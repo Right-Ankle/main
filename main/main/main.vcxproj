@@ -171,6 +171,7 @@
     <ClCompile Include="Program\new_whitening.c" />
     <ClCompile Include="Program\new_ytoyt.c" />
     <ClCompile Include="Program\normal.c" />
+    <ClCompile Include="Program\quantization.c" />
     <ClCompile Include="Program\seki.c" />
     <ClCompile Include="Program\seki3.c" />
     <ClCompile Include="Program\seki5.c" />

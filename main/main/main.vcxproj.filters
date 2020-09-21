@@ -135,6 +135,9 @@
     <ClCompile Include="Program\new_pre.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Program\quantization.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Program\README.txt" />
