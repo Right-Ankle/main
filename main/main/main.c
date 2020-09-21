@@ -14,7 +14,7 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, seg[64 * 64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, seg[64 * 64], y_rank[64][1024], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
 	static double sum, sum0, sum1, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result[2][1024], lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[1024], test3[1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 };
@@ -33,6 +33,7 @@ int main()
 	sum = 0;
 
 	printf("mkdir start\n");
+	printf("+ - - - - - Now Running - - - - +\n");
 	//フォルダ作成　(なければ作成)
 	sprintf(g, "rmdir /s /q OUTPUT");
 	system(g);
@@ -43,6 +44,8 @@ int main()
 	for (j = 0; j < 1024; j++) {
 		sprintf(g, "mkdir OUTPUT\\ICA\\COEFFICIENT\\coe[%d]", j);
 		system(g);
+		if (j % 128 == 0)
+			printf(" @");
 	}
 	_mkdir("OUTPUT\\DCT"); //実験中のICAとDCTの再構成画像を出力
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
@@ -51,7 +54,10 @@ int main()
 	for (j = 0; j < 1024; j++) {
 		sprintf(g, "mkdir OUTPUT\\test\\MSE[%d]", j);
 		system(g);
+		if (j % 128 == 0)
+			printf(" @");
 	}
+	printf("\n\n");
 //_mkdir("coe"); //原画像のブロック画像を拡大して出力
 //	for (j = 0; j < 20; j++) {
 //	sprintf(g, "mkdir coe\\coefficient[%d]", j);
@@ -223,6 +229,7 @@ int main()
 	// 64個の基底のうち1個だけ使用するための処理
 	// 基底はいじれないから、使用する係数を64個から1個に制限する。
 	// ブロック内で使用する基底を1個×64個あるから64パターン×全1024ブロック
+	printf("+ - - - - - Now Running - - - - +\n");
 	for (j = 0; j < 1024; j++) {
 		for (i = 0; i < 64; i++) {
 			b = i;
@@ -265,9 +272,10 @@ int main()
 			mse_ica[i][j] = sum / 64;//平均
 		}
 		// 実行確認用
-		printf("%d\n", j);
+		if (j % 64 == 0)
+			printf(" @");
 	}
-
+	printf("\n\n");
 
 	// ///////////// ica MSE ソート/////////////////////////
 	for (i = 0; i < 64; i++) {
@@ -397,6 +405,12 @@ int main()
 		}
 	}
 
+	for (n = 0; n < 1024; n++) {
+		for (i = 0; i < 64; i++) {
+			y_rank[sort_d[i][n].num][n] = i;
+		}
+	}
+
 	for (i = 0; i < 1024; i++) {
 		for (a = 0; a < 64; a++) {
 			if (a == sort_d[0][i].num)
@@ -435,6 +449,7 @@ int main()
 
 		}
 
+	printf("+ - - - - - Now Running - - - - +\n");
 	for (i = 0; i < 32; i++) {
 		for (j = 0; j < 32; j++) {
 			for (b = 0; b < 8; b++)
@@ -491,8 +506,10 @@ int main()
 			test3[i * 32 + j] = fabs(test2[i * 32 + j] - test3[i * 32 + j]);
 
 		}
-		printf("%d\n", i);
+		if (i % 2 == 0)
+			printf(" @");
 	}
+	printf("\n\n");
 
 	for (m = 0; m < 2500; m+=100) {
 		for (a = 0; a < 256; a++)
@@ -689,7 +706,7 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 	// use dobule ica///////////////////////
 
 	// 1 start
-	printf("1 start");
+	printf("Method 1 start - ->");
 	for (j = 0; j < 1024; j++) {
 		for (m = 0; m < 64; m++) {
 			for (i = 0; i < 64; i++)
@@ -748,14 +765,15 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 
 	for (i = 0; i < 64; i++)
 		for (j = 0; j < 1024; j++) {
-			dct_coe[i][j] = (double)sort_d[i][j].num;//dct_coe -> ソート後のdct係数順位
+			dct_coe[i][j] = (double)sort_d[i][j].num;
 			dcoe_temp[i][j] = sort_d[i][j].val;
 		}
-	printf("1 end\n");
+	printf(" end\n\n");
 	/////////  1 end
 
 	// 2 start ///////
-	printf("2 start");
+	printf("Method 2 start - ->\n");
+	printf("+ - - - - - Now Running - - - - +\n");
 	for (j = 0; j < 1024; j++) {
 		for (m = 0; m < 64; m++)
 			for (n = 0; n < 64; n++) {
@@ -784,9 +802,10 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 
 				ica_test[n][m][j] = sum / 64.0;
 			}
-		if (j % 32 == 0)
-			printf("2 now [%d]\n", j);
+		if (j % 64 == 0)
+			printf(" @");
 	}
+	printf("\n\n");
 
 
 	for (l = 0; l < 1024; l++) {
@@ -875,22 +894,63 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 					}
 				}
 			}
-
+			// Method 1:2 の1個目と2個目の基底の係数順位を比較中
 			sprintf(output, "OUTPUT\\MSE_test.bmp");
 			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
 			fprintf(fp, "\n\n  [Block_num] --> [use 1][use 2] : mse = mse_value \n\n[nolmal]                                                 [random]\n\n------------------\n\n");
 
 			for (b = 0; b < 1024; b++) {
-				fprintf(fp, " [%4d] -->  [%2d][%2d] : mse = %5.4f           ", b, (int)result_ica[0][b], (int)dct_coe[0][b], dcoe_temp[0][b]);
+				fprintf(fp, " [%4d] -->  [%2d][%2d] : mse = %5.4f          ", b, (int)result_ica[0][b], (int)dct_coe[0][b], dcoe_temp[0][b]);
 				fprintf(fp, " [%4d] -->  [%2d][%2d] : mse = %5.4f          ", b, (int)ica_test4[0][b], (int)ica_test4[1][b], ica_test3[0][b]);
 				if (dcoe_temp[0][b] != ica_test3[0][b])
-					fprintf(fp, " [%f]\n\n", dcoe_temp[0][b] - ica_test3[0][b]);
+					fprintf(fp, " [%f]\n", dcoe_temp[0][b] - ica_test3[0][b]);
 				else
-					fprintf(fp, "\n\n");
+					fprintf(fp, "\n");
+				fprintf(fp, "  nomal -->  [%2d][%2d]  :   rank[%2d][%2d]                        ", (int)result_ica[0][b], (int)dct_coe[0][b], y_rank[(int)result_ica[0][b]][b], y_rank[(int)dct_coe[0][b]][b]);
+				fprintf(fp, "  random -->  [%2d][%2d]  :   rank[%2d][%2d]\n\n",(int)ica_test4[0][b], (int)ica_test4[1][b], y_rank[(int)ica_test4[0][b]][b], y_rank[(int)ica_test4[1][b]][b]);
 			}
+			// method1 -> 0位以外使用領域
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = origin[a][b];
 
-			printf("2 fin\n");
+			for (i = 0; i < 1024; i++) {
+				k = i % 32;
+				l = i / 32;
+				if (y_rank[(int)result_ica[0][i]][i] == 0 || y_rank[(int)dct_coe[0][i]][i] == 0 || y_rank[(int)result_ica[0][i]][i] == 1 || y_rank[(int)dct_coe[0][i]][i] == 1) {
+					for (b = 0; b < 8; b++) {
+						for (a = 0; a < 8; a++) {
+							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+						}
+					}
+				}
+			}
+			sprintf(output, "OUTPUT\\Mt1.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			// method2 -> 0位以外使用領域
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = origin[a][b];
+
+			for (i = 0; i < 1024; i++) {
+				k = i % 32;
+				l = i / 32;
+				if (y_rank[(int)ica_test4[0][i]][i] == 0 || y_rank[(int)ica_test4[1][i]][i] == 0 || y_rank[(int)ica_test4[0][i]][i] == 1 || y_rank[(int)ica_test4[1][i]][i] == 1) {
+					for (b = 0; b < 8; b++) {
+						for (a = 0; a < 8; a++) {
+							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+						}
+					}
+				}
+			}
+			sprintf(output, "OUTPUT\\Mt2.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			printf("Method 2 end\n\n");
+
+
 ///////// 2 fin//////////////////
 	//動作確認
 			printf("<ica fin>\n\n");
@@ -1343,6 +1403,6 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			free(temp_1);
 			free(temp_2);
 			free(temp_3);
-			printf("finish");
+			printf(" All finish");
 
 }

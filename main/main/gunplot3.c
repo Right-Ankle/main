@@ -10,7 +10,7 @@ void gnuplot3(double date1[1024], double date2[1024]) {
 	FILE* gp;
 	static double max1, max2, min1, min2;
 	//gp = _popen(GNUPLOT_PATH, "w");
-	printf("----plot start----\n");
+	printf(" plot start - - - ->");
 	for (int j = 0; j < 1024; j++) {
 		if (j == 0) {
 			max1 = date1[j];
@@ -64,6 +64,6 @@ void gnuplot3(double date1[1024], double date2[1024]) {
 		fflush(gp); // バッファに格納されているデータを吐き出す（必須）
 		_pclose(gp);
 		//exit(EXIT_SUCCESS);
-
+		printf("  plot end\n\n");
 	return 0;
 }
