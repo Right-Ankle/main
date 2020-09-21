@@ -18,6 +18,52 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="avg_inter.c" />
+    <ClCompile Include="avg_inter_Block.c" />
+    <ClCompile Include="backup.c" />
+    <ClCompile Include="bitmap.c" />
+    <ClCompile Include="b_entropy_dct.c" />
+    <ClCompile Include="b_entropy_ica.c" />
+    <ClCompile Include="b_mse.c" />
+    <ClCompile Include="cor_coe.c" />
+    <ClCompile Include="dct.c" />
+    <ClCompile Include="dctcoe_conv.c" />
+    <ClCompile Include="file_copy.c" />
+    <ClCompile Include="gentox.c" />
+    <ClCompile Include="gnuplot.c" />
+    <ClCompile Include="gnuplot2.c" />
+    <ClCompile Include="gunplot3.c" />
+    <ClCompile Include="ICA.c" />
+    <ClCompile Include="ICA_temp.c" />
+    <ClCompile Include="idct.c" />
+    <ClCompile Include="identity.c" />
+    <ClCompile Include="inv.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="makew.c" />
+    <ClCompile Include="make_cost.c" />
+    <ClCompile Include="new_pca.c" />
+    <ClCompile Include="new_pre.c" />
+    <ClCompile Include="new_seki.c" />
+    <ClCompile Include="new_seki2.c" />
+    <ClCompile Include="new_sigmoid.c" />
+    <ClCompile Include="new_whitening.c" />
+    <ClCompile Include="new_ytoyt.c" />
+    <ClCompile Include="normal.c" />
+    <ClCompile Include="quantization.c" />
+    <ClCompile Include="seki.c" />
+    <ClCompile Include="seki3.c" />
+    <ClCompile Include="seki5.c" />
+    <ClCompile Include="seki5_Block.c" />
+    <ClCompile Include="sort.c" />
+    <ClCompile Include="wtosai.c" />
+    <ClCompile Include="xtogen.c" />
+    <ClCompile Include="xtogen_Block.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ica.h" />
+    <ClInclude Include="MT.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -85,7 +131,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -138,56 +184,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Program\avg_inter.c" />
-    <ClCompile Include="Program\avg_inter_Block.c" />
-    <ClCompile Include="Program\backup.c" />
-    <ClCompile Include="Program\b_entropy_dct.c" />
-    <ClCompile Include="Program\b_entropy_ica.c" />
-    <ClCompile Include="Program\b_mse.c" />
-    <ClCompile Include="Program\cor_coe.c" />
-    <ClCompile Include="Program\dct.c" />
-    <ClCompile Include="Program\dctcoe_conv.c" />
-    <ClCompile Include="Program\file_copy.c" />
-    <ClCompile Include="Program\gentox.c" />
-    <ClCompile Include="Program\gnuplot.c" />
-    <ClCompile Include="Program\gnuplot2.c" />
-    <ClCompile Include="Program\gunplot3.c" />
-    <ClCompile Include="Program\ICA.c" />
-    <ClCompile Include="Program\ICA_temp.c" />
-    <ClCompile Include="Program\ica_test.c" />
-    <ClCompile Include="Program\idct.c" />
-    <ClCompile Include="Program\idct_Block.c" />
-    <ClCompile Include="Program\identity.c" />
-    <ClCompile Include="Program\inv.c" />
-    <ClCompile Include="Program\main.c" />
-    <ClCompile Include="Program\makew.c" />
-    <ClCompile Include="Program\make_cost.c" />
-    <ClCompile Include="Program\new_pca.c" />
-    <ClCompile Include="Program\new_pre.c" />
-    <ClCompile Include="Program\new_seki.c" />
-    <ClCompile Include="Program\new_seki2.c" />
-    <ClCompile Include="Program\new_sigmoid.c" />
-    <ClCompile Include="Program\new_whitening.c" />
-    <ClCompile Include="Program\new_ytoyt.c" />
-    <ClCompile Include="Program\normal.c" />
-    <ClCompile Include="Program\quantization.c" />
-    <ClCompile Include="Program\seki.c" />
-    <ClCompile Include="Program\seki3.c" />
-    <ClCompile Include="Program\seki5.c" />
-    <ClCompile Include="Program\seki5_Block.c" />
-    <ClCompile Include="Program\sort.c" />
-    <ClCompile Include="Program\wtosai.c" />
-    <ClCompile Include="Program\xtogen.c" />
-    <ClCompile Include="Program\xtogen_Block.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Program\README.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Program\ica.h" />
-    <ClInclude Include="Program\MT.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

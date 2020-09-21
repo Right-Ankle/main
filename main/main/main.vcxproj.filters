@@ -15,138 +15,132 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Program\new_seki.c">
+    <ClCompile Include="idct.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_seki2.c">
+    <ClCompile Include="identity.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_sigmoid.c">
+    <ClCompile Include="inv.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_whitening.c">
+    <ClCompile Include="main.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_ytoyt.c">
+    <ClCompile Include="avg_inter.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\normal.c">
+    <ClCompile Include="avg_inter_Block.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\seki.c">
+    <ClCompile Include="b_entropy_dct.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\seki3.c">
+    <ClCompile Include="b_entropy_ica.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\seki5.c">
+    <ClCompile Include="b_mse.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\seki5_Block.c">
+    <ClCompile Include="backup.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\sort.c">
+    <ClCompile Include="cor_coe.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\wtosai.c">
+    <ClCompile Include="dct.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\xtogen.c">
+    <ClCompile Include="dctcoe_conv.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\xtogen_Block.c">
+    <ClCompile Include="file_copy.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\avg_inter.c">
+    <ClCompile Include="gentox.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\avg_inter_Block.c">
+    <ClCompile Include="gnuplot.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\b_entropy_dct.c">
+    <ClCompile Include="gnuplot2.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\b_entropy_ica.c">
+    <ClCompile Include="gunplot3.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\b_mse.c">
+    <ClCompile Include="ICA.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\backup.c">
+    <ClCompile Include="ICA_temp.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\cor_coe.c">
+    <ClCompile Include="wtosai.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\dct.c">
+    <ClCompile Include="xtogen.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\dctcoe_conv.c">
+    <ClCompile Include="xtogen_Block.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\file_copy.c">
+    <ClCompile Include="make_cost.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\gentox.c">
+    <ClCompile Include="makew.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\gnuplot.c">
+    <ClCompile Include="new_pca.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\gnuplot2.c">
+    <ClCompile Include="new_pre.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\gunplot3.c">
+    <ClCompile Include="new_seki.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\ICA.c">
+    <ClCompile Include="new_seki2.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\ICA_temp.c">
+    <ClCompile Include="new_sigmoid.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\ica_test.c">
+    <ClCompile Include="new_whitening.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\idct.c">
+    <ClCompile Include="new_ytoyt.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\idct_Block.c">
+    <ClCompile Include="normal.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\identity.c">
+    <ClCompile Include="quantization.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\inv.c">
+    <ClCompile Include="seki.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\main.c">
+    <ClCompile Include="seki3.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\make_cost.c">
+    <ClCompile Include="seki5.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\makew.c">
+    <ClCompile Include="seki5_Block.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_pca.c">
+    <ClCompile Include="sort.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Program\new_pre.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Program\quantization.c">
+    <ClCompile Include="bitmap.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Program\README.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Program\ica.h">
+    <ClInclude Include="ica.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Program\MT.h">
+    <ClInclude Include="MT.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
