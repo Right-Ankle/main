@@ -108,6 +108,7 @@ int err(const char* s);
 void segmentation_ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], int mpans[][64], int block_flag[1024], int Q);
 double cor_coe(double date1[1024], double date2[1024]);
 void gnuplot3(double date1[1024], double date2[1024]);
+int img_out(unsigned char origin[][256], int date1[1024], int name);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 
 

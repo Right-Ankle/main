@@ -38,6 +38,7 @@
     <ClCompile Include="ICA_temp.c" />
     <ClCompile Include="idct.c" />
     <ClCompile Include="identity.c" />
+    <ClCompile Include="img_out.c" />
     <ClCompile Include="inv.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="makew.c" />
