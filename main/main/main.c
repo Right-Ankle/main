@@ -66,7 +66,7 @@ int main()
 	printf("mkdir end\n");
 
 //読み込むファイル名
-	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
+	//static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'a', 'i', 'r', 'p', 'l', 'a', 'n', 'e', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'l', 'a', 'x', '.', 'b', 'm', 'p' };
@@ -80,7 +80,7 @@ int main()
 	//static char filename[20] = { 'l', 'i', 'g', 'h', 't', 'h', 'o', 'u', 's', 'e', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
-	//static char filename[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
+	static char filename[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
 
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -918,7 +918,7 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			for (i = 0; i < 1024; i++) {
 				k = i % 32;
 				l = i / 32;
-				if (y_rank[(int)result_ica[0][i]][i] == 0 || y_rank[(int)dct_coe[0][i]][i] == 0 || y_rank[(int)result_ica[0][i]][i] == 1 || y_rank[(int)dct_coe[0][i]][i] == 1) {
+				if (y_rank[(int)result_ica[0][i]][i] != 0 && y_rank[(int)dct_coe[0][i]][i] != 0 && y_rank[(int)result_ica[0][i]][i] != 1 && y_rank[(int)dct_coe[0][i]][i] != 1) {
 					for (b = 0; b < 8; b++) {
 						for (a = 0; a < 8; a++) {
 							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
@@ -937,7 +937,7 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			for (i = 0; i < 1024; i++) {
 				k = i % 32;
 				l = i / 32;
-				if (y_rank[(int)ica_test4[0][i]][i] == 0 || y_rank[(int)ica_test4[1][i]][i] == 0 || y_rank[(int)ica_test4[0][i]][i] == 1 || y_rank[(int)ica_test4[1][i]][i] == 1) {
+				if (y_rank[(int)ica_test4[0][i]][i] != 0 && y_rank[(int)ica_test4[1][i]][i] != 0 && y_rank[(int)ica_test4[0][i]][i] != 1 && y_rank[(int)ica_test4[1][i]][i] != 1) {
 					for (b = 0; b < 8; b++) {
 						for (a = 0; a < 8; a++) {
 							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
@@ -948,6 +948,43 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			sprintf(output, "OUTPUT\\Mt2.bmp");
 			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
+			// method2 -> 0位使用領域
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = origin[a][b];
+
+			for (i = 0; i < 1024; i++) {
+				k = i % 32;
+				l = i / 32;
+				if (y_rank[(int)ica_test4[0][i]][i] != 0 && y_rank[(int)ica_test4[1][i]][i] != 0) {
+					for (b = 0; b < 8; b++) {
+						for (a = 0; a < 8; a++) {
+							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+						}
+					}
+				}
+			}
+			sprintf(output, "OUTPUT\\Mt22.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			// method1 -> 0位使用領域
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = origin[a][b];
+
+			for (i = 0; i < 1024; i++) {
+				k = i % 32;
+				l = i / 32;
+				if (y_rank[(int)result_ica[0][i]][i] != 0 && y_rank[(int)dct_coe[0][i]][i] != 0) {
+					for (b = 0; b < 8; b++) {
+						for (a = 0; a < 8; a++) {
+							temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+						}
+					}
+				}
+			}
+			sprintf(output, "OUTPUT\\Mt11.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 			printf("Method 2 end\n\n");
 
 
