@@ -14,7 +14,7 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count =0, seg[64 * 64], img_out1[1024], img_out2[1024], y_rank[64][1024], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count =0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
 	static double sum, sum0, sum1, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result[2][1024], lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[1024], test3[1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 };
@@ -30,6 +30,8 @@ int main()
 	double* temp_1;
 	double* temp_2;
 	double* temp_3;
+	double* temp_4;
+	double* temp_5;
 
 	sum = 0;
 
@@ -117,6 +119,8 @@ int main()
 	temp_1 = (double*)malloc(sizeof(double) * 1024);
 	temp_2 = (double*)malloc(sizeof(double) * 1024);
 	temp_3 = (double*)malloc(sizeof(double) * 1024);
+	temp_4 = (double*)malloc(sizeof(double) * 1024);
+	temp_5 = (double*)malloc(sizeof(double) * 1024);
 
 
 	//出力ファイル　宣言
@@ -905,6 +909,7 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 
 			QQQ = 0;
 			QQQQ = 0;
+			mk = ml = 0;
 
 				for (b = 0; b < 1024; b++) {
 					img_out1[b] = 0;
@@ -920,28 +925,50 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 					temp_1[i] = (result_ica[0][b] + dct_coe[0][b]) / 2;
 					temp_2[i] = dcoe_temp[0][b] - ica_test3[0][b];
 					temp_3[i] = dcoe_temp[0][b];
+					temp_4[i] = fabs((y[(int)result_ica[0][b]][b]+y[(int)dct_coe[0][b]][b])/2 - (y[(int)ica_test4[0][b]][b]+ y[(int)ica_test4[1][b]][b])/2);
 					i++;
+
 					if (min(result_ica[0][b], dct_coe[0][b]) > min(ica_test4[0][b], ica_test4[1][b]))
 					{
-						QQQ++;
+						mk++;
 						img_out1[b] = 1;
 					}
 					else {
-						QQQQ++;
+						ml++;
 						img_out2[b] = 1;
 					}
+
+					if (max(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])) < max(fabs(y[(int)ica_test4[0][b]][b]), fabs(y[(int)ica_test4[1][b]][b])))
+					{
+						QQQ++;
+						img_out3[b] = 1;
+					}
+					else {
+						QQQQ++;
+						img_out4[b] = 1;
+					}
+
+					fprintf(fp, " <rank> nomal -->  [%2d][%2d]  :   rank[%2d][%2d]                        ", (int)result_ica[0][b], (int)dct_coe[0][b], y_rank[(int)result_ica[0][b]][b], y_rank[(int)dct_coe[0][b]][b]);
+					fprintf(fp, "  random -->  [%2d][%2d]  :   rank[%2d][%2d]\n", (int)ica_test4[0][b], (int)ica_test4[1][b], y_rank[(int)ica_test4[0][b]][b], y_rank[(int)ica_test4[1][b]][b]);
+					fprintf(fp, " <coefficient> nomal -->  [%2d][%2d]  :   coe[%lf][%lf]         ", (int)result_ica[0][b], (int)dct_coe[0][b], y[(int)result_ica[0][b]][b], y[(int)dct_coe[0][b]][b]);
+					fprintf(fp, "  random -->  [%2d][%2d]  :   coe[%lf][%lf]\n", (int)ica_test4[0][b], (int)ica_test4[1][b], y[(int)ica_test4[0][b]][b], y[(int)ica_test4[1][b]][b]);
+					fprintf(fp, " <comparision>  [%lf][%lf]  :  [%lf][%lf]", max(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])), min(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])), max(fabs(y[(int)ica_test4[0][b]][b]), fabs(y[(int)ica_test4[1][b]][b])), min(fabs(y[(int)ica_test4[0][b]][b]), fabs(y[(int)ica_test4[1][b]][b])) );
+					fprintf(fp, " 		----->[% lf][% lf]\n\n", max(fabs(y[(int)ica_test4[0][b]][b]), fabs(y[(int)ica_test4[1][b]][b])) - max(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])), min(fabs(y[(int)ica_test4[0][b]][b]), fabs(y[(int)ica_test4[1][b]][b])) - min(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])));
 				}
 				else
-					fprintf(fp, "\n");
+					fprintf(fp, "\n\n");
 
-				fprintf(fp, "  nomal -->  [%2d][%2d]  :   rank[%2d][%2d]                        ", (int)result_ica[0][b], (int)dct_coe[0][b], y_rank[(int)result_ica[0][b]][b], y_rank[(int)dct_coe[0][b]][b]);
-				fprintf(fp, "  random -->  [%2d][%2d]  :   rank[%2d][%2d]\n\n",(int)ica_test4[0][b], (int)ica_test4[1][b], y_rank[(int)ica_test4[0][b]][b], y_rank[(int)ica_test4[1][b]][b]);
 			}
-			fprintf(fp, " \n\n\n rank improvement[%d]  :  no[%d]",QQQ,QQQQ);
+			fprintf(fp, " \n\n\n coefficient improvement[%d]  :  no[%d]",QQQ,QQQQ);
+			fprintf(fp, " \n\n\n rank improvement[%d]  :  no[%d]", mk, ml);
 
 			out_count = img_out(origin, img_out1, out_count);
 
 			out_count = img_out(origin, img_out2, out_count);
+
+			out_count = img_out(origin, img_out3, out_count);
+
+			out_count = img_out(origin, img_out4, out_count);
 
 			sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
 			for (j = 0; j < i; j++) {
@@ -1510,6 +1537,8 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			free(temp_1);
 			free(temp_2);
 			free(temp_3);
+			free(temp_4);
+			free(temp_5);
 			printf(" All finish");
 
 }
