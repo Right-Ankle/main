@@ -32,6 +32,7 @@ int main()
 	double* temp_3;
 	double* temp_4;
 	double* temp_5;
+	double* temp_6;
 
 	sum = 0;
 
@@ -69,8 +70,8 @@ int main()
 	printf("mkdir end\n");
 
 //読み込むファイル名
-	//static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
-	static char filename[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
+	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
+	//static char filename[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'a', 'i', 'r', 'p', 'l', 'a', 'n', 'e', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'l', 'a', 'x', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'l', 'e', 'n', 'n', 'a', '.', 'b', 'm', 'p' };
@@ -85,6 +86,8 @@ int main()
 	//static char filename[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
 
+	printf("\nfilename plz .... :");
+	scanf("%s", filename);
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
@@ -121,6 +124,7 @@ int main()
 	temp_3 = (double*)malloc(sizeof(double) * 1024);
 	temp_4 = (double*)malloc(sizeof(double) * 1024);
 	temp_5 = (double*)malloc(sizeof(double) * 1024);
+	temp_6 = (double*)malloc(sizeof(double) * 1024);
 
 
 	//出力ファイル　宣言
@@ -922,10 +926,12 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 
 				if (dcoe_temp[0][b] != ica_test3[0][b]) {
 					fprintf(fp, " [%f]\n", dcoe_temp[0][b] - ica_test3[0][b]);
-					temp_1[i] = (result_ica[0][b] + dct_coe[0][b]) / 2;
-					temp_2[i] = dcoe_temp[0][b] - ica_test3[0][b];
-					temp_3[i] = dcoe_temp[0][b];
-					temp_4[i] = fabs((y[(int)result_ica[0][b]][b]+y[(int)dct_coe[0][b]][b])/2 - (y[(int)ica_test4[0][b]][b]+ y[(int)ica_test4[1][b]][b])/2);
+					temp_1[i] = (result_ica[0][b] + dct_coe[0][b]) / 2;//順位平均
+					temp_2[i] = dcoe_temp[0][b] - ica_test3[0][b];//MSE改善量
+					temp_3[i] = dcoe_temp[0][b];//MSE値
+					temp_4[i] = (fabs(y[(int)result_ica[0][b]][b])+fabs(y[(int)dct_coe[0][b]][b]))/2 - (fabs(y[(int)ica_test4[0][b]][b])+ fabs(y[(int)ica_test4[1][b]][b]))/2;//係数値の平均の差
+					temp_5[i] = (fabs(y[(int)result_ica[0][b]][b]) + fabs(y[(int)dct_coe[0][b]][b])) / 2; //係数値の平均
+					temp_6[i] = max(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])); //係数値の大きいほう
 					i++;
 
 					if (min(result_ica[0][b], dct_coe[0][b]) > min(ica_test4[0][b], ica_test4[1][b]))
@@ -959,8 +965,10 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 					fprintf(fp, "\n\n");
 
 			}
+			//fprintf(fp," << percentage of improvement and non-improvement >>\n\n");
 			fprintf(fp, " \n\n\n coefficient improvement[%d]  :  no[%d]",QQQ,QQQQ);
 			fprintf(fp, " \n\n\n rank improvement[%d]  :  no[%d]", mk, ml);
+			//fprintf(fp,"\n\n << correlation with the amount of MSE improvement >>\n\n");
 
 			out_count = img_out(origin, img_out1, out_count);
 
@@ -1005,6 +1013,60 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 
 			result_coe = (sum0 / i) / (sqrt(sum11 / i) * sqrt(sum22 / i));
 			fprintf(fp, " \n\n\n MSE val : amount of improvement= %lf", result_coe);
+			//////////////////////////////////////////
+			sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
+			for (j = 0; j < i; j++) {
+				sum1 += temp_2[j];
+				sum2 += temp_4[j];
+			}
+
+			sum1 /= (double)i;
+			sum2 /= (double)i;
+
+			for (j = 0; j < i; j++) {
+				sum0 += (temp_2[j] - sum1) * (temp_4[j] - sum2);
+				sum11 += pow(temp_2[j] - sum1, 2);
+				sum22 += pow(temp_4[j] - sum2, 2);
+			}
+
+			result_coe = (sum0 / i) / (sqrt(sum11 / i) * sqrt(sum22 / i));
+			fprintf(fp, " \n\n\n difference in coefficient : amount of improvement= %lf", result_coe);
+			//////////////////////////////////////////
+			sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
+			for (j = 0; j < i; j++) {
+				sum1 += temp_2[j];
+				sum2 += temp_5[j];
+			}
+
+			sum1 /= (double)i;
+			sum2 /= (double)i;
+
+			for (j = 0; j < i; j++) {
+				sum0 += (temp_2[j] - sum1) * (temp_5[j] - sum2);
+				sum11 += pow(temp_2[j] - sum1, 2);
+				sum22 += pow(temp_5[j] - sum2, 2);
+			}
+
+			result_coe = (sum0 / i) / (sqrt(sum11 / i) * sqrt(sum22 / i));
+			fprintf(fp, " \n\n\n average of cefficient : amount of improvement= %lf", result_coe);
+			//////////////////////////////////////////
+			sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
+			for (j = 0; j < i; j++) {
+				sum1 += temp_2[j];
+				sum2 += temp_6[j];
+			}
+
+			sum1 /= (double)i;
+			sum2 /= (double)i;
+
+			for (j = 0; j < i; j++) {
+				sum0 += (temp_2[j] - sum1) * (temp_6[j] - sum2);
+				sum11 += pow(temp_2[j] - sum1, 2);
+				sum22 += pow(temp_6[j] - sum2, 2);
+			}
+
+			result_coe = (sum0 / i) / (sqrt(sum11 / i) * sqrt(sum22 / i));
+			fprintf(fp, " \n\n\n average of cefficient : amount of improvement= %lf", result_coe);
 
 
 			//// method1 -> 0位以外使用領域
@@ -1539,6 +1601,7 @@ fprintf(fp3, " [%d] : [Min MSE]  -->  %lf\n", i, result_coe);
 			free(temp_3);
 			free(temp_4);
 			free(temp_5);
+			free(temp_6);
 			printf(" All finish");
 
 }
