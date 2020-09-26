@@ -10,9 +10,9 @@ void gnuplot(double date[64][1024]) {
 	FILE* gp;
 	static double temp[64], max, min;
 	//gp = _popen(GNUPLOT_PATH, "w");
-	printf("----plot start----\n");
+	printf("+ - - - - - Now Plotting - - - - +\n");
 	for (int i = 0; i < 1024; i++) {
-		printf("%d\n", i);
+		//printf("%d\n", i);
 		for (int j = 0; j < 64; j++) {
 			temp[j] = date[j][i];
 			if (j == 0) {
@@ -26,12 +26,12 @@ void gnuplot(double date[64][1024]) {
 					min = temp[j];
 			}
 		}
-		max = max + max / 3;
+		max = max + max / 5;
 
 		if (min > 0)
 			min = 0;
 		else
-			min = min + min / 3;
+			min = min + min / 5;
 
 		gp = _popen("gnuplot -persist", "w"); // パイプを開き、gnuplotの立ち上げ
 		//if (gp == NULL) {
@@ -42,7 +42,7 @@ void gnuplot(double date[64][1024]) {
 		// gnuplotにコマンドを送る
 		//fprintf(gp, "set terminal png color font 'VL PGothic,20' enhanced\n");
 		fprintf(gp, "set terminal png\n");
-		fprintf(gp, "set output 'OUTPUT\\test\\MSE[%d]\\COE[%d].png'\n", i, (int)date[0][i]);
+		fprintf(gp, "set output 'OUTPUT\\test\\area[%d].png'\n", i);
 		fprintf(gp, "set boxwidth 0.5 relative\n");
 		fprintf(gp, "set style fill solid\n");
 		fprintf(gp, "set grid\n");
@@ -62,6 +62,9 @@ void gnuplot(double date[64][1024]) {
 		fflush(gp); // バッファに格納されているデータを吐き出す（必須）
 		_pclose(gp);
 		//exit(EXIT_SUCCESS);
+		if (i % 64 == 0)
+			printf(" @");
 	}
+	printf("\n\n");
 	return 0;
 }
