@@ -14,7 +14,7 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count =0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count =0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64],seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
 	static double sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result[2][1024], lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 };
@@ -272,9 +272,11 @@ int main()
 
 	for (n = 0; n < 1024; n++) {
 		for (i = 0; i < 64; i++) {
-			y_rank[sort_d[i][n].num][n] = i;//係数順位
+			y_rank[i][n] = sort_d[i][n].num;//係数順位
 		}
 	}
+
+
 
 	// use dobule ica///////////////////////
 
@@ -473,9 +475,9 @@ int main()
 
 	//		sprintf(output, "OUTPUT\\MSE_test.bmp");
 	//		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-
-			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order \n\n[Use 1 basis]                                                 [rUse 2 basis]\n\n------------------\n\n");
-
+            fprintf(fp, "\n\n Use image  :  %s\n\n\n",filename);
+			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order | Coefficient order\n\n\n\n------------------\n\n");
+			QQ = 0;
 			QQQ = 0;
 			QQQQ = 0;
 			mk = ml = 0;
@@ -486,11 +488,56 @@ int main()
 				}
 				i = 0;
 				for (b = 0; b < 1024; b++) {
+					QQ = 0;
+					QQQ = 0;
+					QQQQ = 0;
+					for (j = 0; j < 64; j++) {
+						if (y[y_rank[j][b]][b] > 0) {
+							y_rank_pm[(int)y_rank[j][b]] = QQQ;
+							QQQ++;
+						}
+						else {
+							y_rank_pm[(int)y_rank[j][b]] = QQQQ;
+							QQQQ++;
+						}
+						if (y_rank[j][b] == (int)result_ica[0][b])
+							QQ = j;
+					}
 					fprintf(fp, " -- [area No.%d] ------------------------------------------------------------------------------------------  \n\n", b);
 					fprintf(fp, " ~~~~  BEST MSE [basis No.%d]  mse = %5.4f   ~~~~ \n\n",(int)result_ica[0][b], result_ica[1][b]);
 					for (a = 0; a < 64; a++) {
-						fprintf(fp, " [%4d]   |   [%d][%d] : mse = %5.4f   ", a, (int)result_ica[0][b],a, mse_ica1[a][b]);
-						fprintf(fp, " |  [%d][%d] : mse = %5.4f \n\n ", (int)result_ica[0][b],(int)dct_coe[a][b], dcoe_temp[a][b]);
+
+
+
+						fprintf(fp, " [%4d]   |   [%d][%d] : mse = %5.4f   ", a, (int)result_ica[0][b], a, mse_ica1[a][b]);
+						fprintf(fp, " |    [%d][%d] : mse = %5.4f  ", (int)result_ica[0][b], (int)dct_coe[a][b], dcoe_temp[a][b]);
+
+						if (y[(int)result_ica[0][b]][b] > 0) {
+							if (y[(int)dct_coe[a][b]][b] > 0)
+								fprintf(fp, " --->  [+%d][+%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
+							else
+								fprintf(fp, " --->  [+%d][-%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
+						}
+						else {
+							if (y[(int)dct_coe[a][b]][b] > 0)
+								fprintf(fp, " --->  [-%d][+%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
+							else
+								fprintf(fp, " --->  [-%d][-%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
+						}
+
+						if (mse_ica1[(int)y_rank[a][b]][b] == dcoe_temp[0][b])
+							fprintf(fp, " |   ' [%d][%d] : mse = %5.4f ' ", (int)result_ica[0][b], (int)y_rank[a][b], mse_ica1[(int)y_rank[a][b]][b]);
+						else
+							fprintf(fp, " |   [%d][%d] : mse = %5.4f  ", (int)result_ica[0][b], (int)y_rank[a][b], mse_ica1[(int)y_rank[a][b]][b]);
+
+						if (y[y_rank[a][b]][b] > 0)
+							fprintf(fp, " --->  [%d][+%d]  \n\n ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)y_rank[a][b]]);
+						else
+							fprintf(fp, " --->  [%d][-%d]  \n\n", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)y_rank[a][b]]);
+
+
+
+
 
 						//fprintf(fp, " [%f]\n\n", result_ica[1][b] - dcoe_temp[0][b]);//１個目と2個目のMSE差
 						//temp_1[i] = (result_ica[0][b] + dct_coe[0][b]) / 2;//順位平均
@@ -527,7 +574,7 @@ int main()
 				// ２個目を選択する過程の調査中
 				for (a = 0; a < 1024; a++) {
 					for (b = 0; b < 64; b++) {
-						test2[b][a] = mse_ica1[b][a] - result_ica[1][a]; //番号順
+						test2[b][a] = mse_ica1[y_rank[b][a]][a] - result_ica[1][a]; //番号順
 						test3[b][a] = dcoe_temp[b][a] - result_ica[1][a]; //MSE順
 					}
 				}

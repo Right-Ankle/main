@@ -26,12 +26,19 @@ void gnuplot(double date[64][1024]) {
 					min = temp[j];
 			}
 		}
-		max = max + max / 5;
+		if (max < 1)
+			min = 1;
+		else
+			max = max + max / 5;
 
 		if (min > 0)
 			min = 0;
-		else
-			min = min + min / 5;
+		else {
+			if (min > -1)
+				min = -1;
+			else
+				min = min + min / 5;
+		}
 
 		gp = _popen("gnuplot -persist", "w"); // パイプを開き、gnuplotの立ち上げ
 		//if (gp == NULL) {
