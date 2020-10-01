@@ -578,7 +578,7 @@ int main()
 						test3[b][a] = dcoe_temp[b][a] - result_ica[1][a]; //MSE順
 					}
 				}
-				gnuplot(test2);
+				//gnuplot(test2);
 				//gnuplot(test3);
 
 
