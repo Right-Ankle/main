@@ -51,6 +51,7 @@ int main()
 	//	if (j % 128 == 0)
 	//		printf(" @");
 	//}
+
 	_mkdir("OUTPUT\\DCT"); //実験中のICAとDCTの再構成画像を出力
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
@@ -477,6 +478,8 @@ int main()
 	//		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
             fprintf(fp, "\n\n Use image  :  %s\n\n\n",filename);
 			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order | Coefficient order\n\n\n\n------------------\n\n");
+			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
+			fprintf(fp2, "\n\nCoefficient value of min MSE\n\n  [Block No] : Coefficient value \n\n\n\n------------------\n\n");
 			QQ = 0;
 			QQQ = 0;
 			QQQQ = 0;
@@ -485,12 +488,25 @@ int main()
 				for (b = 0; b < 1024; b++) {
 					img_out1[b] = 0;
 					img_out2[b] = 0;
+					img_out3[b] = 0;
 				}
 				i = 0;
 				for (b = 0; b < 1024; b++) {
 					QQ = 0;
 					QQQ = 0;
 					QQQQ = 0;
+
+					// fp2 ---> 最小MSEの係数値を調査中
+					fprintf(fp2, "[%4d] : %lf\n\n", b, y[(int)result_ica[0][b]][b]);
+					if ((int)(fabs(y[(int)result_ica[0][b]][b])) < 1)
+						img_out1[b] = 1;
+					else if ( 1.5 < (fabs(y[(int)result_ica[0][b]][b])) && (fabs(y[(int)result_ica[0][b]][b])) < 2)
+						img_out2[b] = 1;
+					else
+						img_out3[b] = 1;
+
+
+
 					for (j = 0; j < 64; j++) {
 						if (y[y_rank[j][b]][b] > 0) {
 							y_rank_pm[(int)y_rank[j][b]] = QQQ;
@@ -551,7 +567,9 @@ int main()
 					fprintf(fp, "\n\n\n\n");
 				}
 
-			//out_count = img_out(origin, img_out1, out_count);
+			out_count = img_out(origin, img_out1, out_count);
+			out_count = img_out(origin, img_out2, out_count);
+			//out_count = img_out(origin, img_out3, out_count);
 
 				//sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
 				//for (j = 0; j < i; j++) {
@@ -578,7 +596,7 @@ int main()
 						test3[b][a] = dcoe_temp[b][a] - result_ica[1][a]; //MSE順
 					}
 				}
-				gnuplot(test2);
+				//gnuplot(test2);
 				//gnuplot(test3);
 
 
@@ -652,12 +670,12 @@ int main()
 
 			}
 			/////////////////////////////////////////////////////////
-			for (b = 0; b < 1024; b++) {
-				fprintf(fp2, "\n --- [%d] --- \n\n", b);
-				for (a = 0; a < 64; a++) {
-					fprintf(fp2, " [%d][%d]  -->  %lf\n", a, b, mse_dct[a][b]);
-				}
-			}
+			//for (b = 0; b < 1024; b++) {
+			//	fprintf(fp2, "\n --- [%d] --- \n\n", b);
+			//	for (a = 0; a < 64; a++) {
+			//		fprintf(fp2, " [%d][%d]  -->  %lf\n", a, b, mse_dct[a][b]);
+			//	}
+			//}
 
 
 			//for (a = 0; a < 256; a++)
