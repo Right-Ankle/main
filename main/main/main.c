@@ -15,7 +15,7 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count =0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64],seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64];
-	static double sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result[2][1024], lambda = 1024.0;
+	static double sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 };
 	static unsigned char dammy[256][256] = { 0 };
@@ -121,15 +121,15 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp3 = fopen("OUTPUT\\result_ical.csv", "w")) == NULL) {
+	if ((fp3 = fopen("OUTPUT\\fp3.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp4 = fopen("OUTPUT\\ICA.csv", "w")) == NULL) {
+	if ((fp4 = fopen("OUTPUT\\fp4.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp5 = fopen("OUTPUT\\ica.txt", "w")) == NULL) {
+	if ((fp5 = fopen("OUTPUT\\fp5.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -277,7 +277,87 @@ int main()
 		}
 	}
 
+	// use 0 basis
 
+	printf("+ - - - - - Now Running - - - - +\n");
+	for (j = 0; j < 1024; j++) {
+		for (i = 0; i < 64; i++) {
+
+			// 該当係数以外0
+			// i番目の係数（基底）のみ使用。それ以外の係数は0。
+			for (a = 0; a < 64; a++) {
+					ny[a][j] = 0;
+			}
+
+			// 初期化（必ず行う）
+			for (a = 0; a < 64; a++)
+				xx[a] = 0.0;
+
+			// 1ブロックで処理を行っているため、そのブロック番号（ｊ）の係数と
+			// すべての基底を用いることで もとのブロックを再構成する処理
+			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+
+			// ブロックごとのMSE
+			// MSEは（元の値 - 再構成の値）^2をすることで
+			// 再構成した値が元の値とどれくらいずれているのかを見るための指標
+			sum = 0.0;
+			sum2 = 0.0;
+			mk = j % 32;
+			ml = j / 32;
+
+			// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+			// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+			for (a = 0; a < 8; a++) {
+				for (b = 0; b < 8; b++) {
+					sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+				}
+			}
+			mse_ica[i][j] = sum / 64;//平均
+		}
+		// 実行確認用
+		if (j % 64 == 0)
+			printf(" @");
+	}
+	printf("\n\n");
+
+	// sort MSE of 0 basis
+	for (i = 0; i < 64; i++) {
+		for (j = 0; j < 1024; j++) {
+			// .val -> 値を取得・属性を変更し記憶
+			// .abs -> 絶対値を記憶
+			// .num -> 元々の係数に対応するブロック内番号を記憶
+			sort_d[i][j].val = mse_ica[i][j];		/* 元々の係数値 */
+			sort_d[i][j].abs = fabs(mse_ica[i][j]);	/* ソートは係数の絶対値で行う*/
+			sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+		}
+	}
+
+	for (n = 0; n < 1024; n++) {
+		for (i = 0; i < 64 - 1; i++) {
+			min = sort_d[i][n].abs;
+			k = i;
+			for (j = i + 1; j < 64; j++) {
+				if (sort_d[j][n].abs < min) {
+					min = sort_d[j][n].abs;
+					k = j;
+				}
+			}
+			temp = sort_d[i][n];
+			sort_d[i][n] = sort_d[k][n];
+			sort_d[k][n] = temp;
+		}
+	}
+
+	for (i = 0; i < 1024; i++) {
+		result_ica0[0][i] = sort_d[0][i].num;  // 基底番号
+		result_ica0[1][i] = sort_d[0][i].val;    // MSE値
+		//printf("%lf : %lf\n", result_ica[0][i], (double)sort_d[0][i].num);
+	}
+
+	///////////////////////
 
 	// use dobule ica///////////////////////
 
@@ -479,7 +559,9 @@ int main()
             fprintf(fp, "\n\n Use image  :  %s\n\n\n",filename);
 			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order | Coefficient order\n\n\n\n------------------\n\n");
 			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp2, "\n\nCoefficient value of min MSE\n\n  [Block No] : Coefficient value \n\n\n\n------------------\n\n");
+			fprintf(fp2, "\n\n  MSE difference of min MSE\n\n  [Block No] : MSE value of 0 basis   :   MSE value of 1 basis    [ MSE difference ]\n\n\n\n------------------\n\n");
+			fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+			fprintf(fp5, "\n\n  MSE difference of min MSE\n\n  [Block No] : MSE value of 1 basis   :   MSE value of 2 basis    [ MSE difference ]\n\n\n\n------------------\n\n");
 			QQ = 0;
 			QQQ = 0;
 			QQQQ = 0;
@@ -496,16 +578,14 @@ int main()
 					QQQ = 0;
 					QQQQ = 0;
 
-					// fp2 ---> 最小MSEの係数値を調査中
-					fprintf(fp2, "[%4d] : %lf\n\n", b, y[(int)result_ica[0][b]][b]);
-					if ((int)(fabs(y[(int)result_ica[0][b]][b])) < 1)
-						img_out1[b] = 1;
-					else if ( 1.5 < (fabs(y[(int)result_ica[0][b]][b])) && (fabs(y[(int)result_ica[0][b]][b])) < 2)
-						img_out2[b] = 1;
-					else
-						img_out3[b] = 1;
+					// fp2 ---> 0 basis vs 1 basis mse
+					fprintf(fp2, "[%4d] : %lf   :   %lf   [%lf]\n\n", b, result_ica0[1][b], result_ica[1][b], result_ica0[1][b] - result_ica[1][b]);
 
+					//else
+					//	img_out3[b] = 1;
 
+					// fp5 ---> 1 basis vs 2 basis mse
+					fprintf(fp5, "[%4d] : %lf   :   %lf   [%lf]\n\n", b, result_ica[1][b], dcoe_temp[0][b], result_ica[1][b] - dcoe_temp[0][b]);
 
 					for (j = 0; j < 64; j++) {
 						if (y[y_rank[j][b]][b] > 0) {
@@ -566,9 +646,36 @@ int main()
 					}
 					fprintf(fp, "\n\n\n\n");
 				}
+				// MSE差画像を出力中
 
-			out_count = img_out(origin, img_out1, out_count);
-			out_count = img_out(origin, img_out2, out_count);
+
+
+				for (a = 0; a < 20; a++) {
+					for (b = 0; b < 1024; b++) {
+						if ((result_ica0[1][b] - result_ica[1][b]) < (double)a) {
+							img_out1[b] = 0;
+							img_out2[b] = 0;
+							img_out3[b] = 0;
+						}
+					}
+					//out_count = img_out(origin, img_out1, out_count);
+				}
+
+				for (a = 10; a < 500; a+=10) {
+					for (b = 0; b < 1024; b++) {
+						if ((result_ica0[1][b] - result_ica[1][b]) < (double)a) {
+							img_out1[b] = 0;
+							img_out2[b] = 0;
+							img_out3[b] = 0;
+						}
+					}
+					//out_count = img_out(origin, img_out1, out_count);
+				}
+
+
+
+			//out_count = img_out(origin, img_out1, out_count);
+			//out_count = img_out(origin, img_out2, out_count);
 			//out_count = img_out(origin, img_out3, out_count);
 
 				//sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
