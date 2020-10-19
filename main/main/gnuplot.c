@@ -10,7 +10,7 @@ void gnuplot(double date[64][1024]) {
 	FILE* gp;
 	static double temp[64], max, min;
 	//gp = _popen(GNUPLOT_PATH, "w");
-	printf("+ - - - - - Now Plotting - - - - +\n");
+	printf("\n+ - - - - - Now Plotting - - - - +\n");
 	for (int i = 0; i < 1024; i++) {
 		//printf("%d\n", i);
 		for (int j = 0; j < 64; j++) {
