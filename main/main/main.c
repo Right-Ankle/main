@@ -69,7 +69,7 @@ int main()
 //	system(g);
 //}
 	printf("mkdir end\n");
-
+	//
 //読み込むファイル名
 	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
