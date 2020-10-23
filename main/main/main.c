@@ -56,12 +56,14 @@ int main()
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
-	//for (j = 0; j < 1024; j++) {
-	//	sprintf(g, "mkdir OUTPUT\\test\\MSE[%d]", j);
-	//	system(g);
-	//	if (j % 128 == 0)
-	//		printf(" @");
-	//}
+	for (i = 1; i < 5; i++) {
+		sprintf(g, "mkdir OUTPUT\\test\\%d", i);
+		system(g);
+		for (j = 0; j < 64; j++) {
+			sprintf(g, "mkdir OUTPUT\\test\\%d\\%d", i, j);
+			system(g);
+		}
+	}
 	printf("\n\n");
 //_mkdir("coe"); //原画像のブロック画像を拡大して出力
 //	for (j = 0; j < 20; j++) {
@@ -556,12 +558,18 @@ int main()
 
 	//		sprintf(output, "OUTPUT\\MSE_test.bmp");
 	//		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+
+            printf("What percentage do you use ? : ");
+			scanf("%lf", &percent);
+			printf("\n");
+
             fprintf(fp, "\n\n Use image  :  %s\n\n\n",filename);
 			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order | Coefficient order\n\n\n\n------------------\n\n");
 			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp2, "\n\n  Commonly used basis (over 5 percent)\n\n  [Block No] : \n\n\n\n------------------\n\n");
+			fprintf(fp2, "\n\n  Commonly used basis \n\n  [Block No] : percent\n\n  Percent : %lf\n\n------------------\n\n",percent);
 			fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp5, "\n\n  use 0 basis vs use 1 basis of MSE difference\n\n  [Basis No] : MSE val [use basis number]  :  MSE val [use basis number]  :  difference\n\n\n\n------------------\n\n");
+			fprintf(fp5, "\n\n  use basis \n\n  [Basis No] : Number of basis [ percent ]\n\n\n\n------------------\n\n");
 			QQ = 0;
 			QQQ = 0;
 			QQQQ = 0;
@@ -669,18 +677,47 @@ int main()
 
 			// fp2 ---> 最小MSEの係数値を調査中
 
-			for (b = 0; b < 1024; b++) {
 
-				if (fabs(y[(int)result_ica[0][b]][b]) < 1.1) {
+
+
+
+
+
+			printf("+ - - - - - Now Running - - - - +\n");
+			for (b = 0; b < 1024; b++) {
+				j = b % 32;
+				i = b / 32;
+				if (fabs(y[(int)result_ica[0][b]][b]) < 1.1 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0) {
 					temp1[(int)result_ica[0][b]]++;
+					for (c = 0; c < 8; c++)
+						for (a = 0; a < 8; a++)
+							for (n = 0; n < 8; n++)
+								for (m = 0; m < 8; m++)
+									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
+					sprintf(output, "OUTPUT\\test\\1\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
+					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
 					QQ++;
 				}
-				else if (1.1 <= fabs(y[(int)result_ica[0][b]][b]) && fabs(y[(int)result_ica[0][b]][b]) < 2) {
+				else if (1.1 <= fabs(y[(int)result_ica[0][b]][b]) && fabs(y[(int)result_ica[0][b]][b]) < 2 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0) {
 					temp2[(int)result_ica[0][b]]++;
+					for (c = 0; c < 8; c++)
+						for (a = 0; a < 8; a++)
+							for (n = 0; n < 8; n++)
+								for (m = 0; m < 8; m++)
+									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
+					sprintf(output, "OUTPUT\\test\\2\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
+					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
 					QQQ++;
 				}
-				else {
+				else if(fabs(y[(int)result_ica[0][b]][b]) >= 2 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0){
 					temp3[(int)result_ica[0][b]]++;
+					for (c = 0; c < 8; c++)
+						for (a = 0; a < 8; a++)
+							for (n = 0; n < 8; n++)
+								for (m = 0; m < 8; m++)
+									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
+					sprintf(output, "OUTPUT\\test\\3\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
+					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
 					QQQQ++;
 				}
 				//if ((result_ica0[1][b] - result_ica[1][b]) < 10.0) {
@@ -689,11 +726,41 @@ int main()
 
 				if ((result_ica[1][b] - dcoe_temp[0][b]) > 100.0) {
 					temp5[(int)result_ica[0][b]]++;
-					temp5[(int)dct_coe[0][b]]++;
-					mk+=2;
+					//temp5[(int)dct_coe[0][b]]++;
+					for (c = 0; c < 8; c++)
+						for (a = 0; a < 8; a++)
+							for (n = 0; n < 8; n++)
+								for (m = 0; m < 8; m++)
+									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
+					sprintf(output, "OUTPUT\\test\\4\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
+					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
+					mk++;
+				}
+					printf("%d\n",b);
+			}
+
+
+			for (j = 0; j < 64; j++) {
+				if (temp1[j] == 0) {
+					sprintf(g, "rmdir /s /q OUTPUT\\test\\1\\%d",j);
+					system(g);
+				}
+				if (temp2[j] == 0) {
+					sprintf(g, "rmdir /s /q OUTPUT\\test\\2\\%d",j);
+					system(g);
+				}
+				if (temp3[j] == 0) {
+					sprintf(g, "rmdir /s /q OUTPUT\\test\\3\\%d",j);
+					system(g);
+				}
+				if (temp5[j] == 0) {
+					sprintf(g, "rmdir /s /q OUTPUT\\test\\4\\%d",j);
+					system(g);
 				}
 
 			}
+
+			printf("\n\n");
 			gnuplot2(temp1);
 			gnuplot2(temp2);
 			gnuplot2(temp3);
@@ -703,78 +770,78 @@ int main()
 			for (b = 0; b < 64; b++)
 				temp6[b] = 0;
 
-			percent = 5;
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
+
+			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
 			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
+				fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
 				if (((double)temp1[b] / (double)QQ) * 100 > percent) {
 					temp4[b]++;
 					temp6[b]++;
 				}
 			}
 			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over 5 percent) - - - \n\n\n");
+			fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
 			for (b = 0; b < 64; b++) {
 				if (temp4[b] == 1) {
 					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp1[b] / (double)QQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp1[b] / (double)QQ) * 100);
+					fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp1[b] / (double)QQ) * 100);
 				}
 				temp4[b] = 0;
 			}
 			fprintf(fp2, "\n\n");
 
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
+			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
 			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp2[b], ((double)temp2[b] / (double)QQQ) * 100);
+				fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp2[b], ((double)temp2[b] / (double)QQQ) * 100);
 				if (((double)temp2[b] / (double)QQQ) * 100 > percent) {
 					temp4[b]++;
 					temp6[b]++;
 				}
 			}
 			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over 5 percent)- - - \n\n\n");
+			fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
 			for (b = 0; b < 64; b++) {
 				if (temp4[b] == 1) {
 					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp2[b] / (double)QQQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp2[b] / (double)QQQ) * 100);
+					fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp2[b] / (double)QQQ) * 100);
 				}
 				temp4[b] = 0;
 			}
 			fprintf(fp2, "\n\n");
 
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
+			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
 			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp3[b], ((double)temp3[b] / (double)QQQQ) * 100);
+				fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp3[b], ((double)temp3[b] / (double)QQQQ) * 100);
 				if (((double)temp3[b] / (double)QQQQ) * 100 > percent) {
 					temp4[b]++;
 					temp6[b]++;
 				}
 			}
 			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over 5 percent) - - - \n\n\n");
+			fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
 			for (b = 0; b < 64; b++) {
 				if (temp4[b] == 1) {
 					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp3[b] / (double)QQQQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp3[b] / (double)QQQQ) * 100);
+					fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp3[b] / (double)QQQQ) * 100);
 				}
 				temp4[b] = 0;
 			}
 			fprintf(fp2, "\n\n");
 
-			//fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
+			fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
 			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp5[b], ((double)temp5[b] / (double)mk) * 100);
+				fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp5[b], ((double)temp5[b] / (double)mk) * 100);
 				if (((double)temp5[b] / (double)mk) * 100 > percent) {
 					temp4[b]++;
 					temp6[b]++;
 				}
 			}
 			fprintf(fp2, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over 5 percent)- - - \n\n\n");
+			fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
 			for (b = 0; b < 64; b++) {
 				if (temp4[b] == 1) {
 					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp5[b] / (double)mk) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp5[b] / (double)mk) * 100);
+					fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp5[b] / (double)mk) * 100);
 				}
 				temp4[b] = 0;
 			}
@@ -892,8 +959,13 @@ int main()
 				}
 			}
 
+			printf("Can you proceed ? [y/n] :");
+			scanf("%s", &yn);
 
-			gnuplot(test2);
+			if (yn == 'y') {
+				gnuplot(test2);
+			}
+
 
 				for (i = 0; i < 64; i++) {
 					for (j = 0; j < 1024; j++) {
@@ -933,13 +1005,13 @@ int main()
 					gnuplot(test3);
 				}
 
-			for (b = 0; b < 1024; b++) {
-				fprintf(fp5, "\n\n\n -- [area No.%d] ------------------------------------------------------------------------------------------  \n\n", b);
-				fprintf(fp5, " ~~~~  BEST MSE [basis No.%d]  mse = %5.4f   ~~~~ \n\n", (int)result_ica0[0][b], result_ica0[1][b]);
+			//for (b = 0; b < 1024; b++) {
+			//	fprintf(fp5, "\n\n\n -- [area No.%d] ------------------------------------------------------------------------------------------  \n\n", b);
+			//	fprintf(fp5, " ~~~~  BEST MSE [basis No.%d]  mse = %5.4f   ~~~~ \n\n", (int)result_ica0[0][b], result_ica0[1][b]);
 
-				for (a = 0; a < 64; a++)
-					fprintf(fp5, " [%4d]  :  [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f]    |     [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f] \n\n", a, a, mse_ica0[a][b], a, mse_ica[a][b], (mse_ica[a][b] - mse_ica0[a][b]), (int)sort_d[a][b].num, mse_ica0[(int)sort_d[a][b].num][b], (int)sort_d[a][b].num, mse_ica[(int)sort_d[a][b].num][b], (mse_ica[(int)sort_d[a][b].num][b] - mse_ica0[(int)sort_d[a][b].num][b]));
-			}
+			//	for (a = 0; a < 64; a++)
+			//		fprintf(fp5, " [%4d]  :  [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f]    |     [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f] \n\n", a, a, mse_ica0[a][b], a, mse_ica[a][b], (mse_ica[a][b] - mse_ica0[a][b]), (int)sort_d[a][b].num, mse_ica0[(int)sort_d[a][b].num][b], (int)sort_d[a][b].num, mse_ica[(int)sort_d[a][b].num][b], (mse_ica[(int)sort_d[a][b].num][b] - mse_ica0[(int)sort_d[a][b].num][b]));
+			//}
 				//sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
 				//for (j = 0; j < i; j++) {
 				//	sum1 += temp_2[j];

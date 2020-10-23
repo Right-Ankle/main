@@ -7,23 +7,32 @@
 #define GNUPLOT_PATH "C:/Program Files/gnuplot/bin/wgnuplot.exe"
 
 void gnuplot2(int date[64]) {
-	FILE* gp;
-	static int temp[64], max, min;
-	//gp = _popen(GNUPLOT_PATH, "w");
-	printf("----plot start----\n");
-	for (int j = 0; j < 64; j++) {
-		temp[j] = date[j];
-		if (j == 0) {
-			max = temp[j];
-			min = temp[j];
-		}
-		else {
-			if (max < temp[j])
+
+	static char yn;
+
+	printf("Can you proceed ? [y/n] :");
+	scanf("%s", &yn);
+
+	if (yn == 'y') {
+
+		FILE* gp;
+		static int temp[64], max, min;
+
+		//gp = _popen(GNUPLOT_PATH, "w");
+		printf("----plot start----\n");
+		for (int j = 0; j < 64; j++) {
+			temp[j] = date[j];
+			if (j == 0) {
 				max = temp[j];
-			if (min > temp[j])
 				min = temp[j];
+			}
+			else {
+				if (max < temp[j])
+					max = temp[j];
+				if (min > temp[j])
+					min = temp[j];
+			}
 		}
-	}
 
 
 
@@ -55,3 +64,4 @@ void gnuplot2(int date[64]) {
 		_pclose(gp);
 		//exit(EXIT_SUCCESS);
 	}
+}
