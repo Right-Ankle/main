@@ -1,0 +1,45 @@
+
+
+ Use image  :  barbara.bmp
+
+
+
+
+  MSE value for the entire image 
+
+
+  Number of basis used : 0, 1, 2, 3
+
+
+  (* The number of basis is not the whole number, but the number using the best basis in a small area )
+
+----------------------------------------------------------------------------------
+
+
+
+- - - - - - - - Number of basis used : 0 - - - - - - - 
+
+
+ Average of MSE : 617.298737  (value)
+
+
+
+- - - - - - - - Number of basis used : 1 - - - - - - - 
+
+
+ Average of MSE : 400.472626  (value)
+
+
+
+- - - - - - - - Number of basis used : 2 - - - - - - - 
+
+
+ Average of MSE : 303.163620  (value)
+
+
+
+- - - - - - - - Number of basis used : 3 - - - - - - - 
+
+
+ Average of MSE : 242.837799  (value)
+

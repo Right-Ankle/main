@@ -40,7 +40,11 @@
     <ClCompile Include="identity.c" />
     <ClCompile Include="img_out.c" />
     <ClCompile Include="inv.c" />
-    <ClCompile Include="main.c" />
+    <ClCompile Include="main.c">
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Speed</FavorSizeOrSpeed>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MaxSpeed</Optimization>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</BasicRuntimeChecks>
+    </ClCompile>
     <ClCompile Include="makew.c" />
     <ClCompile Include="make_cost.c" />
     <ClCompile Include="new_pca.c" />
@@ -163,10 +167,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <HeapReserveSize>536870912</HeapReserveSize>
+      <HeapCommitSize>536870912</HeapCommitSize>
+      <StackReserveSize>536870912</StackReserveSize>
+      <StackCommitSize>536870912</StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

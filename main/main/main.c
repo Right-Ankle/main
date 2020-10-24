@@ -15,9 +15,9 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64];
-	static double percent, sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], mse_ica2[1024], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], lambda = 1024.0;
-	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[2][1024], ica_test0[64][1024], ica_test1[64][1024], average2[4][2];
-	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 };
+	static double percent, sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], lambda = 1024.0;
+	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][1024], average2[4][2];
+	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
@@ -37,7 +37,7 @@ int main()
 	sum = 0;
 
 	printf("mkdir start\n");
-	printf("+ - - - - - Now Running - - - - +\n");
+	//printf("+ - - - - - Now Running - - - - +\n");
 	//フォルダ作成　(なければ作成)
 	sprintf(g, "rmdir /s /q OUTPUT");
 	system(g);
@@ -160,7 +160,7 @@ int main()
 	// 64個の基底のうち1個だけ使用するための処理
 	// 基底はいじれないから、使用する係数を64個から1個に制限する。
 	// ブロック内で使用する基底を1個×64個あるから64パターン×全1024ブロック
-	printf("+ - - - - - Now Running - - - - +\n");
+
 	for (j = 0; j < 1024; j++) {
 		for (i = 0; i < 64; i++) {
 			b = i;
@@ -203,8 +203,7 @@ int main()
 			mse_ica[i][j] = sum / 64;//平均
 		}
 		// 実行確認用
-		if (j % 64 == 0)
-			printf(" @");
+		printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
 	printf("\n\n");
 
@@ -244,6 +243,7 @@ int main()
 		result_ica[0][i] = sort_d[0][i].num;  // 基底番号
 		result_ica[1][i] = sort_d[0][i].val;    // MSE値
 		//printf("%lf : %lf\n", result_ica[0][i], (double)sort_d[0][i].num);
+		all_mse[1][i] = sort_d[0][i].val;
 	}
 
 	for (i = 0; i < 64; i++) {
@@ -281,7 +281,7 @@ int main()
 
 	// use 0 basis
 
-	printf("+ - - - - - Now Running - - - - +\n");
+
 	for (j = 0; j < 1024; j++) {
 		for (i = 0; i < 64; i++) {
 
@@ -320,8 +320,7 @@ int main()
 			mse_ica0[i][j] = sum / 64;//平均
 		}
 		// 実行確認用
-		if (j % 64 == 0)
-			printf(" @");
+		printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
 	printf("\n\n");
 
@@ -357,6 +356,7 @@ int main()
 		result_ica0[0][i] = sort_d[0][i].num;  // 基底番号
 		result_ica0[1][i] = sort_d[0][i].val;    // MSE値
 		//printf("%lf : %lf\n", result_ica[0][i], (double)sort_d[0][i].num);
+		all_mse[0][i] = sort_d[0][i].val;
 	}
 
 	///////////////////////
@@ -430,654 +430,214 @@ int main()
 	/////////  1 end
 
 	// 2 start ///////
-	//printf("Method 2 start - ->\n");
-	//printf("+ - - - - - Now Running - - - - +\n");
-	//for (j = 0; j < 1024; j++) {
-	//	for (m = 0; m < 64; m++)
-	//		for (n = 0; n < 64; n++) {
-	//			for (i = 0; i < 64; i++)
-	//				ny[i][j] = 0;
+	printf("Do you start method 2 ? [ y/n ] : ");
+	scanf("%s", &yn);
+	if (yn == 'y') {
+		printf("Method 2 start - ->\n");
 
-	//			ny[m][j] = y[m][j]; //一つ目の基底選択
-	//			ny[n][j] = y[n][j]; // ２つ目の基底選択
+		for (j = 0; j < 1024; j++) {
+			for (m = 0; m < 64; m++)
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
 
-	//			// 初期化（必ず行う）
-	//			for (a = 0; a < 64; a++)
-	//				xx[a] = 0.0;
+					ny[m][j] = y[m][j]; //一つ目の基底選択
+					ny[n][j] = y[n][j]; // ２つ目の基底選択
 
-	//			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-	//			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-	//			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
 
-	//			sum = 0.0;
-	//			mk = j % 32;
-	//			ml = j / 32;
-	//			for (a = 0; a < 8; a++) {
-	//				for (b = 0; b < 8; b++) {
-	//					sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
-	//				}
-	//			}
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-	//			ica_test[n][m][j] = sum / 64.0;
-	//		}
-	//	if (j % 64 == 0)
-	//		printf(" @");
-	//}
-	//printf("\n\n");
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+
+					ica_test[n][m][j] = sum / 64.0;
+				}
+			printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\n\n");
 
 
-	//for (l = 0; l < 1024; l++) {
-	//	// 64*64*1024 -> 最小ＭＳＥ　64*1024こ
-	//	for (m = 0; m < 64; m++) {
-	//		for (i = 0; i < 64; i++) {
-	//			// .val -> 値を取得・属性を変更し記憶
-	//			// .abs -> 絶対値を記憶
-	//			// .num -> 元々の係数に対応するブロック内番号を記憶
-	//			sort_d[i][m].val = ica_test[i][m][l];		/* 元々の係数値 */
-	//			sort_d[i][m].abs = fabs(ica_test[i][m][l]);	/* ソートは係数の絶対値で行う*/
-	//			sort_d[i][m].num = i;					/* numに元々の係数に対応する番号を記憶 */
-	//		}
-	//	}
+		for (l = 0; l < 1024; l++) {
+			// 64*64*1024 -> 最小ＭＳＥ　64*1024こ
+			for (m = 0; m < 64; m++) {
+				for (i = 0; i < 64; i++) {
+					// .val -> 値を取得・属性を変更し記憶
+					// .abs -> 絶対値を記憶
+					// .num -> 元々の係数に対応するブロック内番号を記憶
+					sort_d[i][m].val = ica_test[i][m][l];		/* 元々の係数値 */
+					sort_d[i][m].abs = fabs(ica_test[i][m][l]);	/* ソートは係数の絶対値で行う*/
+					sort_d[i][m].num = i;					/* numに元々の係数に対応する番号を記憶 */
+				}
+			}
 
-	//	for (n = 0; n < 64; n++)
-	//		for (i = 0; i < 64 - 1; i++) {
-	//			min = sort_d[i][n].abs;
-	//			k = i;
-	//			for (j = i + 1; j < 64; j++) {
-	//				if (sort_d[j][n].abs < min) {
-	//					min = sort_d[j][n].abs;
-	//					k = j;
-	//				}
-	//			}
-	//			temp = sort_d[i][n];
-	//			sort_d[i][n] = sort_d[k][n];
-	//			sort_d[k][n] = temp;
-	//		}
+			for (n = 0; n < 64; n++)
+				for (i = 0; i < 64 - 1; i++) {
+					min = sort_d[i][n].abs;
+					k = i;
+					for (j = i + 1; j < 64; j++) {
+						if (sort_d[j][n].abs < min) {
+							min = sort_d[j][n].abs;
+							k = j;
+						}
+					}
+					temp = sort_d[i][n];
+					sort_d[i][n] = sort_d[k][n];
+					sort_d[k][n] = temp;
+				}
 
-	//	for (m = 0; m < 64; m++) {
-	//		ica_test2[0][m][l] = sort_d[0][m].val;//mse
-	//		ica_test2[1][m][l] = (double)sort_d[0][m].num;//基底番号
+			for (m = 0; m < 64; m++) {
+				ica_test2[0][m][l] = sort_d[0][m].val;//mse
+				ica_test2[1][m][l] = (double)sort_d[0][m].num;//基底番号
 
-	//	}
-	//}
+			}
+		}
 
-	//	for (j = 0; j < 1024; j++) {
-	//		for (i = 0; i < 64; i++) {
-	//			// .val -> 値を取得・属性を変更し記憶
-	//			// .abs -> 絶対値を記憶
-	//			// .num -> 元々の係数に対応するブロック内番号を記憶
-	//			sort_d[i][j].val = ica_test2[0][i][j];		/* 元々の係数値 */
-	//			sort_d[i][j].abs = fabs(ica_test2[0][i][j]);	/* ソートは係数の絶対値で行う*/
-	//			sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-	//		}
-	//	}
+		for (j = 0; j < 1024; j++) {
+			for (i = 0; i < 64; i++) {
+				// .val -> 値を取得・属性を変更し記憶
+				// .abs -> 絶対値を記憶
+				// .num -> 元々の係数に対応するブロック内番号を記憶
+				sort_d[i][j].val = ica_test2[0][i][j];		/* 元々の係数値 */
+				sort_d[i][j].abs = fabs(ica_test2[0][i][j]);	/* ソートは係数の絶対値で行う*/
+				sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+			}
+		}
 
-	//	for (n = 0; n < 1024; n++) {
-	//		for (i = 0; i < 64 - 1; i++) {
-	//			min = sort_d[i][n].abs;
-	//			k = i;
-	//			for (j = i + 1; j < 64; j++) {
-	//				if (sort_d[j][n].abs < min) {
-	//					min = sort_d[j][n].abs;
-	//					k = j;
-	//				}
-	//			}
-	//			temp = sort_d[i][n];
-	//			sort_d[i][n] = sort_d[k][n];
-	//			sort_d[k][n] = temp;
-	//		}
-	//	}
+		for (n = 0; n < 1024; n++) {
+			for (i = 0; i < 64 - 1; i++) {
+				min = sort_d[i][n].abs;
+				k = i;
+				for (j = i + 1; j < 64; j++) {
+					if (sort_d[j][n].abs < min) {
+						min = sort_d[j][n].abs;
+						k = j;
+					}
+				}
+				temp = sort_d[i][n];
+				sort_d[i][n] = sort_d[k][n];
+				sort_d[k][n] = temp;
+			}
+		}
 
-	//	for (j = 0; j < 1024; j++) {
-	//		ica_test3[0][j] = sort_d[0][j].val;//mse
-	//		ica_test3[1][j] = (double)sort_d[0][j].num;//基底番号
+		for (j = 0; j < 1024; j++) {
+			ica_test3[0][j] = sort_d[0][j].val;//mse
+			ica_test3[1][j] = (double)sort_d[0][j].num;//基底番号
 
-	//		ica_test4[0][j] = ica_test3[1][j];//1つ目の基底番号
-	//		ica_test4[1][j] = ica_test2[1][(int)ica_test3[1][j]][j];// 2つ目の基底番号
-	//	}
+			all_mse[2][j] = sort_d[0][j].val;
 
-	//	printf("Method 2 end\n\n");
+			ica_test4[0][j] = ica_test3[1][j];//1つ目の基底番号
+			ica_test4[1][j] = ica_test2[1][(int)ica_test3[1][j]][j];// 2つ目の基底番号
+		}
+
+		printf("Method 2 end\n\n");
+	}
 	//		////////////// 2 fin ///////////////////////
 
-	//				// Method 1:2 の1個目と2個目の基底の係数順位を比較中
-	//		for (a = 0; a < 256; a++)
-	//			for (b = 0; b < 256; b++)
-	//				temp_sai[a * 256 + b] = origin[a][b];
-
-	//		for (i = 0; i < 1024; i++) {
-	//			k = i % 32;
-	//			l = i / 32;
-	//			if (dcoe_temp[0][i] == ica_test3[0][i]) {
-	//				for (b = 0; b < 8; b++) {
-	//					for (a = 0; a < 8; a++) {
-	//						temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
-	//					}
-	//				}
-	//			}
-	//		}
-
-	//		sprintf(output, "OUTPUT\\MSE_test.bmp");
-	//		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-
-
-            printf("What percentage do you use ? : ");
-			scanf("%lf", &percent);
-			printf("\n");
-
-
-            fprintf(fp, "\n\n Use image  :  %s\n\n\n",filename);
-			fprintf(fp, "\n\n  [Block No] | Basis Number order | MSE order | Coefficient order\n\n\n\n------------------\n\n");
-			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp2, "\n\n  Commonly used basis \n\n  [Block No] : percent\n\n  Percent : %lf\n\n------------------\n\n",percent);
-			fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp5, "\n\n Correspondence between basis and MSE \n\n Average of MSE  &  Average amount of MSE improvement (0 -> 1)\n\n\n Use 1 basis\n\n\n------------------\n\n");
-			QQ = 0;
-			QQQ = 0;
-			QQQQ = 0;
-			mk = ml = 0;
-			sum = 0;
-			sum1 = 0;
-
-				for (b = 0; b < 1024; b++) {
-					img_out1[b] = 0;
-					img_out2[b] = 0;
-					img_out3[b] = 0;
-				}
-				i = 0;
-				for (b = 0; b < 1024; b++) {
-					QQ = 0;
-					QQQ = 0;
-					QQQQ = 0;
-
-					// fp2 ---> 0 basis vs 1 basis mse
-					//fprintf(fp2, "[%4d] : %lf   :   %lf   [%lf]\n\n", b, result_ica0[1][b], result_ica[1][b], result_ica0[1][b] - result_ica[1][b]);
-
-					//else
-					//	img_out3[b] = 1;
-
-					// fp5 ---> 1 basis vs 2 basis mse
-					//fprintf(fp5, "[%4d] : %lf   :   %lf   [%lf]\n\n", b, result_ica[1][b], dcoe_temp[0][b], result_ica[1][b] - dcoe_temp[0][b]);
-
-					for (j = 0; j < 64; j++) {
-						if (y[y_rank[j][b]][b] > 0) {
-							y_rank_pm[(int)y_rank[j][b]] = QQQ;
-							QQQ++;
-						}
-						else {
-							y_rank_pm[(int)y_rank[j][b]] = QQQQ;
-							QQQQ++;
-						}
-						if (y_rank[j][b] == (int)result_ica[0][b])
-							QQ = j;
-					}
-					fprintf(fp, " -- [area No.%d] ------------------------------------------------------------------------------------------  \n\n", b);
-					fprintf(fp, " ~~~~  BEST MSE [basis No.%d]  mse = %5.4f   ~~~~ \n\n",(int)result_ica[0][b], result_ica[1][b]);
-					for (a = 0; a < 64; a++) {
-
-
-
-						fprintf(fp, " [%4d]   |   [%d][%d] : mse = %5.4f   ", a, (int)result_ica[0][b], a, mse_ica1[a][b]);
-						fprintf(fp, " |    [%d][%d] : mse = %5.4f  ", (int)result_ica[0][b], (int)dct_coe[a][b], dcoe_temp[a][b]);
-
-						if (y[(int)result_ica[0][b]][b] > 0) {
-							if (y[(int)dct_coe[a][b]][b] > 0)
-								fprintf(fp, " --->  [+%d][+%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
-							else
-								fprintf(fp, " --->  [+%d][-%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
-						}
-						else {
-							if (y[(int)dct_coe[a][b]][b] > 0)
-								fprintf(fp, " --->  [-%d][+%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
-							else
-								fprintf(fp, " --->  [-%d][-%d]   ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)dct_coe[a][b]]);
-						}
-
-						if (mse_ica1[(int)y_rank[a][b]][b] == dcoe_temp[0][b])
-							fprintf(fp, " |   ' [%d][%d] : mse = %5.4f ' ", (int)result_ica[0][b], (int)y_rank[a][b], mse_ica1[(int)y_rank[a][b]][b]);
-						else
-							fprintf(fp, " |   [%d][%d] : mse = %5.4f  ", (int)result_ica[0][b], (int)y_rank[a][b], mse_ica1[(int)y_rank[a][b]][b]);
-
-						if (y[y_rank[a][b]][b] > 0)
-							fprintf(fp, " --->  [%d][+%d]  \n\n ", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)y_rank[a][b]]);
-						else
-							fprintf(fp, " --->  [%d][-%d]  \n\n", y_rank_pm[(int)result_ica[0][b]], y_rank_pm[(int)y_rank[a][b]]);
-
-
-
-
-
-						//fprintf(fp, " [%f]\n\n", result_ica[1][b] - dcoe_temp[0][b]);//１個目と2個目のMSE差
-						//temp_1[i] = (result_ica[0][b] + dct_coe[0][b]) / 2;//順位平均
-						//temp_2[b] = result_ica[1][b] - dcoe_temp[0][b];//MSE改善量
-						//temp_3[i] = dcoe_temp[0][b];//MSE値
-						//temp_4[i] = (fabs(y[(int)result_ica[0][b]][b]) + fabs(y[(int)dct_coe[0][b]][b])) / 2 - (fabs(y[(int)ica_test4[0][b]][b]) + fabs(y[(int)ica_test4[1][b]][b])) / 2;//係数値の平均の差
-						//temp_5[b] = (fabs(y[(int)result_ica[0][b]][b]) + fabs(y[(int)dct_coe[0][b]][b])) / 2; //係数値の平均
-						//temp_6[i] = max(fabs(y[(int)result_ica[0][b]][b]), fabs(y[(int)dct_coe[0][b]][b])); //係数値の大きいほう
-						//i++;
-					}
-					fprintf(fp, "\n\n\n\n");
-				}
-				// MSE差画像を出力中
-
-			for (b = 0; b < 1024; b++) {
-				img_out1[b] = 0;
-				img_out2[b] = 0;
-				img_out3[b] = 0;
-			}
-
-			for (b = 0; b < 64; b++) {
-				temp1[b] = 0;
-				temp2[b] = 0;
-				temp3[b] = 0;
-				temp4[b] = 0;
-				temp5[b] = 0;
-			}
-
-			QQ = 0;
-			QQQ = 0;
-			QQQQ = 0;
-			mk = 0;
-
-			// fp2 ---> 最小MSEの係数値を調査中
-
-
-
-
-
-
-
-			printf("+ - - - - - Now Running - - - - +\n");
-			for (b = 0; b < 1024; b++) {
-				j = b % 32;
-				i = b / 32;
-				if (fabs(y[(int)result_ica[0][b]][b]) < 1.1 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0) {
-					temp1[(int)result_ica[0][b]]++;
-					for (c = 0; c < 8; c++)
-						for (a = 0; a < 8; a++)
-							for (n = 0; n < 8; n++)
-								for (m = 0; m < 8; m++)
-									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
-					sprintf(output, "OUTPUT\\test\\1\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
-					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-					average2[0][0] += result_ica[1][b];
-					average2[0][1] += result_ica0[1][b] - result_ica[1][b];
-					QQ++;
-				}
-				else if (1.1 <= fabs(y[(int)result_ica[0][b]][b]) && fabs(y[(int)result_ica[0][b]][b]) < 2 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0) {
-					temp2[(int)result_ica[0][b]]++;
-					for (c = 0; c < 8; c++)
-						for (a = 0; a < 8; a++)
-							for (n = 0; n < 8; n++)
-								for (m = 0; m < 8; m++)
-									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
-					sprintf(output, "OUTPUT\\test\\2\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
-					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-					average2[1][0] += result_ica[1][b];
-					average2[1][1] += result_ica0[1][b] - result_ica[1][b];
-					QQQ++;
-				}
-				else if(fabs(y[(int)result_ica[0][b]][b]) >= 2 && (result_ica0[1][b] - result_ica[1][b]) > 10.0 && (result_ica[1][b] - dcoe_temp[0][b]) < 100.0){
-					temp3[(int)result_ica[0][b]]++;
-					for (c = 0; c < 8; c++)
-						for (a = 0; a < 8; a++)
-							for (n = 0; n < 8; n++)
-								for (m = 0; m < 8; m++)
-									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
-					sprintf(output, "OUTPUT\\test\\3\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
-					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-					average2[2][0] += result_ica[1][b];
-					average2[2][1] += result_ica0[1][b] - result_ica[1][b];
-					QQQQ++;
-				}
-				//if ((result_ica0[1][b] - result_ica[1][b]) < 10.0) {
-				//	temp4[(int)result_ica[0][b]]++;
-				//}
-
-				if ((result_ica[1][b] - dcoe_temp[0][b]) > 100.0) {
-					temp5[(int)result_ica[0][b]]++;
-					//temp5[(int)dct_coe[0][b]]++;
-					for (c = 0; c < 8; c++)
-						for (a = 0; a < 8; a++)
-							for (n = 0; n < 8; n++)
-								for (m = 0; m < 8; m++)
-									seg[64 * 8 * c + 8 * a + n * 64 + m] = ori_temp[256 * 8 * i + 8 * j + a + 256 * c];
-					sprintf(output, "OUTPUT\\test\\4\\%d\\ORIGIN[%d].bmp", (int)result_ica[0][b], i * 32 + j);
-					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-					average2[3][0] += result_ica[1][b];
-					average2[3][1] += result_ica0[1][b] - result_ica[1][b];
-					mk++;
-				}
-					printf("%d\n",b);
-			}
-
-			average2[0][0] = average2[0][0] / (double)QQ;
-			average2[0][1] = average2[0][1] / (double)QQ;
-
-			average2[1][0] = average2[1][0] / (double)QQQ;
-			average2[1][1] = average2[1][1] / (double)QQQ;
-
-			average2[2][0] = average2[2][0] / (double)QQQQ;
-			average2[2][1] = average2[2][1] / (double)QQQQ;
-
-			average2[3][0] = average2[3][0] / (double)mk;
-			average2[3][1] = average2[3][1] / (double)mk;
-
-			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-			fprintf(fp5, " Average of MSE : %lf  (value)\n\n",average2[0][0]);
-			fprintf(fp5, " Average amount of MSE improvement : %lf  (value)\n\n", average2[0][1]);
-			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-			fprintf(fp5, " Average of MSE : %lf  (value)\n\n", average2[1][0]);
-			fprintf(fp5, " Average amount of MSE improvement : %lf  (value)\n\n", average2[1][1]);
-			fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-			fprintf(fp5, " Average of MSE : %lf  (value)\n\n", average2[2][0]);
-			fprintf(fp5, " Average amount of MSE improvement : %lf  (value)\n\n", average2[2][1]);
-			fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-			fprintf(fp5, " Average of MSE : %lf  (value)\n\n", average2[3][0]);
-			fprintf(fp5, " Average amount of MSE improvement : %lf  (value)\n\n", average2[3][1]);
-
-			for (j = 0; j < 64; j++) {
-				if (temp1[j] == 0) {
-					sprintf(g, "rmdir /s /q OUTPUT\\test\\1\\%d",j);
-					system(g);
-				}
-				if (temp2[j] == 0) {
-					sprintf(g, "rmdir /s /q OUTPUT\\test\\2\\%d",j);
-					system(g);
-				}
-				if (temp3[j] == 0) {
-					sprintf(g, "rmdir /s /q OUTPUT\\test\\3\\%d",j);
-					system(g);
-				}
-				if (temp5[j] == 0) {
-					sprintf(g, "rmdir /s /q OUTPUT\\test\\4\\%d",j);
-					system(g);
-				}
-
-			}
-
-			printf("\n\n");
-			gnuplot2(temp1);
-			gnuplot2(temp2);
-			gnuplot2(temp3);
-			//gnuplot2(temp4);
-			gnuplot2(temp5);
-
-			for (b = 0; b < 64; b++)
-				temp6[b] = 0;
-
-
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
-				if (((double)temp1[b] / (double)QQ) * 100 > percent) {
-					temp4[b]++;
-					temp6[b]++;
-				}
-			}
-			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
-			for (b = 0; b < 64; b++) {
-				if (temp4[b] == 1) {
-					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp1[b] / (double)QQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp1[b] / (double)QQ) * 100);
-				}
-				temp4[b] = 0;
-			}
-			fprintf(fp2, "\n\n");
-
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp2[b], ((double)temp2[b] / (double)QQQ) * 100);
-				if (((double)temp2[b] / (double)QQQ) * 100 > percent) {
-					temp4[b]++;
-					temp6[b]++;
-				}
-			}
-			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
-			for (b = 0; b < 64; b++) {
-				if (temp4[b] == 1) {
-					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp2[b] / (double)QQQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp2[b] / (double)QQQ) * 100);
-				}
-				temp4[b] = 0;
-			}
-			fprintf(fp2, "\n\n");
-
-			//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp3[b], ((double)temp3[b] / (double)QQQQ) * 100);
-				if (((double)temp3[b] / (double)QQQQ) * 100 > percent) {
-					temp4[b]++;
-					temp6[b]++;
-				}
-			}
-			fprintf(fp2, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
-			for (b = 0; b < 64; b++) {
-				if (temp4[b] == 1) {
-					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp3[b] / (double)QQQQ) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp3[b] / (double)QQQQ) * 100);
-				}
-				temp4[b] = 0;
-			}
-			fprintf(fp2, "\n\n");
-
-			//fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-			for (b = 0; b < 64; b++) {
-				//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp5[b], ((double)temp5[b] / (double)mk) * 100);
-				if (((double)temp5[b] / (double)mk) * 100 > percent) {
-					temp4[b]++;
-					temp6[b]++;
-				}
-			}
-			fprintf(fp2, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-			//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
-			for (b = 0; b < 64; b++) {
-				if (temp4[b] == 1) {
-					fprintf(fp2, "[%2d] : %lf       ", b, ((double)temp5[b] / (double)mk) * 100);
-					//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp5[b] / (double)mk) * 100);
-				}
-				temp4[b] = 0;
-			}
-			fprintf(fp2, "\n\n");
-
-			// 使用率の高い基底のみを用いたらMSEはどれくらい下がる？
-			//printf("+ - - - - - Now Running - - - - +\n");
-			//for (i = 0; i < 1024; i++)
-			//	for (j = 0; j < 64; j++) {
-			//		ny[j][i] = 0;
-			//		if (temp6[j] == 0)
-			//			y[j][i] = 0; // ny -> yy(ica係数コピー)
-			//	}
-
-			//for (j = 0; j < 1024; j++) {
-			//	for (i = 0; i < 64; i++) {
-			//		b = i;
-
-			//		// 該当係数以外0
-			//		// i番目の係数（基底）のみ使用。それ以外の係数は0。
-			//		for (a = 0; a < 64; a++) {
-			//			if (b == a)
-			//				ny[a][j] = y[a][j];
-			//			else
-			//				ny[a][j] = 0;
-			//		}
-			//		// 初期化（必ず行う）
-			//		for (a = 0; a < 64; a++)
-			//			xx[a] = 0.0;
-
-			//		// 1ブロックで処理を行っているため、そのブロック番号（ｊ）の係数と
-			//		// すべての基底を用いることで もとのブロックを再構成する処理
-			//		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-			//		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-			//		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-			//		// ブロックごとのMSE
-			//		// MSEは（元の値 - 再構成の値）^2をすることで
-			//		// 再構成した値が元の値とどれくらいずれているのかを見るための指標
-			//		sum = 0.0;
-			//		sum2 = 0.0;
-			//		mk = j % 32;
-			//		ml = j / 32;
-
-			//		// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-			//		// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-			//		for (a = 0; a < 8; a++) {
-			//			for (b = 0; b < 8; b++) {
-			//				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
-			//			}
-			//		}
-			//		mse_ica0[i][j] = sum / 64;//平均
-			//	}
-			//	// 実行確認用
-			//	if (j % 64 == 0)
-			//		printf(" @");
-			//}
-			//printf("\n");
-
-			//for (i = 0; i < 64; i++) {
-			//	for (j = 0; j < 1024; j++) {
-			//		// .val -> 値を取得・属性を変更し記憶
-			//		// .abs -> 絶対値を記憶
-			//		// .num -> 元々の係数に対応するブロック内番号を記憶
-			//		sort_d[i][j].val = mse_ica0[i][j];		/* 元々の係数値 */
-			//		sort_d[i][j].abs = fabs(mse_ica0[i][j]);	/* ソートは係数の絶対値で行う*/
-			//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-			//	}
-			//}
-
-			//for (n = 0; n < 1024; n++) {
-			//	for (i = 0; i < 64 - 1; i++) {
-			//		min = sort_d[i][n].abs;
-			//		k = i;
-			//		for (j = i + 1; j < 64; j++) {
-			//			if (sort_d[j][n].abs < min) {
-			//				min = sort_d[j][n].abs;
-			//				k = j;
-			//			}
-			//		}
-			//		temp = sort_d[i][n];
-			//		sort_d[i][n] = sort_d[k][n];
-			//		sort_d[k][n] = temp;
-			//	}
-			//}
-
-			//for (i = 0; i < 1024; i++) { //
-			//	ica_test5[0][i] = sort_d[0][i].num;  // 基底番号
-			//	ica_test5[1][i] = sort_d[0][i].val;    // MSE値
-			//	//printf("%lf : %lf\n", result_ica[0][i], (double)sort_d[0][i].num);
-			//}
-
-			//fprintf(fp5, "use basis number : \n\n");
-			//fprintf(fp5, "Percentage  :  %lf\n\n",percent);
-			//for (b = 0; b < 64; b++) {
-			//	if (temp6[b] != 0)
-			//		fprintf(fp5, "  [%2d]  ",b);
-			//}
-			//fprintf(fp5, "\n\n----------------------------------------------------------------------------\n\n");
-
-			//for (b = 0; b < 1024;b++) {
-			//	if ((result_ica[1][b] - dcoe_temp[0][b]) < 100 && (result_ica0[1][b] - result_ica[1][b]) > 10)
-			//		fprintf(fp5, " [%4d]  :  [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   diff = %5.4f \n\n", b, (int)ica_test5[0][b], ica_test5[1][b], (int)result_ica[0][b], result_ica[1][b], (ica_test5[1][b] - result_ica[1][b]));
-			//	else
-			//		fprintf(fp5, "- - -\n\n");
-			//	//fprintf(fp, " |    [%d][%d] : mse = %5.4f  ", (int)result_ica[0][b], (int)dct_coe[a][b], dcoe_temp[a][b]);
-			//}
-
-
-			//　0→1のMSE改善量　調査中
-			for (a = 0; a < 1024; a++) {
-				for (b = 0; b < 64; b++) {
-					test2[b][a] = mse_ica[b][a] - mse_ica0[b][a]; //番号順
-					test3[b][a] = mse_ica[b][a] - mse_ica0[b][a]; //MSE順
-				}
-			}
-
-			printf("Can you proceed ? [y/n] :");
-			scanf("%s", &yn);
-
-			if (yn == 'y') {
-				gnuplot(test2);
-			}
-
-
-				for (i = 0; i < 64; i++) {
-					for (j = 0; j < 1024; j++) {
-						// .val -> 値を取得・属性を変更し記憶
-						// .abs -> 絶対値を記憶
-						// .num -> 元々の係数に対応するブロック内番号を記憶
-						sort_d[i][j].val = test3[i][j];		/* 元々の係数値 */
-						sort_d[i][j].abs = fabs(test3[i][j]);	/* ソートは係数の絶対値で行う*/
-						sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-					}
-				}
-
-				for (n = 0; n < 1024; n++) {
-					for (i = 0; i < 64 - 1; i++) {
-						min = sort_d[i][n].val;
-						k = i;
-						for (j = i + 1; j < 64; j++) {
-							if (sort_d[j][n].val < min) {
-								min = sort_d[j][n].val;
-								k = j;
+		///////////////////////// 3 start ////////////////////////////////
+		printf("Do you use 3 basis ? [ y/n ] : ");
+		scanf("%s", &yn);
+		if (yn == 'y') {
+			printf("Method 3 basis start - ->\n");
+
+			for (j = 0; j < 1024; j++) {
+				for (m = 0; m < 64; m++)
+					for (n = 0; n < 64; n++)
+						for (l = 0; l < 64; l++) {
+							for (i = 0; i < 64; i++)
+								ny[i][j] = 0;
+
+							ny[m][j] = y[m][j]; // 3つ目の基底選択
+							ny[n][j] = y[n][j]; // 2つ目の基底選択
+							ny[l][j] = y[l][j]; // 1つ目の基底選択
+
+							// 初期化（必ず行う）
+							for (a = 0; a < 64; a++)
+								xx[a] = 0.0;
+
+							seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+							sum = 0.0;
+							mk = j % 32;
+							ml = j / 32;
+							for (a = 0; a < 8; a++) {
+								for (b = 0; b < 8; b++) {
+									sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+								}
 							}
+
+							ica_test5[l][n][m] = sum / 64.0;
 						}
-						temp = sort_d[i][n];
-						sort_d[i][n] = sort_d[k][n];
-						sort_d[k][n] = temp;
-					}
-				}
-
-				for (a = 0; a < 1024; a++)
-					for (b = 0; b < 64; b++)
-						test3[b][a] = sort_d[b][a].val;
-
-				printf("Can you proceed ? [y/n] :");
-				scanf("%s", &yn);
-
-				if (yn == 'y') {
-					gnuplot(test3);
-				}
-
-			//for (b = 0; b < 1024; b++) {
-			//	fprintf(fp5, "\n\n\n -- [area No.%d] ------------------------------------------------------------------------------------------  \n\n", b);
-			//	fprintf(fp5, " ~~~~  BEST MSE [basis No.%d]  mse = %5.4f   ~~~~ \n\n", (int)result_ica0[0][b], result_ica0[1][b]);
-
-			//	for (a = 0; a < 64; a++)
-			//		fprintf(fp5, " [%4d]  :  [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f]    |     [%2d] mse = %5.4f  :  [%2d]  mse = %5.4f  :   [diff = %5.4f] \n\n", a, a, mse_ica0[a][b], a, mse_ica[a][b], (mse_ica[a][b] - mse_ica0[a][b]), (int)sort_d[a][b].num, mse_ica0[(int)sort_d[a][b].num][b], (int)sort_d[a][b].num, mse_ica[(int)sort_d[a][b].num][b], (mse_ica[(int)sort_d[a][b].num][b] - mse_ica0[(int)sort_d[a][b].num][b]));
-			//}
-				//sum0 = sum1 = sum2 = sum11 = sum22 = result_coe = 0;
-				//for (j = 0; j < i; j++) {
-				//	sum1 += temp_2[j];
-				//	sum2 += temp_5[j];
-				//}
-
-				//sum1 /= (double)i;
-				//sum2 /= (double)i;
-
-				//for (j = 0; j < i; j++) {
-				//	sum0 += (temp_2[j] - sum1) * (temp_5[j] - sum2);
-				//	sum11 += pow(temp_2[j] - sum1, 2);
-				//	sum22 += pow(temp_5[j] - sum2, 2);
-				//}
-
-				//result_coe = (sum0 / i) / (sqrt(sum11 / i) * sqrt(sum22 / i));
-				//fprintf(fp, " \n\n\n average of coefficient : amount of improvement= %lf", result_coe);
-
-				// ２個目を選択する過程の調査中
-				for (a = 0; a < 1024; a++) {
-					for (b = 0; b < 64; b++) {
-						test2[b][a] = mse_ica1[y_rank[b][a]][a] - result_ica[1][a]; //番号順
-						test3[b][a] = dcoe_temp[b][a] - result_ica[1][a]; //MSE順
-					}
-				}
-				//gnuplot(test2);
-				//gnuplot(test3);
 
 
-///////// 2 fin//////////////////
-	//動作確認
+				//printf("+ - - - - - Now Running - - - - +\n");
+
+				min = ica_test5[0][0][0];
+				for (m = 0; m < 64; m++)
+					for (n = 0; n < 64; n++)
+						for (l = 0; l < 64; l++) {
+							if (ica_test5[l][n][m] < min)
+								min = ica_test5[l][n][m];
+						}
+				all_mse[3][j] = min;
+				printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+			}
+			printf("\n\n");
+
+			///////// 2 fin//////////////////
+				//動作確認
+
+			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
+			fprintf(fp2, "\n\n  MSE value for the entire image \n\n\n  Number of basis used : 0, 1, 2, 3\n\n\n  (* The number of basis is not the whole number, but the number using the best basis in a small area )\n\n----------------------------------------------------------------------------------\n\n");
+
+			sum = 0;
+			for (j = 0; j < 1024; j++)
+				sum += all_mse[0][j];
+			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 0 - - - - - - - \n\n\n");
+			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+
+			sum = 0;
+			for (j = 0; j < 1024; j++)
+				sum += all_mse[1][j];
+			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 1 - - - - - - - \n\n\n");
+			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+
+			sum = 0;
+			for (j = 0; j < 1024; j++)
+				sum += all_mse[2][j];
+			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 2 - - - - - - - \n\n\n");
+			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+
+			sum = 0;
+			for (j = 0; j < 1024; j++)
+				sum += all_mse[3][j];
+			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 3 - - - - - - - \n\n\n");
+			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+
+		}
+
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 1024; j++)
+				total_mse[i] += mse_ica0[i][j] - mse_ica[i][j]; // 0 -> 1の時の各基底のMSE改善・損失量
+
+		printf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp5, "\n\n  MSE improvement and loss for each basis \n\n\n  Number of basis used : 0, 1\n\n\n  (* MSE value 0 - 1 : Improvement is +, Loss is - )\n\n\n  [basis number]  :  MSE value ( improvement & loss )\n\n----------------------------------------------------------------------------------\n\n");
+
+		for (i = 0; i < 64; i++)
+			fprintf(fp5, " [%2d] : %lf  ( improvement & loss )\n\n", i, total_mse[i]);
+
 			printf("<ica fin>\n\n");
 			/////////////////////////////////ica 終了/////////////////////////////////////////
 
