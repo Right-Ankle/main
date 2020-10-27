@@ -142,7 +142,7 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 	seki3(w, v, w2); // w2 -> wとvの積
 	inv(w2, w);	//ここまでで w が完成 w -> w2の逆行列, w2 -> 単位行列
 
-	printf("END\n");
+	printf("END\n\n");
 
 	wtosai(p, npca_basis);	//出力用PCA基底の作成　p -> pca基底
 	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底

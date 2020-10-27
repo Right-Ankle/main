@@ -17,7 +17,7 @@ int main()
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64];
 	static double percent, sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][1024], average2[4][2];
-	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], ica_bent[1024], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
+	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
@@ -203,8 +203,9 @@ int main()
 			mse_ica[i][j] = sum / 64;//平均
 		}
 		// 実行確認用
-		printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
+	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
 
 	// ///////////// ica MSE ソート/////////////////////////
@@ -320,8 +321,9 @@ int main()
 			mse_ica0[i][j] = sum / 64;//平均
 		}
 		// 実行確認用
-		printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
+	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
 
 	// sort MSE of 0 basis
@@ -433,7 +435,7 @@ int main()
 	printf("Do you start method 2 ? [ y/n ] : ");
 	scanf("%s", &yn);
 	if (yn == 'y') {
-		printf("Method 2 start - ->\n");
+		printf("\nMethod 2 start - ->\n\n");
 
 		for (j = 0; j < 1024; j++) {
 			for (m = 0; m < 64; m++)
@@ -463,8 +465,9 @@ int main()
 
 					ica_test[n][m][j] = sum / 64.0;
 				}
-			printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 		}
+		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
 
 
@@ -548,7 +551,7 @@ int main()
 		printf("Do you use 3 basis ? [ y/n ] : ");
 		scanf("%s", &yn);
 		if (yn == 'y') {
-			printf("Method 3 basis start - ->\n");
+			printf("\nMethod 3 basis start - ->\n\n");
 
 			for (j = 0; j < 1024; j++) {
 				for (m = 0; m < 64; m++)
@@ -592,8 +595,9 @@ int main()
 								min = ica_test5[l][n][m];
 						}
 				all_mse[3][j] = min;
-				printf("\r  Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+				printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 			}
+			printf("\r [ Execution finished ]          ");
 			printf("\n\n");
 
 			///////// 2 fin//////////////////
@@ -606,25 +610,25 @@ int main()
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[0][j];
 			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 0 - - - - - - - \n\n\n");
-			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[1][j];
 			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 1 - - - - - - - \n\n\n");
-			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[2][j];
 			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 2 - - - - - - - \n\n\n");
-			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[3][j];
 			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 3 - - - - - - - \n\n\n");
-			fprintf(fp2, " Average of MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 		}
 
@@ -632,11 +636,57 @@ int main()
 			for (j = 0; j < 1024; j++)
 				total_mse[i] += mse_ica0[i][j] - mse_ica[i][j]; // 0 -> 1の時の各基底のMSE改善・損失量
 
+		for (i = 0; i < 64; i++) {
+			// .val -> 値を取得・属性を変更し記憶
+			// .abs -> 絶対値を記憶
+			// .num -> 元々の係数に対応するブロック内番号を記憶
+			sort_d[i][0].val = total_mse[i];		/* 元々の係数値 */
+			sort_d[i][0].abs = fabs(total_mse[i]);	/* ソートは係数の絶対値で行う*/
+			sort_d[i][0].num = i;				/* numに元々の係数に対応する番号を記憶 */
+		}
+
+
+		for (i = 0; i < 64 - 1; i++) {
+			max = sort_d[i][0].abs;
+			k = i;
+			for (j = i + 1; j < 64; j++) {
+				if (sort_d[j][0].abs > max) {
+					max = sort_d[j][0].abs;
+					k = j;
+				}
+			}
+			temp = sort_d[i][0];
+			sort_d[i][0] = sort_d[k][0];
+			sort_d[k][0] = temp;
+		}
+		
+		sum = 0; sum1 = 0; //1 -> マイナス
+
+		for (j = 0; j < 1024; j++) {
+			sum = 0; sum1 = 0;
+			for (i = 0; i < 64; i++) {
+				if (0 < mse_ica0[i][j] - mse_ica[i][j])
+					sum += mse_ica0[i][j] - mse_ica[i][j];
+				else
+					sum1 += fabs(mse_ica0[i][j] - mse_ica[i][j]);
+			}
+			for (i = 0; i < 64; i++) {
+				if (0 < mse_ica0[i][j] - mse_ica[i][j])
+					test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]) / sum;
+				else
+					test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]) / sum1;
+			}
+		}
+
+		for (j = 0; j < 1024; j++)
+			for (i = 0; i < 64; i++)
+				total_test[i] += test2[i][j];
+
 		printf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp5, "\n\n  MSE improvement and loss for each basis \n\n\n  Number of basis used : 0, 1\n\n\n  (* MSE value 0 - 1 : Improvement is +, Loss is - )\n\n\n  [basis number]  :  MSE value ( improvement & loss )\n\n----------------------------------------------------------------------------------\n\n");
+		fprintf(fp5, "\n\n  MSE improvement and loss for each basis \n\n\n  Number of basis used : 0, 1\n\n\n  (* MSE value 0 - 1 : Improvement is +, Loss is - )\n\n\n  [basis number]  :  MSE value ( improvement & loss )       [basis number]  :  MSE value ( Value after sorting )\n\n----------------------------------------------------------------------------------\n\n");
 
 		for (i = 0; i < 64; i++)
-			fprintf(fp5, " [%2d] : %lf  ( improvement & loss )\n\n", i, total_mse[i]);
+			fprintf(fp5, " [%2d] : %lf  ( improvement & loss MSE)        [%2d] : %lf  ( improvement & loss MSE)       [%2d] : %lf  ( improvement & loss MSE)\n\n", i, total_mse[i], (int)sort_d[i][0].num, sort_d[i][0].val, i, total_test[i]);
 
 			printf("<ica fin>\n\n");
 			/////////////////////////////////ica 終了/////////////////////////////////////////
@@ -648,63 +698,81 @@ int main()
 			//動作確認
 			printf("<dct start>\n");
 
-
+			fprintf(fp2, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 			// 10段階品質があるから10段階分やる
-			//for (Q = 100; Q > 0; Q -= 10) {
-			//	printf("now Q is %d\n", Q);
-			Q = 100;
+			for (Q = 100; Q > 0; Q -= 10) {
+				printf("\r now Q is %d          \n", Q);
+
+
+			//Q = 100;
 
 			// dct処理
 			dct(origin, dcoe, 8); // 係数を出力
 			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-			dctcoe_conv(dcoe, dct_ent);
+			idct(dcoe, dcoe2, 8); // 普通の再構成
 
-			for (i = 0; i < 64; i++) {
+			sum = 0;
 
-				// 該当係数以外0
-				// i番目の係数（基底）のみ使用。それ以外の係数は0。
-				for (j = 0; j < 1024; j++) {
-					for (a = 0; a < 64; a++) {
-						if (i == a)
-							ny[a][j] = dct_ent[a][j];
-						else
-							ny[a][j] = 0;
-					}
+			for (a = 0; a < 256; a++) {
+				for (b = 0; b < 256; b++) {
+					sum += pow((double)origin[a][b] - (double)dcoe2[a][b], 2);
 				}
-				xtogen2(ny, dcoe);
-				idct(dcoe, dcoe2, 8); // 普通の再構成
-
-				for (j = 0; j < 1024; j++) {
-
-					// ブロックごとのMSE
-					// MSEは（元の値 - 再構成の値）^2をすることで
-					// 再構成した値が元の値とどれくらいずれているのかを見るための指標
-					sum = 0.0;
-					sum2 = 0.0;
-					mk = j % 32;
-					ml = j / 32;
-
-					// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-					// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-					for (a = 0; a < 8; a++) {
-						for (b = 0; b < 8; b++) {
-							sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
-						}
-					}
-					mse_dct[i][j] = sum / 64;//平均
-				}
-				// 実行確認用
-				//printf("%d\n", i);
-				//if (i == 0) {
-				//	for (a = 0; a < 256; a++)
-				//		for (b = 0; b < 256; b++)
-				//			temp_sai[a * 256 + b] = dcoe2[a][b];
-
-				//	sprintf(output, "test.bmp");
-				//	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-				//}
-
 			}
+
+			sum = sum / (256.0 * 256.0);
+
+
+			fprintf(fp2, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
+
+			//for (i = 0; i < 64; i++) {
+
+			//	// 該当係数以外0
+			//	// i番目の係数（基底）のみ使用。それ以外の係数は0。
+			//	for (j = 0; j < 1024; j++) {
+			//		for (a = 0; a < 64; a++) {
+			//			if (i == a)
+			//				ny[a][j] = dct_ent[a][j];
+			//			else
+			//				ny[a][j] = 0;
+			//		}
+			//	}
+			//	xtogen2(ny, dcoe);
+			//	idct(dcoe, dcoe2, 8); // 普通の再構成
+
+			//	for (j = 0; j < 1024; j++) {
+
+			//		// ブロックごとのMSE
+			//		// MSEは（元の値 - 再構成の値）^2をすることで
+			//		// 再構成した値が元の値とどれくらいずれているのかを見るための指標
+			//		sum = 0.0;
+			//		sum2 = 0.0;
+			//		mk = j % 32;
+			//		ml = j / 32;
+
+			//		// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+			//		// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+			//		for (a = 0; a < 8; a++) {
+			//			for (b = 0; b < 8; b++) {
+			//				sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
+			//			}
+			//		}
+			//		mse_dct[i][j] = sum / 64;//平均
+			//	}
+			//	// 実行確認用
+			//	
+
+
+
+			//	//	sprintf(output, "test.bmp");
+			//	//	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+			//	//}
+
+			//}
+
+			//	for (i = 0; i < 1024; i++)
+			//		for (j = 0; j < 64; j++)
+			//		mse_dct[i][j]
+
 			/////////////////////////////////////////////////////////
 			//for (b = 0; b < 1024; b++) {
 			//	fprintf(fp2, "\n --- [%d] --- \n\n", b);
@@ -743,71 +811,71 @@ int main()
 
 		//}
 
-			// dct係数をソート
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					// .val -> 値を取得・属性を変更し記憶
-					// .abs -> 絶対値を記憶
-					// .num -> 元々の係数に対応するブロック内番号を記憶
-					sort_d[i][j].val = dct_ent[i][j];		/* 元々の係数値 */
-					sort_d[i][j].abs = fabs(dct_ent[i][j]);	/* ソートは係数の絶対値で行う*/
-					sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-				}
-			}
+			//// dct係数をソート
+			//for (i = 0; i < 64; i++) {
+			//	for (j = 0; j < 1024; j++) {
+			//		// .val -> 値を取得・属性を変更し記憶
+			//		// .abs -> 絶対値を記憶
+			//		// .num -> 元々の係数に対応するブロック内番号を記憶
+			//		sort_d[i][j].val = dct_ent[i][j];		/* 元々の係数値 */
+			//		sort_d[i][j].abs = fabs(dct_ent[i][j]);	/* ソートは係数の絶対値で行う*/
+			//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+			//	}
+			//}
 
-			for (n = 0; n < 1024; n++) {
-				for (i = 0; i < 64 - 1; i++) {
-					max = sort_d[i][n].abs;
-					k = i;
-					for (j = i + 1; j < 64; j++) {
-						if (sort_d[j][n].abs > max) {
-							max = sort_d[j][n].abs;
-							k = j;
-						}
-					}
-					temp = sort_d[i][n];
-					sort_d[i][n] = sort_d[k][n];
-					sort_d[k][n] = temp;
-				}
-			}
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++) {
-					dct_coe[i][j] = (double)sort_d[i][j].num;//dct_coe -> ソート後のdct係数順位
-					dcoe_temp[i][j] = sort_d[i][j].val;
-				}
-			////////////////////////////
+			//for (n = 0; n < 1024; n++) {
+			//	for (i = 0; i < 64 - 1; i++) {
+			//		max = sort_d[i][n].abs;
+			//		k = i;
+			//		for (j = i + 1; j < 64; j++) {
+			//			if (sort_d[j][n].abs > max) {
+			//				max = sort_d[j][n].abs;
+			//				k = j;
+			//			}
+			//		}
+			//		temp = sort_d[i][n];
+			//		sort_d[i][n] = sort_d[k][n];
+			//		sort_d[k][n] = temp;
+			//	}
+			//}
+			//for (i = 0; i < 64; i++)
+			//	for (j = 0; j < 1024; j++) {
+			//		dct_coe[i][j] = (double)sort_d[i][j].num;//dct_coe -> ソート後のdct係数順位
+			//		dcoe_temp[i][j] = sort_d[i][j].val;
+			//	}
+			//////////////////////////////
 
-					// dctのMSEをソート
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					// .val -> 値を取得・属性を変更し記憶
-					// .abs -> 絶対値を記憶
-					// .num -> 元々の係数に対応するブロック内番号を記憶
-					sort_d[i][j].val = mse_dct[i][j];		/* 元々の係数値 */
-					sort_d[i][j].abs = fabs(mse_dct[i][j]);	/* ソートは係数の絶対値で行う*/
-					sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-				}
-			}
+			//		// dctのMSEをソート
+			//for (i = 0; i < 64; i++) {
+			//	for (j = 0; j < 1024; j++) {
+			//		// .val -> 値を取得・属性を変更し記憶
+			//		// .abs -> 絶対値を記憶
+			//		// .num -> 元々の係数に対応するブロック内番号を記憶
+			//		sort_d[i][j].val = mse_dct[i][j];		/* 元々の係数値 */
+			//		sort_d[i][j].abs = fabs(mse_dct[i][j]);	/* ソートは係数の絶対値で行う*/
+			//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+			//	}
+			//}
 
-			for (n = 0; n < 1024; n++) {
-				for (i = 0; i < 64 - 1; i++) {
-					max = sort_d[i][n].abs;
-					k = i;
-					for (j = i + 1; j < 64; j++) {
-						if (sort_d[j][n].abs > max) {
-							max = sort_d[j][n].abs;
-							k = j;
-						}
-					}
-					temp = sort_d[i][n];
-					sort_d[i][n] = sort_d[k][n];
-					sort_d[k][n] = temp;
-				}
-			}
+			//for (n = 0; n < 1024; n++) {
+			//	for (i = 0; i < 64 - 1; i++) {
+			//		max = sort_d[i][n].abs;
+			//		k = i;
+			//		for (j = i + 1; j < 64; j++) {
+			//			if (sort_d[j][n].abs > max) {
+			//				max = sort_d[j][n].abs;
+			//				k = j;
+			//			}
+			//		}
+			//		temp = sort_d[i][n];
+			//		sort_d[i][n] = sort_d[k][n];
+			//		sort_d[k][n] = temp;
+			//	}
+			//}
 
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++)
-					mse_dct[i][j] = sort_d[i][j].val;//dct_coe -> ソート後のmse
+			//for (i = 0; i < 64; i++)
+			//	for (j = 0; j < 1024; j++)
+			//		mse_dct[i][j] = sort_d[i][j].val;//dct_coe -> ソート後のmse
 
 			/// //////////////////////////////
 
@@ -818,7 +886,9 @@ int main()
 			////////////////出力///////////////////
 
 			//////////////////出力終了///////////////////////
-		//} // dctの最初に戻る
+		} // dctの最初に戻る
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
 
 			fclose(fp);
 			fclose(fp2);

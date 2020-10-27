@@ -1,0 +1,71 @@
+
+
+ Use image  :  barbara.bmp
+
+
+
+
+  MSE value for the entire image 
+
+
+  Number of basis used : 0, 1, 2, 3
+
+
+  (* The number of basis is not the whole number, but the number using the best basis in a small area )
+
+----------------------------------------------------------------------------------
+
+
+
+- - - - - - - - Number of basis used : 0 - - - - - - - 
+
+
+ MSE : 617.298737  (value)
+
+
+
+- - - - - - - - Number of basis used : 1 - - - - - - - 
+
+
+ MSE : 400.472626  (value)
+
+
+
+- - - - - - - - Number of basis used : 2 - - - - - - - 
+
+
+ MSE : 303.163620  (value)
+
+
+
+- - - - - - - - Number of basis used : 3 - - - - - - - 
+
+
+ MSE : 242.837799  (value)
+
+
+
+
+- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - 
+
+
+ Q = 100 : 0.728363  (MSE value)
+
+ Q =  90 : 13.009079  (MSE value)
+
+ Q =  80 : 28.281433  (MSE value)
+
+ Q =  70 : 43.980484  (MSE value)
+
+ Q =  60 : 60.471252  (MSE value)
+
+ Q =  50 : 76.575546  (MSE value)
+
+ Q =  40 : 97.431107  (MSE value)
+
+ Q =  30 : 132.385635  (MSE value)
+
+ Q =  20 : 200.593826  (MSE value)
+
+ Q =  10 : 371.353836  (MSE value)
+
