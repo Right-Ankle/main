@@ -13,131 +13,131 @@
 
 ----------------------------------------------------------------------------------
 
- [ 0] : 6180.000000  ( improvement & loss MSE)        [46] : 24119.718750  ( improvement & loss MSE)       [ 0] : -6.412143  ( improvement & loss MSE)
+ [ 0] : 3257.000000  ( improvement & loss MSE)        [40] : 46343.812500  ( improvement & loss MSE)       [ 0] : -9.100225  ( improvement & loss MSE)
 
- [ 1] : 5894.140625  ( improvement & loss MSE)        [44] : 23193.343750  ( improvement & loss MSE)       [ 1] : -5.487882  ( improvement & loss MSE)
+ [ 1] : 3414.234375  ( improvement & loss MSE)        [18] : 43685.984375  ( improvement & loss MSE)       [ 1] : -3.446066  ( improvement & loss MSE)
 
- [ 2] : 7265.078125  ( improvement & loss MSE)        [41] : 21618.859375  ( improvement & loss MSE)       [ 2] : -1.276662  ( improvement & loss MSE)
+ [ 2] : 9764.109375  ( improvement & loss MSE)        [22] : 33010.890625  ( improvement & loss MSE)       [ 2] : 0.922828  ( improvement & loss MSE)
 
- [ 3] : 9199.750000  ( improvement & loss MSE)        [57] : 18908.656250  ( improvement & loss MSE)       [ 3] : -8.317918  ( improvement & loss MSE)
+ [ 3] : 14745.500000  ( improvement & loss MSE)        [34] : 29419.312500  ( improvement & loss MSE)       [ 3] : 0.242190  ( improvement & loss MSE)
 
- [ 4] : 7350.984375  ( improvement & loss MSE)        [35] : 15443.421875  ( improvement & loss MSE)       [ 4] : 4.369263  ( improvement & loss MSE)
+ [ 4] : 9474.390625  ( improvement & loss MSE)        [39] : 25282.296875  ( improvement & loss MSE)       [ 4] : -3.892275  ( improvement & loss MSE)
 
- [ 5] : 10313.796875  ( improvement & loss MSE)        [33] : 14381.375000  ( improvement & loss MSE)       [ 5] : 4.870926  ( improvement & loss MSE)
+ [ 5] : 4098.171875  ( improvement & loss MSE)        [50] : 20436.468750  ( improvement & loss MSE)       [ 5] : -0.305186  ( improvement & loss MSE)
 
- [ 6] : 5518.671875  ( improvement & loss MSE)        [19] : 14327.046875  ( improvement & loss MSE)       [ 6] : 0.593590  ( improvement & loss MSE)
+ [ 6] : 7334.546875  ( improvement & loss MSE)        [17] : 19893.031250  ( improvement & loss MSE)       [ 6] : -1.950400  ( improvement & loss MSE)
 
- [ 7] : 9806.812500  ( improvement & loss MSE)        [43] : 14271.390625  ( improvement & loss MSE)       [ 7] : 2.545869  ( improvement & loss MSE)
+ [ 7] : 7147.140625  ( improvement & loss MSE)        [23] : 19885.218750  ( improvement & loss MSE)       [ 7] : -5.623790  ( improvement & loss MSE)
 
- [ 8] : 8095.921875  ( improvement & loss MSE)        [31] : 12646.093750  ( improvement & loss MSE)       [ 8] : 0.262508  ( improvement & loss MSE)
+ [ 8] : 5239.734375  ( improvement & loss MSE)        [41] : 17386.515625  ( improvement & loss MSE)       [ 8] : -0.949213  ( improvement & loss MSE)
 
- [ 9] : 5512.531250  ( improvement & loss MSE)        [34] : 12363.859375  ( improvement & loss MSE)       [ 9] : -3.808575  ( improvement & loss MSE)
+ [ 9] : 4766.734375  ( improvement & loss MSE)        [10] : 16394.218750  ( improvement & loss MSE)       [ 9] : -5.013542  ( improvement & loss MSE)
 
- [10] : 6808.500000  ( improvement & loss MSE)        [15] : 12205.546875  ( improvement & loss MSE)       [10] : -1.435961  ( improvement & loss MSE)
+ [10] : 16394.218750  ( improvement & loss MSE)        [12] : 15869.656250  ( improvement & loss MSE)       [10] : 7.119326  ( improvement & loss MSE)
 
- [11] : 7635.859375  ( improvement & loss MSE)        [39] : 11683.796875  ( improvement & loss MSE)       [11] : 1.684561  ( improvement & loss MSE)
+ [11] : 5079.015625  ( improvement & loss MSE)        [ 3] : 14745.500000  ( improvement & loss MSE)       [11] : -3.101714  ( improvement & loss MSE)
 
- [12] : 8043.828125  ( improvement & loss MSE)        [29] : 11487.656250  ( improvement & loss MSE)       [12] : 2.575073  ( improvement & loss MSE)
+ [12] : 15869.656250  ( improvement & loss MSE)        [31] : 12298.250000  ( improvement & loss MSE)       [12] : 7.936406  ( improvement & loss MSE)
 
- [13] : 8237.000000  ( improvement & loss MSE)        [56] : 11303.578125  ( improvement & loss MSE)       [13] : -2.770800  ( improvement & loss MSE)
+ [13] : 8451.406250  ( improvement & loss MSE)        [51] : 11849.968750  ( improvement & loss MSE)       [13] : -5.271957  ( improvement & loss MSE)
 
- [14] : 9152.546875  ( improvement & loss MSE)        [58] : 11123.437500  ( improvement & loss MSE)       [14] : 4.449916  ( improvement & loss MSE)
+ [14] : 6643.812500  ( improvement & loss MSE)        [63] : 11653.937500  ( improvement & loss MSE)       [14] : 4.485137  ( improvement & loss MSE)
 
- [15] : 12205.546875  ( improvement & loss MSE)        [53] : 10874.828125  ( improvement & loss MSE)       [15] : 3.723978  ( improvement & loss MSE)
+ [15] : 3342.718750  ( improvement & loss MSE)        [43] : 10659.390625  ( improvement & loss MSE)       [15] : -5.249405  ( improvement & loss MSE)
 
- [16] : 10543.718750  ( improvement & loss MSE)        [28] : 10768.390625  ( improvement & loss MSE)       [16] : -0.581845  ( improvement & loss MSE)
+ [16] : 6188.203125  ( improvement & loss MSE)        [30] : 10268.468750  ( improvement & loss MSE)       [16] : -0.172373  ( improvement & loss MSE)
 
- [17] : 8597.250000  ( improvement & loss MSE)        [16] : 10543.718750  ( improvement & loss MSE)       [17] : 3.795774  ( improvement & loss MSE)
+ [17] : 19893.031250  ( improvement & loss MSE)        [25] : 9971.187500  ( improvement & loss MSE)       [17] : -2.044791  ( improvement & loss MSE)
 
- [18] : 8090.843750  ( improvement & loss MSE)        [49] : 10404.125000  ( improvement & loss MSE)       [18] : -2.381720  ( improvement & loss MSE)
+ [18] : 43685.984375  ( improvement & loss MSE)        [53] : 9871.453125  ( improvement & loss MSE)       [18] : 15.023102  ( improvement & loss MSE)
 
- [19] : 14327.046875  ( improvement & loss MSE)        [ 5] : 10313.796875  ( improvement & loss MSE)       [19] : -5.572466  ( improvement & loss MSE)
+ [19] : 8803.312500  ( improvement & loss MSE)        [ 2] : 9764.109375  ( improvement & loss MSE)       [19] : -5.612471  ( improvement & loss MSE)
 
- [20] : 7359.140625  ( improvement & loss MSE)        [21] : 9862.140625  ( improvement & loss MSE)       [20] : -5.236993  ( improvement & loss MSE)
+ [20] : 7546.265625  ( improvement & loss MSE)        [55] : 9754.250000  ( improvement & loss MSE)       [20] : -1.479666  ( improvement & loss MSE)
 
- [21] : 9862.140625  ( improvement & loss MSE)        [ 7] : 9806.812500  ( improvement & loss MSE)       [21] : 1.838123  ( improvement & loss MSE)
+ [21] : 5193.921875  ( improvement & loss MSE)        [24] : 9676.062500  ( improvement & loss MSE)       [21] : -2.071259  ( improvement & loss MSE)
 
- [22] : 9289.718750  ( improvement & loss MSE)        [47] : 9554.296875  ( improvement & loss MSE)       [22] : 3.386088  ( improvement & loss MSE)
+ [22] : 33010.890625  ( improvement & loss MSE)        [ 4] : 9474.390625  ( improvement & loss MSE)       [22] : 7.057477  ( improvement & loss MSE)
 
- [23] : 5590.687500  ( improvement & loss MSE)        [32] : 9468.203125  ( improvement & loss MSE)       [23] : -1.812835  ( improvement & loss MSE)
+ [23] : 19885.218750  ( improvement & loss MSE)        [28] : 9089.906250  ( improvement & loss MSE)       [23] : 10.887491  ( improvement & loss MSE)
 
- [24] : 9302.562500  ( improvement & loss MSE)        [24] : 9302.562500  ( improvement & loss MSE)       [24] : -2.835284  ( improvement & loss MSE)
+ [24] : 9676.062500  ( improvement & loss MSE)        [19] : 8803.312500  ( improvement & loss MSE)       [24] : 1.314238  ( improvement & loss MSE)
 
- [25] : 5303.984375  ( improvement & loss MSE)        [22] : 9289.718750  ( improvement & loss MSE)       [25] : 3.778598  ( improvement & loss MSE)
+ [25] : 9971.187500  ( improvement & loss MSE)        [13] : 8451.406250  ( improvement & loss MSE)       [25] : -4.912609  ( improvement & loss MSE)
 
- [26] : 5837.421875  ( improvement & loss MSE)        [ 3] : 9199.750000  ( improvement & loss MSE)       [26] : -0.763884  ( improvement & loss MSE)
+ [26] : 2215.328125  ( improvement & loss MSE)        [56] : 8251.140625  ( improvement & loss MSE)       [26] : -5.122587  ( improvement & loss MSE)
 
- [27] : 7166.171875  ( improvement & loss MSE)        [14] : 9152.546875  ( improvement & loss MSE)       [27] : 1.007472  ( improvement & loss MSE)
+ [27] : 6079.515625  ( improvement & loss MSE)        [20] : 7546.265625  ( improvement & loss MSE)       [27] : -9.144630  ( improvement & loss MSE)
 
- [28] : 10768.390625  ( improvement & loss MSE)        [59] : 9094.328125  ( improvement & loss MSE)       [28] : -8.641971  ( improvement & loss MSE)
+ [28] : 9089.906250  ( improvement & loss MSE)        [ 6] : 7334.546875  ( improvement & loss MSE)       [28] : -4.295541  ( improvement & loss MSE)
 
- [29] : 11487.656250  ( improvement & loss MSE)        [50] : 9020.609375  ( improvement & loss MSE)       [29] : -9.788561  ( improvement & loss MSE)
+ [29] : 6774.718750  ( improvement & loss MSE)        [45] : 7280.812500  ( improvement & loss MSE)       [29] : 7.330484  ( improvement & loss MSE)
 
- [30] : 5907.609375  ( improvement & loss MSE)        [60] : 8731.750000  ( improvement & loss MSE)       [30] : -0.643824  ( improvement & loss MSE)
+ [30] : 10268.468750  ( improvement & loss MSE)        [52] : 7151.171875  ( improvement & loss MSE)       [30] : -5.795951  ( improvement & loss MSE)
 
- [31] : 12646.093750  ( improvement & loss MSE)        [42] : 8613.390625  ( improvement & loss MSE)       [31] : 3.523676  ( improvement & loss MSE)
+ [31] : 12298.250000  ( improvement & loss MSE)        [ 7] : 7147.140625  ( improvement & loss MSE)       [31] : 8.438183  ( improvement & loss MSE)
 
- [32] : 9468.203125  ( improvement & loss MSE)        [17] : 8597.250000  ( improvement & loss MSE)       [32] : 2.598379  ( improvement & loss MSE)
+ [32] : 4342.640625  ( improvement & loss MSE)        [57] : 6943.140625  ( improvement & loss MSE)       [32] : 0.387923  ( improvement & loss MSE)
 
- [33] : 14381.375000  ( improvement & loss MSE)        [13] : 8237.000000  ( improvement & loss MSE)       [33] : 1.283921  ( improvement & loss MSE)
+ [33] : 5603.859375  ( improvement & loss MSE)        [29] : 6774.718750  ( improvement & loss MSE)       [33] : -4.234627  ( improvement & loss MSE)
 
- [34] : 12363.859375  ( improvement & loss MSE)        [52] : 8181.203125  ( improvement & loss MSE)       [34] : 3.190978  ( improvement & loss MSE)
+ [34] : 29419.312500  ( improvement & loss MSE)        [14] : 6643.812500  ( improvement & loss MSE)       [34] : 19.968708  ( improvement & loss MSE)
 
- [35] : 15443.421875  ( improvement & loss MSE)        [40] : 8163.828125  ( improvement & loss MSE)       [35] : 3.948791  ( improvement & loss MSE)
+ [35] : 3313.046875  ( improvement & loss MSE)        [36] : 6279.812500  ( improvement & loss MSE)       [35] : -1.657658  ( improvement & loss MSE)
 
- [36] : 7169.984375  ( improvement & loss MSE)        [63] : 8137.250000  ( improvement & loss MSE)       [36] : 1.544659  ( improvement & loss MSE)
+ [36] : 6279.812500  ( improvement & loss MSE)        [16] : 6188.203125  ( improvement & loss MSE)       [36] : -2.599661  ( improvement & loss MSE)
 
- [37] : 7456.484375  ( improvement & loss MSE)        [ 8] : 8095.921875  ( improvement & loss MSE)       [37] : 0.158759  ( improvement & loss MSE)
+ [37] : 5317.218750  ( improvement & loss MSE)        [27] : 6079.515625  ( improvement & loss MSE)       [37] : -2.135268  ( improvement & loss MSE)
 
- [38] : 7181.140625  ( improvement & loss MSE)        [18] : 8090.843750  ( improvement & loss MSE)       [38] : -2.816677  ( improvement & loss MSE)
+ [38] : 4676.171875  ( improvement & loss MSE)        [42] : 5809.203125  ( improvement & loss MSE)       [38] : -1.388703  ( improvement & loss MSE)
 
- [39] : 11683.796875  ( improvement & loss MSE)        [12] : 8043.828125  ( improvement & loss MSE)       [39] : 0.622103  ( improvement & loss MSE)
+ [39] : 25282.296875  ( improvement & loss MSE)        [33] : 5603.859375  ( improvement & loss MSE)       [39] : 12.997574  ( improvement & loss MSE)
 
- [40] : 8163.828125  ( improvement & loss MSE)        [45] : 7834.156250  ( improvement & loss MSE)       [40] : 7.423633  ( improvement & loss MSE)
+ [40] : 46343.812500  ( improvement & loss MSE)        [46] : 5530.671875  ( improvement & loss MSE)       [40] : 18.891377  ( improvement & loss MSE)
 
- [41] : 21618.859375  ( improvement & loss MSE)        [51] : 7693.671875  ( improvement & loss MSE)       [41] : -5.837432  ( improvement & loss MSE)
+ [41] : 17386.515625  ( improvement & loss MSE)        [37] : 5317.218750  ( improvement & loss MSE)       [41] : 1.114687  ( improvement & loss MSE)
 
- [42] : 8613.390625  ( improvement & loss MSE)        [11] : 7635.859375  ( improvement & loss MSE)       [42] : -0.126039  ( improvement & loss MSE)
+ [42] : 5809.203125  ( improvement & loss MSE)        [44] : 5310.062500  ( improvement & loss MSE)       [42] : -3.696682  ( improvement & loss MSE)
 
- [43] : 14271.390625  ( improvement & loss MSE)        [37] : 7456.484375  ( improvement & loss MSE)       [43] : -2.434410  ( improvement & loss MSE)
+ [43] : 10659.390625  ( improvement & loss MSE)        [ 8] : 5239.734375  ( improvement & loss MSE)       [43] : 11.896713  ( improvement & loss MSE)
 
- [44] : 23193.343750  ( improvement & loss MSE)        [20] : 7359.140625  ( improvement & loss MSE)       [44] : 5.179274  ( improvement & loss MSE)
+ [44] : 5310.062500  ( improvement & loss MSE)        [21] : 5193.921875  ( improvement & loss MSE)       [44] : -1.802785  ( improvement & loss MSE)
 
- [45] : 7834.156250  ( improvement & loss MSE)        [ 4] : 7350.984375  ( improvement & loss MSE)       [45] : 1.893847  ( improvement & loss MSE)
+ [45] : 7280.812500  ( improvement & loss MSE)        [62] : 5116.406250  ( improvement & loss MSE)       [45] : 0.817185  ( improvement & loss MSE)
 
- [46] : 24119.718750  ( improvement & loss MSE)        [ 2] : 7265.078125  ( improvement & loss MSE)       [46] : -8.837274  ( improvement & loss MSE)
+ [46] : 5530.671875  ( improvement & loss MSE)        [11] : 5079.015625  ( improvement & loss MSE)       [46] : -0.091041  ( improvement & loss MSE)
 
- [47] : 9554.296875  ( improvement & loss MSE)        [38] : 7181.140625  ( improvement & loss MSE)       [47] : 5.581330  ( improvement & loss MSE)
+ [47] : 3515.046875  ( improvement & loss MSE)        [ 9] : 4766.734375  ( improvement & loss MSE)       [47] : -0.161320  ( improvement & loss MSE)
 
- [48] : 6685.625000  ( improvement & loss MSE)        [36] : 7169.984375  ( improvement & loss MSE)       [48] : -0.672006  ( improvement & loss MSE)
+ [48] : 2058.453125  ( improvement & loss MSE)        [38] : 4676.171875  ( improvement & loss MSE)       [48] : -6.139538  ( improvement & loss MSE)
 
- [49] : 10404.125000  ( improvement & loss MSE)        [27] : 7166.171875  ( improvement & loss MSE)       [49] : -6.107910  ( improvement & loss MSE)
+ [49] : 3587.218750  ( improvement & loss MSE)        [32] : 4342.640625  ( improvement & loss MSE)       [49] : -1.581478  ( improvement & loss MSE)
 
- [50] : 9020.609375  ( improvement & loss MSE)        [55] : 7030.359375  ( improvement & loss MSE)       [50] : -3.527527  ( improvement & loss MSE)
+ [50] : 20436.468750  ( improvement & loss MSE)        [ 5] : 4098.171875  ( improvement & loss MSE)       [50] : -12.501977  ( improvement & loss MSE)
 
- [51] : 7693.671875  ( improvement & loss MSE)        [62] : 6978.109375  ( improvement & loss MSE)       [51] : -1.056599  ( improvement & loss MSE)
+ [51] : 11849.968750  ( improvement & loss MSE)        [58] : 3703.937500  ( improvement & loss MSE)       [51] : 7.181051  ( improvement & loss MSE)
 
- [52] : 8181.203125  ( improvement & loss MSE)        [10] : 6808.500000  ( improvement & loss MSE)       [52] : 0.913782  ( improvement & loss MSE)
+ [52] : 7151.171875  ( improvement & loss MSE)        [49] : 3587.218750  ( improvement & loss MSE)       [52] : 3.999241  ( improvement & loss MSE)
 
- [53] : 10874.828125  ( improvement & loss MSE)        [48] : 6685.625000  ( improvement & loss MSE)       [53] : 0.822542  ( improvement & loss MSE)
+ [53] : 9871.453125  ( improvement & loss MSE)        [47] : 3515.046875  ( improvement & loss MSE)       [53] : 0.586874  ( improvement & loss MSE)
 
- [54] : 5789.406250  ( improvement & loss MSE)        [ 0] : 6180.000000  ( improvement & loss MSE)       [54] : 2.496366  ( improvement & loss MSE)
+ [54] : 2765.156250  ( improvement & loss MSE)        [60] : 3455.375000  ( improvement & loss MSE)       [54] : -0.165174  ( improvement & loss MSE)
 
- [55] : 7030.359375  ( improvement & loss MSE)        [30] : 5907.609375  ( improvement & loss MSE)       [55] : 0.848802  ( improvement & loss MSE)
+ [55] : 9754.250000  ( improvement & loss MSE)        [ 1] : 3414.234375  ( improvement & loss MSE)       [55] : -1.191973  ( improvement & loss MSE)
 
- [56] : 11303.578125  ( improvement & loss MSE)        [ 1] : 5894.140625  ( improvement & loss MSE)       [56] : -1.715882  ( improvement & loss MSE)
+ [56] : 8251.140625  ( improvement & loss MSE)        [15] : 3342.718750  ( improvement & loss MSE)       [56] : -2.604913  ( improvement & loss MSE)
 
- [57] : 18908.656250  ( improvement & loss MSE)        [26] : 5837.421875  ( improvement & loss MSE)       [57] : 15.008712  ( improvement & loss MSE)
+ [57] : 6943.140625  ( improvement & loss MSE)        [35] : 3313.046875  ( improvement & loss MSE)       [57] : -4.232816  ( improvement & loss MSE)
 
- [58] : 11123.437500  ( improvement & loss MSE)        [61] : 5812.453125  ( improvement & loss MSE)       [58] : 1.847022  ( improvement & loss MSE)
+ [58] : 3703.937500  ( improvement & loss MSE)        [ 0] : 3257.000000  ( improvement & loss MSE)       [58] : -2.587987  ( improvement & loss MSE)
 
- [59] : 9094.328125  ( improvement & loss MSE)        [54] : 5789.406250  ( improvement & loss MSE)       [59] : -3.388331  ( improvement & loss MSE)
+ [59] : 2176.750000  ( improvement & loss MSE)        [54] : 2765.156250  ( improvement & loss MSE)       [59] : -3.019718  ( improvement & loss MSE)
 
- [60] : 8731.750000  ( improvement & loss MSE)        [23] : 5590.687500  ( improvement & loss MSE)       [60] : 7.267107  ( improvement & loss MSE)
+ [60] : 3455.375000  ( improvement & loss MSE)        [61] : 2355.937500  ( improvement & loss MSE)       [60] : -3.503603  ( improvement & loss MSE)
 
- [61] : 5812.453125  ( improvement & loss MSE)        [ 6] : 5518.671875  ( improvement & loss MSE)       [61] : 1.270078  ( improvement & loss MSE)
+ [61] : 2355.937500  ( improvement & loss MSE)        [26] : 2215.328125  ( improvement & loss MSE)       [61] : -3.545581  ( improvement & loss MSE)
 
- [62] : 6978.109375  ( improvement & loss MSE)        [ 9] : 5512.531250  ( improvement & loss MSE)       [62] : -0.072350  ( improvement & loss MSE)
+ [62] : 5116.406250  ( improvement & loss MSE)        [59] : 2176.750000  ( improvement & loss MSE)       [62] : -2.591971  ( improvement & loss MSE)
 
- [63] : 8137.250000  ( improvement & loss MSE)        [25] : 5303.984375  ( improvement & loss MSE)       [63] : -1.943737  ( improvement & loss MSE)
+ [63] : 11653.937500  ( improvement & loss MSE)        [48] : 2058.453125  ( improvement & loss MSE)       [63] : -2.608066  ( improvement & loss MSE)
 

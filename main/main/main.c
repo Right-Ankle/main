@@ -15,7 +15,7 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64];
-	static double percent, sum, sum0, sum1,sum11,sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], lambda = 1024.0;
+	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024],  lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][1024], average2[4][2], test_per[4][64];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
@@ -471,6 +471,7 @@ int main()
 		printf("\n\n");
 
 
+
 		for (l = 0; l < 1024; l++) {
 			// 64*64*1024 -> 最小ＭＳＥ　64*1024こ
 			for (m = 0; m < 64; m++) {
@@ -533,7 +534,7 @@ int main()
 			}
 		}
 
-		for (j = 0; j < 1024; j++) {
+		for (j = 0; j < 1024; j++) {// 2 basis
 			ica_test3[0][j] = sort_d[0][j].val;//mse
 			ica_test3[1][j] = (double)sort_d[0][j].num;//基底番号
 
@@ -542,6 +543,31 @@ int main()
 			ica_test4[0][j] = ica_test3[1][j];//1つ目の基底番号
 			ica_test4[1][j] = ica_test2[1][(int)ica_test3[1][j]][j];// 2つ目の基底番号
 		}
+
+		// 生成画像確認
+		for (j = 0; j < 1024; j++) {
+			for (i = 0; i < 64; i++)
+				ny[i][j] = 0;
+
+			ny[(int)ica_test4[0][j]][j] = y[(int)ica_test4[0][j]][j]; //一つ目の基底選択
+			ny[(int)ica_test4[1][j]][j] = y[(int)ica_test4[1][j]][j]; // ２つ目の基底選択
+		}
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
+
+		seki5(nw, ny, x); // x -> nw * ny
+		xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+		avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = ica_sai[a][b];
+
+		sprintf(output, "OUTPUT/Basis2.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+
 
 		printf("Method 2 end\n\n");
 	}
@@ -591,14 +617,42 @@ int main()
 				for (m = 0; m < 64; m++)
 					for (n = 0; n < 64; n++)
 						for (l = 0; l < 64; l++) {
-							if (ica_test5[l][n][m] < min)
+							if (ica_test5[l][n][m] < min) {
 								min = ica_test5[l][n][m];
+								y3[0][j] = (double)l;
+								y3[1][j] = (double)m;
+								y3[2][j] = (double)n;
+							}
 						}
 				all_mse[3][j] = min;
 				printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 			}
 			printf("\r [ Execution finished ]          ");
 			printf("\n\n");
+
+			// 生成画像確認
+			for (j = 0; j < 1024; j++) {
+				for (i = 0; i < 64; i++)
+					ny[i][j] = 0;
+
+				ny[(int)y3[0][j]][j] = y[(int)y3[0][j]][j]; //一つ目の基底選択
+				ny[(int)y3[1][j]][j] = y[(int)y3[1][j]][j]; // ２つ目の基底選択
+				ny[(int)y3[2][j]][j] = y[(int)y3[2][j]][j]; // ２つ目の基底選択
+			}
+			// 初期化（必ず行う）
+			for (a = 0; a < 64; a++)
+				xx[a] = 0.0;
+
+			seki5(nw, ny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = ica_sai[a][b];
+
+			sprintf(output, "OUTPUT/Basis3.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
 			///////// 2 fin//////////////////
 				//動作確認
@@ -816,6 +870,14 @@ int main()
 			}
 			fprintf(fp, "\n +----+-------+-------+-------+-------+\n");
 		}
+
+		for (b = 0; b < 1024; b++)
+			cost_ica[b] = result_ica[1][b] - ica_test3[0][b];
+
+		gnuplot3(cost_ica, cost_dct);
+
+
+
 			printf("<ica fin>\n\n");
 			/////////////////////////////////ica 終了/////////////////////////////////////////
 
