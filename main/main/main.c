@@ -15,7 +15,7 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64];
-	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024],  lambda = 1024.0;
+	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024],  lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][1024], average2[4][2], test_per[4][64];
 	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
@@ -687,34 +687,17 @@ int main()
 		}
 
 		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++)
-				total_mse[i] += mse_ica0[i][j] - mse_ica[i][j]; // 0 -> 1の時の各基底のMSE改善・損失量
-
-		for (i = 0; i < 64; i++) {
-			// .val -> 値を取得・属性を変更し記憶
-			// .abs -> 絶対値を記憶
-			// .num -> 元々の係数に対応するブロック内番号を記憶
-			sort_d[i][0].val = total_mse[i];		/* 元々の係数値 */
-			sort_d[i][0].abs = fabs(total_mse[i]);	/* ソートは係数の絶対値で行う*/
-			sort_d[i][0].num = i;				/* numに元々の係数に対応する番号を記憶 */
-		}
-
-
-		for (i = 0; i < 64 - 1; i++) {
-			max = sort_d[i][0].abs;
-			k = i;
-			for (j = i + 1; j < 64; j++) {
-				if (sort_d[j][0].abs > max) {
-					max = sort_d[j][0].abs;
-					k = j;
+			for (j = 0; j < 1024; j++) {
+				if (mse_ica0[i][j] - mse_ica[i][j] > 0) {
+					total_mse[0][i] += mse_ica0[i][j] - mse_ica[i][j]; // 0 -> 1の時の各基底のMSE改善・損失量
+					total_mse[2][i]++;
 				}
+				else
+					total_mse[1][i] += mse_ica0[i][j] - mse_ica[i][j];
 			}
-			temp = sort_d[i][0];
-			sort_d[i][0] = sort_d[k][0];
-			sort_d[k][0] = temp;
-		}
+
 		
-		sum = 0; sum1 = 0; //1 -> マイナス
+		sum = 0; sum1 = 0; //sum1 -> マイナス
 
 		for (j = 0; j < 1024; j++) {
 			sum = 0; sum1 = 0;
@@ -728,7 +711,7 @@ int main()
 				if (0 < mse_ica0[i][j] - mse_ica[i][j])
 					test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]) / sum;
 				else
-					test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]) / sum1;
+					test2[i][j] = -1.0 * ((mse_ica0[i][j] - mse_ica[i][j]) / sum1);
 			}
 		}
 
@@ -737,10 +720,10 @@ int main()
 				total_test[i] += test2[i][j];
 
 		printf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp5, "\n\n  MSE improvement and loss for each basis \n\n\n  Number of basis used : 0, 1\n\n\n  (* MSE value 0 - 1 : Improvement is +, Loss is - )\n\n\n  [basis number]  :  MSE value ( improvement & loss )       [basis number]  :  MSE value ( Value after sorting )\n\n----------------------------------------------------------------------------------\n\n");
+		fprintf(fp5, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement )  \n\n----------------------------------------------------------------------------------\n\n");
 
 		for (i = 0; i < 64; i++)
-			fprintf(fp5, " [%2d] : %lf  ( improvement & loss MSE)        [%2d] : %lf  ( improvement & loss MSE)       [%2d] : %lf  ( improvement & loss MSE)\n\n", i, total_mse[i], (int)sort_d[i][0].num, sort_d[i][0].val, i, total_test[i]);
+			fprintf(fp5, " [%2d] : %lf  ( Percentage )\n\n", i, total_mse[0][i], i, total_mse[0][i] / total_mse[2][i], (int)total_mse[2][i], i, total_mse[1][i], i, total_mse[1][i] / (1024.0 - total_mse[2][i]), (int)(1024.0 - total_mse[2][i]));
 
 		for (b = 0; b < 64; b++) {
 			temp1[b] = 0;
@@ -875,6 +858,9 @@ int main()
 			cost_ica[b] = result_ica[1][b] - ica_test3[0][b];
 
 		gnuplot3(cost_ica, cost_dct);
+
+
+
 
 
 
