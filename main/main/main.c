@@ -17,7 +17,7 @@ int main()
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64];
 	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024],  lambda = 1024.0;
 	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][1024], average2[4][2], test_per[4][64];
-	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
+	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[4][64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
@@ -705,25 +705,55 @@ int main()
 				if (0 < mse_ica0[i][j] - mse_ica[i][j])
 					sum += mse_ica0[i][j] - mse_ica[i][j];
 				else
-					sum1 += fabs(mse_ica0[i][j] - mse_ica[i][j]);
+					sum1 += mse_ica0[i][j] - mse_ica[i][j];
 			}
 			for (i = 0; i < 64; i++) {
 				if (0 < mse_ica0[i][j] - mse_ica[i][j])
-					test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]) / sum;
+					test2[i][j] = ((mse_ica0[i][j] - mse_ica[i][j]) / sum) * 100.0;
 				else
-					test2[i][j] = -1.0 * ((mse_ica0[i][j] - mse_ica[i][j]) / sum1);
+					test2[i][j] = ((mse_ica0[i][j] - mse_ica[i][j]) / fabs(sum1) )* 100;
 			}
 		}
 
-		for (j = 0; j < 1024; j++)
-			for (i = 0; i < 64; i++)
-				total_test[i] += test2[i][j];
-
-		printf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
 		fprintf(fp5, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement )  \n\n----------------------------------------------------------------------------------\n\n");
 
-		for (i = 0; i < 64; i++)
-			fprintf(fp5, " [%2d] : %lf  ( Percentage )\n\n", i, total_mse[0][i], i, total_mse[0][i] / total_mse[2][i], (int)total_mse[2][i], i, total_mse[1][i], i, total_mse[1][i] / (1024.0 - total_mse[2][i]), (int)(1024.0 - total_mse[2][i]));
+		for (j = 0; j < 1024; j++) {
+			fprintf(fp5, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+			for (i = 0; i < 64; i++) {
+				fprintf(fp5, " [%2d] : %3.16lf  ( Percentage )\n\n", i, test2[i][j]);
+			}
+		}
+
+
+		printf("What percentage do you use ? : ");
+		scanf("%lf", &percent);
+		printf("\n");
+		fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp2, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement or loss )  \n\n\n  Persentage threshold : %lf \n\n----------------------------------------------------------------------------------\n\n", percent);
+
+		for (j = 0; j < 1024; j++) {
+			fprintf(fp2, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+			for (i = 0; i < 64; i++) {
+				if (test2[i][j] > 0)
+					total_test[2][i]++;
+				else
+					total_test[3][i]++;
+
+				if (percent < fabs(test2[i][j]) && fabs(test2[i][j]) < percent + 10) {
+					fprintf(fp2, " [%2d] : %3.10lf  ( Percentage )\n\n", i, test2[i][j]);
+					if (test2[i][j] > 0)
+						total_test[0][i]++;
+					else
+						total_test[1][i]++;
+				}
+			}
+		}
+
+		fprintf(fp2, "\n\n -------------- Basis usage count ---------------------- \n\n\n");
+		for (i = 0; i < 64; i++) {
+				fprintf(fp2, " [%2d] : %3d / %3d  %lf  ( improvement )   %3d / %3d  %lf  ( loss )\n\n", i, (int)total_test[0][i], (int)total_test[2][i], total_test[0][i] / total_test[2][i] * 100,(int)total_test[1][i], (int)total_test[3][i], total_test[1][i] / total_test[3][i] * 100);
+		}
 
 		for (b = 0; b < 64; b++) {
 			temp1[b] = 0;
