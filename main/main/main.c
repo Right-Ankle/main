@@ -932,6 +932,13 @@ int main()
 
 					fprintf(fp2, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
 
+					for (a = 0; a < 256; a++)
+						for (b = 0; b < 256; b++)
+							temp_sai[a * 256 + b] = dcoe2[a][b];
+
+					sprintf(output, "OUTPUT/DCT%d.bmp",Q);
+					img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
 					//for (i = 0; i < 64; i++) {
 
 					//	// 該当係数以外0
