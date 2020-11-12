@@ -89,8 +89,8 @@ int main()
 	//static char filename[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	//static char filename[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
 
-	printf("\nfilename plz .... :");
-	scanf("%s", filename);
+	printf("\nfilename plz .... (1, barbara  2, cameraman  3, mandrill) :");
+	scanf("%s", &filename);
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
@@ -432,8 +432,9 @@ int main()
 	/////////  1 end
 
 	// 2 start ///////
-	printf("Do you start method 2 ? [ y/n ] : ");
-	scanf("%s", &yn);
+	//printf("Do you start method 2 ? [ y/n ] : ");
+	//scanf("%s", &yn);
+	yn = 'y';
 	if (yn == 'y') {
 		printf("\nMethod 2 start - ->\n\n");
 
@@ -574,8 +575,9 @@ int main()
 	//		////////////// 2 fin ///////////////////////
 
 		///////////////////////// 3 start ////////////////////////////////
-		printf("Do you use 3 basis ? [ y/n ] : ");
-		scanf("%s", &yn);
+		//printf("Do you use 3 basis ? [ y/n ] : ");
+		//scanf("%s", &yn);
+	yn = 'n';
 		if (yn == 'y') {
 			printf("\nMethod 3 basis start - ->\n\n");
 
@@ -726,8 +728,8 @@ int main()
 		}
 
 
-		printf("What percentage do you use ? : ");
-		scanf("%lf", &percent);
+		//printf("What percentage do you use ? : ");
+		//scanf("%lf", &percent);
 		printf("\n");
 		fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
 		fprintf(fp2, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement or loss )  \n\n\n  Persentage threshold : %lf \n\n----------------------------------------------------------------------------------\n\n", percent);
@@ -799,154 +801,162 @@ int main()
 		printf("\n");
 
 		fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp, "\n\n  Percentage of improvement and loss of each basis to area ( By classification )\n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement or loss )  \n\n\n  Persentage threshold : %lf  ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent, percent+10);
+		fprintf(fp, "\n\n  Percentage of improvement and loss of each basis to area ( By classification )\n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  Number of improvement  :  Number of loss  \n\n\n  Persentage threshold : %lf  ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent, percent+10);
 
 
-		//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-		for (b = 0; b < 64; b++) {
-			//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
-			if (((double)temp1[b] / (double)QQ) * 100 > percent) {
-				temp4[b]++;
-				test_per[0][b]++;
-			}
-		}
-		fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
-		//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
-		for (b = 0; b < 64; b++) {
-			if (temp4[b] == 1) {
-				fprintf(fp, "[%2d] : %lf       ", b, ((double)temp1[b] / (double)QQ) * 100);
-				//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp1[b] / (double)QQ) * 100);
-			}
-			temp4[b] = 0;
-		}
-		fprintf(fp, "\n\n");
+		////fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
+		//for (b = 0; b < 64; b++) {
+		//	//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
+		//	if (((double)temp1[b] / (double)QQ) * 100 > percent) {
+		//		temp4[b]++;
+		//		test_per[0][b]++;
+		//	}
+		//}
+		//fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
+		////fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
+		//for (b = 0; b < 64; b++) {
+		//	if (temp4[b] == 1) {
+		//		fprintf(fp, "[%2d] : %lf       ", b, ((double)temp1[b] / (double)QQ) * 100);
+		//		//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp1[b] / (double)QQ) * 100);
+		//	}
+		//	temp4[b] = 0;
+		//}
+		//fprintf(fp, "\n\n");
 
-		//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-		for (b = 0; b < 64; b++) {
-			//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp2[b], ((double)temp2[b] / (double)QQQ) * 100);
-			if (((double)temp2[b] / (double)QQQ) * 100 > percent) {
-				temp4[b]++;
-				test_per[1][b]++;
-			}
-		}
-		fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
-		//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
-		for (b = 0; b < 64; b++) {
-			if (temp4[b] == 1) {
-				fprintf(fp, "[%2d] : %lf       ", b, ((double)temp2[b] / (double)QQQ) * 100);
-				//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp2[b] / (double)QQQ) * 100);
-			}
-			temp4[b] = 0;
-		}
-		fprintf(fp, "\n\n");
+		////fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
+		//for (b = 0; b < 64; b++) {
+		//	//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp2[b], ((double)temp2[b] / (double)QQQ) * 100);
+		//	if (((double)temp2[b] / (double)QQQ) * 100 > percent) {
+		//		temp4[b]++;
+		//		test_per[1][b]++;
+		//	}
+		//}
+		//fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - \n\n\n");
+		////fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
+		//for (b = 0; b < 64; b++) {
+		//	if (temp4[b] == 1) {
+		//		fprintf(fp, "[%2d] : %lf       ", b, ((double)temp2[b] / (double)QQQ) * 100);
+		//		//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp2[b] / (double)QQQ) * 100);
+		//	}
+		//	temp4[b] = 0;
+		//}
+		//fprintf(fp, "\n\n");
 
-		//fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-		for (b = 0; b < 64; b++) {
-			//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp3[b], ((double)temp3[b] / (double)QQQQ) * 100);
-			if (((double)temp3[b] / (double)QQQQ) * 100 > percent) {
-				temp4[b]++;
-				test_per[2][b]++;
-			}
-		}
-		fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
-		//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
-		for (b = 0; b < 64; b++) {
-			if (temp4[b] == 1) {
-				fprintf(fp, "[%2d] : %lf       ", b, ((double)temp3[b] / (double)QQQQ) * 100);
-				//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp3[b] / (double)QQQQ) * 100);
-			}
-			temp4[b] = 0;
-		}
-		fprintf(fp, "\n\n");
+		////fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
+		//for (b = 0; b < 64; b++) {
+		//	//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp3[b], ((double)temp3[b] / (double)QQQQ) * 100);
+		//	if (((double)temp3[b] / (double)QQQQ) * 100 > percent) {
+		//		temp4[b]++;
+		//		test_per[2][b]++;
+		//	}
+		//}
+		//fprintf(fp, "\n\n- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - \n\n\n");
+		////fprintf(fp5, "\n- - - Commonly used basis (over %lf percent) - - - \n\n\n",percent);
+		//for (b = 0; b < 64; b++) {
+		//	if (temp4[b] == 1) {
+		//		fprintf(fp, "[%2d] : %lf       ", b, ((double)temp3[b] / (double)QQQQ) * 100);
+		//		//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp3[b] / (double)QQQQ) * 100);
+		//	}
+		//	temp4[b] = 0;
+		//}
+		//fprintf(fp, "\n\n");
 
-		//fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-		for (b = 0; b < 64; b++) {
-			//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp5[b], ((double)temp5[b] / (double)mk) * 100);
-			if (((double)temp5[b] / (double)mk) * 100 > percent) {
-				temp4[b]++;
-				test_per[3][b]++;
-			}
-		}
-		fprintf(fp, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
-		//fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
-		for (b = 0; b < 64; b++) {
-			if (temp4[b] == 1) {
-				fprintf(fp, "[%2d] : %lf       ", b, ((double)temp5[b] / (double)mk) * 100);
-				//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp5[b] / (double)mk) * 100);
-			}
-			temp4[b] = 0;
-		}
-		fprintf(fp, "\n\n\n\n");
+		////fprintf(fp5, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
+		//for (b = 0; b < 64; b++) {
+		//	//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b, temp5[b], ((double)temp5[b] / (double)mk) * 100);
+		//	if (((double)temp5[b] / (double)mk) * 100 > percent) {
+		//		temp4[b]++;
+		//		test_per[3][b]++;
+		//	}
+		//}
+		//fprintf(fp, "\n\n- - - - - - - - Use 2 basis - - - - - - - \n\n\n");
+		////fprintf(fp5, "\n- - - Commonly used basis (over %lf percent)- - - \n\n\n",percent);
+		//for (b = 0; b < 64; b++) {
+		//	if (temp4[b] == 1) {
+		//		fprintf(fp, "[%2d] : %lf       ", b, ((double)temp5[b] / (double)mk) * 100);
+		//		//fprintf(fp5, "%2d : %lf\n\n", b, ((double)temp5[b] / (double)mk) * 100);
+		//	}
+		//	temp4[b] = 0;
+		//}
+		//fprintf(fp, "\n\n\n\n");
 
 		for (j = 0; j < 1024; j++) {
 			for (i = 0; i < 64; i++) {
-				if (test2[i][j] > 0)
-					if (count_temp[0][j] == 0)
-						total_test[0][i]++;
-					else if(count_temp[0][j] == 1)
-						total_test[4][i]++;
-					else if (count_temp[0][j] == 2)
-						total_test[8][i]++;
-					else if (count_temp[0][j] == 3)
-						total_test[12][i]++;
-					else if (count_temp[0][j] == 4)
-						total_test[16][i]++;
-				else
+				//if (test2[i][j] > 0)
+				//	if (count_temp[0][j] == 0)
+				//		total_test[0][i]++;
+				//	else if(count_temp[0][j] == 1)
+				//		total_test[4][i]++;
+				//	else if (count_temp[0][j] == 2)
+				//		total_test[8][i]++;
+				//	else if (count_temp[0][j] == 3)
+				//		total_test[12][i]++;
+				//	else if (count_temp[0][j] == 4)
+				//		total_test[16][i]++;
+				//else
+				//		if (count_temp[0][j] == 0)
+				//			total_test[1][i]++;
+				//		else if (count_temp[0][j] == 1)
+				//			total_test[5][i]++;
+				//		else if (count_temp[0][j] == 2)
+				//			total_test[9][i]++;
+				//		else if (count_temp[0][j] == 3)
+				//			total_test[13][i]++;
+				//		else if (count_temp[0][j] == 4)
+				//			total_test[17][i]++;
+
+				if (percent < fabs(test2[i][j]) && fabs(test2[i][j]) < percent + 10) {
+					if (test2[i][j] >= 0) {
+						if (count_temp[0][j] == 0)
+							total_test[0][i]++;
+						else if (count_temp[0][j] == 1)
+							total_test[2][i]++;
+						else if (count_temp[0][j] == 2)
+							total_test[4][i]++;
+						else if (count_temp[0][j] == 3)
+							total_test[6][i]++;
+						else if (count_temp[0][j] == 4)
+							total_test[8][i]++;
+						total_test[14][i]++;
+					}
+
+					if (test2[i][j] < 0){
 						if (count_temp[0][j] == 0)
 							total_test[1][i]++;
 						else if (count_temp[0][j] == 1)
+							total_test[3][i]++;
+						else if (count_temp[0][j] == 2)
 							total_test[5][i]++;
-						else if (count_temp[0][j] == 2)
+						else if (count_temp[0][j] == 3)
+							total_test[7][i]++;
+						else if (count_temp[0][j] == 4)
 							total_test[9][i]++;
-						else if (count_temp[0][j] == 3)
-							total_test[13][i]++;
-						else if (count_temp[0][j] == 4)
-							total_test[17][i]++;
+						total_test[15][i]++;
+					}
 
-				if (percent < fabs(test2[i][j]) && fabs(test2[i][j]) < percent + 10) {
-					if (test2[i][j] > 0)
-						if (count_temp[0][j] == 0)
-							total_test[2][i]++;
-						else if (count_temp[0][j] == 1)
-							total_test[6][i]++;
-						else if (count_temp[0][j] == 2)
-							total_test[10][i]++;
-						else if (count_temp[0][j] == 3)
-							total_test[14][i]++;
-						else if (count_temp[0][j] == 4)
-							total_test[18][i]++;
-						else
-							if (count_temp[0][j] == 0)
-								total_test[3][i]++;
-							else if (count_temp[0][j] == 1)
-								total_test[7][i]++;
-							else if (count_temp[0][j] == 2)
-								total_test[11][i]++;
-							else if (count_temp[0][j] == 3)
-								total_test[15][i]++;
-							else if (count_temp[0][j] == 4)
-								total_test[19][i]++;
 				}
 			}
 		}
 
 
-		fprintf(fp, "\n         1       2       3       4");
-		fprintf(fp, "\n +----+-------------------------------------+-------------------------------------+-------------------------------------+-------------------------------------+\n");
+		fprintf(fp, "\n               0 basis                    ~ 1.1                   1.1 ~ 2.0                 2.0 ~                   2 basis                total");
+		fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
 		for (b = 0; b < 64; b++) {
 			fprintf(fp, " | %2d | ", b);
+			for (i = 0; i < 5; i++) {
+				if (total_test[i * 2][b] == 0)
+					fprintf(fp, "           ");
+				else
+					fprintf(fp, " %3d (%3d%%)", (int)total_test[i * 2][b], (int)((total_test[i*2][b]/total_test[14][b])*100));
 
-			fprintf(fp, " %3d (improvement)    %3d (loss) | ", (int)total_test[2][b], (int)total_test[3][b]);
-
-			fprintf(fp, " %3d (improvement)    %3d (loss) | ", (int)total_test[6][b], (int)total_test[7][b]);
-
-			fprintf(fp, " %3d (improvement)    %3d (loss) | ", (int)total_test[10][b], (int)total_test[11][b]);
-
-			fprintf(fp, " %3d (improvement)    %3d (loss) | ", (int)total_test[14][b], (int)total_test[15][b]);
-
-			fprintf(fp, " %3d (improvement)    %3d (loss) | ", (int)total_test[18][b], (int)total_test[19][b]);
-
-			fprintf(fp, "\n +----+-------------------------------------+-------------------------------------+-------------------------------------+-------------------------------------+\n");
+				if (total_test[i * 2+1][b] == 0)
+					fprintf(fp, " :           |"); 
+				else
+					fprintf(fp, " : %3d (%3d%%)|", (int)total_test[i * 2 + 1][b], (int)((total_test[i * 2+1][b] / total_test[15][b])* 100));
+			}
+			fprintf(fp, "  %3d   :  %3d    |", (int)total_test[14][b], (int)total_test[15][b]);
+			fprintf(fp, " %2d | ", b);
+			fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
 		}
 		
 
@@ -955,12 +965,12 @@ int main()
 
 		gnuplot3(cost_ica, cost_dct);
 
-		fprintf(fp, "\n\n\n");
-		for (b = 0; b < 1024; b++) {
-			fprintf(fp, "%2d ",count_temp[0][b]);
-			if (b % 32 == 0 && b != 0)
-				fprintf(fp, "\n");
-		}
+		//fprintf(fp, "\n\n\n");
+		//for (b = 0; b < 1024; b++) {
+		//	fprintf(fp, "%2d ",count_temp[0][b]);
+		//	if (b % 32 == 0 && b != 0)
+		//		fprintf(fp, "\n");
+		//}
 
 
 
@@ -976,8 +986,9 @@ int main()
 
 			//動作確認
 			printf("<dct start>\n\n");
-			printf("Do you want to run the DCT ? [ y/n ] : ");
-			scanf("%s", &yn);
+			//printf("Do you want to run the DCT ? [ y/n ] : ");
+			//scanf("%s", &yn);
+			
 			if (yn == 'y') {
 				fprintf(fp2, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 				// 10段階品質があるから10段階分やる

@@ -1,6 +1,6 @@
 
 
- Use image  :  barbara.bmp
+ Use image  :  mandrill.bmp
 
 
 
@@ -14,7 +14,7 @@
   [basis number]  :  Percentage ( improvement or loss )  
 
 
-  Persentage threshold : 30.000000 
+  Persentage threshold : 0.000000 
 
 ----------------------------------------------------------------------------------
 
