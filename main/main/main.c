@@ -701,31 +701,45 @@ int main()
 		
 		sum = 0; sum1 = 0; //sum1 -> マイナス
 
-		for (j = 0; j < 1024; j++) {
-			sum = 0; sum1 = 0;
-			for (i = 0; i < 64; i++) {
-				if (0 < mse_ica0[i][j] - mse_ica[i][j])
-					sum += mse_ica0[i][j] - mse_ica[i][j];
-				else
-					sum1 += mse_ica0[i][j] - mse_ica[i][j];
-			}
-			for (i = 0; i < 64; i++) {
-				if (0 < mse_ica0[i][j] - mse_ica[i][j])
-					test2[i][j] = ((mse_ica0[i][j] - mse_ica[i][j]) / sum) * 100.0;
-				else
-					test2[i][j] = ((mse_ica0[i][j] - mse_ica[i][j]) / fabs(sum1) )* 100;
+		for (j = 0; j < 1024; j++)
+			for (i = 0; i < 64; i++)
+				test2[i][j] = (mse_ica0[i][j] - mse_ica[i][j]);
+
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				// .val -> 値を取得・属性を変更し記憶
+				// .abs -> 絶対値を記憶
+				// .num -> 元々の係数に対応するブロック内番号を記憶
+				sort_d[i][j].val = test2[i][j];		/* 元々の係数値 */
+				sort_d[i][j].abs = test2[i][j];	/* ソートは係数の絶対値で行う*/
+				sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
 			}
 		}
 
-		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp5, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement )  \n\n----------------------------------------------------------------------------------\n\n");
-
-		for (j = 0; j < 1024; j++) {
-			fprintf(fp5, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
-			for (i = 0; i < 64; i++) {
-				fprintf(fp5, " [%2d] : %3.16lf  ( Percentage )\n\n", i, test2[i][j]);
+		for (n = 0; n < 1024; n++) {
+			for (i = 0; i < 64 - 1; i++) {
+				max = sort_d[i][n].abs;
+				k = i;
+				for (j = i + 1; j < 64; j++) {
+					if (sort_d[j][n].abs > max) {
+						max = sort_d[j][n].abs;
+						k = j;
+					}
+				}
+				temp = sort_d[i][n];
+				sort_d[i][n] = sort_d[k][n];
+				sort_d[k][n] = temp;
 			}
 		}
+
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 1024; j++) {
+				test2[i][j] = sort_d[i][j].val;
+				test3[i][j] = sort_d[i][j].num;
+			}
+		printf("What percentage do you use ? : ");
+		scanf("%lf", &percent);
+
 
 
 		//printf("What percentage do you use ? : ");
@@ -796,12 +810,12 @@ int main()
 
 		
 
-		printf("What percentage do you use ? : ");
-		scanf("%lf", &percent);
+		//printf("What percentage do you use ? : ");
+		//scanf("%lf", &percent);
 		printf("\n");
 
-		fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp, "\n\n  Percentage of improvement and loss of each basis to area ( By classification )\n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  Number of improvement  :  Number of loss  \n\n\n  Persentage threshold : %lf  ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent, percent+10);
+		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp5, "\n\n  Percentage of improvement and loss of each basis to area ( By classification )\n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  Number of improvement  :  Number of loss  \n\n\n  Persentage threshold : %lf  ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent, percent+10);
 
 
 		////fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
@@ -880,90 +894,90 @@ int main()
 		//}
 		//fprintf(fp, "\n\n\n\n");
 
-		for (j = 0; j < 1024; j++) {
-			for (i = 0; i < 64; i++) {
-				//if (test2[i][j] > 0)
-				//	if (count_temp[0][j] == 0)
-				//		total_test[0][i]++;
-				//	else if(count_temp[0][j] == 1)
-				//		total_test[4][i]++;
-				//	else if (count_temp[0][j] == 2)
-				//		total_test[8][i]++;
-				//	else if (count_temp[0][j] == 3)
-				//		total_test[12][i]++;
-				//	else if (count_temp[0][j] == 4)
-				//		total_test[16][i]++;
-				//else
-				//		if (count_temp[0][j] == 0)
-				//			total_test[1][i]++;
-				//		else if (count_temp[0][j] == 1)
-				//			total_test[5][i]++;
-				//		else if (count_temp[0][j] == 2)
-				//			total_test[9][i]++;
-				//		else if (count_temp[0][j] == 3)
-				//			total_test[13][i]++;
-				//		else if (count_temp[0][j] == 4)
-				//			total_test[17][i]++;
+		//for (j = 0; j < 1024; j++) {
+		//	for (i = 0; i < 64; i++) {
+		//		//if (test2[i][j] > 0)
+		//		//	if (count_temp[0][j] == 0)
+		//		//		total_test[0][i]++;
+		//		//	else if(count_temp[0][j] == 1)
+		//		//		total_test[4][i]++;
+		//		//	else if (count_temp[0][j] == 2)
+		//		//		total_test[8][i]++;
+		//		//	else if (count_temp[0][j] == 3)
+		//		//		total_test[12][i]++;
+		//		//	else if (count_temp[0][j] == 4)
+		//		//		total_test[16][i]++;
+		//		//else
+		//		//		if (count_temp[0][j] == 0)
+		//		//			total_test[1][i]++;
+		//		//		else if (count_temp[0][j] == 1)
+		//		//			total_test[5][i]++;
+		//		//		else if (count_temp[0][j] == 2)
+		//		//			total_test[9][i]++;
+		//		//		else if (count_temp[0][j] == 3)
+		//		//			total_test[13][i]++;
+		//		//		else if (count_temp[0][j] == 4)
+		//		//			total_test[17][i]++;
 
-				if (percent < fabs(test2[i][j]) && fabs(test2[i][j]) < percent + 10) {
-					if (test2[i][j] >= 0) {
-						if (count_temp[0][j] == 0)
-							total_test[0][i]++;
-						else if (count_temp[0][j] == 1)
-							total_test[2][i]++;
-						else if (count_temp[0][j] == 2)
-							total_test[4][i]++;
-						else if (count_temp[0][j] == 3)
-							total_test[6][i]++;
-						else if (count_temp[0][j] == 4)
-							total_test[8][i]++;
-						total_test[14][i]++;
-					}
+		//		if (percent < fabs(test2[i][j]) && fabs(test2[i][j]) < percent + 10) {
+		//			if (test2[i][j] >= 0) {
+		//				if (count_temp[0][j] == 0)
+		//					total_test[0][i]++;
+		//				else if (count_temp[0][j] == 1)
+		//					total_test[2][i]++;
+		//				else if (count_temp[0][j] == 2)
+		//					total_test[4][i]++;
+		//				else if (count_temp[0][j] == 3)
+		//					total_test[6][i]++;
+		//				else if (count_temp[0][j] == 4)
+		//					total_test[8][i]++;
+		//				total_test[14][i]++;
+		//			}
 
-					if (test2[i][j] < 0){
-						if (count_temp[0][j] == 0)
-							total_test[1][i]++;
-						else if (count_temp[0][j] == 1)
-							total_test[3][i]++;
-						else if (count_temp[0][j] == 2)
-							total_test[5][i]++;
-						else if (count_temp[0][j] == 3)
-							total_test[7][i]++;
-						else if (count_temp[0][j] == 4)
-							total_test[9][i]++;
-						total_test[15][i]++;
-					}
+		//			if (test2[i][j] < 0){
+		//				if (count_temp[0][j] == 0)
+		//					total_test[1][i]++;
+		//				else if (count_temp[0][j] == 1)
+		//					total_test[3][i]++;
+		//				else if (count_temp[0][j] == 2)
+		//					total_test[5][i]++;
+		//				else if (count_temp[0][j] == 3)
+		//					total_test[7][i]++;
+		//				else if (count_temp[0][j] == 4)
+		//					total_test[9][i]++;
+		//				total_test[15][i]++;
+		//			}
 
-				}
-			}
-		}
+		//		}
+		//	}
+		//}
 
 
-		fprintf(fp, "\n               0 basis                    ~ 1.1                   1.1 ~ 2.0                 2.0 ~                   2 basis                total");
-		fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
-		for (b = 0; b < 64; b++) {
-			fprintf(fp, " | %2d | ", b);
-			for (i = 0; i < 5; i++) {
-				if (total_test[i * 2][b] == 0)
-					fprintf(fp, "           ");
-				else
-					fprintf(fp, " %3d (%3d%%)", (int)total_test[i * 2][b], (int)((total_test[i*2][b]/total_test[14][b])*100));
+		//fprintf(fp, "\n               0 basis                    ~ 1.1                   1.1 ~ 2.0                 2.0 ~                   2 basis                total");
+		//fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
+		//for (b = 0; b < 64; b++) {
+		//	fprintf(fp, " | %2d | ", b);
+		//	for (i = 0; i < 5; i++) {
+		//		if (total_test[i * 2][b] == 0)
+		//			fprintf(fp, "           ");
+		//		else
+		//			fprintf(fp, " %3d (%3d%%)", (int)total_test[i * 2][b], (int)((total_test[i*2][b]/total_test[14][b])*100));
 
-				if (total_test[i * 2+1][b] == 0)
-					fprintf(fp, " :           |"); 
-				else
-					fprintf(fp, " : %3d (%3d%%)|", (int)total_test[i * 2 + 1][b], (int)((total_test[i * 2+1][b] / total_test[15][b])* 100));
-			}
-			fprintf(fp, "  %3d   :  %3d    |", (int)total_test[14][b], (int)total_test[15][b]);
-			fprintf(fp, " %2d | ", b);
-			fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
-		}
-		
+		//		if (total_test[i * 2+1][b] == 0)
+		//			fprintf(fp, " :           |"); 
+		//		else
+		//			fprintf(fp, " : %3d (%3d%%)|", (int)total_test[i * 2 + 1][b], (int)((total_test[i * 2+1][b] / total_test[15][b])* 100));
+		//	}
+		//	fprintf(fp, "  %3d   :  %3d    |", (int)total_test[14][b], (int)total_test[15][b]);
+		//	fprintf(fp, " %2d | ", b);
+		//	fprintf(fp, "\n +----+-------------------------+------------------------+------------------------+------------------------+------------------------+------------------+----+\n");
+		//}
+		//
 
-		for (b = 0; b < 1024; b++)
-			cost_ica[b] = result_ica[1][b] - ica_test3[0][b];
+		//for (b = 0; b < 1024; b++)
+		//	cost_ica[b] = result_ica[1][b] - ica_test3[0][b];
 
-		gnuplot3(cost_ica, cost_dct);
+		//gnuplot3(cost_ica, cost_dct);
 
 		//fprintf(fp, "\n\n\n");
 		//for (b = 0; b < 1024; b++) {
@@ -973,239 +987,302 @@ int main()
 		//}
 
 
+		fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp, "\n\n  Core basis investigation \n\n\n  Number of basis used : 0, 1 \n\n\n  MSE difference used : %lf\n\n----------------------------------------------------------------------------------\n\n", percent);
 
-
-
-
-			printf("<ica fin>\n\n");
-			/////////////////////////////////ica 終了/////////////////////////////////////////
-
-
-			// //////////////////////////// dct ////////////////////////////////////////
-			// ICA と大体同じ。DCTの基底は汎用的だから決まっている。係数のみを動かせばいい
-
-			//動作確認
-			printf("<dct start>\n\n");
-			//printf("Do you want to run the DCT ? [ y/n ] : ");
-			//scanf("%s", &yn);
-			
-			if (yn == 'y') {
-				fprintf(fp2, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
-				// 10段階品質があるから10段階分やる
-				for (Q = 100; Q > 0; Q -= 10) {
-					printf("\r now Q is %d          \n", Q);
-
-
-					//Q = 100;
-
-					// dct処理
-					dct(origin, dcoe, 8); // 係数を出力
-					quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-					idct(dcoe, dcoe2, 8); // 普通の再構成
-
-					sum = 0;
-
-					for (a = 0; a < 256; a++) {
-						for (b = 0; b < 256; b++) {
-							sum += pow((double)origin[a][b] - (double)dcoe2[a][b], 2);
-						}
-					}
-
-					sum = sum / (256.0 * 256.0);
-
-
-					fprintf(fp2, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
-
-					for (a = 0; a < 256; a++)
-						for (b = 0; b < 256; b++)
-							temp_sai[a * 256 + b] = dcoe2[a][b];
-
-					sprintf(output, "OUTPUT/DCT%d.bmp",Q);
-					img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-
-					//for (i = 0; i < 64; i++) {
-
-					//	// 該当係数以外0
-					//	// i番目の係数（基底）のみ使用。それ以外の係数は0。
-					//	for (j = 0; j < 1024; j++) {
-					//		for (a = 0; a < 64; a++) {
-					//			if (i == a)
-					//				ny[a][j] = dct_ent[a][j];
-					//			else
-					//				ny[a][j] = 0;
-					//		}
-					//	}
-					//	xtogen2(ny, dcoe);
-					//	idct(dcoe, dcoe2, 8); // 普通の再構成
-
-					//	for (j = 0; j < 1024; j++) {
-
-					//		// ブロックごとのMSE
-					//		// MSEは（元の値 - 再構成の値）^2をすることで
-					//		// 再構成した値が元の値とどれくらいずれているのかを見るための指標
-					//		sum = 0.0;
-					//		sum2 = 0.0;
-					//		mk = j % 32;
-					//		ml = j / 32;
-
-					//		// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-					//		// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-					//		for (a = 0; a < 8; a++) {
-					//			for (b = 0; b < 8; b++) {
-					//				sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
-					//			}
-					//		}
-					//		mse_dct[i][j] = sum / 64;//平均
-					//	}
-					//	// 実行確認用
-					//	
-
-
-
-					//	//	sprintf(output, "test.bmp");
-					//	//	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-					//	//}
-
-					//}
-
-					//	for (i = 0; i < 1024; i++)
-					//		for (j = 0; j < 64; j++)
-					//		mse_dct[i][j]
-
-					/////////////////////////////////////////////////////////
-					//for (b = 0; b < 1024; b++) {
-					//	fprintf(fp2, "\n --- [%d] --- \n\n", b);
-					//	for (a = 0; a < 64; a++) {
-					//		fprintf(fp2, " [%d][%d]  -->  %lf\n", a, b, mse_dct[a][b]);
-					//	}
-					//}
-
-
-					//for (a = 0; a < 256; a++)
-					//	for (b = 0; b < 256; b++)
-					//		temp_sai[a * 256 + b] = dcoe2[a][b];
-
-					//sprintf(output, "DEFAULT/DCT[%d].bmp", Q);
-					//img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-					//
-					//b_entropy_dct(dcoe, dct_bent);
-					//b_mse(origin, dcoe2, mse_dct2);
-					//make_cost(dct_bent, mse_dct2, cost_dct);
-
-					// 256*256->64*1024（係数の順番を変更)
-					//  256*256だと0番目のブロックの値は [0~7]*[0~7]に格納されている（1番目だと[0~7]*[8~15]) が、
-					//  64*1024にすれば[0~64]*[0]と計算しやすく・わかりやすくなる
-
-				   // ブロックごとのMSE
-					sum = 0.0;
-					sum2 = 0.0;
-					mk = j % 32;
-					ml = j / 32;
-					/////////////////////////dct 終了/////////////////////////////
-
-					//if (Q == 100) {
-					//for (a = 0; a < 256; a++)
-					//	for (b = 0; b < 256; b++)
-					//		temp_sai[a * 256 + b] = dcoe3[a][b];
-
-				//}
-
-					//// dct係数をソート
-					//for (i = 0; i < 64; i++) {
-					//	for (j = 0; j < 1024; j++) {
-					//		// .val -> 値を取得・属性を変更し記憶
-					//		// .abs -> 絶対値を記憶
-					//		// .num -> 元々の係数に対応するブロック内番号を記憶
-					//		sort_d[i][j].val = dct_ent[i][j];		/* 元々の係数値 */
-					//		sort_d[i][j].abs = fabs(dct_ent[i][j]);	/* ソートは係数の絶対値で行う*/
-					//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-					//	}
-					//}
-
-					//for (n = 0; n < 1024; n++) {
-					//	for (i = 0; i < 64 - 1; i++) {
-					//		max = sort_d[i][n].abs;
-					//		k = i;
-					//		for (j = i + 1; j < 64; j++) {
-					//			if (sort_d[j][n].abs > max) {
-					//				max = sort_d[j][n].abs;
-					//				k = j;
-					//			}
-					//		}
-					//		temp = sort_d[i][n];
-					//		sort_d[i][n] = sort_d[k][n];
-					//		sort_d[k][n] = temp;
-					//	}
-					//}
-					//for (i = 0; i < 64; i++)
-					//	for (j = 0; j < 1024; j++) {
-					//		dct_coe[i][j] = (double)sort_d[i][j].num;//dct_coe -> ソート後のdct係数順位
-					//		dcoe_temp[i][j] = sort_d[i][j].val;
-					//	}
-					//////////////////////////////
-
-					//		// dctのMSEをソート
-					//for (i = 0; i < 64; i++) {
-					//	for (j = 0; j < 1024; j++) {
-					//		// .val -> 値を取得・属性を変更し記憶
-					//		// .abs -> 絶対値を記憶
-					//		// .num -> 元々の係数に対応するブロック内番号を記憶
-					//		sort_d[i][j].val = mse_dct[i][j];		/* 元々の係数値 */
-					//		sort_d[i][j].abs = fabs(mse_dct[i][j]);	/* ソートは係数の絶対値で行う*/
-					//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-					//	}
-					//}
-
-					//for (n = 0; n < 1024; n++) {
-					//	for (i = 0; i < 64 - 1; i++) {
-					//		max = sort_d[i][n].abs;
-					//		k = i;
-					//		for (j = i + 1; j < 64; j++) {
-					//			if (sort_d[j][n].abs > max) {
-					//				max = sort_d[j][n].abs;
-					//				k = j;
-					//			}
-					//		}
-					//		temp = sort_d[i][n];
-					//		sort_d[i][n] = sort_d[k][n];
-					//		sort_d[k][n] = temp;
-					//	}
-					//}
-
-					//for (i = 0; i < 64; i++)
-					//	for (j = 0; j < 1024; j++)
-					//		mse_dct[i][j] = sort_d[i][j].val;//dct_coe -> ソート後のmse
-
-					/// //////////////////////////////
-
-
-					//　最小ＭＳＥの係数順位のグラフ出力
-
-
-					////////////////出力///////////////////
-
-					//////////////////出力終了///////////////////////
-				} // dctの最初に戻る
-				printf("\r [ Execution finished ]          ");
-				printf("\n\n");
-			}
-			fclose(fp);
-			fclose(fp2);
-			fclose(fp3);
-			fclose(fp4);
-			fclose(fp5);
-			//gnuplot(dcoe_temp);
+		for (j = 0; j < 1024; j++) {
+			fprintf(fp, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
 			for (i = 0; i < 64; i++) {
-				free(sort_d[i]);
+				if (test2[0][j] - test2[i][j] <= percent && test2[i][j] >= 0) {
+					if (count_temp[0][j] == 0) {
+						total_test[0][(int)test3[i][j]]++;
+						//total_test[10][0]++;
+					}
+					else if (count_temp[0][j] == 1) {
+						total_test[1][(int)test3[i][j]]++;
+						//total_test[10][1]++;
+					}
+					else if (count_temp[0][j] == 2) {
+						total_test[2][(int)test3[i][j]]++;
+						//total_test[10][2]++;
+					}
+					else if (count_temp[0][j] == 3) {
+						total_test[3][(int)test3[i][j]]++;
+						//total_test[10][3]++;
+					}
+					else if (count_temp[0][j] == 4) {
+						total_test[4][(int)test3[i][j]]++;
+						//total_test[10][4]++;
+					}
+					if (count_temp[0][j] != 0)
+						fprintf(fp, " [%2d] : %4.5lf  ( MSE Value )\n\n", (int)test3[i][j], mse_ica[(int)test3[i][j]][j]);
+
+				}
+			}
+			if (count_temp[0][j] == 0) {
+				//total_test[0][(int)test3[i][j]]++;
+				total_test[10][0]++;
+			}
+			else if (count_temp[0][j] == 1) {
+				//total_test[1][(int)test3[i][j]]++;
+				total_test[10][1]++;
+			}
+			else if (count_temp[0][j] == 2) {
+				//total_test[2][(int)test3[i][j]]++;
+				total_test[10][2]++;
+			}
+			else if (count_temp[0][j] == 3) {
+				//total_test[3][(int)test3[i][j]]++;
+				total_test[10][3]++;
+			}
+			else if (count_temp[0][j] == 4) {
+				//total_test[4][(int)test3[i][j]]++;
+				total_test[10][4]++;
+			}
+		}
+
+		fprintf(fp, "\n\n\n\n\n\n");
+
+		fprintf(fp, "\n               0 basis                  ~ 1.1                1.1 ~ 2.0               2.0 ~                2 basis             ");
+		fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
+		for (b = 0; b < 64; b++) {
+			fprintf(fp, " | %2d | ", b);
+			for (i = 0; i < 5; i++) {
+				fprintf(fp, "      %3d / %3d (%3d%%)|", (int)total_test[i][b], (int)total_test[10][i], (int)((total_test[i][b] / total_test[10][i]) * 100));
+			}
+			fprintf(fp, " %2d | ", b);
+			fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
+
+		}
+	printf("<ica fin>\n\n");
+	/////////////////////////////////ica 終了/////////////////////////////////////////
+
+
+	// //////////////////////////// dct ////////////////////////////////////////
+	// ICA と大体同じ。DCTの基底は汎用的だから決まっている。係数のみを動かせばいい
+
+	//動作確認
+	printf("<dct start>\n\n");
+	//printf("Do you want to run the DCT ? [ y/n ] : ");
+	//scanf("%s", &yn);
+
+	if (yn == 'y') {
+		fprintf(fp2, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
+		// 10段階品質があるから10段階分やる
+		for (Q = 100; Q > 0; Q -= 10) {
+			printf("\r now Q is %d          \n", Q);
+
+
+			//Q = 100;
+
+			// dct処理
+			dct(origin, dcoe, 8); // 係数を出力
+			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+			idct(dcoe, dcoe2, 8); // 普通の再構成
+
+			sum = 0;
+
+			for (a = 0; a < 256; a++) {
+				for (b = 0; b < 256; b++) {
+					sum += pow((double)origin[a][b] - (double)dcoe2[a][b], 2);
+				}
 			}
 
-			free(sort_d);
-			free(temp_1);
-			free(temp_2);
-			free(temp_3);
-			free(temp_4);
-			free(temp_5);
-			free(temp_6);
-			printf(" All finish");
+			sum = sum / (256.0 * 256.0);
+
+
+			fprintf(fp2, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
+
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = dcoe2[a][b];
+
+			sprintf(output, "OUTPUT/DCT%d.bmp", Q);
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			//for (i = 0; i < 64; i++) {
+
+			//	// 該当係数以外0
+			//	// i番目の係数（基底）のみ使用。それ以外の係数は0。
+			//	for (j = 0; j < 1024; j++) {
+			//		for (a = 0; a < 64; a++) {
+			//			if (i == a)
+			//				ny[a][j] = dct_ent[a][j];
+			//			else
+			//				ny[a][j] = 0;
+			//		}
+			//	}
+			//	xtogen2(ny, dcoe);
+			//	idct(dcoe, dcoe2, 8); // 普通の再構成
+
+			//	for (j = 0; j < 1024; j++) {
+
+			//		// ブロックごとのMSE
+			//		// MSEは（元の値 - 再構成の値）^2をすることで
+			//		// 再構成した値が元の値とどれくらいずれているのかを見るための指標
+			//		sum = 0.0;
+			//		sum2 = 0.0;
+			//		mk = j % 32;
+			//		ml = j / 32;
+
+			//		// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+			//		// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+			//		for (a = 0; a < 8; a++) {
+			//			for (b = 0; b < 8; b++) {
+			//				sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
+			//			}
+			//		}
+			//		mse_dct[i][j] = sum / 64;//平均
+			//	}
+			//	// 実行確認用
+			//	
+
+
+
+			//	//	sprintf(output, "test.bmp");
+			//	//	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+			//	//}
+
+			//}
+
+			//	for (i = 0; i < 1024; i++)
+			//		for (j = 0; j < 64; j++)
+			//		mse_dct[i][j]
+
+			/////////////////////////////////////////////////////////
+			//for (b = 0; b < 1024; b++) {
+			//	fprintf(fp2, "\n --- [%d] --- \n\n", b);
+			//	for (a = 0; a < 64; a++) {
+			//		fprintf(fp2, " [%d][%d]  -->  %lf\n", a, b, mse_dct[a][b]);
+			//	}
+			//}
+
+
+			//for (a = 0; a < 256; a++)
+			//	for (b = 0; b < 256; b++)
+			//		temp_sai[a * 256 + b] = dcoe2[a][b];
+
+			//sprintf(output, "DEFAULT/DCT[%d].bmp", Q);
+			//img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+			//
+			//b_entropy_dct(dcoe, dct_bent);
+			//b_mse(origin, dcoe2, mse_dct2);
+			//make_cost(dct_bent, mse_dct2, cost_dct);
+
+			// 256*256->64*1024（係数の順番を変更)
+			//  256*256だと0番目のブロックの値は [0~7]*[0~7]に格納されている（1番目だと[0~7]*[8~15]) が、
+			//  64*1024にすれば[0~64]*[0]と計算しやすく・わかりやすくなる
+
+		   // ブロックごとのMSE
+			sum = 0.0;
+			sum2 = 0.0;
+			mk = j % 32;
+			ml = j / 32;
+			/////////////////////////dct 終了/////////////////////////////
+
+			//if (Q == 100) {
+			//for (a = 0; a < 256; a++)
+			//	for (b = 0; b < 256; b++)
+			//		temp_sai[a * 256 + b] = dcoe3[a][b];
+
+		//}
+
+			//// dct係数をソート
+			//for (i = 0; i < 64; i++) {
+			//	for (j = 0; j < 1024; j++) {
+			//		// .val -> 値を取得・属性を変更し記憶
+			//		// .abs -> 絶対値を記憶
+			//		// .num -> 元々の係数に対応するブロック内番号を記憶
+			//		sort_d[i][j].val = dct_ent[i][j];		/* 元々の係数値 */
+			//		sort_d[i][j].abs = fabs(dct_ent[i][j]);	/* ソートは係数の絶対値で行う*/
+			//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+			//	}
+			//}
+
+			//for (n = 0; n < 1024; n++) {
+			//	for (i = 0; i < 64 - 1; i++) {
+			//		max = sort_d[i][n].abs;
+			//		k = i;
+			//		for (j = i + 1; j < 64; j++) {
+			//			if (sort_d[j][n].abs > max) {
+			//				max = sort_d[j][n].abs;
+			//				k = j;
+			//			}
+			//		}
+			//		temp = sort_d[i][n];
+			//		sort_d[i][n] = sort_d[k][n];
+			//		sort_d[k][n] = temp;
+			//	}
+			//}
+			//for (i = 0; i < 64; i++)
+			//	for (j = 0; j < 1024; j++) {
+			//		dct_coe[i][j] = (double)sort_d[i][j].num;//dct_coe -> ソート後のdct係数順位
+			//		dcoe_temp[i][j] = sort_d[i][j].val;
+			//	}
+			//////////////////////////////
+
+			//		// dctのMSEをソート
+			//for (i = 0; i < 64; i++) {
+			//	for (j = 0; j < 1024; j++) {
+			//		// .val -> 値を取得・属性を変更し記憶
+			//		// .abs -> 絶対値を記憶
+			//		// .num -> 元々の係数に対応するブロック内番号を記憶
+			//		sort_d[i][j].val = mse_dct[i][j];		/* 元々の係数値 */
+			//		sort_d[i][j].abs = fabs(mse_dct[i][j]);	/* ソートは係数の絶対値で行う*/
+			//		sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
+			//	}
+			//}
+
+			//for (n = 0; n < 1024; n++) {
+			//	for (i = 0; i < 64 - 1; i++) {
+			//		max = sort_d[i][n].abs;
+			//		k = i;
+			//		for (j = i + 1; j < 64; j++) {
+			//			if (sort_d[j][n].abs > max) {
+			//				max = sort_d[j][n].abs;
+			//				k = j;
+			//			}
+			//		}
+			//		temp = sort_d[i][n];
+			//		sort_d[i][n] = sort_d[k][n];
+			//		sort_d[k][n] = temp;
+			//	}
+			//}
+
+			//for (i = 0; i < 64; i++)
+			//	for (j = 0; j < 1024; j++)
+			//		mse_dct[i][j] = sort_d[i][j].val;//dct_coe -> ソート後のmse
+
+			/// //////////////////////////////
+
+
+			//　最小ＭＳＥの係数順位のグラフ出力
+
+
+			////////////////出力///////////////////
+
+			//////////////////出力終了///////////////////////
+		} // dctの最初に戻る
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+	}
+	fclose(fp);
+	fclose(fp2);
+	fclose(fp3);
+	fclose(fp4);
+	fclose(fp5);
+	//gnuplot(dcoe_temp);
+	for (i = 0; i < 64; i++) {
+		free(sort_d[i]);
+	}
+
+	free(sort_d);
+	free(temp_1);
+	free(temp_2);
+	free(temp_3);
+	free(temp_4);
+	free(temp_5);
+	free(temp_6);
+	printf(" All finish");
 
 }

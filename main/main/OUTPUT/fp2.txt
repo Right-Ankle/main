@@ -14,7 +14,7 @@
   [basis number]  :  Percentage ( improvement or loss )  
 
 
-  Persentage threshold : 0.000000 
+  Persentage threshold : 10.000000 
 
 ----------------------------------------------------------------------------------
 
