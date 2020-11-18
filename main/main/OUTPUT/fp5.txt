@@ -14,7 +14,7 @@
   [basis number]  Number of improvement  :  Number of loss  
 
 
-  Persentage threshold : 10.000000  ~ 20.000000
+  Persentage threshold : 5.000000  ~ 15.000000
 
 ----------------------------------------------------------------------------------
 

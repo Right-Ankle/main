@@ -1,0 +1,53 @@
+
+
+ Use image  :  mandrill.bmp
+
+
+
+
+ Correspondence between basis and MSE 
+
+ Average of MSE  &  Average amount of MSE improvement (0 -> 1)
+
+
+ Use 1 basis
+
+
+------------------
+
+
+
+- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - 
+
+
+ Average of MSE : 131.453125  (value)
+
+ Average amount of MSE improvement : 32.737818  (value)
+
+
+
+- - - - - - - - Magnitude of coefficient 1.1 ~ 2 - - - - - - - 
+
+
+ Average of MSE : 276.525755  (value)
+
+ Average amount of MSE improvement : 65.925715  (value)
+
+
+
+- - - - - - - - Magnitude of coefficient 2 ~ - - - - - - - 
+
+
+ Average of MSE : 488.438942  (value)
+
+ Average amount of MSE improvement : 130.396935  (value)
+
+
+
+- - - - - - - - Use 2 basis - - - - - - - 
+
+
+ Average of MSE : 883.668683  (value)
+
+ Average amount of MSE improvement : 340.428035  (value)
+

@@ -5,6 +5,51 @@
 
 
 
+  MSE value for the entire image 
+
+
+  Number of basis used : 0, 1, 2, 3
+
+
+  (* The number of basis is not the whole number, but the number using the best basis in a small area )
+
+----------------------------------------------------------------------------------
+
+
+
+- - - - - - - - Number of basis used : 0 - - - - - - - 
+
+
+ MSE : 600.675232  (value)
+
+
+
+- - - - - - - - Number of basis used : 1 - - - - - - - 
+
+
+ MSE : 453.552567  (value)
+
+
+
+- - - - - - - - Number of basis used : 2 - - - - - - - 
+
+
+ MSE : 373.015045  (value)
+
+
+
+- - - - - - - - Number of basis used : 3 - - - - - - - 
+
+
+ MSE : 318.008560  (value)
+
+
+
+ Use image  :  mandrill.bmp
+
+
+
+
   Percentage of improvement and loss of each basis to area 
 
 
@@ -14,7 +59,33 @@
   [basis number]  :  Percentage ( improvement or loss )  
 
 
-  Persentage threshold : 10.000000 
+  Persentage threshold : 5.000000 
 
 ----------------------------------------------------------------------------------
+
+
+
+
+- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - 
+
+
+ Q = 100 : 0.739151  (MSE value)
+
+ Q =  90 : 31.587357  (MSE value)
+
+ Q =  80 : 74.649231  (MSE value)
+
+ Q =  70 : 109.809464  (MSE value)
+
+ Q =  60 : 139.893707  (MSE value)
+
+ Q =  50 : 162.474609  (MSE value)
+
+ Q =  40 : 187.294174  (MSE value)
+
+ Q =  30 : 224.433273  (MSE value)
+
+ Q =  20 : 282.477249  (MSE value)
+
+ Q =  10 : 419.803436  (MSE value)
 

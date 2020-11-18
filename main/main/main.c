@@ -396,6 +396,8 @@ int main()
 		}
 	}
 
+
+
 	for (i = 0; i < 64; i++) {
 		for (j = 0; j < 1024; j++) {
 			// .val -> 値を取得・属性を変更し記憶
@@ -434,7 +436,7 @@ int main()
 	// 2 start ///////
 	//printf("Do you start method 2 ? [ y/n ] : ");
 	//scanf("%s", &yn);
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'y') {
 		printf("\nMethod 2 start - ->\n\n");
 
