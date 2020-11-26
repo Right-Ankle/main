@@ -1,6 +1,6 @@
 
 
- Use image  :  cameraman.bmp
+ [34mUse image[m  :  barbara.bmp
 
 
 
@@ -20,21 +20,21 @@
 - - - - - - - - Number of basis used : 0 - - - - - - - 
 
 
- MSE : 733.511200  (value)
+ MSE : 617.298737  (value)
 
 
 
 - - - - - - - - Number of basis used : 1 - - - - - - - 
 
 
- MSE : 405.194778  (value)
+ MSE : 400.472626  (value)
 
 
 
 - - - - - - - - Number of basis used : 2 - - - - - - - 
 
 
- MSE : 291.541840  (value)
+ MSE : 303.163620  (value)
 
 
 
@@ -45,7 +45,7 @@
 
 
 
- Use image  :  cameraman.bmp
+ Use image  :  barbara.bmp
 
 
 
@@ -59,7 +59,7 @@
   [basis number]  :  Percentage ( improvement or loss )  
 
 
-  Persentage threshold : 25.000000 
+  Persentage threshold : 10.000000 
 
 ----------------------------------------------------------------------------------
 
