@@ -1,6 +1,6 @@
 
 
- [34mUse image[m  :  barbara.bmp
+ Use image  :  mandrill.bmp
 
 
 
@@ -20,21 +20,21 @@
 - - - - - - - - Number of basis used : 0 - - - - - - - 
 
 
- MSE : 617.298737  (value)
+ MSE : 600.675232  (value)
 
 
 
 - - - - - - - - Number of basis used : 1 - - - - - - - 
 
 
- MSE : 400.472626  (value)
+ MSE : 453.552567  (value)
 
 
 
 - - - - - - - - Number of basis used : 2 - - - - - - - 
 
 
- MSE : 303.163620  (value)
+ MSE : 373.015045  (value)
 
 
 
@@ -45,7 +45,7 @@
 
 
 
- Use image  :  barbara.bmp
+ Use image  :  mandrill.bmp
 
 
 
@@ -59,7 +59,7 @@
   [basis number]  :  Percentage ( improvement or loss )  
 
 
-  Persentage threshold : 10.000000 
+  Persentage threshold : 100.000000 
 
 ----------------------------------------------------------------------------------
 

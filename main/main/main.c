@@ -757,7 +757,7 @@ int main()
 		for (j = 0; j < 1024; j++) {
 			mk = j % 32;
 			ml = j / 32;
-			if (temp_sai2[i][j] == 0)
+			if (test3[0][j] != i)
 				for (a = 0; a < 8; a++)
 					for (b = 0; b < 8; b++)
 						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
@@ -767,7 +767,7 @@ int main()
 			for (b = 0; b < 256; b++)
 				temp_sai[a * 256 + b] = temp_sai3[a][b];
 
-		sprintf(output, "OUTPUT/ORIGIN/%d[%d].bmp", (int)percent, i);
+		sprintf(output, "OUTPUT/ORIGIN/[%d].bmp", i);
 		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 	}
 
@@ -776,7 +776,7 @@ int main()
 			temp_sai3[a][b] = 0;
 
 	for (a = 0; a < 64; a++)
-		for (b = a; b < 64; b++)
+		for (b = 0; b < 64; b++)
 			for (j = 0; j < 1024; j++)
 				if (temp_sai2[a][j] == 1 && temp_sai2[b][j] == 1)
 					temp_sai3[a][b]++;
@@ -894,6 +894,8 @@ int main()
 
 		for (j = 0; j < 64; j++) {
 			sum = 0;
+			for (a = 0; a < 1024; a++)
+				sum += temp_sai2[j][a];
 			fprintf(fp5, "\n +----+");
 			for (i = 0; i < 65; i++)
 				fprintf(fp5, "----+");
@@ -902,8 +904,10 @@ int main()
 				if (j == i)
 					fprintf(fp5, " ## |");
 				else{
-					if (i <= j)
-						fprintf(fp5, "%4d|", (int)temp_sai3[i][j]);
+					if (50 < (temp_sai3[i][j] / sum) * 100) {
+						fprintf(fp5, "%4d|", (int)((temp_sai3[i][j] / sum) * 100));
+						temp5[i]++;
+					}
 					else
 						fprintf(fp5, "    |");
 				}
@@ -917,6 +921,15 @@ int main()
 		fprintf(fp5, "\n | ## |");
 		for (i = 0; i < 64; i++)
 			fprintf(fp5, "[%2d]|", i);
+		fprintf(fp5, " ## |");
+
+		fprintf(fp5, "\n +----+");
+		for (i = 0; i < 65; i++)
+			fprintf(fp5, "----+");
+
+		fprintf(fp5, "\n | ## |");
+		for (i = 0; i < 64; i++)
+			fprintf(fp5, "[%2d]|", (int)temp5[i]);
 		fprintf(fp5, " ## |");
 
 		fprintf(fp5, "\n +----+");
