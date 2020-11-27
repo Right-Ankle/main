@@ -14,10 +14,10 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, seg[64 * 64], img_out1[1024], img_out2[1024], img_out3[1024], img_out4[1024], y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], count[1024], count2[1024], count3[64], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], temp_sai4[64 * 64], ica[64], temp_temp[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024];
-	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], best_dct[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024], lambda = 1024.0;
-	static double result_coe, coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, coe_temp[256][256] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[4][2], test_per[4][64];
-	static double avg[1024], y0[64][1024], y1[64][1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp2[64][1024], dct_cost[64][1024], mse_cost[64][1024], total_test[20][64], dct_bent[1024], ica_ent[64][1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024];
+	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024], imp[10][1024];
+	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[4][2], test_per[4][64];
+	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
@@ -35,6 +35,7 @@ int main()
 	double* temp_6;
 
 	sum = 0;
+
 
 	printf("mkdir start\n");
 	//printf("+ - - - - - Now Running - - - - +\n");
@@ -129,11 +130,11 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp3 = fopen("OUTPUT\\fp3.csv", "w")) == NULL) {
+	if ((fp3 = fopen("OUTPUT\\fp3.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp4 = fopen("OUTPUT\\fp4.csv", "w")) == NULL) {
+	if ((fp4 = fopen("OUTPUT\\fp4.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -246,7 +247,7 @@ int main()
 
 	//ソート結果を格納
 	// 各ブロック64パターンの中で一番誤差のないもの
-	for (i = 0; i < 1024; i++) { // use 1 basis
+	for (i = 0; i < 1024; i++) { // use 1 basis ///////////////////////////////////////////////////////////////////////////
 		result_ica[0][i] = sort_d[0][i].num;  // 基底番号
 		result_ica[1][i] = sort_d[0][i].val;    // MSE値
 		//printf("%lf : %lf\n", result_ica[0][i], (double)sort_d[0][i].num);
@@ -442,7 +443,7 @@ int main()
 	// 2 start ///////
 	//printf("Do you start method 2 ? [ y/n ] : ");
 	//scanf("%s", &yn);
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'y') {
 		printf("\nMethod 2 start - ->\n\n");
 
@@ -737,8 +738,8 @@ int main()
 		}
 
 	// 置換可能基底
-	printf(" ~ Investigation of replaceable basis ~\n What percentage do you use ? : ");
-	scanf("%lf", &percent);
+	//printf(" ~ Investigation of replaceable basis ~\n What percentage do you use ? : ");
+	//scanf("%lf", &percent);
 
 
 	for (i = 0; i < 64; i++)
@@ -785,32 +786,32 @@ int main()
 				y_rank_pm[(int)test3[0][j]]++;
 			/// ////////////////////////////////////////////////////////////////////////////////////////////
 
-			fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp2, "\n\n  MSE value for the entire image \n\n\n  Number of basis used : 0, 1, 2, 3\n\n\n  (* The number of basis is not the whole number, but the number using the best basis in a small area )\n\n----------------------------------------------------------------------------------\n\n");
+			/*fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
+			fprintf(fp, "\n\n  MSE value for the entire image \n\n\n  Number of basis used : 0, 1, 2, 3\n\n\n  (* The number of basis is not the whole number, but the number using the best basis in a small area )\n\n----------------------------------------------------------------------------------\n\n");
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[0][j];
-			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 0 - - - - - - - \n\n\n");
-			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 0 - - - - - - - \n\n\n");
+			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[1][j];
-			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 1 - - - - - - - \n\n\n");
-			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 1 - - - - - - - \n\n\n");
+			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[2][j];
-			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 2 - - - - - - - \n\n\n");
-			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 2 - - - - - - - \n\n\n");
+			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++)
 				sum += all_mse[3][j];
-			fprintf(fp2, "\n\n- - - - - - - - Number of basis used : 3 - - - - - - - \n\n\n");
-			fprintf(fp2, " MSE : %lf  (value)\n\n", sum / 1024.0);
+			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 3 - - - - - - - \n\n\n");
+			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);*/
 
 		
 
@@ -827,21 +828,7 @@ int main()
 		
 		sum = 0; sum1 = 0; //sum1 -> マイナス
 
-
-
-
-		//printf("What percentage do you use ? : ");
-		//scanf("%lf", &percent);
-
-
-
-		//printf("What percentage do you use ? : ");
-		//scanf("%lf", &percent);
-		printf("\n");
-		fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp2, "\n\n  Percentage of improvement and loss of each basis to area \n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number]  :  Percentage ( improvement or loss )  \n\n\n  Persentage threshold : %lf \n\n----------------------------------------------------------------------------------\n\n", percent);
-
-		/*for (j = 0; j < 1024; j++) {
+				/*for (j = 0; j < 1024; j++) {
 			fprintf(fp2, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
 			for (i = 0; i < 64; i++) {
 				if (test2[i][j] > 0)
@@ -864,6 +851,639 @@ int main()
 				fprintf(fp2, " [%2d] : %3d / %3d  %lf  ( improvement )   %3d / %3d  %lf  ( loss )\n\n", i, (int)total_test[0][i], (int)total_test[2][i], total_test[0][i] / total_test[2][i] * 100,(int)total_test[1][i], (int)total_test[3][i], total_test[1][i] / total_test[3][i] * 100);
 		}*/
 
+
+		//printf("What percentage do you use ? : ");
+		//scanf("%lf", &percent);
+		// 改善量調査　基底数1を格納
+		percent = 500;
+		for (j = 0; j < 1024; j++) {
+			imp[0][j] = 1.0; //今後の計算の有無
+			imp[1][j] = result_ica[1][j]; //今のMSE値
+			imp[2][j] = result_ica0[1][j] - result_ica[1][j]; //一段階前とのMSE改善量
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+			//imp[3][j] += imp[2][j]; //今の累計のMSE改善量
+			imp[5][j] = result_ica[0][j];
+		}
+		//printf("What percentage do you use ? : ");
+		//scanf("%lf", &percent);
+
+		///////////////////////////////////////////////////////////// /////////////////  2basis
+		printf("\n");
+		fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp, "\n\n  Area with 500 or more MSE \n\n\n  Number of basis used : 1, 2 \n\n\n  Area MSE value and basis improvement ( comparison and cumulative total with one step before ) \n\n----------------------------------------------------------------------------------\n\n");
+		QQ = 0;
+		for (j = 0; j < 1024; j++) {
+			imp[4][j]=100000;
+			if (imp[0][j] == 1) {
+				QQ++;
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
+
+					ny[(int)imp[5][j]][j] = y[(int)imp[5][j]][j]; //一つ目の基底選択
+					ny[n][j] = y[n][j]; // ２つ目の基底選択
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+					if (imp[4][j] > sum / 64.0) {
+						imp[4][j] = sum / 64.0;
+						imp[6][j] = n;
+					}
+				}
+				imp[2][j] = imp[1][j] - imp[4][j];
+				imp[3][j] += imp[2][j];
+				imp[1][j] = imp[4][j];
+			}
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (imp[0][j] != 1)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/Basis2.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+		fprintf(fp, " +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp, "----+");
+
+		fprintf(fp, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp, "[%2d]|", i+1);
+		fprintf(fp, " ## |                                                                                    ");
+
+		for (j = 0; j < 32; j++) {
+
+			fprintf(fp, "\n +----+");
+			for (i = 0; i < 33; i++)
+				fprintf(fp, "----+");
+			fprintf(fp, "\n |[%2d]|", j+1);
+			for (i = 0; i < 32; i++) {
+				if (imp[0][i + 32 * j] == 1)
+					fprintf(fp, "%4d|", (int)imp[1][i + 32 * j]);
+				else
+					fprintf(fp, "    |");
+			}
+			fprintf(fp, "[%2d]|", j+1);
+		}
+		fprintf(fp, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp, "----+");
+
+		fprintf(fp, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp, "[%2d]|", i+1);
+		fprintf(fp, " ## |                                                                                    ");
+
+		fprintf(fp, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp, "----+");
+
+		fprintf(fp, "\n\n\n  count : %4d / 1024\n\n", QQ);
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			fprintf(fp, "\n\n -------------------- [ area No.%d (%2d , %2d)] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j, ml + 1, mk + 1);
+			if (imp[0][j] == 1) {
+				fprintf(fp, "   MSE Value : %lf  ->  %lf", result_ica[1][j], imp[1][j]);
+				fprintf(fp, "\n\n   Amount of improvement from basis 1 : %lf", imp[2][j]);
+				fprintf(fp, "\n\n   Cumulative amount of improvement from basis 1  [ improvement rate ] : %lf  [ %lf ]", imp[3][j], (imp[3][j] / result_ica[1][j])*100);
+
+			}
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+		}
+
+
+		///////////////////////////////////////////////////////////// /////////////////  3basis
+		printf("\n");
+		fprintf(fp2, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp2, "\n\n  Area with 500 or more MSE \n\n\n  Number of basis used : 2, 3 \n\n\n  Area MSE value and basis improvement ( comparison and cumulative total with one step before ) \n\n----------------------------------------------------------------------------------\n\n");
+		QQ = 0;
+		for (j = 0; j < 1024; j++) {
+			imp[4][j] = 100000;
+			if (imp[0][j] == 1) {
+				QQ++;
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
+
+					ny[(int)imp[5][j]][j] = y[(int)imp[5][j]][j]; //1つ目の基底選択
+					ny[(int)imp[6][j]][j] = y[(int)imp[6][j]][j]; //2つ目の基底選択
+					ny[n][j] = y[n][j]; // 3つ目の基底選択
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+					if (imp[4][j] > sum / 64.0) {
+						imp[4][j] = sum / 64.0;
+						imp[7][j] = n;
+					}
+				}
+				imp[2][j] = imp[1][j] - imp[4][j];
+				imp[3][j] += imp[2][j];
+				imp[1][j] = imp[4][j];
+			}
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (imp[0][j] != 1)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/Basis3.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+		fprintf(fp2, " +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp2, "----+");
+
+		fprintf(fp2, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp2, "[%2d]|", i + 1);
+		fprintf(fp2, " ## |                                                                                    ");
+
+		for (j = 0; j < 32; j++) {
+
+			fprintf(fp2, "\n +----+");
+			for (i = 0; i < 33; i++)
+				fprintf(fp2, "----+");
+			fprintf(fp2, "\n |[%2d]|", j + 1);
+			for (i = 0; i < 32; i++) {
+				if (imp[0][i + 32 * j] == 1)
+					fprintf(fp2, "%4d|", (int)imp[1][i + 32 * j]);
+				else
+					fprintf(fp2, "    |");
+			}
+			fprintf(fp2, "[%2d]|", j + 1);
+		}
+		fprintf(fp2, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp2, "----+");
+
+		fprintf(fp2, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp2, "[%2d]|", i + 1);
+		fprintf(fp2, " ## |                                                                                    ");
+
+		fprintf(fp2, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp2, "----+");
+
+		fprintf(fp2, "\n\n\n  count : %4d / 1024\n\n", QQ);
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			fprintf(fp2, "\n\n -------------------- [ area No.%d (%2d , %2d)] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j, ml + 1, mk + 1);
+			if (imp[0][j] == 1) {
+				fprintf(fp2, "   MSE Value : %lf  ->  %lf", result_ica[1][j], imp[1][j]);
+				fprintf(fp2, "\n\n   Amount of improvement from basis 1 : %lf", imp[2][j]);
+				fprintf(fp2, "\n\n   Cumulative amount of improvement from basis 1 [ improvement rate ] : %lf  [ %lf ]  ", imp[3][j], (imp[3][j] / result_ica[1][j]) * 100);
+
+			}
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+		}
+
+		///////////////////////////////////////////////////////////// /////////////////  4basis
+		printf("\n");
+		fprintf(fp3, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp3, "\n\n  Area with 500 or more MSE \n\n\n  Number of basis used : 3, 4 \n\n\n  Area MSE value and basis improvement ( comparison and cumulative total with one step before ) \n\n----------------------------------------------------------------------------------\n\n");
+		QQ = 0;
+		for (j = 0; j < 1024; j++) {
+			imp[4][j] = 100000;
+			if (imp[0][j] == 1) {
+				QQ++;
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
+
+					ny[(int)imp[5][j]][j] = y[(int)imp[5][j]][j]; //一つ目の基底選択
+					ny[(int)imp[6][j]][j] = y[(int)imp[6][j]][j]; //2つ目の基底選択
+					ny[(int)imp[7][j]][j] = y[(int)imp[7][j]][j]; //3つ目の基底選択
+					ny[n][j] = y[n][j]; // 4つ目の基底選択
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+					if (imp[4][j] > sum / 64.0) {
+						imp[4][j] = sum / 64.0;
+						imp[8][j] = n;
+					}
+				}
+				imp[2][j] = imp[1][j] - imp[4][j];
+				imp[3][j] += imp[2][j];
+				imp[1][j] = imp[4][j];
+			}
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (imp[0][j] != 1)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/Basis4.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+		fprintf(fp3, " +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp3, "----+");
+
+		fprintf(fp3, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp3, "[%2d]|", i + 1);
+		fprintf(fp3, " ## |                                                                                    ");
+
+		for (j = 0; j < 32; j++) {
+
+			fprintf(fp3, "\n +----+");
+			for (i = 0; i < 33; i++)
+				fprintf(fp3, "----+");
+			fprintf(fp3, "\n |[%2d]|", j + 1);
+			for (i = 0; i < 32; i++) {
+				if (imp[0][i + 32 * j] == 1)
+					fprintf(fp3, "%4d|", (int)imp[1][i + 32 * j]);
+				else
+					fprintf(fp3, "    |");
+			}
+			fprintf(fp3, "[%2d]|", j + 1);
+		}
+		fprintf(fp3, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp3, "----+");
+
+		fprintf(fp3, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp3, "[%2d]|", i + 1);
+		fprintf(fp3, " ## |                                                                                    ");
+
+		fprintf(fp3, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp3, "----+");
+
+		fprintf(fp3, "\n\n\n  count : %4d / 1024\n\n", QQ);
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			fprintf(fp3, "\n\n -------------------- [ area No.%d (%2d , %2d)] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j, ml + 1, mk + 1);
+			if (imp[0][j] == 1) {
+				fprintf(fp3, "   MSE Value : %lf  ->  %lf", result_ica[1][j], imp[1][j]);
+				fprintf(fp3, "\n\n   Amount of improvement from basis 1 : %lf", imp[2][j]);
+				fprintf(fp3, "\n\n   Cumulative amount of improvement from basis 1  [ improvement rate ] : %lf  [ %lf ]", imp[3][j], (imp[3][j] / result_ica[1][j]) * 100);
+
+			}
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+		}
+
+		///////////////////////////////////////////////////////////// /////////////////  5basis
+		printf("\n");
+		fprintf(fp4, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp4, "\n\n  Area with 500 or more MSE \n\n\n  Number of basis used : 4, 5 \n\n\n  Area MSE value and basis improvement ( comparison and cumulative total with one step before ) \n\n----------------------------------------------------------------------------------\n\n");
+		QQ = 0;
+		for (j = 0; j < 1024; j++) {
+			imp[4][j] = 100000;
+			if (imp[0][j] == 1) {
+				QQ++;
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
+
+					ny[(int)imp[5][j]][j] = y[(int)imp[5][j]][j]; //一つ目の基底選択
+					ny[(int)imp[6][j]][j] = y[(int)imp[6][j]][j]; //2つ目の基底選択
+					ny[(int)imp[7][j]][j] = y[(int)imp[7][j]][j]; //3つ目の基底選択
+					ny[(int)imp[8][j]][j] = y[(int)imp[8][j]][j]; //4つ目の基底選択
+					ny[n][j] = y[n][j]; // 5つ目の基底選択
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+					if (imp[4][j] > sum / 64.0) {
+						imp[4][j] = sum / 64.0;
+						imp[9][j] = n;
+					}
+				}
+				imp[2][j] = imp[1][j] - imp[4][j];
+				imp[3][j] += imp[2][j];
+				imp[1][j] = imp[4][j];
+			}
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (imp[0][j] != 1)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/Basis5.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+		fprintf(fp4, " +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp4, "----+");
+
+		fprintf(fp4, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp4, "[%2d]|", i + 1);
+		fprintf(fp4, " ## |                                                                                    ");
+
+		for (j = 0; j < 32; j++) {
+			fprintf(fp4, "\n +----+");
+			for (i = 0; i < 33; i++)
+				fprintf(fp4, "----+");
+			fprintf(fp4, "\n |[%2d]|", j + 1);
+			for (i = 0; i < 32; i++) {
+				if (imp[0][i + 32 * j] == 1)
+					fprintf(fp4, "%4d|", (int)imp[1][i + 32 * j]);
+				else
+					fprintf(fp4, "    |");
+			}
+			fprintf(fp4, "[%2d]|", j + 1);
+		}
+		fprintf(fp4, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp4, "----+");
+
+		fprintf(fp4, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp4, "[%2d]|", i + 1);
+		fprintf(fp4, " ## |                                                                                    ");
+
+		fprintf(fp4, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp4, "----+");
+
+		fprintf(fp4, "\n\n\n  count : %4d / 1024\n\n", QQ);
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			fprintf(fp4, "\n\n -------------------- [ area No.%d (%2d , %2d)] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j, ml + 1, mk + 1);
+			if (imp[0][j] == 1) {
+				fprintf(fp4, "   MSE Value : %lf  ->  %lf", result_ica[1][j], imp[1][j]);
+				fprintf(fp4, "\n\n   Amount of improvement from basis 1 : %lf", imp[2][j]);
+				fprintf(fp4, "\n\n   Cumulative amount of improvement from basis 1  [ improvement rate ] : %lf  [ %lf ]", imp[3][j], (imp[3][j] / result_ica[1][j]) * 100);
+
+			}
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+		}
+
+		///////////////////////////////////////////////////////////// /////////////////  6basis
+		printf("\n");
+		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+		fprintf(fp5, "\n\n  Area with 500 or more MSE \n\n\n  Number of basis used : 5, 6 \n\n\n  Area MSE value and basis improvement ( comparison and cumulative total with one step before ) \n\n----------------------------------------------------------------------------------\n\n");
+		QQ = 0;
+		for (j = 0; j < 1024; j++) {
+			imp[4][j] = 100000;
+			if (imp[0][j] == 1) {
+				QQ++;
+				for (n = 0; n < 64; n++) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0;
+
+					ny[(int)imp[5][j]][j] = y[(int)imp[5][j]][j]; //一つ目の基底選択
+					ny[(int)imp[6][j]][j] = y[(int)imp[6][j]][j]; //2つ目の基底選択
+					ny[(int)imp[7][j]][j] = y[(int)imp[7][j]][j]; //3つ目の基底選択
+					ny[(int)imp[8][j]][j] = y[(int)imp[8][j]][j]; //4つ目の基底選択
+					ny[(int)imp[9][j]][j] = y[(int)imp[9][j]][j]; //5つ目の基底選択
+					ny[n][j] = y[n][j]; // 6つ目の基底選択
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
+					}
+					if (imp[4][j] > sum / 64.0) {
+						imp[4][j] = sum / 64.0;
+					}
+				}
+				imp[2][j] = imp[1][j] - imp[4][j];
+				imp[3][j] += imp[2][j];
+				imp[1][j] = imp[4][j];
+			}
+			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		}
+		printf("\r [ Execution finished ]          ");
+		printf("\n\n");
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (imp[0][j] != 1)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/Basis6.bmp");
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+		fprintf(fp5, " +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp5, "----+");
+
+		fprintf(fp5, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp5, "[%2d]|", i + 1);
+		fprintf(fp5, " ## |                                                                                    ");
+
+		for (j = 0; j < 32; j++) {
+			fprintf(fp5, "\n +----+");
+			for (i = 0; i < 33; i++)
+				fprintf(fp5, "----+");
+			fprintf(fp5, "\n |[%2d]|", j + 1);
+			for (i = 0; i < 32; i++) {
+				if (imp[0][i + 32 * j] == 1)
+					fprintf(fp5, "%4d|", (int)imp[1][i + 32 * j]);
+				else
+					fprintf(fp5, "    |");
+			}
+			fprintf(fp5, "[%2d]|", j + 1);
+		}
+		fprintf(fp5, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp5, "----+");
+
+		fprintf(fp5, "\n | ## |");
+		for (i = 0; i < 32; i++)
+			fprintf(fp5, "[%2d]|", i + 1);
+		fprintf(fp5, " ## |                                                                                    ");
+
+		fprintf(fp5, "\n +----+");
+		for (i = 0; i < 33; i++)
+			fprintf(fp5, "----+");
+
+		fprintf(fp5, "\n\n\n  count : %4d / 1024\n\n", QQ);
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			fprintf(fp5, "\n\n -------------------- [ area No.%d (%2d , %2d)] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j, ml+1, mk+1);
+			if (imp[0][j] == 1) {
+				fprintf(fp5, "   MSE Value : %lf  ->  %lf", result_ica[1][j], imp[1][j]);
+				fprintf(fp5, "\n\n   Amount of improvement from basis 1 : %lf", imp[2][j]);
+				fprintf(fp5, "\n\n   Cumulative amount of improvement from basis 1  [ improvement rate ] : %lf  [ %lf ]", imp[3][j], (imp[3][j] / result_ica[1][j]) * 100);
+
+			}
+			if (imp[1][j] <= percent)
+				imp[0][j] = 0;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		for (b = 0; b < 64; b++) {
 			temp1[b] = 0;
 			temp2[b] = 0;
@@ -879,7 +1499,7 @@ int main()
 		//scanf("%lf", &percent);
 		printf("\n");
 
-		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+		/*fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
 		fprintf(fp5, "\n\n  Relationship between basis and replaceable basis\n\n\n  Number of basis used : 0, 1 \n\n\n  [basis number] : Number of substitutable basis for basis number \n\n\n *Total on the right : Number of replacements (Be done)\n\n  Total below : Number of replacements (To do)\n\n\n  Of the amount of improvement  : 0 ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent);
 
 
@@ -937,7 +1557,7 @@ int main()
 			fprintf(fp5, "----+");
 
 
-		fprintf(fp5, "\n\n\n\n\n\n\n");
+		fprintf(fp5, "\n\n\n\n\n\n\n");*/
 		////fprintf(fp5, "\n\n- - - - - - - - Magnitude of coefficient ~ 1.1 - - - - - - - \n\n\n");
 		//for (b = 0; b < 64; b++) {
 		//	//fprintf(fp5, "[%2d] : %d   [%lf%]\n\n", b,temp1[b], ((double)temp1[b]/(double)QQ )*100);
@@ -1107,73 +1727,73 @@ int main()
 		//}
 
 
-		fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp, "\n\n  Core basis investigation \n\n\n  Number of basis used : 0, 1 \n\n\n  MSE difference used : %lf\n\n----------------------------------------------------------------------------------\n\n", percent);
+		//fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
+		//fprintf(fp, "\n\n  Core basis investigation \n\n\n  Number of basis used : 0, 1 \n\n\n  MSE difference used : %lf\n\n----------------------------------------------------------------------------------\n\n", percent);
 
-		for (j = 0; j < 1024; j++) {
-			fprintf(fp, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
-			for (i = 0; i < 64; i++) {
-				if (test2[0][j] - test2[i][j] <= percent && test2[i][j] >= 0) {
-					if (count_temp[0][j] == 0) {
-						total_test[0][(int)test3[i][j]]++;
-						//total_test[10][0]++;
-					}
-					else if (count_temp[0][j] == 1) {
-						total_test[1][(int)test3[i][j]]++;
-						//total_test[10][1]++;
-					}
-					else if (count_temp[0][j] == 2) {
-						total_test[2][(int)test3[i][j]]++;
-						//total_test[10][2]++;
-					}
-					else if (count_temp[0][j] == 3) {
-						total_test[3][(int)test3[i][j]]++;
-						//total_test[10][3]++;
-					}
-					else if (count_temp[0][j] == 4) {
-						total_test[4][(int)test3[i][j]]++;
-						//total_test[10][4]++;
-					}
-					if (count_temp[0][j] != 0)
-						fprintf(fp, " [%2d] : %4.5lf  ( MSE Value )\n\n", (int)test3[i][j], mse_ica[(int)test3[i][j]][j]);
+		//for (j = 0; j < 1024; j++) {
+		//	fprintf(fp, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+		//	for (i = 0; i < 64; i++) {
+		//		if (test2[0][j] - test2[i][j] <= percent && test2[i][j] >= 0) {
+		//			if (count_temp[0][j] == 0) {
+		//				total_test[0][(int)test3[i][j]]++;
+		//				//total_test[10][0]++;
+		//			}
+		//			else if (count_temp[0][j] == 1) {
+		//				total_test[1][(int)test3[i][j]]++;
+		//				//total_test[10][1]++;
+		//			}
+		//			else if (count_temp[0][j] == 2) {
+		//				total_test[2][(int)test3[i][j]]++;
+		//				//total_test[10][2]++;
+		//			}
+		//			else if (count_temp[0][j] == 3) {
+		//				total_test[3][(int)test3[i][j]]++;
+		//				//total_test[10][3]++;
+		//			}
+		//			else if (count_temp[0][j] == 4) {
+		//				total_test[4][(int)test3[i][j]]++;
+		//				//total_test[10][4]++;
+		//			}
+		//			if (count_temp[0][j] != 0)
+		//				fprintf(fp, " [%2d] : %4.5lf  ( MSE Value )\n\n", (int)test3[i][j], mse_ica[(int)test3[i][j]][j]);
 
-				}
-			}
-			if (count_temp[0][j] == 0) {
-				//total_test[0][(int)test3[i][j]]++;
-				total_test[10][0]++;
-			}
-			else if (count_temp[0][j] == 1) {
-				//total_test[1][(int)test3[i][j]]++;
-				total_test[10][1]++;
-			}
-			else if (count_temp[0][j] == 2) {
-				//total_test[2][(int)test3[i][j]]++;
-				total_test[10][2]++;
-			}
-			else if (count_temp[0][j] == 3) {
-				//total_test[3][(int)test3[i][j]]++;
-				total_test[10][3]++;
-			}
-			else if (count_temp[0][j] == 4) {
-				//total_test[4][(int)test3[i][j]]++;
-				total_test[10][4]++;
-			}
-		}
+		//		}
+		//	}
+		//	if (count_temp[0][j] == 0) {
+		//		//total_test[0][(int)test3[i][j]]++;
+		//		total_test[10][0]++;
+		//	}
+		//	else if (count_temp[0][j] == 1) {
+		//		//total_test[1][(int)test3[i][j]]++;
+		//		total_test[10][1]++;
+		//	}
+		//	else if (count_temp[0][j] == 2) {
+		//		//total_test[2][(int)test3[i][j]]++;
+		//		total_test[10][2]++;
+		//	}
+		//	else if (count_temp[0][j] == 3) {
+		//		//total_test[3][(int)test3[i][j]]++;
+		//		total_test[10][3]++;
+		//	}
+		//	else if (count_temp[0][j] == 4) {
+		//		//total_test[4][(int)test3[i][j]]++;
+		//		total_test[10][4]++;
+		//	}
+		//}
 
-		fprintf(fp, "\n\n\n\n\n\n");
+		//fprintf(fp, "\n\n\n\n\n\n");
 
-		fprintf(fp, "\n               0 basis                  ~ 1.1                1.1 ~ 2.0               2.0 ~                2 basis             ");
-		fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
-		for (b = 0; b < 64; b++) {
-			fprintf(fp, " | %2d | ", b);
-			for (i = 0; i < 5; i++) {
-				fprintf(fp, "      %3d / %3d (%3d%%)|", (int)total_test[i][b], (int)total_test[10][i], (int)((total_test[i][b] / total_test[10][i]) * 100));
-			}
-			fprintf(fp, " %2d | ", b);
-			fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
+		//fprintf(fp, "\n               0 basis                  ~ 1.1                1.1 ~ 2.0               2.0 ~                2 basis             ");
+		//fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
+		//for (b = 0; b < 64; b++) {
+		//	fprintf(fp, " | %2d | ", b);
+		//	for (i = 0; i < 5; i++) {
+		//		fprintf(fp, "      %3d / %3d (%3d%%)|", (int)total_test[i][b], (int)total_test[10][i], (int)((total_test[i][b] / total_test[10][i]) * 100));
+		//	}
+		//	fprintf(fp, " %2d | ", b);
+		//	fprintf(fp, "\n +----+-----------------------+----------------------+----------------------+----------------------+----------------------+----+\n");
 
-		}
+		//}
 	printf("<ica fin>\n\n");
 	/////////////////////////////////ica 終了/////////////////////////////////////////
 
@@ -1187,7 +1807,7 @@ int main()
 	//scanf("%s", &yn);
 
 	if (yn == 'y') {
-		fprintf(fp2, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
+		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
 		for (Q = 100; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
@@ -1211,7 +1831,7 @@ int main()
 			sum = sum / (256.0 * 256.0);
 
 
-			fprintf(fp2, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
+			//fprintf(fp, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
 
 			for (a = 0; a < 256; a++)
 				for (b = 0; b < 256; b++)
