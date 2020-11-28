@@ -33,6 +33,7 @@
     <ClCompile Include="gentox.c" />
     <ClCompile Include="gnuplot.c" />
     <ClCompile Include="gnuplot2.c" />
+    <ClCompile Include="gnuplot4.c" />
     <ClCompile Include="gunplot3.c" />
     <ClCompile Include="ICA.c" />
     <ClCompile Include="ICA_temp.c" />
