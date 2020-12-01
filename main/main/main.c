@@ -14,7 +14,7 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
 	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024];
 	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
@@ -1393,7 +1393,7 @@ int main()
 				}
 				else if (0 < test2[0][j] - test2[(int)test3[i][j]][j] && test2[0][j] - test2[(int)test3[i][j]][j] <= percent && test2[(int)test3[i][j]][j] >= 0) {
 					fprintf(fp5, " ## |");
-					QQQ++;
+					no_op[j]++;
 					semi[1][i]++;
 				}
 				else
@@ -1401,7 +1401,7 @@ int main()
 			}
 			fprintf(fp5, "%4d|", j);
 			fprintf(fp5, "[%2d]|", (int)test3[0][j]);
-			fprintf(fp5, "%4d|", QQQ);
+			fprintf(fp5, "%4d|", no_op[j]);
 
 		}
 		fprintf(fp5, "\n +----+");
@@ -1435,6 +1435,27 @@ int main()
 		for (i = 0; i < 67; i++)
 			fprintf(fp5, "----+");
 		fprintf(fp5, "\n\n\n\n\n\n");
+
+		// 置き換え不可能領域の画像確認
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai3[a][b] = origin[a][b];
+
+		for (j = 0; j < 1024; j++) {
+			mk = j % 32;
+			ml = j / 32;
+			if (no_op[j] != 0)
+				for (a = 0; a < 8; a++)
+					for (b = 0; b < 8; b++)
+						temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+		}
+
+		for (a = 0; a < 256; a++)
+			for (b = 0; b < 256; b++)
+				temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+		sprintf(output, "OUTPUT/DCT/not_replaceable[%d].bmp", (int)percent);
+		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
 		//gnuplot4(imp_rate);
 			
@@ -1523,7 +1544,7 @@ int main()
 				for (b = 0; b < 256; b++)
 					temp_sai[a * 256 + b] = temp_sai3[a][b];
 
-			sprintf(output, "OUTPUT/DCT/not_replaceable[%d].bmp", (int)percent);
+			sprintf(output, "OUTPUT/DCT/replaceable[%d].bmp", (int)percent);
 			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 		}
 
