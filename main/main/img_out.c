@@ -7,7 +7,7 @@
 #include <string.h>
 #include "ica.h"
 
-// 画像出力用
+// 画像出力用(領域指定[1024])
 int img_out(unsigned char origin[][256], int date1[1024], int name) {
 	static int temp_sai[256 * 256];
 	char output[1000];

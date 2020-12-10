@@ -9,12 +9,12 @@
 
 int main()
 {
-	FILE* fp, * fp2, * fp3, * fp4, * fp5; //ファイルポインタの定義
+	FILE* fp, * fp2, * fp3, * fp4, * fp5, *fp6; //ファイルポインタの定義
 
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
 	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][64];
 	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
@@ -92,12 +92,10 @@ int main()
 
 	printf("\nfilename plz .... (1, barbara  2, cameraman  3, mandrill) :");
 	scanf("%d", &i);
-
 	if (i == 2)
 		strcpy(filename, filename2);
 	else if (i == 3)
 		strcpy(filename, filename15);
-
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
@@ -139,6 +137,10 @@ int main()
 	}
 
 	if ((fp5 = fopen("OUTPUT\\fp5.txt", "w")) == NULL) {
+		fprintf(stderr, "Can not open file\n");
+	}
+
+	if ((fp6 = fopen("OUTPUT\\fp6.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -209,6 +211,7 @@ int main()
 			}
 			mse_ica[i][j] = sum / 64;//平均
 		}
+
 		// 実行確認用
 		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
@@ -246,7 +249,7 @@ int main()
 	////////////////////////////ソート終了////////////////////////////////
 
 	//ソート結果を格納
-	// 各ブロック64パターンの中で一番誤差のないもの
+	// MSE順ソート後
 	for (i = 0; i < 1024; i++) { // use 1 basis ///////////////////////////////////////////////////////////////////////////
 		result_ica[0][i] = sort_d[0][i].num;  // 基底番号
 		result_ica[1][i] = sort_d[0][i].val;    // MSE値
@@ -411,6 +414,7 @@ int main()
 
 
 
+
 	for (i = 0; i < 64; i++) {
 		for (j = 0; j < 1024; j++) {
 			// .val -> 値を取得・属性を変更し記憶
@@ -443,150 +447,33 @@ int main()
 			dct_coe[i][j] = (double)sort_d[i][j].num;
 			dcoe_temp[i][j] = sort_d[i][j].val;
 		}
-	printf(" end\n\n");
-	/////////  1 end
 
-	// 2 start ///////
-	//printf("Do you start method 2 ? [ y/n ] : ");
-	//scanf("%s", &yn);
-	yn = 'n';
-	if (yn == 'y') {
-		printf("\nMethod 2 start - ->\n\n");
+	// 生成画像確認
+	for (j = 0; j < 1024; j++) {
+		for (i = 0; i < 64; i++)
+			ny[i][j] = 0;
 
-		for (j = 0; j < 1024; j++) {
-			for (m = 0; m < 64; m++)
-				for (n = 0; n < 64; n++) {
-					for (i = 0; i < 64; i++)
-						ny[i][j] = 0;
-
-					ny[m][j] = y[m][j]; //一つ目の基底選択
-					ny[n][j] = y[n][j]; // ２つ目の基底選択
-
-					// 初期化（必ず行う）
-					for (a = 0; a < 64; a++)
-						xx[a] = 0.0;
-
-					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-					sum = 0.0;
-					mk = j % 32;
-					ml = j / 32;
-					for (a = 0; a < 8; a++) {
-						for (b = 0; b < 8; b++) {
-							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
-						}
-					}
-
-					ica_test[n][m][j] = sum / 64.0;
-				}
-			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
-		}
-		printf("\r [ Execution finished ]          ");
-		printf("\n\n");
-
-
-
-		for (l = 0; l < 1024; l++) {
-			// 64*64*1024 -> 最小ＭＳＥ　64*1024こ
-			for (m = 0; m < 64; m++) {
-				for (i = 0; i < 64; i++) {
-					// .val -> 値を取得・属性を変更し記憶
-					// .abs -> 絶対値を記憶
-					// .num -> 元々の係数に対応するブロック内番号を記憶
-					sort_d[i][m].val = ica_test[i][m][l];		/* 元々の係数値 */
-					sort_d[i][m].abs = fabs(ica_test[i][m][l]);	/* ソートは係数の絶対値で行う*/
-					sort_d[i][m].num = i;					/* numに元々の係数に対応する番号を記憶 */
-				}
-			}
-
-			for (n = 0; n < 64; n++)
-				for (i = 0; i < 64 - 1; i++) {
-					min = sort_d[i][n].abs;
-					k = i;
-					for (j = i + 1; j < 64; j++) {
-						if (sort_d[j][n].abs < min) {
-							min = sort_d[j][n].abs;
-							k = j;
-						}
-					}
-					temp = sort_d[i][n];
-					sort_d[i][n] = sort_d[k][n];
-					sort_d[k][n] = temp;
-				}
-
-			for (m = 0; m < 64; m++) {
-				ica_test2[0][m][l] = sort_d[0][m].val;//mse
-				ica_test2[1][m][l] = (double)sort_d[0][m].num;//基底番号
-
-			}
-		}
-
-		for (j = 0; j < 1024; j++) {
-			for (i = 0; i < 64; i++) {
-				// .val -> 値を取得・属性を変更し記憶
-				// .abs -> 絶対値を記憶
-				// .num -> 元々の係数に対応するブロック内番号を記憶
-				sort_d[i][j].val = ica_test2[0][i][j];		/* 元々の係数値 */
-				sort_d[i][j].abs = fabs(ica_test2[0][i][j]);	/* ソートは係数の絶対値で行う*/
-				sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-			}
-		}
-
-		for (n = 0; n < 1024; n++) {
-			for (i = 0; i < 64 - 1; i++) {
-				min = sort_d[i][n].abs;
-				k = i;
-				for (j = i + 1; j < 64; j++) {
-					if (sort_d[j][n].abs < min) {
-						min = sort_d[j][n].abs;
-						k = j;
-					}
-				}
-				temp = sort_d[i][n];
-				sort_d[i][n] = sort_d[k][n];
-				sort_d[k][n] = temp;
-			}
-		}
-
-		for (j = 0; j < 1024; j++) {// 2 basis
-			ica_test3[0][j] = sort_d[0][j].val;//mse
-			ica_test3[1][j] = (double)sort_d[0][j].num;//基底番号
-
-			all_mse[2][j] = sort_d[0][j].val;
-
-			ica_test4[0][j] = ica_test3[1][j];//1つ目の基底番号
-			ica_test4[1][j] = ica_test2[1][(int)ica_test3[1][j]][j];// 2つ目の基底番号
-		}
-
-		// 生成画像確認
-		for (j = 0; j < 1024; j++) {
-			for (i = 0; i < 64; i++)
-				ny[i][j] = 0;
-
-			ny[(int)ica_test4[0][j]][j] = y[(int)ica_test4[0][j]][j]; //一つ目の基底選択
-			ny[(int)ica_test4[1][j]][j] = y[(int)ica_test4[1][j]][j]; // ２つ目の基底選択
-		}
-		// 初期化（必ず行う）
-		for (a = 0; a < 64; a++)
-			xx[a] = 0.0;
-
-		seki5(nw, ny, x); // x -> nw * ny
-		xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-		avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-		for (a = 0; a < 256; a++)
-			for (b = 0; b < 256; b++)
-				temp_sai[a * 256 + b] = ica_sai[a][b];
-
-		sprintf(output, "OUTPUT/Basis2.bmp");
-		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-
-
-
-		printf("Method 2 end\n\n");
+		ny[(int)dct_coe[0][j]][j] = y[(int)dct_coe[0][j]][j]; //一つ目の基底選択
+		ny[(int)dct_coe[1][j]][j] = y[(int)dct_coe[1][j]][j]; // ２つ目の基底選択
 	}
+	// 初期化（必ず行う）
+	for (a = 0; a < 64; a++)
+		xx[a] = 0.0;
+
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+	for (a = 0; a < 256; a++)
+		for (b = 0; b < 256; b++)
+			temp_sai[a * 256 + b] = ica_sai[a][b];
+
+	sprintf(output, "OUTPUT/Basis2.bmp");
+	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+	printf(" end\n\n");
+	/////////   end
+
 	//		////////////// 2 fin ///////////////////////
 
 		///////////////////////// 3 start ////////////////////////////////
@@ -792,47 +679,6 @@ int main()
 				y_rank_pm[(int)test3[0][j]]++;
 			/// ////////////////////////////////////////////////////////////////////////////////////////////
 
-			/*fprintf(fp, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp, "\n\n  MSE value for the entire image \n\n\n  Number of basis used : 0, 1, 2, 3\n\n\n  (* The number of basis is not the whole number, but the number using the best basis in a small area )\n\n----------------------------------------------------------------------------------\n\n");
-
-			sum = 0;
-			for (j = 0; j < 1024; j++)
-				sum += all_mse[0][j];
-			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 0 - - - - - - - \n\n\n");
-			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
-
-			sum = 0;
-			for (j = 0; j < 1024; j++)
-				sum += all_mse[1][j];
-			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 1 - - - - - - - \n\n\n");
-			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
-
-			sum = 0;
-			for (j = 0; j < 1024; j++)
-				sum += all_mse[2][j];
-			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 2 - - - - - - - \n\n\n");
-			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);
-
-			sum = 0;
-			for (j = 0; j < 1024; j++)
-				sum += all_mse[3][j];
-			fprintf(fp, "\n\n- - - - - - - - Number of basis used : 3 - - - - - - - \n\n\n");
-			fprintf(fp, " MSE : %lf  (value)\n\n", sum / 1024.0);*/
-
-		
-
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++) {
-				if (mse_ica0[i][j] - mse_ica[i][j] > 0) {
-					total_mse[0][i] += mse_ica0[i][j] - mse_ica[i][j]; // 0 -> 1の時の各基底のMSE改善・損失量
-					total_mse[2][i]++;
-				}
-				else
-					total_mse[1][i] += mse_ica0[i][j] - mse_ica[i][j];
-			}
-
-		
-		sum = 0; sum1 = 0; //sum1 -> マイナス
 
 				/*for (j = 0; j < 1024; j++) {
 			fprintf(fp2, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
@@ -1466,7 +1312,7 @@ int main()
 		sprintf(output, "OUTPUT/DCT/not_replaceable[%d].bmp", (int)percent);
 		img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
-		gnuplot2(temp6);
+		//gnuplot2(temp6);
 		//gnuplot4(imp_rate);
 			
 
@@ -1559,42 +1405,7 @@ int main()
 		}
 
 		// 1->2改善量
-		for (j = 0; j < 1024; j++)
-			for (i = 0; i < 64; i++)
-				test2[i][j] = (mse_ica[i][j] - mse_ica1[i][j]);
-
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				// .val -> 値を取得・属性を変更し記憶
-				// .abs -> 絶対値を記憶
-				// .num -> 元々の係数に対応するブロック内番号を記憶
-				sort_d[i][j].val = test2[i][j];		/* 元々の係数値 */
-				sort_d[i][j].abs = test2[i][j];	/* ソートは係数の絶対値で行う*/
-				sort_d[i][j].num = i;					/* numに元々の係数に対応する番号を記憶 */
-			}
-		}
-
-		for (n = 0; n < 1024; n++) {
-			for (i = 0; i < 64 - 1; i++) {
-				max = sort_d[i][n].abs;
-				k = i;
-				for (j = i + 1; j < 64; j++) {
-					if (sort_d[j][n].abs > max) {
-						max = sort_d[j][n].abs;
-						k = j;
-					}
-				}
-				temp = sort_d[i][n];
-				sort_d[i][n] = sort_d[k][n];
-				sort_d[k][n] = temp;
-			}
-		}
-
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++) {// 0->1の改善量
-				test2[i][j] = sort_d[i][j].val; //改善量（mse）
-				test3[i][j] = sort_d[i][j].num; //基底番号
-			}
+	
 
 		for (QQ = 0; QQ < 4; QQ++) {
 			if (QQ == 0)
@@ -1652,55 +1463,120 @@ int main()
 		}
 
 		// 1 -> 64 までのMSE調査
-
+		for (j = 0; j < 1024; j++)
+			for (a = 0; a < 64; a++)
+				ny[a][j] = y[a][j];
 		//for (j = 0; j < 1024; j++) {
-		j = 0;
-		for (i = 0; i < 64; i++) {
-			imp[4][j] = 100000;
+		j = 2;
+		for (c = 0; c < 64; c++) {
+
+			sum0 = 10000;
 			QQ = 0;
+			printf("a");
 
 			for (n = 0; n < 64; n++) {
 
 				for (a = 0; a < 64; a++)
-					ny[a][j] = 0;
+					ny[a][j] = y[a][j];
 
-				for (a = 0; a < 64; a++)
-					ny[(int)full_mse[0][a]][j] = y[(int)full_mse[0][a]][j];
+				if (c != 0)
+					for (a = 0; a < c; a++)
+						ny[(int)full_mse[0][a]][j] = 0;
 
-				ny[n][j] = y[n][j]; // iつ目の基底選択
+				if (ny[n][j] != 0) {
+					ny[n][j] =0; // iつ目の基底選択
 
-				// 初期化（必ず行う）
-				for (a = 0; a < 64; a++)
-					xx[a] = 0.0;
+				    // 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
 
-				seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-				xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-				avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-				sum = 0.0;
-				mk = j % 32;
-				ml = j / 32;
-				for (a = 0; a < 8; a++) {
-					for (b = 0; b < 8; b++) {
-						sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+					for (b = 0; b < 8; b++)
+						for (a = 0; a < 8; a++)
+							for (l = 0; l < 8; l++)
+								for (m = 0; m < 8; m++)
+									seg[64 * 8 * b + 8 * a + l * 64 + m] = block_ica[b * 8 + a];
+
+					sprintf(output, "OUTPUT/test/b_sai[%d].bmp", n);
+					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
+
+					seki5(nw, ny, x); // x -> nw * ny
+					xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+					avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+						}
 					}
-				}
 
-				if (imp[4][j] > sum / 64.0) {
-					imp[4][j] = sum / 64.0;
-					QQ = n;
-				}
+					if (sum0 > sum / 64.0) {
+						sum0 = sum / 64.0;
+						QQ = n;
+					}
 
+				}
 			}
-			full_mse[1][i] = imp[4][j];
-			full_mse[0][i] = QQ;
-
+			if (c != 0)
+				full_mse[1][c] = sum0;
+			full_mse[0][c] = (double)QQ;
+		
 		}
-		for (i = 0; i < 64; i++) {
-			mse100[i] = full_mse[1][i];
-			printf("%d\n", (int)full_mse[0][i]);
+
+			for (i = 0; i < 64; i++) {
+				mse100[i] = full_mse[1][i];
+				printf("%d\n", (int)full_mse[0][i]);
+			
 		}
 		gnuplot5(mse100);
+			for (j = 0; j < 1024; j++)
+				for (a = 0; a < 64; a++)
+					ny[a][j] = 0;
+
+			for (j = 0; j < 1024; j++)
+				for (a = 0; a < 64; a++)
+					if (a == 0)
+						ny[a][j] = y[a][j];
+
+			seki5(nw, ny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = ica_sai[a][b];
+
+			sprintf(output, "OUTPUT/ica_qq.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
+			fprintf(fp6, "\n\n  confirmation of MSE \n\n\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
+
+			for (a = 0; a < 64; a++)
+				fprintf(fp6, "\n\n  %2d : %lf\n", (int)full_mse[0][a], full_mse[1][a]);
+
+
+
+			//for (i = 0; i < 32; i++) {
+			//	for (j = 0; j < 32; j++) {
+			//		for (b = 0; b < 8; b++)
+			//			for (a = 0; a < 8; a++)
+			//				for (n = 0; n < 8; n++)
+			//					for (m = 0; m < 8; m++)
+			//						seg[64 * 8 * b + 8 * a + n * 64 + m] = temp_sai[256 * 8 * i + 8 * j + a + 256 * b];
+			//		sprintf(output, "OUTPUT/ICA/ICA[%d].bmp", i * 32 + j);
+			//		img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
+			//	}
+			//}
+
+
+
+
 
 		/*	printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 		}
@@ -2225,6 +2101,7 @@ int main()
 	fclose(fp3);
 	fclose(fp4);
 	fclose(fp5);
+	fclose(fp6);
 	//gnuplot(dcoe_temp);
 	for (i = 0; i < 64; i++) {
 		free(sort_d[i]);
