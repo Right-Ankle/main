@@ -141,6 +141,9 @@
     <ClCompile Include="gnuplot4.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="gnuplot5.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ica.h">

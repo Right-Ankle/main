@@ -109,6 +109,7 @@ void segmentation_ent_out(unsigned char origin[][256], double y[][1024], double 
 double cor_coe(double date1[1024], double date2[1024]);
 void gnuplot3(double date1[1024], double date2[1024]);
 void gnuplot4(double date1[7][1024]);
+void gnuplot4(double date[64]);
 int img_out(unsigned char origin[][256], int date1[1024], int name);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
