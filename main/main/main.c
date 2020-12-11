@@ -14,9 +14,9 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
-	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
+	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, d, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
 	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[64][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][64];
-	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64];
+	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, dct_coe_temp[64][1024], test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
@@ -1462,118 +1462,6 @@ int main()
 			temp5[b] = 0;
 		}
 
-		// 1 -> 64 までのMSE調査
-		for (j = 0; j < 1024; j++)
-			for (a = 0; a < 64; a++)
-				ny[a][j] = y[a][j];
-		//for (j = 0; j < 1024; j++) {
-		j = 2;
-		for (c = 0; c < 64; c++) {
-
-			sum0 = 10000;
-			QQ = 0;
-			printf("a");
-
-			for (n = 0; n < 64; n++) {
-
-				for (a = 0; a < 64; a++)
-					ny[a][j] = y[a][j];
-
-				if (c != 0)
-					for (a = 0; a < c; a++)
-						ny[(int)full_mse[0][a]][j] = 0;
-
-				if (ny[n][j] != 0) {
-					ny[n][j] =0; // iつ目の基底選択
-
-				    // 初期化（必ず行う）
-					for (a = 0; a < 64; a++)
-						xx[a] = 0.0;
-
-					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-					for (b = 0; b < 8; b++)
-						for (a = 0; a < 8; a++)
-							for (l = 0; l < 8; l++)
-								for (m = 0; m < 8; m++)
-									seg[64 * 8 * b + 8 * a + l * 64 + m] = block_ica[b * 8 + a];
-
-					sprintf(output, "OUTPUT/test/b_sai[%d].bmp", n);
-					img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-
-					seki5(nw, ny, x); // x -> nw * ny
-					xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-					avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-					sum = 0.0;
-					mk = j % 32;
-					ml = j / 32;
-					for (a = 0; a < 8; a++) {
-						for (b = 0; b < 8; b++) {
-							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
-						}
-					}
-
-					if (sum0 > sum / 64.0) {
-						sum0 = sum / 64.0;
-						QQ = n;
-					}
-
-				}
-			}
-			if (c != 0)
-				full_mse[1][c] = sum0;
-			full_mse[0][c] = (double)QQ;
-		
-		}
-
-			for (i = 0; i < 64; i++) {
-				mse100[i] = full_mse[1][i];
-				printf("%d\n", (int)full_mse[0][i]);
-			
-		}
-		gnuplot5(mse100);
-			for (j = 0; j < 1024; j++)
-				for (a = 0; a < 64; a++)
-					ny[a][j] = 0;
-
-			for (j = 0; j < 1024; j++)
-				for (a = 0; a < 64; a++)
-					if (a == 0)
-						ny[a][j] = y[a][j];
-
-			seki5(nw, ny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-			for (a = 0; a < 256; a++)
-				for (b = 0; b < 256; b++)
-					temp_sai[a * 256 + b] = ica_sai[a][b];
-
-			sprintf(output, "OUTPUT/ica_qq.bmp");
-			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
-
-			fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
-			fprintf(fp6, "\n\n  confirmation of MSE \n\n\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
-
-			for (a = 0; a < 64; a++)
-				fprintf(fp6, "\n\n  %2d : %lf\n", (int)full_mse[0][a], full_mse[1][a]);
-
-
-
-			//for (i = 0; i < 32; i++) {
-			//	for (j = 0; j < 32; j++) {
-			//		for (b = 0; b < 8; b++)
-			//			for (a = 0; a < 8; a++)
-			//				for (n = 0; n < 8; n++)
-			//					for (m = 0; m < 8; m++)
-			//						seg[64 * 8 * b + 8 * a + n * 64 + m] = temp_sai[256 * 8 * i + 8 * j + a + 256 * b];
-			//		sprintf(output, "OUTPUT/ICA/ICA[%d].bmp", i * 32 + j);
-			//		img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-			//	}
-			//}
-
 
 
 
@@ -1896,39 +1784,122 @@ int main()
 	//printf("Do you want to run the DCT ? [ y/n ] : ");
 	//scanf("%s", &yn);
 
-	if (yn == 'y') {
+	if (yn == 'n') {
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 100; Q > 0; Q -= 10) {
-			printf("\r now Q is %d          \n", Q);
+		//for (Q = 100; Q > 0; Q -= 10) {
+			//printf("\r now Q is %d          \n", Q);
 
+		for (a = 0; a < 64; a++)
+			for (b = 0; b < 1024; b++)
+				dct_coe[a][b] = 0;
 
-			//Q = 100;
+			Q = 100;
 
 			// dct処理
-			dct(origin, dcoe, 8); // 係数を出力
-			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-			idct(dcoe, dcoe2, 8); // 普通の再構成
+			//dct(origin, dcoe, 8); // 係数を出力
 
-			sum = 0;
 
-			for (a = 0; a < 256; a++) {
-				for (b = 0; b < 256; b++) {
-					sum += pow((double)origin[a][b] - (double)dcoe2[a][b], 2);
+	//dct係数
+			dct(origin, coe, 8); //coe -> dct係数格納
+			n = 0;
+			for (i = 0; i < 256; i += 8) {
+				for (j = 0; j < 256; j += 8) {
+					m = 0;
+					for (k = 0; k < 8; k++) {
+						for (l = 0; l < 8; l++) {
+							dct_coe[m][n] = coe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
+							m++;
+						}
+					}
+					n++;
 				}
 			}
 
-			sum = sum / (256.0 * 256.0);
+			for (j = 0; j < 1024; j++)
+				for (a = 0; a < 64; a++) {
+					if (a != 0)
+						dct_coe[a][j] = 0;
+				}
+
+			n = 0;
+			for (c = 0; c < 256; c += 8) {
+				for (d = 0; d < 256; d += 8) {
+					m = 0;
+					for (k = 0; k < 8; k++) {
+						for (l = 0; l < 8; l++) {
+							// dcoe,coe_temp -> 擬似量子化後のdct係数をコピー
+							dcoe[c + k][d + l] = dct_coe[m][n];
+							m++;
+						}
+					}
+					n++;
+				}
+			}
+
+			idct(dcoe, dcoe2, 8); // 普通の再構成
+
+			for (j = 0; j < 1024; j++) {
+				//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 
 
-			//fprintf(fp, " Q = %3d : %lf  (MSE value)\n\n", Q, sum);
+				sum = 0.0;
+				sum2 = 0.0;
+				mk = j % 32;
+				ml = j / 32;
+
+				// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+				// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+				for (a = 0; a < 8; a++) {
+					for (b = 0; b < 8; b++) {
+						sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
+					}
+				}
+				mse_dct[0][j] = sum / 64;
+
+				printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+			}
+			printf("\r [ Execution finished ]          ");
+			printf("\n\n");
 
 			for (a = 0; a < 256; a++)
 				for (b = 0; b < 256; b++)
 					temp_sai[a * 256 + b] = dcoe2[a][b];
 
-			sprintf(output, "OUTPUT/DCT%d.bmp", Q);
+			sprintf(output, "OUTPUT/DCT.bmp");
 			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai3[a][b] = origin[a][b];
+
+			for (j = 0; j < 1024; j++) {
+				mk = j % 32;
+				ml = j / 32;
+				if (mse_dct[0][j] < result_ica[1][j]) {
+					for (a = 0; a < 8; a++)
+						for (b = 0; b < 8; b++)
+							temp_sai3[ml * 8 + b][mk * 8 + a] = 0;
+				}
+			}
+
+			for (a = 0; a < 256; a++)
+				for (b = 0; b < 256; b++)
+					temp_sai[a * 256 + b] = temp_sai3[a][b];
+
+			sprintf(output, "OUTPUT/aaaaaaaaaaaaaa.bmp");
+			img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
+
+			//fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
+			//fprintf(fp6, "\n\n  confirmation of MSE \n\n\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
+
+			//for (a = 0; a < 64; a++)
+			//	fprintf(fp6, "\n\n  %2d : %lf\n", (int)full_mse[0][a], full_mse[1][a]);
+
+
+
+
 
 			//for (i = 0; i < 64; i++) {
 
@@ -2092,7 +2063,7 @@ int main()
 			////////////////出力///////////////////
 
 			//////////////////出力終了///////////////////////
-		} // dctの最初に戻る
+		//} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
 	}
