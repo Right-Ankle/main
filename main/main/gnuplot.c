@@ -49,7 +49,7 @@ void gnuplot(double date[64][1024]) {
 		// gnuplot‚ÉƒRƒ}ƒ“ƒh‚ð‘—‚é
 		//fprintf(gp, "set terminal png color font 'VL PGothic,20' enhanced\n");
 		fprintf(gp, "set terminal png\n");
-		fprintf(gp, "set output 'OUTPUT\\test\\area[%d].png'\n", i);
+		fprintf(gp, "set output 'OUTPUT\\ICA\\%d\\area[%d].png'\n", i, i);
 		fprintf(gp, "set boxwidth 0.5 relative\n");
 		fprintf(gp, "set style fill solid\n");
 		fprintf(gp, "set grid\n");
