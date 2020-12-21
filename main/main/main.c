@@ -15,9 +15,9 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, d, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
-	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[2][10][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][64][1024];
+	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[2][10][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][65][1024];
 	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, dct_coe_temp[64][1024], test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64][1024];
-	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4];
+	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
@@ -90,12 +90,16 @@ int main()
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
 
-	printf("\nfilename plz .... (1, barbara  2, cameraman  3, mandrill) :");
+	printf("\n (1, barbara  2, cameraman  3, mandrill  4, earth  5, Airplane)\n filename plz .... : ");
 	scanf("%d", &i);
 	if (i == 2)
 		strcpy(filename, filename2);
 	else if (i == 3)
 		strcpy(filename, filename15);
+	else if (i == 4)
+		strcpy(filename, filename14);
+	else if (i == 5)
+		strcpy(filename, filename3);
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
@@ -1242,8 +1246,8 @@ int main()
 		///////////////////////////////////////////////////////////// /////////////////  各領域の最適基底・準最適基底の調査
 		printf("\n");
 
-		printf(" ~ Investigation of Optimal basis ~\n What percentage do you use ? : ");
-		scanf("%lf", &percent);
+		//printf(" ~ Investigation of Optimal basis ~\n What percentage do you use ? : ");
+		//scanf("%lf", &percent);
 
 		fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
 		fprintf(fp5, "\n\n  Optimal and semi-optimal basis for each area \n\n\n  Number of basis used : 0, 1 \n\n\n  Optimal -> $$,  Semi-optimal -> ## \n\n\n  Rightmost explanation ->  Number of optimal basis , Semi-optimal sum \n\n\n  Bottom explanation ->  Optimal sum , semi-optimal sum \n\n\n  Use Percentage : 0 ~ %lf\n\n----------------------------------------------------------------------------------\n\n", percent);
@@ -1492,7 +1496,7 @@ int main()
 		// 1 -> 64 までのMSE調査
 
 		fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
-		fprintf(fp6, "\n\n  confirmation of MSE \n\n\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
+		fprintf(fp6, "\n\n  DCT vs ICA  \n\n    Area with a small number of basis\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
 
 		for (j = 0; j < 1024; j++) {
 
@@ -1512,7 +1516,7 @@ int main()
 
 					if (c != 0)
 						for (a = 0; a < c; a++)
-							ny[(int)full_mse[0][a][j]][j] = 0;
+							ny[(int)full_mse[0][a+1][j]][j] = 0;
 
 					if (ny[n][j] != 0) {
 						ny[n][j] = 0; // iつ目の基底選択
@@ -1537,6 +1541,7 @@ int main()
 						sum = 0.0;
 						mk = j % 32;
 						ml = j / 32;
+
 						for (a = 0; a < 8; a++) {
 							for (b = 0; b < 8; b++) {
 								sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
@@ -1550,7 +1555,7 @@ int main()
 
 					}
 				}
-				full_mse[1][c][j] = sum0;
+				full_mse[1][c+1][j] = sum0;
 				full_mse[0][c][j] = (double)QQ;
 			}
 			//	for (a = 0; a < c; a++)
@@ -1590,6 +1595,25 @@ int main()
 			//gnuplot(mse100);
 		}
 
+		for (j = 0; j < 1024; j++)
+			for (n = 0; n < 64; n++)
+			ny[n][j] = y[n][j]; // iつ目の基底選択
+
+			seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+	for (j = 0; j < 1024; j++) {
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
+			}
+		}
+		full_mse[1][0][j] = sum / 64;//平均
+	}
 
 
 
@@ -1972,7 +1996,7 @@ int main()
 			//for (a = 0; a < 256; a++)
 			//	for (b = 0; b < 256; b++)
 			//		temp_sai[a * 256 + b] = dcoe2[a][b];
-			
+
 			//for (i = 0; i < 1024; i++) {
 
 			//	mk = i % 32;
@@ -2158,29 +2182,48 @@ int main()
 			////////////////出力///////////////////
 
 			//////////////////出力終了///////////////////////
+
+			QQ = 0;
+
+			for (j = 0; j < 1024; j++)
+				no_op[j] = 1;
+
+			for (j = 0; j < 1024; j++) {
+				//for (a = 9; a > 0; a -= 1) {
+				a = Q / 10 - 1; // Q = 30
+				for (b = 0; b < 65; b++)
+					if (mse_dct[0][a][j] > full_mse[1][b][j]) {
+						bunrui[3][j] = full_mse[1][b][j];
+						bunrui[2][j] = 64.0 - b;
+					}
+				if (mse_dct[0][a][j] < full_mse[1][0][j]) {
+					bunrui[3][j] = full_mse[1][0][j];
+					bunrui[2][j] = 64.0;
+				}
+
+				bunrui[0][j] = mse_dct[1][a][j];
+				bunrui[1][j] = mse_dct[0][a][j];
+
+				if (mse_dct[1][a][j] > bunrui[2][j]) {
+					no_op[j] = 0;
+					QQ++;
+				}
+
+				//fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+
+				//fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
+				//fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[1], bunrui[0]);
+			}
+
+			fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
+			fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024-QQ, QQ);
+
+			img_out(origin, no_op, (a + 1) * 10);
+			txt_out(bunrui, filename, Q);
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
 	}
-
-	for (j = 0; j < 1024; j++){
-		for (a = 9; a > 0; a-=1)
-			if (mse_dct[0][a][j] < 300) {
-				bunrui[0] = mse_dct[1][a][j];
-				bunrui[1] = mse_dct[0][a][j];
-				Q = a;
-			}
-		for (a = 0; a < 64; a++)
-			if (full_mse[1][a][j] < 300) {
-				bunrui[2] = 63.0 - a;
-				bunrui[3] = full_mse[1][a][j];
-			}
-		fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
-
-			fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)bunrui[0], (Q+1)*10, bunrui[1]);
-			fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[2], bunrui[3]);
-	}
-
 
 	fclose(fp);
 	fclose(fp2);
