@@ -88,8 +88,8 @@ void img_write_gray(int *G, char *conv, int h_size, int v_size);
 void segmentation_ent(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], int mpans[][64], int block_flag[1024], int Q);
 void get_seg_image(unsigned char origin[][256], int b_flag[1024]);
 
-void b_entropy_ica(double y[64][1024], double b_ent_ica[1024]);
-void b_entropy_dct(double coe[256][256], double b_ent_dct[1024]);
+void b_entropy_ica(double y[64][1024]);
+void b_entropy_dct(double coe[256][256]);
 
 void b_var_ica(double in[64][1024], double var[1024], double ske[1024]);
 
@@ -112,6 +112,7 @@ void gnuplot4(double date1[7][1024]);
 void gnuplot4(double date[64]);
 int img_out(unsigned char origin[][256], int date1[1024], int name);
 int txt_out(double date[4][1024], static char filename[20], int rate);
+int txt_out2(double date[4][1024], static char filename[20], int rate);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 

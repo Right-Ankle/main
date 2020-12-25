@@ -10,9 +10,9 @@ void gnuplot5(double date[64]) {
 
 	static char yn;
 
-	printf("Can you proceed ? [y/n] :");
-	scanf("%s", &yn);
-
+	//printf("Can you proceed ? [y/n] :");
+	//scanf("%s", &yn);
+	yn = 'y';
 	if (yn == 'y') {
 
 		FILE* gp;

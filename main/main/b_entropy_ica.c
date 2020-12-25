@@ -10,10 +10,10 @@
 
 double step = 100.0;
 //ブロックごとのyのエントロピーを計算しb_ent_icaに出力します
-void b_entropy_ica(double y[64][1024], double b_ent_ica[1024]){
+void b_entropy_ica(double y[64][1024]){
 	FILE *fp;
 	int i = 0, j = 0, l = 0, m = 0, n = 0;
-	static double min = 0, x[64][1024] = { 0 };
+	static double min = 0, x[64][1024] = { 0 }, b_ent_ica[1024];
 	static int hist[50000] = { 0 };
 
 	if ((fp = fopen("b_entropy_ica.csv", "w")) == NULL){

@@ -63,6 +63,7 @@
     <ClCompile Include="seki5.c" />
     <ClCompile Include="seki5_Block.c" />
     <ClCompile Include="sort.c" />
+    <ClCompile Include="txt_out2.c" />
     <ClCompile Include="txt_out.c" />
     <ClCompile Include="wtosai.c" />
     <ClCompile Include="xtogen.c" />
