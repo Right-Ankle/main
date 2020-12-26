@@ -150,6 +150,12 @@
     <ClCompile Include="txt_out2.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="txt_out3.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="txt_out4.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ica.h">

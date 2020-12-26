@@ -6,8 +6,8 @@
 #include "ica.h"
 #define GNUPLOT_PATH "C:/Program Files/gnuplot/bin/wgnuplot.exe"
 
-void gnuplot5(double date[64]) {
-
+void gnuplot5(double date[64], int name) {
+	char out[50];
 	static char yn;
 
 	//printf("Can you proceed ? [y/n] :");
@@ -46,7 +46,8 @@ void gnuplot5(double date[64]) {
 		// gnuplot‚ÉƒRƒ}ƒ“ƒh‚ð‘—‚é
 
 		fprintf(gp, "set terminal png\n");
-		fprintf(gp, "set output 'OUTPUT\\gnuplot10.png'\n");
+		sprintf(out, "OUTPUT\\plot[%d].png", name);
+		fprintf(gp, "set output '%s'\n", out);
 		fprintf(gp, "set boxwidth 0.5 relative\n");
 		fprintf(gp, "set style fill solid\n");
 		fprintf(gp, "set grid\n");
