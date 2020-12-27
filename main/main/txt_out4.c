@@ -87,7 +87,7 @@ int txt_out4(double date1[64][64], static char filename[20], int rate) {
 
 	fprintf(fp5, "\n\n\n\n\n\n");
 
-	gnuplot5(basis2, rate);
+	//gnuplot5(basis2, rate);
 
 	printf(" end\n\n");
 	fclose(fp5);

@@ -12,9 +12,9 @@
 int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 
 	FILE* fp5;
-	int count = 0;
-	int i, j, k, l, QQ, QQQ = 0, basis[65], temp[2][1024];
-	double num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], temp2[64];
+	int count = 0, count4 = 0;
+	int i, j, k, l, Q, QQ, QQQ = 0, basis[65], temp[2][1024];
+	double num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], temp2[64], gloup2[64][64][2], count2[64], count3[64][64], gloup3[64][64][2];
 	char out[50];
 
 
@@ -25,8 +25,15 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 		basis1[i] = 0;
 		basis2[i] = 0;
 		flag[i] = 0;
-		for (j = 0; j < 64; j++)
+		count2[i] = 0;
+		for (j = 0; j < 64; j++) {
 			gloup[i][j] = 0;
+			gloup2[i][j][0] = 99;
+			gloup2[i][j][1] = 99;
+			count3[i][j] = 0;
+			gloup3[i][j][0] = 99;
+			gloup3[i][j][1] = 99;
+		}
 	}
 	for (i = 0; i < 1024; i++) {
 		temp[0][i] = 99;
@@ -151,8 +158,8 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 					basis2[i]++;
 			}
 		}
-	txt_out3(basis1, filename, rate+1);
-	txt_out3(basis2, filename, rate+2);
+	txt_out3(basis1, filename, rate + 1);
+	txt_out3(basis2, filename, rate + 2);
 
 
 	for (j = 0; j < 1024; j++) {
@@ -175,14 +182,78 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 
 		}
 		//printf("[%d,%d]\n", temp[0][j], temp[1][j]);
-		if (num2[j] == 2)
-			if (basis2[temp[0][j]] >= basis2[temp[1][j]])
+		if (num2[j] == 2) {
+			if (basis2[temp[0][j]] >= basis2[temp[1][j]]) {
 				flag[temp[0][j]]++;
-			else if (basis2[temp[0][j]] < basis2[temp[1][j]])
+				gloup2[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
+				gloup2[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
+				gloup3[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
+				gloup3[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
+				count2[temp[0][j]]++;
+				count3[temp[0][j]][temp[0][j]]++;
+				count3[temp[0][j]][temp[1][j]]++;
+			}
+			else if (basis2[temp[0][j]] < basis2[temp[1][j]]) {
 				flag[temp[1][j]]++;
+				gloup2[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
+				gloup2[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
+				gloup3[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
+				gloup3[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
+				count2[temp[1][j]]++;
+				count3[temp[1][j]][temp[0][j]]++;
+				count3[temp[1][j]][temp[1][j]]++;
+			}
+		}
 	}
 	txt_out3(flag, filename, rate + 3);
+	//txt_out4(count3, filename, rate);
+	txt_out5(gloup2, filename, rate);
 
+	for (i = 0; i < 64; i++)
+		if (gloup2[i][0][0] != 99 && gloup2[i][1][0] == 99) { //1こだけのグループ
+
+			QQ = count2[i];
+			count = (int)count3[i][(int)gloup2[i][0][0]]; //おそらく1
+			for (j = 0; j < 64; j++) {
+				if (count < count3[j][(int)gloup2[i][0][0]]) {
+					count = count3[j][(int)gloup2[i][0][0]];
+					QQ = j;
+				}
+				else if (count == count3[j][(int)gloup2[i][0][0]] && count2[QQ] < count2[j]) {
+					count = count3[j][(int)gloup2[i][0][0]];
+					QQ = j;
+				}
+
+			}
+
+			Q = count2[i]; //基底番号
+			count4 = (int)count3[i][(int)gloup2[i][0][1]]; //頻度
+			for (j = 0; j < 64; j++) {
+				if (count4 <= count3[j][(int)gloup2[i][0][1]]) {
+					count4 = count3[j][(int)gloup2[i][0][1]];
+					Q = j;
+				}
+				else if (count == count3[j][(int)gloup2[i][0][1]] && count2[Q] < count2[j]) {
+					count4 = count3[j][(int)gloup2[i][0][1]];
+					Q = j;
+				}
+			}
+
+			if (count > count4)
+				Q = QQ;
+			else if(count == count4 && count2[Q] < count2[QQ])
+				Q = QQ;
+
+			if (QQ != i && Q !=i) {
+				gloup3[i][0][0] = 99;
+				gloup3[i][0][1] = 99;
+				gloup3[Q][(int)count2[Q]][0] = gloup2[i][0][0];
+				gloup3[Q][(int)count2[Q]][1] = gloup2[i][0][1];
+				count2[Q]++;
+			}
+		}
+
+	txt_out5(gloup3, filename, rate);
 	for (j = 0; j < 64; j++)
 		flag[j] = 0;
 

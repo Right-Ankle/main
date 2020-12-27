@@ -67,6 +67,7 @@
     <ClCompile Include="txt_out.c" />
     <ClCompile Include="txt_out3.c" />
     <ClCompile Include="txt_out4.c" />
+    <ClCompile Include="txt_out5.c" />
     <ClCompile Include="wtosai.c" />
     <ClCompile Include="xtogen.c" />
     <ClCompile Include="xtogen_Block.c" />
