@@ -1,6 +1,6 @@
 
 
- Use image  :  mandrill.bmp
+ Use image  :  barbara.bmp
 
 
 

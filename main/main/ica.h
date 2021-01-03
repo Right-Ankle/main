@@ -112,9 +112,10 @@ void gnuplot4(double date1[7][1024]);
 void gnuplot5(double date[64], int name);
 int img_out(unsigned char origin[][256], int date1[1024], int name);
 int txt_out(double date[4][1024], static char filename[20], int rate);
-int txt_out2(double date[4][1024], static char filename[20], int rate);
+int txt_out2(double date[65][1024], static char filename[20], int rate);
 int txt_out3(double date[64], static char filename[20], int rate);
 int txt_out4(double date[64][64], static char filename[20], int rate);
+int group(double date[65][1024], static char filename[20], int rate);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 
