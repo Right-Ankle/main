@@ -14,7 +14,7 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 	FILE* fp5;
 	int count = 0, count4 = 0;
 	int i, j, k, l, Q, QQ, QQQ = 0, basis[65], temp[2][1024];
-	double num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], temp2[64], gloup2[64][64][2], count2[64], count3[64][64], gloup3[64][64][2];
+	double num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], temp2[64], gloup2[64][64][2], count2[64], count3[64][64], gloup3[64][64][2], group[64][64][2];
 	char out[50];
 
 
@@ -33,6 +33,8 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 			count3[i][j] = 0;
 			gloup3[i][j][0] = 99;
 			gloup3[i][j][1] = 99;
+			group[i][j][0] = 99;
+			group[i][j][1] = 99;
 		}
 	}
 	for (i = 0; i < 1024; i++) {
@@ -183,31 +185,39 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 		}
 		//printf("[%d,%d]\n", temp[0][j], temp[1][j]);
 		if (num2[j] == 2) {
-			if (basis2[temp[0][j]] >= basis2[temp[1][j]]) {
-				flag[temp[0][j]]++;
-				gloup2[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
-				gloup2[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
-				gloup3[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
-				gloup3[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
-				count2[temp[0][j]]++;
-				count3[temp[0][j]][temp[0][j]]++;
-				count3[temp[0][j]][temp[1][j]]++;
-			}
-			else if (basis2[temp[0][j]] < basis2[temp[1][j]]) {
-				flag[temp[1][j]]++;
-				gloup2[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
-				gloup2[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
-				gloup3[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
-				gloup3[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
-				count2[temp[1][j]]++;
-				count3[temp[1][j]][temp[0][j]]++;
-				count3[temp[1][j]][temp[1][j]]++;
-			}
+			group[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
+			group[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
+			group[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
+			group[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
+			count2[temp[0][j]]++;
+			count2[temp[1][j]]++;
+
+			//if (basis2[temp[0][j]] >= basis2[temp[1][j]]) {
+			//	flag[temp[0][j]]++;
+			//	gloup2[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
+			//	gloup2[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
+			//	gloup3[temp[0][j]][(int)count2[temp[0][j]]][0] = temp[0][j];
+			//	gloup3[temp[0][j]][(int)count2[temp[0][j]]][1] = temp[1][j];
+			//	count2[temp[0][j]]++;
+			//	count3[temp[0][j]][temp[0][j]]++;
+			//	count3[temp[0][j]][temp[1][j]]++;
+			//}
+			//else if (basis2[temp[0][j]] < basis2[temp[1][j]]) {
+			//	flag[temp[1][j]]++;
+			//	gloup2[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
+			//	gloup2[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
+			//	gloup3[temp[1][j]][(int)count2[temp[1][j]]][0] = temp[0][j];
+			//	gloup3[temp[1][j]][(int)count2[temp[1][j]]][1] = temp[1][j];
+			//	count2[temp[1][j]]++;
+			//	count3[temp[1][j]][temp[0][j]]++;
+			//	count3[temp[1][j]][temp[1][j]]++;
+			//}
 		}
 	}
+	txt_out5(group, filename, rate);
 	txt_out3(flag, filename, rate + 3);
 	//txt_out4(count3, filename, rate);
-	txt_out5(gloup2, filename, rate);
+	//txt_out5(gloup2, filename, rate);
 
 	for (i = 0; i < 64; i++)
 		if (gloup2[i][0][0] != 99 && gloup2[i][1][0] == 99) { //1‚±‚¾‚¯‚ÌƒOƒ‹[ƒv
@@ -253,7 +263,7 @@ int txt_out2(double date1[65][1024], static char filename[20], int rate) {
 			}
 		}
 
-	txt_out5(gloup3, filename, rate);
+	//txt_out5(gloup3, filename, rate);
 	for (j = 0; j < 64; j++)
 		flag[j] = 0;
 

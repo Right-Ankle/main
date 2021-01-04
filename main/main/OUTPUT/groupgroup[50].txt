@@ -1,0 +1,21 @@
+
+
+ Use image  :  barbara.bmp
+
+
+
+
+  Basis used in the ICA area 
+
+
+  Number of basis used : 0 ~ 64 
+
+
+  Use basis -> $$ 
+
+
+
+  Use Q rate : 50
+
+----------------------------------------------------------------------------------
+

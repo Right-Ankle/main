@@ -14,7 +14,7 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 	FILE* fp5;
 	int count = 0, count4 = 0;
 	int i, j, k, l, b, a, c, d, e, Q, QQ, QQQ = 0, basis[64][64], temp[2][1024], hist[64][64], temp2[64]; //basis[65][64] 使用基底ごとのヒストグラム
-	double max, num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], gloup2[64][64][2], count2[64], count3[64][64], gloup3[64][64][2], temp3[64];
+	double max, num[64], num2[1024], basis1[64], basis2[64], flag[64], flag2[64], gloup[64][64], gloup2[64][64][2], count2[64], count3[64][64], gloup3[64][64][2], temp3[64], temp4[65][1024];
 	char out[50];
 
 
@@ -24,6 +24,7 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 		for (b = 0; b < 64; b++)
 			hist[b][i] = 0;
 	}
+
 	for (i = 0; i < 64; i++) {
 		temp2[i] = 0;
 		temp3[i] = 0;
@@ -45,6 +46,8 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 		temp[0][i] = 99;
 		temp[1][i] = 99;
 		num2[i] = 99;
+		for (b = 0; b < 65; b++)
+			temp4[b][i] = 99;
 	}
 
 	max = 0;
@@ -59,38 +62,85 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 	fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
 	fprintf(fp5, "\n\n  Basis used in the ICA area \n\n\n  Number of basis used : 0 ~ 64 \n\n\n  Use basis -> $$ \n\n\n\n  Use Q rate : %d\n\n----------------------------------------------------------------------------------\n\n", rate);
 
+	// 使用基底を位置フラグから番号に変換
+	for (j = 0; j < 1024; j++) { // 使用基底個数をコピー
+		temp4[64][j] = date1[64][j];
+		//printf("%d : %d\n", (int)temp4[64][j], (int)date1[64][j]);
+		//if(j%10 == 0)
+			//printf("-------------\n");
+	}
+	for (j = 0; j < 1024; j++) { // フラグから番号へ
+		QQ = 0;
+		if ((int)date1[64][j] != 99) {
+			for (i = 0; i < 64; i++) {
+				if ((int)date1[i][j] == 1) {
+					temp4[QQ][j] = i;
+					QQ++;
+				}
+			}
+		}
+	} // temp4 -> 0~63 : 使用基底番号，64 : 使用基底数
 
 	for (j = 0; j < 1024; j++) {
-
-		if ((int)date1[64][j] != 99)
-			for (i = 0; i < 64; i++)
-				if ((int)date1[i][j] == 1)
-					basis[(int)date1[64][j]][i]++;
+		if ((int)temp4[64][j] != 99) {
+			for (i = 0; i < 64; i++) {
+				if ((int)temp4[i][j] != 99) {
+					basis[(int)temp4[64][j]][(int)temp4[i][j]]++; // 使用基底数：基底番号
+				}
+			}
+		}
 	}
+
+	//for (j = 0; j < 64; j++) {
+	//	for (i = 0; i < 64; i++) {
+	//		temp3[i] = basis[j][i];
+	//	}
+	//	gnuplot5(temp3, (j + 1) * 1000);
+	//}
+
+	//for (j = 0; j < 64; j++) {
+	//	for (i = 0; i < 64; i++) {
+	//		basis[j][i] = 0;
+	//	}
+	//}
+	//for (j = 0; j < 1024; j++) {
+
+	//	if ((int)date1[64][j] != 99)
+	//		for (i = 0; i < 64; i++)
+	//			if ((int)date1[i][j] == 1)
+	//				basis[(int)date1[64][j]][i]++;
+	//}
+
+	//for (j = 0; j < 64; j++) {
+	//	for (i = 0; i < 64; i++)
+	//		temp3[i] = basis[j][i];
+	//	gnuplot5(temp3, (j + 1) * 1000);
+	//}
+
+	Q = 0;
+	for (j = 0; j < 1024; j++) {
+		max = 0;
+
+		if ((int)temp4[64][j] != 99) {
+			for (i = 0; i < 64; i++) {
+				if ((int)temp4[i][j] != 99) {
+					if (max < basis[(int)temp4[64][j]][(int)temp4[i][j]]) {
+						max = basis[(int)temp4[64][j]][(int)temp4[i][j]];
+						temp[0][j] = (int)temp4[i][j]; //グループ番号
+					}
+				}
+			}
+			temp[1][j] = (int)temp4[64][j]; // 使用基底数
+			hist[(int)temp4[64][j]][temp[0][j]]++; // 使用基底数：基底番号
+		}
+	}
+
 
 	for (j = 0; j < 64; j++) {
 		for (i = 0; i < 64; i++)
-			temp3[i] = basis[j][i];
-
-		gnuplot5(temp3, (j + 1) * 1000);
+			temp3[i] = hist[j][i];
+		gnuplot5(temp3, rate*1000+j);
 	}
-
-	for (b = 0; b < 64; b++)
-		for (j = 0; j < 1024; j++)
-			if ((int)date1[64][j] != 99 && (int)date1[64][j] == b) {
-				for (i = 0; i < 64; i++)
-					if ((int)date1[i][j] == 1)
-						if (max < basis[b][i])
-							max = basis[b][i];
-
-				temp[0][j] = (int)max; //グループ番号
-				temp[1][j] = (int)date1[64][j]; // 使用基底数
-
-				if ((int)date1[64][j] != 99)
-					hist[temp[1][j]][temp[0][j]]++;
-			}
-
-
 
 
 	for (i = 2; i < 64; i++) { // 使用基底数
@@ -124,7 +174,7 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 		if (temp[1][i] == 2)
 			temp3[temp[0][i]]++;
 
-	gnuplot2(temp3);
+	//gnuplot2(temp3);
 
 	//for (i = 0; i < 64; i++) {
 	//	l = 0;

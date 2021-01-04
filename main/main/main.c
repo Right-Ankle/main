@@ -2187,6 +2187,8 @@ int main()
 
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 1;
+				for (i = 0; i < 4; i++)
+					bunrui[i][j] = 0;
 				for (i = 0; i < 64; i++)
 					ny[i][j] = 0;
 			}
@@ -2194,6 +2196,12 @@ int main()
 			for (j = 0; j < 1024; j++) {
 				//for (a = 9; a > 0; a -= 1) {
 				a = Q / 10 - 1; // Q = 30
+
+				for (b = 0; b < 65; b++) {
+					ica_basis[b][j] = 0;
+					ica_basis2[b][j] = 99;
+				}
+
 				for (b = 0; b < 65; b++)
 					if (mse_dct[0][a][j] > full_mse[1][b][j]) {
 						bunrui[3][j] = full_mse[1][b][j];
@@ -2210,10 +2218,7 @@ int main()
 				if (bunrui[0][j] > bunrui[2][j]) {
 					no_op[j] = 0;
 					QQ++;
-					for (b = 0; b < 65; b++) {
-						ica_basis[b][j] = 0;
-						ica_basis2[b][j] = 99;
-					}
+
 					if (bunrui[2][j] == 0)
 						ica_basis[64][j] = 1; // 基底0
 					else {
@@ -2223,10 +2228,8 @@ int main()
 							//printf("%d\n", (int)ica_basis[65-a][j]);
 						}
 					}
-
-					for (b = 0; b < 64; b++)
-						if (bunrui[2][j] == b)
-							ica_basis2[64][j] = b;
+					//printf("%d\n", j);
+					ica_basis2[64][j] = bunrui[2][j];
 
 					for (b = 63; b > 63 - bunrui[2][j]; b--) {
 						ica_basis2[(int)full_mse[0][b][j]][j] = 1;
@@ -2248,11 +2251,11 @@ int main()
 			fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
 			fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024-QQ, QQ);
 
-			img_out(origin, no_op, (a + 1) * 10);
-			txt_out(bunrui, filename, Q);
-			txt_out2(ica_basis, filename, Q);
-			if (Q == 10)
+				//img_out(origin, no_op, (a + 1) * 10);
+				//txt_out(bunrui, filename, Q);
+				//txt_out2(ica_basis, filename, Q);
 				group(ica_basis2, filename, Q);
+
 			//b_entropy_ica(ny);
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
