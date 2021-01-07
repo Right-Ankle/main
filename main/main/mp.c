@@ -13,7 +13,7 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 	static double atemp[64] = {0}, btemp[64] = {0}, in[1024][64] = {0}, max, inans[1024][64] = {0}, inans2[1024][64] = {0};
 	int gauge = 4;
 
-	if ((fp = fopen("Matching_Pursuit.csv", "w")) == NULL) {
+	if ((fp = fopen("OUTPUT\\Matching_Pursuit.csv", "w")) == NULL) {
 		fprintf(stderr,"Can not open file\n");
 	}
 
@@ -29,16 +29,16 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 	//xtogen(x, gen, avg);
 	//gentox(gen, x);
 
-	printf("\n[0%%]--------[50%%]---------[100%%]\n");
+	printf("\n Mutching pursuits START\n");
 
 
-	for(count = 0; count < 64; count++){
+	for (count = 0; count < 64; count++) {
 
-		for(j = 0; j < 64; j++){
-            // temp -> y2‚Ì‘ÎŠp¬•ª0
-			for(k = 0; k < 1024; k++)
-				for(l = 0; l < 64; l++)
-					if(j == l)
+		for (j = 0; j < 64; j++) {
+			// temp -> y2‚Ì‘ÎŠp¬•ª0
+			for (k = 0; k < 1024; k++)
+				for (l = 0; l < 64; l++)
+					if (j == l)
 						temp[l][k] = y2[l][k];
 					else
 						temp[l][k] = 0.0;
@@ -47,10 +47,10 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 			//xtogen(x2, gen, avg);
 			//gentox(gen, x2);
 
-            // atemp -> icaŒW”*Šî’ê, btemp ->’¼—¬‚È‚µicaŒW”*Šî’ê
+			// atemp -> icaŒW”*Šî’ê, btemp ->’¼—¬‚È‚µicaŒW”*Šî’ê
 			// ƒuƒƒbƒN‚²‚Æ‚Éˆ—
-			for(i = 0; i < 1024; i++){
-				for(k = 0; k < 64; k++){
+			for (i = 0; i < 1024; i++) {
+				for (k = 0; k < 64; k++) {
 					atemp[k] = x[k][i];
 					btemp[k] = x2[k][i];
 				}
@@ -58,10 +58,10 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 			}
 		}
 
-		for(i = 0; i < 1024; i++){
+		for (i = 0; i < 1024; i++) {
 			max = -1;
-			for(j = 0; j < 64; j++){
-				if(in[i][j] > max){
+			for (j = 0; j < 64; j++) {
+				if (in[i][j] > max) {
 					// ƒuƒƒbƒN“àÅ‘å’lŠi”[
 					max = in[i][j];
 					key[i] = j;
@@ -79,8 +79,8 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 		//xtogen(x, gen, avg);
 		//gentox(gen, x);
 
-		for(i = 0; i < 1024; i++){
-			for(k = 0; k < 64; k++){
+		for (i = 0; i < 1024; i++) {
+			for (k = 0; k < 64; k++) {
 				atemp[k] = xori[k][i]; // icaŒW”*Šî’ê
 				btemp[k] = x[k][i];    // Å‘å’l‚Ì‚Æ‚±‚ë0‚ÌicaŒW” * Šî’ê
 			}
@@ -88,12 +88,15 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 			inans2[i][count] = inner_product(atemp, btemp);
 		}
 
-		//count 4‚¸‚Â‚É'‚Æ‚è‚±'H
-		if(count % gauge == 0)
-			printf(" ");
+		////count 4‚¸‚Â‚É'‚Æ‚è‚±'H
+		//if (count % gauge == 0)
+		//	printf(" ");
 
+		printf("\r Now Running  :  [%3.3lf]", ((double)count / 64.0) * 100);
 	}
+	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
+
 
 	// Šm”F—p fprint
 	for(i = 0; i < 64; i++){

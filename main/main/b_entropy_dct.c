@@ -9,10 +9,10 @@
 #include "ica.h"
 
 //エントロピー計算
-void b_entropy_dct(double y[][256]){
+void b_entropy_dct(double y[][256], double b_ent_dct[1024]){
 	FILE *fp;
 	int i = 0, j = 0, l = 0, m = 0, n = 0, k = 0;
-	static double min = 0, x[64][1024] = { 0 }, b_ent_dct[1024];
+	static double min = 0, x[64][1024] = { 0 }, sum=0, sum1=0;
 	static int hist[50000] = { 0 };
 
 	if ((fp = fopen("b_entropy_dct.csv", "w")) == NULL){
@@ -38,7 +38,8 @@ void b_entropy_dct(double y[][256]){
 			n++;
 		}
 	}
-
+	sum = 0;
+	sum1 = 0;
 	/* ブロックごとの係数のエントロピーの計算 */
 	for (n = 0; n < 1024; n++){
 
@@ -62,11 +63,15 @@ void b_entropy_dct(double y[][256]){
 
 		/* エントロピーの計算 */
 		for (i = 0; i < 50000; i++)
-			if (hist[i] > 0)
+			if (hist[i] > 0) {
 				b_ent_dct[n] += -((hist[i] / (double)(63)) * (log((hist[i] / (double)(63))) / log(2)));
-
+				sum1 += -((hist[i] / (double)(63)) * (log((hist[i] / (double)(63))) / log(2)));
+			}
+		sum = sum1;
 		b_ent_dct[n] = b_ent_dct[n] * 63;
 	}
+
+	printf("%lf\n", sum / 1024);
 
 	for (i = 0; i < 1024; i++)
 		fprintf(fp, "%lf,", b_ent_dct[i]);

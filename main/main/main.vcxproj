@@ -23,14 +23,17 @@
     <ClCompile Include="avg_inter_Block.c" />
     <ClCompile Include="backup.c" />
     <ClCompile Include="bitmap.c" />
+    <ClCompile Include="block_psnr.c" />
     <ClCompile Include="b_entropy_dct.c" />
     <ClCompile Include="b_entropy_ica.c" />
     <ClCompile Include="b_mse.c" />
     <ClCompile Include="cor_coe.c" />
     <ClCompile Include="dct.c" />
     <ClCompile Include="dctcoe_conv.c" />
+    <ClCompile Include="ent_out.c" />
     <ClCompile Include="file_copy.c" />
     <ClCompile Include="gentox.c" />
+    <ClCompile Include="get_seg_image.c" />
     <ClCompile Include="gnuplot.c" />
     <ClCompile Include="gnuplot2.c" />
     <ClCompile Include="gnuplot4.c" />
@@ -42,6 +45,7 @@
     <ClCompile Include="idct.c" />
     <ClCompile Include="identity.c" />
     <ClCompile Include="img_out.c" />
+    <ClCompile Include="inner_product.c" />
     <ClCompile Include="inv.c" />
     <ClCompile Include="main.c">
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Speed</FavorSizeOrSpeed>
@@ -50,6 +54,7 @@
     </ClCompile>
     <ClCompile Include="makew.c" />
     <ClCompile Include="make_cost.c" />
+    <ClCompile Include="mp.c" />
     <ClCompile Include="new_pca.c" />
     <ClCompile Include="new_pre.c" />
     <ClCompile Include="new_seki.c" />
@@ -59,6 +64,8 @@
     <ClCompile Include="new_ytoyt.c" />
     <ClCompile Include="normal.c" />
     <ClCompile Include="quantization.c" />
+    <ClCompile Include="segmentation_ent_out.c" />
+    <ClCompile Include="segmentation_RD_single.c" />
     <ClCompile Include="seki.c" />
     <ClCompile Include="seki3.c" />
     <ClCompile Include="seki5.c" />

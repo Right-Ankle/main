@@ -14,8 +14,10 @@ int main()
 	//宣言
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
+	static int mpans[1024][64] = { 0 };
+	static int block_flag[1024] = { 0 };
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, d, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
-	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[2][10][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][65][1024];
+	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[2][10][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][65][1024], mp_mse[2][65][1024];
 	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, dct_coe_temp[64][1024], test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64][1024], ica_basis[65][1024], ica_basis2[65][1024];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
 	static unsigned char dammy[256][256] = { 0 };
@@ -1615,6 +1617,49 @@ int main()
 		full_mse[1][0][j] = sum / 64;//平均
 	}
 
+	// mp法の確認
+	mp(y, avg, w, mpans);
+
+
+	for (j = 0; j < 1024; j++) {
+
+		for (b = 0; b < 1024; b++)
+			for (a = 0; a < 64; a++)
+				ny[a][b] = y[a][b];
+
+		for (a = 0; a < 65; a++) { // i番目
+
+			if (a != 0) {
+				for (n = 0; n < a; n++) {
+					ny[mpans[j][63 - n]][j] = 0;
+				}
+			}
+
+			// 初期化（必ず行う）
+			for (b = 0; b < 64; b++)
+				xx[b] = 0.0;
+
+			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+			sum = 0.0;
+			mk = j % 32;
+			ml = j / 32;
+
+			for (c = 0; c < 8; c++) {
+				for (b = 0; b < 8; b++) {
+					sum += pow(origin[ml * 8 + b][mk * 8 + c] - block_ica[b * 8 + c], 2);
+				}
+			}
+
+			mp_mse[1][a][j] = sum / 64.0;
+			if (a == 64)
+				mp_mse[0][64][j] = (double)99;
+			else
+				mp_mse[0][a][j] = (double)mpans[j][63 - a];
+		}
+	}
 
 
 
@@ -1938,7 +1983,12 @@ int main()
 	//printf("Do you want to run the DCT ? [ y/n ] : ");
 	//scanf("%s", &yn);
 
+	for (i = 0; i < 1024; i++)
+		block_flag[i] = 0;
+
 	if (yn == 'n') {
+		printf("Do you want to run the MSE or MP ? [ y/n ] : ");
+		scanf("%s", &yn);
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
 		for (Q = 100; Q > 0; Q -= 10) {
@@ -2186,82 +2236,164 @@ int main()
 			QQ = 0;
 
 			for (j = 0; j < 1024; j++) {
-				no_op[j] = 1;
+				no_op[j] = 0;
 				for (i = 0; i < 4; i++)
 					bunrui[i][j] = 0;
 				for (i = 0; i < 64; i++)
 					ny[i][j] = 0;
 			}
 
-			for (j = 0; j < 1024; j++) {
-				//for (a = 9; a > 0; a -= 1) {
-				a = Q / 10 - 1; // Q = 30
 
-				for (b = 0; b < 65; b++) {
-					ica_basis[b][j] = 0;
-					ica_basis2[b][j] = 99;
-				}
 
-				for (b = 0; b < 65; b++)
-					if (mse_dct[0][a][j] > full_mse[1][b][j]) {
-						bunrui[3][j] = full_mse[1][b][j];
-						bunrui[2][j] = 64.0 - b;
+			if (yn == 'y') {
+				for (j = 0; j < 1024; j++) {
+					//for (a = 9; a > 0; a -= 1) {
+					a = Q / 10 - 1; // Q = 30
+
+					for (b = 0; b < 65; b++) {
+						ica_basis[b][j] = 0;
+						ica_basis2[b][j] = 99;
 					}
-				if (mse_dct[0][a][j] < full_mse[1][0][j]) {
-					bunrui[3][j] = full_mse[1][0][j];
-					bunrui[2][j] = 64.0;
-				}
 
-				bunrui[0][j] = mse_dct[1][a][j];
-				bunrui[1][j] = mse_dct[0][a][j];
-
-				if (bunrui[0][j] > bunrui[2][j]) {
-					no_op[j] = 0;
-					QQ++;
-
-					if (bunrui[2][j] == 0)
-						ica_basis[64][j] = 1; // 基底0
-					else {
-						for (b = 63; b > 63 - bunrui[2][j]; b--) {
-							ica_basis[(int)full_mse[0][b][j]][j] = 1;
-							ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
-							//printf("%d\n", (int)ica_basis[65-a][j]);
+					for (b = 0; b < 65; b++)
+						if (mse_dct[0][a][j] > full_mse[1][b][j]) {
+							bunrui[3][j] = full_mse[1][b][j];
+							bunrui[2][j] = 64.0 - b;
 						}
-					}
-					//printf("%d\n", j);
-					ica_basis2[64][j] = bunrui[2][j];
-
-					for (b = 63; b > 63 - bunrui[2][j]; b--) {
-						ica_basis2[(int)full_mse[0][b][j]][j] = 1;
-						nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+					if (mse_dct[0][a][j] < full_mse[1][0][j]) {
+						bunrui[3][j] = full_mse[1][0][j];
+						bunrui[2][j] = 64.0;
 					}
 
-				}
-				else {
-					ica_basis[64][j] = 2;
-					for (b = 0; b < 64; b++)
-						ica_basis[b][j] = 3;
-				}
-				//fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+					bunrui[0][j] = mse_dct[1][a][j];
+					bunrui[1][j] = mse_dct[0][a][j];
 
-				//fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
-				//fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[1], bunrui[0]);
+					if (bunrui[0][j] >= bunrui[2][j]) {
+						no_op[j] = 1;
+						QQ++;
+
+						if (bunrui[2][j] == 0)
+							ica_basis[64][j] = 1; // 基底0
+						else {
+							for (b = 63; b > 63 - bunrui[2][j]; b--) {
+								ica_basis[(int)full_mse[0][b][j]][j] = 1;
+								ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+								//printf("%d\n", (int)ica_basis[65-a][j]);
+							}
+						}
+						//printf("%d\n", j);
+						ica_basis2[64][j] = bunrui[2][j];
+
+						for (b = 63; b > 63 - bunrui[2][j]; b--) {
+							ica_basis2[(int)full_mse[0][b][j]][j] = 1;
+							nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+						}
+
+					}
+					else {
+						ica_basis[64][j] = 2;
+						for (b = 0; b < 64; b++)
+							ica_basis[b][j] = 3;
+					}
+					fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+					fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
+					fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[1][j], bunrui[0][j]);
+				}
+
+				fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
+				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
+
+				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
+			else if (yn == 'n')
+			{
 
-			fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
-			fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024-QQ, QQ);
+				for (j = 0; j < 1024; j++) {
+					//for (a = 9; a > 0; a -= 1) {
+					a = Q / 10 - 1; // Q = 30
 
+					for (b = 0; b < 65; b++) {
+						ica_basis[b][j] = 0;
+						ica_basis2[b][j] = 99;
+					}
+
+					for (b = 0; b < 65; b++)
+						if (mse_dct[0][a][j] > mp_mse[1][b][j]) {
+							bunrui[3][j] = mp_mse[1][b][j];
+							bunrui[2][j] = 64.0 - b;
+						}
+					if (mse_dct[0][a][j] < mp_mse[1][0][j]) {
+						bunrui[3][j] = mp_mse[1][0][j];
+						bunrui[2][j] = 64.0;
+					}
+
+					bunrui[0][j] = mse_dct[1][a][j];
+					bunrui[1][j] = mse_dct[0][a][j];
+
+					if (bunrui[0][j] >= bunrui[2][j]) {
+						no_op[j] = 1;
+						QQ++;
+
+						if (bunrui[2][j] == 0)
+							ica_basis[64][j] = 1; // 基底0
+						else {
+							for (b = 63; b > 63 - bunrui[2][j]; b--) {
+								ica_basis[(int)mp_mse[0][b][j]][j] = 1;
+								ny[(int)mp_mse[0][b][j]][j] = y[(int)mp_mse[0][b][j]][j];
+								//printf("%d\n", (int)ica_basis[65-a][j]);
+							}
+						}
+						//printf("%d\n", j);
+						ica_basis2[64][j] = bunrui[2][j];
+
+						for (b = 63; b > 63 - bunrui[2][j]; b--) {
+							ica_basis2[(int)mp_mse[0][b][j]][j] = 1;
+							nny[(int)mp_mse[0][b][j]][j] = y[(int)mp_mse[0][b][j]][j];
+						}
+
+					}
+					else {
+						ica_basis[64][j] = 2;
+						for (b = 0; b < 64; b++)
+							ica_basis[b][j] = 3;
+					}
+					fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+					fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
+					fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[1][j], bunrui[0][j]);
+				}
+
+				fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
+				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
+
+				ent_out(origin, y, avg, w, ny, no_op, Q);
+			}
+			else
+			{
+				ent_out(origin, y, avg, w, ny, no_op, Q);
+			}
 				//img_out(origin, no_op, (a + 1) * 10);
 				//txt_out(bunrui, filename, Q);
 				//txt_out2(ica_basis, filename, Q);
-				group(ica_basis2, filename, Q);
+				//group(ica_basis2, filename, Q);
+				//dct(origin, dcoe, 8); // 係数を出力
+				//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+				//idct(dcoe, dcoe2, 8); // 普通の再構成
+				//b_entropy_dct(dcoe);
 
+				//mp(y, avg, w, mpans);
+
+				//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
+				for (i = 0; i < 1024; i++)
+					block_flag[i] = 0;
+
+				//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
+				//for (i = 0; i < 1024; i++)
+				//	block_flag[i] = 0;
 			//b_entropy_ica(ny);
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
 	}
-	b_entropy_dct(dcoe);
 
 	fclose(fp);
 	fclose(fp2);
@@ -2283,4 +2415,6 @@ int main()
 	free(temp_6);
 	printf(" All finish");
 
+	printf("\nPress any button...");
+	getchar();
 }
