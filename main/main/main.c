@@ -2268,7 +2268,7 @@ int main()
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
 
-					if (bunrui[0][j] >= bunrui[2][j]) {
+					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {
 						no_op[j] = 1;
 						QQ++;
 
@@ -2330,7 +2330,7 @@ int main()
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
 
-					if (bunrui[0][j] >= bunrui[2][j]) {
+					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {
 						no_op[j] = 1;
 						QQ++;
 
@@ -2366,8 +2366,9 @@ int main()
 				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 
 				ent_out(origin, y, avg, w, ny, no_op, Q);
+				img_out(origin, no_op, (a + 1) * 10);
 			}
-			else
+			else if(yn == 'd')
 			{
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
@@ -2416,5 +2417,6 @@ int main()
 	printf(" All finish");
 
 	printf("\nPress any button...");
+	getchar();
 	getchar();
 }
