@@ -15,12 +15,12 @@ int main()
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	//static  double ori_temp2[64][1024] = { 0 };
 	static int mpans[1024][64] = { 0 };
-	static int block_flag[1024] = { 0 };
+	static int block_flag[1024] = { 0 }, temp_basis[64*64];
 	static int i, j, n, m, k, l, mk, ml, Q, QQ, QQQ, QQQQ, b, a, c, d, out_count = 0, y_rank[64][1024], seg[64 * 64], y_rank_pm[64], seg0[64 * 64], seg1[64 * 64], ori_temp[256 * 256], temp_sai[256 * 256], temp_sai11[256 * 256], temp_sai22[256 * 256], temp_sai2[64][1024], temp_sai3[256][256], ica[64], temp1[64], temp2[64], temp3[64], temp4[64], temp5[64], temp6[64], count_temp[4][1024], semi[2][64], no_op[1024];
 	static double percent, sum, sum0, sum1, sum11, sum22, best_ica[1024], sum2, min, max, mse_dct[2][10][1024], mse_dct2[1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024], cost_ica[1024], cost_dct[1024], total_mse[3][64], result_dct[2][1024], result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], imp[10][1024], imp_rate[7][1024], full_mse[2][65][1024], mp_mse[2][65][1024];
 	static double coe[256][256] = { 0 }, dct_coe[64][1024] = { 0 }, dcoe[256][256] = { 0 }, dct_coe_temp[64][1024], test[5][1024], test2[64][1024], test3[64][1024], ica_test[64][64][1024], ica_test2[2][64][1024], ica_test3[2][1024], ica_test4[2][1024], ica_test5[64][64][64], ica_test0[64][1024], ica_test1[64][64], average2[1024], test_per[4][64], mse100[64][1024], ica_basis[65][1024], ica_basis2[65][1024];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nw[64][64], x[64][1024], xx[64], total_test[20][64], dct_bent[1024], dct_ent[64][1024], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
-	static unsigned char dammy[256][256] = { 0 };
+	static unsigned char dammy[256][256] = { 0 }, nica_basis[64][64];
 	static unsigned char block_dct[64], dcoe3[256][256] = { 0 }, dcoe2[256][256] = { 0 }, block_ica[64];
 	static unsigned char  ica_sai[256][256] = { 0 }, ica_sai0[256][256] = { 0 }, ica_sai1[256][256] = { 0 };
 	static struct pca pcaStr = { 0 };
@@ -161,6 +161,16 @@ int main()
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	pcaStr = new_pca(origin);
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+
+	// ICA_BASIS 出力よう
+	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
+	fprintf(fp2, "P5\n64 64\n255\n");
+	fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
+	sprintf(output, "OUTPUT\\ICA_BASIS_main.bmp"); //ICA基底bmpで出力
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 64; j++)
+			temp_basis[i * 64 + j] = nica_basis[i][j];
+	img_write_gray(temp_basis, output, 64, 64);
 
 	// 計算用にコピー
 	for (i = 0; i < 1024; i++)
@@ -1510,7 +1520,7 @@ int main()
 
 				sum0 = 10000;
 				QQ = 0;
-				printf("a");
+				//printf("a");
 
 				for (n = 0; n < 64; n++) {
 					for (a = 0; a < 64; a++)
@@ -1617,49 +1627,7 @@ int main()
 		full_mse[1][0][j] = sum / 64;//平均
 	}
 
-	// mp法の確認
-	mp(y, avg, w, mpans);
-
-
-	for (j = 0; j < 1024; j++) {
-
-		for (b = 0; b < 1024; b++)
-			for (a = 0; a < 64; a++)
-				ny[a][b] = y[a][b];
-
-		for (a = 0; a < 65; a++) { // i番目
-
-			if (a != 0) {
-				for (n = 0; n < a; n++) {
-					ny[mpans[j][63 - n]][j] = 0;
-				}
-			}
-
-			// 初期化（必ず行う）
-			for (b = 0; b < 64; b++)
-				xx[b] = 0.0;
-
-			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-			sum = 0.0;
-			mk = j % 32;
-			ml = j / 32;
-
-			for (c = 0; c < 8; c++) {
-				for (b = 0; b < 8; b++) {
-					sum += pow(origin[ml * 8 + b][mk * 8 + c] - block_ica[b * 8 + c], 2);
-				}
-			}
-
-			mp_mse[1][a][j] = sum / 64.0;
-			if (a == 64)
-				mp_mse[0][64][j] = (double)99;
-			else
-				mp_mse[0][a][j] = (double)mpans[j][63 - a];
-		}
-	}
+	
 
 
 
@@ -2234,6 +2202,7 @@ int main()
 			//////////////////出力終了///////////////////////
 
 			QQ = 0;
+			int mp_count = 0;
 
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
@@ -2304,9 +2273,75 @@ int main()
 				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 
 				ent_out(origin, y, avg, w, ny, no_op, Q);
+
+				// // ICA_Blockの使用基底を画像出力
+				//if(Q==40)
+				//	for(j=0;j<1024;j++)
+				//		if (no_op[j] == 1) {
+				//			for (a = 0; a < 4096; a++)
+				//				temp_basis[a] = 0;
+				//				sprintf(output, "OUTPUT\\ICA_BASIS[%d].bmp", j); //ICA基底bmpで出力
+				//				for (i = 0; i < 64; i++) {
+				//					mk = i % 8;
+				//					ml = i / 8;
+				//					if (ny[i][j] != 0) {
+				//						for (a = 0; a < 8; a++)
+				//							for (b = 0; b < 8; b++)
+				//								temp_basis[ml * 64 * 8 + mk * 8 + 64 * a + b] = nica_basis[ml * 8 + a][mk * 8 + b];
+				//						img_write_gray(temp_basis, output, 64, 64);
+				//					}
+				//				}
+				//		}
 			}
 			else if (yn == 'n')
 			{
+
+				// mp法の確認
+				if (mp_count == 0) {
+
+					mp(y, avg, w, mpans);
+
+					for (j = 0; j < 1024; j++) {
+
+						for (b = 0; b < 1024; b++)
+							for (a = 0; a < 64; a++)
+								ny[a][b] = y[a][b];
+
+						for (a = 0; a < 65; a++) { // i番目
+
+							if (a != 0) {
+								for (n = 0; n < a; n++) {
+									ny[mpans[j][63 - n]][j] = 0;
+								}
+							}
+
+							// 初期化（必ず行う）
+							for (b = 0; b < 64; b++)
+								xx[b] = 0.0;
+
+							seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+							sum = 0.0;
+							mk = j % 32;
+							ml = j / 32;
+
+							for (c = 0; c < 8; c++) {
+								for (b = 0; b < 8; b++) {
+									sum += pow(origin[ml * 8 + b][mk * 8 + c] - block_ica[b * 8 + c], 2);
+								}
+							}
+
+							mp_mse[1][a][j] = sum / 64.0;
+							if (a == 64)
+								mp_mse[0][64][j] = (double)99;
+							else
+								mp_mse[0][a][j] = (double)mpans[j][63 - a];
+						}
+					}
+					mp_count++;
+				}
 
 				for (j = 0; j < 1024; j++) {
 					//for (a = 9; a > 0; a -= 1) {
@@ -2375,7 +2410,7 @@ int main()
 				//img_out(origin, no_op, (a + 1) * 10);
 				//txt_out(bunrui, filename, Q);
 				//txt_out2(ica_basis, filename, Q);
-				//group(ica_basis2, filename, Q);
+				group(ica_basis2, filename, Q);
 				//dct(origin, dcoe, 8); // 係数を出力
 				//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 				//idct(dcoe, dcoe2, 8); // 普通の再構成

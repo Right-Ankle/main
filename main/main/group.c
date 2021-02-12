@@ -91,12 +91,12 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 		}
 	}
 
-	//for (j = 0; j < 64; j++) {
-	//	for (i = 0; i < 64; i++) {
-	//		temp3[i] = basis[j][i];
-	//	}
-	//	gnuplot5(temp3, (j + 1) * 1000);
-	//}
+	for (j = 0; j < 64; j++) {
+		for (i = 0; i < 64; i++) {
+			temp3[i] = basis[j][i];
+		}
+		gnuplot5(temp3, rate*100+j);
+	}
 
 	//for (j = 0; j < 64; j++) {
 	//	for (i = 0; i < 64; i++) {
@@ -136,11 +136,11 @@ int group(double date1[65][1024], static char filename[20], int rate) {
 	}
 
 
-	for (j = 0; j < 64; j++) {
-		for (i = 0; i < 64; i++)
-			temp3[i] = hist[j][i];
-		gnuplot5(temp3, rate*1000+j);
-	}
+	//for (j = 0; j < 64; j++) {
+	//	for (i = 0; i < 64; i++)
+	//		temp3[i] = hist[j][i];
+	//	gnuplot5(temp3, rate*1000+j);
+	//}
 
 
 	for (i = 2; i < 64; i++) { // Žg—pŠî’ê”
