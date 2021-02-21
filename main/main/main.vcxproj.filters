@@ -42,9 +42,6 @@
     <ClCompile Include="b_mse.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="backup.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="cor_coe.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -127,9 +124,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="seki5_Block.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="sort.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="bitmap.c">

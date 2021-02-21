@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="avg_inter.c" />
     <ClCompile Include="avg_inter_Block.c" />
-    <ClCompile Include="backup.c" />
     <ClCompile Include="bitmap.c" />
     <ClCompile Include="block_psnr.c" />
     <ClCompile Include="b_entropy_dct.c" />
@@ -70,7 +69,6 @@
     <ClCompile Include="seki3.c" />
     <ClCompile Include="seki5.c" />
     <ClCompile Include="seki5_Block.c" />
-    <ClCompile Include="sort.c" />
     <ClCompile Include="txt_out2.c" />
     <ClCompile Include="txt_out.c" />
     <ClCompile Include="txt_out3.c" />
