@@ -117,6 +117,7 @@ int txt_out3(double date1[64], static char filename[20], int rate);
 int txt_out4(double date1[64][64], static char filename[20], int rate);
 int group(double date1[65][1024], static char filename[20], int rate);
 void ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], double y_flag[64][1024], int block_flag[1024], int Q);
+void ent_count(double y[256][256], double ica_dc[1024]);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 

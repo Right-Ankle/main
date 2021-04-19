@@ -50,6 +50,8 @@ int main()
 	static double threshold = 0, percent = 0;//閾値で使用
 	static double basis_mse[64][64];//origin基底と差分基底の類似度（すべての基底で照合）
 	static double diff_basis_mse[10][10][64];//レートごとの差分基底の類似度
+	static double b_ica_ent[1024]; //各ica基底の情報量
+	static double b_dct_ent[1024]; //各ica基底の情報量
 	static double mse_dct[2][10][1024], mse_ica[64][1024], mse_ica0[64][1024], mse_ica1[64][1024]; //mse
 	static double result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], full_mse[2][65][1024], mp_mse[2][65][1024];
 	static double coe[256][256] = { 0 }, basis2[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test2[64][1024], test3[64][1024], ica_test5[64][64][64], ica_test1[64][64], average2[1024], ica_basis[65][1024], ica_basis2[65][1024];
@@ -181,111 +183,112 @@ int main()
 	}
 
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	yn = 'n';
+	if (yn == 'y') {
+		/////////////////////原画像とdct再構成との差分をica基底にする////////////////////////////////////////////////////
+		for (i = 0; i < 1024; i++)
+			block_flag[i] = 1;
 
-	/////////////////////原画像とdct再構成との差分をica基底にする////////////////////////////////////////////////////
-	for (i = 0; i < 1024; i++)
-		block_flag[i] = 1;
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 64; j++)
+				basis_mse[i][j] = 0;
 
-	for (i = 0; i < 64; i++)
-		for (j = 0; j < 64; j++)
-			basis_mse[i][j] = 0;
-
-	pcaStr = new_pca(origin);
-	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
-
-	// ICA_BASIS_origin
-	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
-	fprintf(fp2, "P5\n64 64\n255\n");
-	fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
-	sprintf(output, "OUTPUT\\ICA_BASIS_origin.bmp"); //ICA基底bmpで出力
-	for (i = 0; i < 64; i++)
-		for (j = 0; j < 64; j++) {
-			temp_basis[i * 64 + j] = nica_basis[i][j];
-			origin_basis[i][j] = nica_basis[i][j];
-		}
-	img_write_gray(temp_basis, output, 64, 64);
-
-    //////////// 本処理/////////////////////////////
-	for (Q = 100; Q > 0; Q -= 10) {
-		printf("\r now Q is %d          \n", Q);
-
-		// dct処理
-		dct(origin, dcoe, 8); // 係数を出力
-		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-		idct(dcoe, dcoe2, 8); // 普通の再構成
-
-		for (j = 0; j < 256; j++)
-			for (i = 0; i < 256; i++)
-				ddct[i][j] = 0;
-
-		for (j = 0; j < 256; j++)
-			for (i = 0; i < 256; i++) {
-				a = origin[i][j];
-				b = dcoe2[i][j];
-				ddct[i][j] = (a - b) / 2 + 127;
-			}
-		//img_out(ddct, block_flag, Q);
-
-		//差分をICA基底に
 		pcaStr = new_pca(origin);
-		ICA(ddct, pcaStr, y, w, avg, 100, 0.002);
+		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
-		// ICA_BASIS 出力よう
+		// ICA_BASIS_origin
 		wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
 		fprintf(fp2, "P5\n64 64\n255\n");
 		fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
-		sprintf(output, "OUTPUT\\ICA_BASIS_%d.bmp",Q); //ICA基底bmpで出力
+		sprintf(output, "OUTPUT\\ICA_BASIS_origin.bmp"); //ICA基底bmpで出力
 		for (i = 0; i < 64; i++)
-			for (j = 0; j < 64; j++)
+			for (j = 0; j < 64; j++) {
 				temp_basis[i * 64 + j] = nica_basis[i][j];
+				origin_basis[i][j] = nica_basis[i][j];
+			}
 		img_write_gray(temp_basis, output, 64, 64);
 
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 64; j++)
-				diff_basis[(Q/10)-1][i][j] = nica_basis[i][j];
+		//////////// 本処理/////////////////////////////
+		for (Q = 100; Q > 0; Q -= 10) {
+			printf("\r now Q is %d          \n", Q);
 
-		//差分基底がorigin_basisと類似しているか？
-		//結果→似てない（DCT成分が抜けているから似ない．より局所的な特徴が基底に現れる）
-		m = 0;
-		for (a = 0; a < 64; a+=8) {
-			for (b = 0; b < 64; b+=8) {
-				n = 0;
-				for (c = 0; c < 64; c += 8)
-					for (d = 0; d < 64; d += 8) {
+			// dct処理
+			dct(origin, dcoe, 8); // 係数を出力
+			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+			idct(dcoe, dcoe2, 8); // 普通の再構成
+
+			for (j = 0; j < 256; j++)
+				for (i = 0; i < 256; i++)
+					ddct[i][j] = 0;
+
+			for (j = 0; j < 256; j++)
+				for (i = 0; i < 256; i++) {
+					a = origin[i][j];
+					b = dcoe2[i][j];
+					ddct[i][j] = (a - b) / 2 + 127;
+				}
+			//img_out(ddct, block_flag, Q);
+
+			//差分をICA基底に
+			pcaStr = new_pca(origin);
+			ICA(ddct, pcaStr, y, w, avg, 100, 0.002);
+
+			// ICA_BASIS 出力よう
+			wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
+			fprintf(fp2, "P5\n64 64\n255\n");
+			fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
+			sprintf(output, "OUTPUT\\ICA_BASIS_%d.bmp", Q); //ICA基底bmpで出力
+			for (i = 0; i < 64; i++)
+				for (j = 0; j < 64; j++)
+					temp_basis[i * 64 + j] = nica_basis[i][j];
+			img_write_gray(temp_basis, output, 64, 64);
+
+			for (i = 0; i < 64; i++)
+				for (j = 0; j < 64; j++)
+					diff_basis[(Q / 10) - 1][i][j] = nica_basis[i][j];
+
+			//差分基底がorigin_basisと類似しているか？
+			//結果→似てない（DCT成分が抜けているから似ない．より局所的な特徴が基底に現れる）
+			m = 0;
+			for (a = 0; a < 64; a += 8) {
+				for (b = 0; b < 64; b += 8) {
+					n = 0;
+					for (c = 0; c < 64; c += 8)
+						for (d = 0; d < 64; d += 8) {
+							sum = 0;
+							for (i = 0; i < 8; i++)
+								for (j = 0; j < 8; j++)
+									sum += pow((double)origin_basis[a + i][b + j] - (double)nica_basis[c][d], 2);
+							basis_mse[m][n] = sum / 64;//origin基底と差分基底の類似度（すべての基底で照合）
+							if (sum / 64 < 100)
+								printf("\n [%d:%d]", m, n);
+							n++;
+						}
+					m++;
+				}
+			}
+
+		}
+
+		//差分基底同士は類似しているか？
+		//結果→似てない（レートごとにｄｃｔでは足りない部分の大きさが変わってくるから似ない）
+		for (c = 0; c < 10; c++) {
+			m = 0;
+			for (a = 0; a < 64; a += 8) {
+				for (b = 0; b < 64; b += 8) {
+					for (d = 0; d < 10; d++) {
 						sum = 0;
 						for (i = 0; i < 8; i++)
 							for (j = 0; j < 8; j++)
-								sum += pow((double)origin_basis[a + i][b + j] - (double)nica_basis[c][d], 2);
-						basis_mse[m][n] = sum / 64;//origin基底と差分基底の類似度（すべての基底で照合）
-						if (sum / 64 < 100)
-							printf("\n [%d:%d]", m, n);
-						n++;
+								sum += pow((double)diff_basis[c][a + i][b + j] - (double)diff_basis[d][a + i][b + j], 2);
+						diff_basis_mse[c][d][m] = sum / 64;//レートごとの差分基底の類似度
 					}
-				m++;
-			}
-		}
-
-	}
-
-	//差分基底同士は類似しているか？
-	//結果→似てない（レートごとにｄｃｔでは足りない部分の大きさが変わってくるから似ない）
-	for (c = 0; c < 10; c++) {
-		m = 0;
-		for (a = 0; a < 64; a += 8) {
-			for (b = 0; b < 64; b += 8) {
-				for (d = 0; d < 10; d++) {
-					sum = 0;
-					for (i = 0; i < 8; i++)
-						for (j = 0; j < 8; j++)
-							sum += pow((double)diff_basis[c][a + i][b + j] - (double)diff_basis[d][a + i][b + j], 2);
-					diff_basis_mse[c][d][m] = sum / 64;//レートごとの差分基底の類似度
+					m++;
 				}
-				m++;
 			}
 		}
 	}
-
-	///////////////////////////////////////////////////////////////////////
+	///////////////////////////原画像とdct再構成との差分をica基底にする fin ////////////////////////////////////////////
 
 	// ///////////////////////// ica //////////////////////////////////
 	// ICA基底・係数
@@ -315,6 +318,65 @@ int main()
 		for (j = 0; j < 64; j++)
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
+
+	/////////////////////////////////////////////////////////////////////////////////////////// test
+	b_entropy_ica(y, b_ica_ent);
+	sum = 0;
+	for (i = 0; i < 1024; i++)
+		sum += b_ica_ent[i];
+	sum /= 1024;
+	printf("\n%lf", sum);
+
+	Q = 80;
+
+	dct(origin, dcoe, 8); // 係数を出力
+	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+	idct(dcoe, dcoe2, 8); // 普通の再構成
+
+	seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+	xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+
+	b_entropy_dct(dcoe, b_dct_ent);
+	sum = 0;
+	for (i = 0; i < 1024; i++)
+		sum += b_dct_ent[i];
+	sum /= 256*256;
+	//printf("\n%lf", sum);
+
+	ent_count(dcoe, avg);
+
+	///////////////////////////// icaのtest /////////////////////
+	double sum1 = 0;
+	for (i = 0; i < 64; i++) {
+		for (j = 0; j < 1024; j++) {
+			b = i;
+
+			// 該当係数以外0
+			// i番目の係数（基底）のみ使用。それ以外の係数は0。
+			for (a = 0; a < 64; a++) {
+				if (b == a)
+					ny[a][j] = y[a][j];
+				else
+					ny[a][j] = 0;
+			}
+
+
+		}
+		b_entropy_ica(ny, b_ica_ent);
+		sum = 0;
+		for (a = 0; a < 1024; a++)
+			sum += b_ica_ent[a];
+		sum /= 256 * 256;
+		//printf("\n%lf", sum);
+		sum1 += sum;
+	}
+	printf("\n%lf\n", sum1/64);
+	
+
+
+	///////////////////////////////////////////////
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
 
 	// 64個の基底のうち1個だけ使用するための処理
 	// 基底はいじれないから、使用する係数を64個から1個に制限する。
@@ -732,8 +794,8 @@ int main()
 				no_op[a] = 0;
 		}
 
-		sprintf(img_name, "ORIGIN/[%d].bmp", i);
-		img_out(origin, no_op, img_name);
+		//sprintf((char)img_name, "ORIGIN/[%d].bmp", i); // 格納変数はcharを使用する
+		//img_out(origin, no_op, img_name);
 
 	}
 
@@ -823,8 +885,8 @@ int main()
 				no_op[a] = 0;
 		}
 
-		sprintf(img_name, "DCT/not_replaceable[%d].bmp", (int)percent);
-		img_out(origin, no_op, img_name);
+		//sprintf(img_name, "DCT/not_replaceable[%d].bmp", (int)percent);// 格納変数はcharにして
+		//img_out(origin, no_op, img_name);
 
 		//
 		for (QQ = 1; QQ < 10; QQ++) {
@@ -864,8 +926,8 @@ int main()
 			for (a = 0; a < 1024; a++) {
 				no_op[a] = 1;
 			}
-			sprintf(img_name, "test/[%d].bmp", QQ);
-			img_out(ica_sai, no_op, img_name);
+			//sprintf(img_name, "test/[%d].bmp", QQ);// 格納変数はcharにして
+			//img_out(ica_sai, no_op, img_name);
 
 		}
 
@@ -899,8 +961,8 @@ int main()
 					no_op[a] = 0;
 			}
 
-			sprintf(img_name, "DCT/not_replaceable[%d].bmp", (int)percent);
-			img_out(origin, no_op, img_name);
+			//sprintf(img_name, "DCT/not_replaceable[%d].bmp", (int)percent);  // 格納変数はcharにして
+			//img_out(origin, no_op, img_name);
 
 		}
 
@@ -944,8 +1006,8 @@ int main()
 				no_op[a] = 1;
 			}
 
-			sprintf(img_name, "MSE/[%d].bmp", (int)percent);
-			img_out(origin, no_op, img_name);
+			//sprintf(img_name, "MSE/[%d].bmp", (int)percent);
+			//img_out(origin, no_op, img_name);
 
 		}
 
@@ -1363,7 +1425,7 @@ int main()
 				//img_out(origin, no_op, (a + 1) * 10);
 				//txt_out(bunrui, filename, Q);
 				//txt_out2(ica_basis, filename, Q);
-				group(ica_basis2, filename, Q);
+				//group(ica_basis2, filename, Q);
 				//dct(origin, dcoe, 8); // 係数を出力
 				//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 				//idct(dcoe, dcoe2, 8); // 普通の再構成

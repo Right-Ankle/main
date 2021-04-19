@@ -29,6 +29,7 @@
     <ClCompile Include="cor_coe.c" />
     <ClCompile Include="dct.c" />
     <ClCompile Include="dctcoe_conv.c" />
+    <ClCompile Include="ent_count.c" />
     <ClCompile Include="ent_out.c" />
     <ClCompile Include="file_copy.c" />
     <ClCompile Include="gentox.c" />
