@@ -7,8 +7,8 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 	int i = 0, j = 0, l = 0, m = 0, n = 0, k = 0;
 	static double min = 0, min2 = 0, x[64][1024] = { 0 }, sum = 0, sum1 = 0;
 	static double b_ent_dct[1024];
-	static int hist[50000] = { 0 };
-	static int hist2[50000] = { 0 };
+	static int hist[100000] = { 0 };
+	static int hist2[100000] = { 0 };
 
 /////////////////////////////////// dct /////////////////////////////////////////////////
 	for (i = 0; i < 256; i += 8) {
@@ -31,7 +31,7 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 	for (n = 0; n < 1024; n++) {
 
 		/* histの初期化 */
-		for (i = 0; i < 50000; i++) {
+		for (i = 0; i < 100000; i++) {
 			hist[i] = 0;
 			hist2[i] = 0;
 		}
@@ -51,7 +51,7 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 
 
 		/* エントロピーの計算 */
-		for (i = 0; i < 50000; i++)
+		for (i = 0; i < 100000; i++)
 			if (hist[i] > 0) {
 				b_ent_dct[n] += -((hist[i] / (double)(63)) * (log((hist[i] / (double)(63))) / log(2)));
 				sum1 += -((hist[i] / (double)(63)) * (log((hist[i] / (double)(63))) / log(2)));
@@ -73,7 +73,7 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 
 	sum1 = 0;
 	/* エントロピーの計算 */
-	for (i = 0; i < 50000; i++)
+	for (i = 0; i < 100000; i++)
 		if (hist2[i] > 0) {
 			sum1 += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
 		}
@@ -84,14 +84,14 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 	for (i = 0; i < 1024; i++)
 		sum += b_ent_dct[i];
 
-	//printf("\n%lf\n", sum / (256*256));
+	printf("\n%lf\n", sum / (256*256));
 	printf("\n%lf\n", (sum / (256 * 256)) + (sum1 / 64));
 
 	//printf("\n%lf\n", sum1);
 	///////////////////////////////// dct fin ///////////////////////////////////////////////////
 
 	/* histの初期化 */
-	for (i = 0; i < 50000; i++) {
+	for (i = 0; i < 100000; i++) {
 		hist[i] = 0;
 		hist2[i] = 0;
 	}
@@ -108,11 +108,33 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 	}
 
 	/* エントロピーの計算 */
-	for (i = 0; i < 50000; i++)
+	for (i = 0; i < 100000; i++)
 		if (hist2[i] > 0) {
 			sum1 += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
 		}
 
 	printf("\n%lf\n", sum1 / 64);
+
+	/* hist2の作成 */
+	static double min3 = 0;
+	sum1 = 0;
+	min3 = x[0][0];
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++)
+			if (x[j][i] < min3)
+				min3 = x[j][i]; // histの左端
+
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++) {
+			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
+			hist[(int)(x[j][i] - min3) + 1]++;	//ステップ幅1
+		}
+
+	for (i = 0; i < 100000; i++)
+		if (hist[i] > 0) {
+			sum1 += -((hist[i] / (double)(1024*64)) * (log((hist[i] / (double)(1024*64))) / log(2)));
+		}
+
+	printf("\nall_ent = %lf\n", sum1);
 
 }

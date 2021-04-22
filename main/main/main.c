@@ -183,7 +183,7 @@ int main()
 	}
 
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'y') {
 		/////////////////////原画像とdct再構成との差分をica基底にする////////////////////////////////////////////////////
 		for (i = 0; i < 1024; i++)
@@ -326,8 +326,8 @@ int main()
 	sum = 0;
 	for (i = 0; i < 1024; i++)
 		sum += b_ica_ent[i];
-	sum /= 1024;
-	printf("\n%lf", sum);
+	sum /= 1024*64;
+	printf("\nica all  : %lf", sum);
 
 	Q = 80;
 
@@ -335,8 +335,9 @@ int main()
 	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 	idct(dcoe, dcoe2, 8); // 普通の再構成
 
-	seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-	xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
 	b_entropy_dct(dcoe, b_dct_ent);
 	sum = 0;
@@ -347,8 +348,75 @@ int main()
 
 	ent_count(dcoe, avg);
 
-	///////////////////////////// icaのtest /////////////////////
+
+	/* histの初期化 */
+	int hist[100000];
+	for (i = 0; i < 100000; i++) {
+		hist[i] = 0;
+	}
+
+	/* hist2の作成 */
+	double step = 100.0;
+	static double min3 = 0;
 	double sum1 = 0;
+	min3 = y[0][0];
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++)
+			if (y[j][i] < min3)
+				min3 = y[j][i]; // histの左端
+
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++) {
+			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
+			hist[(int)((y[j][i] - min3) * step) + 1]++;	//ステップ幅1
+		}
+
+	for (i = 0; i < 100000; i++)
+		if (hist[i] > 0) {
+			sum1 += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
+		}
+
+	printf("\nica_all_ent = %lf\n", sum1);
+
+
+	/// 0コメのブロックの係数を全てゼロ//////////////////////////////
+	sum1 = 0;
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++)
+			ny[j][i] = y[j][i];
+
+	for (j = 0; j < 64; j++)
+		ny[j][0] = 0;
+
+	for (i = 0; i < 100000; i++) {
+		hist[i] = 0;
+	}
+
+	min3 = ny[0][0];
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++)
+			if (ny[j][i] < min3)
+				min3 = ny[j][i]; // histの左端
+
+	for (j = 0; j < 64; j++)
+		for (i = 0; i < 1024; i++) {
+			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
+			hist[(int)((ny[j][i] - min3) * step) + 1]++;	//ステップ幅1
+		}
+
+	for (i = 0; i < 100000; i++)
+		if (hist[i] > 0) {
+			sum1 += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
+		}
+
+	printf("\nica_ent[0] = %lf\n", sum1);
+
+
+
+
+
+	///////////////////////////// icaのtest /////////////////////
+
 	for (i = 0; i < 64; i++) {
 		for (j = 0; j < 1024; j++) {
 			b = i;
@@ -372,7 +440,18 @@ int main()
 		//printf("\n%lf", sum);
 		sum1 += sum;
 	}
-	printf("\n%lf\n", sum1/64);
+	printf("\n1y : %lf\n", sum1/64);
+
+	for (a = 0; a < 1024; a++)
+		b_ica_ent[a] = 0;
+
+	b_entropy_ica(y, b_ica_ent);
+	sum = 0;
+	for (a = 0; a < 1024; a++)
+		sum += b_ica_ent[a];
+	sum /= 256 * 256;
+	printf("\n%lf", sum);
+
 	
 
 
