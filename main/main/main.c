@@ -42,6 +42,13 @@ int main()
 	static int no_op[1024] = { 0 }; // 小領域flag
 	static int Q;//圧縮レート
 	static int QQ, QQQ, QQQQ, temp_sai2[64][1024] = { 0 }, semi[2][64] = { 0 };
+	double min2 = 100000;
+	double sum2 = 0;
+	int hist[50000];
+	int hist2[50000];
+	double sum1_1 = 0;
+	double sum2_2 = 0;
+	int test_basis[64];
 
 
 	////// double //////
@@ -104,7 +111,9 @@ int main()
 	//	system(g);
 	//}
 	printf("mkdir end\n");
-
+	i = 1;
+	sum = -((i / (double)(1000)) * (log((i / (double)(1000))) / log(2)));
+	printf("\n\n%lf", sum);
 
 	//
 //読み込むファイル名
@@ -183,114 +192,6 @@ int main()
 	}
 
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	yn = 'n';
-	if (yn == 'y') {
-		/////////////////////原画像とdct再構成との差分をica基底にする////////////////////////////////////////////////////
-		for (i = 0; i < 1024; i++)
-			block_flag[i] = 1;
-
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 64; j++)
-				basis_mse[i][j] = 0;
-
-		pcaStr = new_pca(origin);
-		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
-
-		// ICA_BASIS_origin
-		wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
-		fprintf(fp2, "P5\n64 64\n255\n");
-		fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
-		sprintf(output, "OUTPUT\\ICA_BASIS_origin.bmp"); //ICA基底bmpで出力
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 64; j++) {
-				temp_basis[i * 64 + j] = nica_basis[i][j];
-				origin_basis[i][j] = nica_basis[i][j];
-			}
-		img_write_gray(temp_basis, output, 64, 64);
-
-		ent_count_basis(w);
-
-		//////////// 本処理/////////////////////////////
-		for (Q = 100; Q > 0; Q -= 10) {
-			printf("\r now Q is %d          \n", Q);
-
-			// dct処理
-			dct(origin, dcoe, 8); // 係数を出力
-			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-			idct(dcoe, dcoe2, 8); // 普通の再構成
-
-			for (j = 0; j < 256; j++)
-				for (i = 0; i < 256; i++)
-					ddct[i][j] = 0;
-
-			for (j = 0; j < 256; j++)
-				for (i = 0; i < 256; i++) {
-					a = origin[i][j];
-					b = dcoe2[i][j];
-					ddct[i][j] = (a - b) / 2 + 127;
-				}
-			//img_out(ddct, block_flag, Q);
-
-			//差分をICA基底に
-			pcaStr = new_pca(origin);
-			ICA(ddct, pcaStr, y, w, avg, 100, 0.002);
-
-			// ICA_BASIS 出力よう
-			wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
-			fprintf(fp2, "P5\n64 64\n255\n");
-			fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
-			sprintf(output, "OUTPUT\\ICA_BASIS_%d.bmp", Q); //ICA基底bmpで出力
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 64; j++)
-					temp_basis[i * 64 + j] = nica_basis[i][j];
-			img_write_gray(temp_basis, output, 64, 64);
-
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 64; j++)
-					diff_basis[(Q / 10) - 1][i][j] = nica_basis[i][j];
-
-			//差分基底がorigin_basisと類似しているか？
-			//結果→似てない（DCT成分が抜けているから似ない．より局所的な特徴が基底に現れる）
-			m = 0;
-			for (a = 0; a < 64; a += 8) {
-				for (b = 0; b < 64; b += 8) {
-					n = 0;
-					for (c = 0; c < 64; c += 8)
-						for (d = 0; d < 64; d += 8) {
-							sum = 0;
-							for (i = 0; i < 8; i++)
-								for (j = 0; j < 8; j++)
-									sum += pow((double)origin_basis[a + i][b + j] - (double)nica_basis[c][d], 2);
-							basis_mse[m][n] = sum / 64;//origin基底と差分基底の類似度（すべての基底で照合）
-							if (sum / 64 < 100)
-								printf("\n [%d:%d]", m, n);
-							n++;
-						}
-					m++;
-				}
-			}
-
-		}
-
-		//差分基底同士は類似しているか？
-		//結果→似てない（レートごとにｄｃｔでは足りない部分の大きさが変わってくるから似ない）
-		for (c = 0; c < 10; c++) {
-			m = 0;
-			for (a = 0; a < 64; a += 8) {
-				for (b = 0; b < 64; b += 8) {
-					for (d = 0; d < 10; d++) {
-						sum = 0;
-						for (i = 0; i < 8; i++)
-							for (j = 0; j < 8; j++)
-								sum += pow((double)diff_basis[c][a + i][b + j] - (double)diff_basis[d][a + i][b + j], 2);
-						diff_basis_mse[c][d][m] = sum / 64;//レートごとの差分基底の類似度
-					}
-					m++;
-				}
-			}
-		}
-	}
-	///////////////////////////原画像とdct再構成との差分をica基底にする fin ////////////////////////////////////////////
 
 	// ///////////////////////// ica //////////////////////////////////
 	// ICA基底・係数
@@ -321,25 +222,31 @@ int main()
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
 
-	/////////////////////////////////////////////////////////////////////////////////////////// test
+
+		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	b_entropy_ica(y, b_ica_ent);
 	sum = 0;
 	for (i = 0; i < 1024; i++)
 		sum += b_ica_ent[i];
 	sum /= 1024*64;
-	printf("\nica all  : %lf", sum);
+	printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
 
-	Q = 80;
+	Q = 100;
+	for (i = 0; i < 10; i++) {
+		printf("\nnow Q = %d\n", Q);
+		dct(origin, dcoe, 8); // 係数を出力
+		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+		idct(dcoe, dcoe2, 8); // 普通の再構成
 
-	dct(origin, dcoe, 8); // 係数を出力
-	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-	idct(dcoe, dcoe2, 8); // 普通の再構成
+		b_entropy_dct(dcoe, b_dct_ent);
+		Q -= 10;
+	}
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-	b_entropy_dct(dcoe, b_dct_ent);
+
 	sum = 0;
 	for (i = 0; i < 1024; i++)
 		sum += b_dct_ent[i];
@@ -350,8 +257,8 @@ int main()
 
 
 	/* histの初期化 */
-	int hist[100000];
-	for (i = 0; i < 100000; i++) {
+
+	for (i = 0; i < 50000; i++) {
 		hist[i] = 0;
 	}
 
@@ -371,45 +278,16 @@ int main()
 			hist[(int)((y[j][i] - min3) * step) + 1]++;	//ステップ幅1
 		}
 
-	for (i = 0; i < 100000; i++)
+	for (i = 0; i < 50000; i++)
 		if (hist[i] > 0) {
 			sum1 += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
 		}
 
-	printf("\nica_all_ent = %lf\n", sum1);
+	printf("\nica_all_ent = %lf\n", sum1); // ica基底ごとの情報量の総和
 
 
 	/// 0コメのブロックの係数を全てゼロ//////////////////////////////
-	sum1 = 0;
-	for (j = 0; j < 64; j++)
-		for (i = 0; i < 1024; i++)
-			ny[j][i] = y[j][i];
 
-	for (j = 0; j < 64; j++)
-		ny[j][0] = 0;
-
-	for (i = 0; i < 100000; i++) {
-		hist[i] = 0;
-	}
-
-	min3 = ny[0][0];
-	for (j = 0; j < 64; j++)
-		for (i = 0; i < 1024; i++)
-			if (ny[j][i] < min3)
-				min3 = ny[j][i]; // histの左端
-
-	for (j = 0; j < 64; j++)
-		for (i = 0; i < 1024; i++) {
-			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
-			hist[(int)((ny[j][i] - min3) * step) + 1]++;	//ステップ幅1
-		}
-
-	for (i = 0; i < 100000; i++)
-		if (hist[i] > 0) {
-			sum1 += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
-		}
-
-	printf("\nica_ent[0] = %lf\n", sum1);
 
 
 
@@ -455,7 +333,7 @@ int main()
 	
 
 
-	///////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1334,7 +1212,7 @@ int main()
 					bunrui[1][j] = mse_dct[0][a][j];
 
 					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {
-						no_op[j] = 1;
+						no_op[j] = 1; // no_op 1 ならica
 						QQ++;
 
 						if (bunrui[2][j] == 0)
@@ -1368,7 +1246,7 @@ int main()
 				fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
 				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 
-				ent_out(origin, y, avg, w, ny, no_op, Q);
+				//ent_out(origin, y, avg, w, ny, no_op, Q);
 
 				// // ICA_Blockの使用基底を画像出力
 				//if(Q==40)
@@ -1499,33 +1377,54 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 				img_out(origin, no_op, (a + 1) * 10);
 			}
-			else if(yn == 'd')
+			else if (yn == 'd')
 			{
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
-				//img_out(origin, no_op, (a + 1) * 10);
-				//txt_out(bunrui, filename, Q);
-				//txt_out2(ica_basis, filename, Q);
-				//group(ica_basis2, filename, Q);
-				//dct(origin, dcoe, 8); // 係数を出力
-				//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-				//idct(dcoe, dcoe2, 8); // 普通の再構成
-				//b_entropy_dct(dcoe);
+			//img_out(origin, no_op, (a + 1) * 10);
+			//txt_out(bunrui, filename, Q);
+			//txt_out2(ica_basis, filename, Q);
+			//group(ica_basis2, filename, Q);
+			//dct(origin, dcoe, 8); // 係数を出力
+			//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+			//idct(dcoe, dcoe2, 8); // 普通の再構成
+			//b_entropy_dct(dcoe);
 
-				//mp(y, avg, w, mpans);
+			//mp(y, avg, w, mpans);
 
-				//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
-				for (i = 0; i < 1024; i++)
-					block_flag[i] = 0;
+			//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
+			for (i = 0; i < 1024; i++)
+				block_flag[i] = 0;
 
-				//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
-				//for (i = 0; i < 1024; i++)
-				//	block_flag[i] = 0;
-			//b_entropy_ica(ny);
+			//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
+			//for (i = 0; i < 1024; i++)
+			//	block_flag[i] = 0;
+		//b_entropy_ica(ny);
+		// 
+				// ヒストグラム作成時　使用フラグのない領域はカウントしない////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			for (i = 0; i < 64; i++)
+				test_basis[i] = 0;
+
+			for (i = 0; i < 64; i++)
+				for (j = 0; j < 1024; j++)
+					if (ny[i][j] != 0 && test_basis[i] == 0) {
+						test_basis[i] = 1;
+					}
+			k = 0;
+			for (i = 0; i < 64; i++)
+				if (test_basis[i] == 1)
+					k++;
+			printf("\n%d\n", k);
+			// / ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
 	}
+
+
+
+
 
 	fclose(fp);
 	fclose(fp2);

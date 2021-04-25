@@ -95,16 +95,18 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 		hist[i] = 0;
 		hist2[i] = 0;
 	}
+	int step = 100;
+	sum1 = 0;
 
 	/* hist2の作成 */
-	min2 = ica_dc[i];
+	min2 = ica_dc[0];
 	for (i = 0; i < 1024; i++)
 		if (ica_dc[i] < min2)
 			min2 = ica_dc[i]; // histの左端
 
 	for (i = 0; i < 1024; i++) {
 		//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
-		hist2[(int)(ica_dc[i] - min2) + 1]++;	//ステップ幅1
+		hist2[(int)((ica_dc[i] - min2))+1]++;	//ステップ幅1
 	}
 
 	/* エントロピーの計算 */
@@ -113,7 +115,7 @@ void ent_count(double y[256][256], double ica_dc[1024]) {
 			sum1 += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
 		}
 
-	printf("\n%lf\n", sum1 / 64);
+	printf("\nica_dc : %lf\n", sum1 / 64);
 
 	/* hist2の作成 */
 	static double min3 = 0;

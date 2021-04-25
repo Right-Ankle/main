@@ -101,6 +101,39 @@ void b_entropy_dct(double y[][256], double b_ent_dct[1024]){
 	//printf("\n%lf\n", sum / (256*256));
 	printf("\n%lf\n", (sum / (256 * 256)) + (sum1/64));
 
+	/// <summary>///////////////////////////////////////////////////////////////////////////////////
+	sum = 0;
+	for (n = 0; n < 64; n++) {
+		sum1 = 0;
+		/* histの初期化 */
+		for (i = 0; i < 50000; i++) {
+			hist[i] = 0;
+			hist2[i] = 0;
+		}
+
+		/* histの作成 */
+		min = 1000000;
+		for (i = 0; i < 1024; i++)
+			if (x[n][i] < min)
+				min = x[n][i]; // histの左端
+
+		for (i = 0; i < 1024; i++) {
+			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
+			hist[(int)(x[n][i] - min) + 1]++;	//ステップ幅1
+		}
+
+
+		/* エントロピーの計算 */
+		for (i = 0; i < 50000; i++)
+			if (hist[i] > 0) {
+				//b_ent_dct[n] += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+				sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+			}
+		sum += (sum1*1024);
+	}
+	sum = sum / (64 * 1024);
+	printf("\ndct_basis_all : %lf\n", sum);
+	/// <param name="b_ent_dct"></param>//////////////////////////////////////////////////////////////////////////////////
 
 	for (i = 0; i < 1024; i++)
 		fprintf(fp, "%lf,", b_ent_dct[i]);
