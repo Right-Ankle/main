@@ -50,7 +50,7 @@
     <ClCompile Include="inv.c" />
     <ClCompile Include="main.c">
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Speed</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MaxSpeed</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MinSpace</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</BasicRuntimeChecks>
     </ClCompile>
     <ClCompile Include="makew.c" />
@@ -190,10 +190,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <HeapReserveSize>536870912</HeapReserveSize>
-      <HeapCommitSize>536870912</HeapCommitSize>
-      <StackReserveSize>536870912</StackReserveSize>
-      <StackCommitSize>536870912</StackCommitSize>
+      <HeapReserveSize>1036870912</HeapReserveSize>
+      <HeapCommitSize>1036870912</HeapCommitSize>
+      <StackReserveSize>1036870912</StackReserveSize>
+      <StackCommitSize>1036870912</StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

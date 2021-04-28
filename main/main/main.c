@@ -49,6 +49,9 @@ int main()
 	double sum1_1 = 0;
 	double sum2_2 = 0;
 	int test_basis[64];
+	double dct_ent[10][64][1024];
+	double ica_ent[64][1024];
+	double out_ent[10];
 
 
 	////// double //////
@@ -225,6 +228,9 @@ int main()
 
 		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	b_entropy_ica(y, b_ica_ent);
+	double step = 100.0;
+	static double min3 = 0;
+	double sum1 = 0;
 	sum = 0;
 	for (i = 0; i < 1024; i++)
 		sum += b_ica_ent[i];
@@ -232,13 +238,56 @@ int main()
 	printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
 
 	Q = 100;
-	for (i = 0; i < 10; i++) {
+	for (a = 0; a < 10; a++) {
 		printf("\nnow Q = %d\n", Q);
 		dct(origin, dcoe, 8); // 係数を出力
 		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 		idct(dcoe, dcoe2, 8); // 普通の再構成
 
 		b_entropy_dct(dcoe, b_dct_ent);
+
+		for (i = 0; i < 256; i += 8) {
+			for (j = 0; j < 256; j += 8) {
+				m = 0;
+				for (k = 0; k < 8; k++) {
+					for (l = 0; l < 8; l++) {
+						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+
+						m++;
+					}
+				}
+				n++;
+			}
+		}
+
+		for (j = 0; j < 64; j++) {
+
+			for (i = 0; i < 50000; i++) {
+				hist[i] = 0;
+			}
+
+			sum1 = 0;
+			min3 = x[j][0];
+
+			for (i = 0; i < 1024; i++)
+				if (x[j][i] < min3)
+					min3 = x[j][i]; // histの左端
+
+
+			for (i = 0; i < 1024; i++) {
+				//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
+				hist[(int)((x[j][i] - min3)) + 1]++;	//ステップ幅1
+			}
+
+			for (i = 0; i < 50000; i++)
+				if (hist[i] > 0) {
+					sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+				}
+			for (i = 0; i < 1024; i++) {
+				dct_ent[(Q/10)-1][j][i] = sum1 / 1024;
+			}
+
+		}
 		Q -= 10;
 	}
 
@@ -258,33 +307,38 @@ int main()
 
 	/* histの初期化 */
 
-	for (i = 0; i < 50000; i++) {
-		hist[i] = 0;
-	}
+
 
 	/* hist2の作成 */
-	double step = 100.0;
-	static double min3 = 0;
-	double sum1 = 0;
-	min3 = y[0][0];
-	for (j = 0; j < 64; j++)
+
+	for (j = 0; j < 64; j++) {
+
+		for (i = 0; i < 50000; i++) {
+			hist[i] = 0;
+		}
+
+		sum1 = 0;
+		min3 = y[j][0];
+
 		for (i = 0; i < 1024; i++)
 			if (y[j][i] < min3)
 				min3 = y[j][i]; // histの左端
 
-	for (j = 0; j < 64; j++)
+
 		for (i = 0; i < 1024; i++) {
 			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
 			hist[(int)((y[j][i] - min3) * step) + 1]++;	//ステップ幅1
 		}
 
-	for (i = 0; i < 50000; i++)
-		if (hist[i] > 0) {
-			sum1 += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
+		for (i = 0; i < 50000; i++)
+			if (hist[i] > 0) {
+				sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+			}
+		for (i = 0; i < 1024; i++) {
+			ica_ent[j][i] = sum1 / 1024;
 		}
 
-	printf("\nica_all_ent = %lf\n", sum1); // ica基底ごとの情報量の総和
-
+	}
 
 	/// 0コメのブロックの係数を全てゼロ//////////////////////////////
 
@@ -1402,19 +1456,38 @@ int main()
 		//b_entropy_ica(ny);
 		// 
 				// ヒストグラム作成時　使用フラグのない領域はカウントしない////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			for (i = 0; i < 64; i++)
+			for (i = 0; i < 64; i++) // 使用基底種類数を調査
 				test_basis[i] = 0;
 
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++)
-					if (ny[i][j] != 0 && test_basis[i] == 0) {
-						test_basis[i] = 1;
+			sum = 0;
+
+			for (j = 0; j < 1024; j++) {
+				if (no_op[j] == 1) {
+					for (i = 0; i < 64; i++) {
+						if (ny[i][j] != 0) {
+							out_ent[(Q / 10) - 1] += ica_ent[i][j];
+						}
 					}
+				}
+				else {
+					for (i = 0; i < 64; i++) {
+						out_ent[(Q/10)-1] += dct_ent[(Q/10)-1][i][j];
+					}
+				}
+			}
+
 			k = 0;
 			for (i = 0; i < 64; i++)
 				if (test_basis[i] == 1)
 					k++;
-			printf("\n%d\n", k);
+			//printf("\n%d\n", k);
+
+			seki5(nw, ny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+			img_out2(dcoe2, ica_sai, no_op, Q);
+
 			// / ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		} // dctの最初に戻る

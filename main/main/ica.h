@@ -119,6 +119,7 @@ int group(double date1[65][1024], static char filename[20], int rate);
 void ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], double y_flag[64][1024], int block_flag[1024], int Q);
 void ent_count(double y[256][256], double ica_dc[1024]);
 void ent_count_basis(double w[64][64]);
+void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag[1024], int name);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 
