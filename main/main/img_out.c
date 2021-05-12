@@ -71,7 +71,7 @@ void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag
 		}
 	}
 
-	sprintf(output, "OUTPUT\\PM%d.bmp", name);
+	sprintf(output, "OUTPUT\\ProMet%d.bmp", name);
 	img_write_gray(temp_sai, output, 256, 256); // output‚Éo—Í‰æ‘œ‚ğ‘‚«o‚·
 
 	printf(" end\n\n");

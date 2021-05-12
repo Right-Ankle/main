@@ -49,9 +49,14 @@ int main()
 	double sum1_1 = 0;
 	double sum2_2 = 0;
 	int test_basis[64];
-	double dct_ent[10][64][1024];
+	double dct_ent[64][1024];
 	double ica_ent[64][1024];
 	double out_ent[10];
+	int ica_fre[64][1024];//基底試用頻度
+	int dct_fre[10][64][1024];//基底使用頻度
+	int dct_fre_temp[10][64];
+	int ica_fre_temp[64];
+	int zig[64];
 
 
 	////// double //////
@@ -224,9 +229,102 @@ int main()
 		for (j = 0; j < 64; j++)
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
+	for (i = 0; i < 64; i++) {
+		for (j = 0; j < 1024; j++) {
+			for (Q = 0; Q < 10; Q++)
+				dct_fre[Q][i][j] = 0;
+			ica_fre[i][j] = 0;
+		}
+		for (Q = 0; Q < 10; Q++)
+			dct_fre_temp[Q][i] = 0;
+	}
 
+	for (i = 0; i < 64; i++) {
+		for (j = 0; j < 1024; j++) {
+			if (y[i][j] != 0)
+				ica_fre[i][j]++;
+		}
+		ica_fre_temp[i] = 0;
+	}
+
+	for (i = 0; i < 64; i++) {
+		for (j = 0; j < 1024; j++) {
+			ica_fre_temp[i] += ica_fre[i][j];
+		}
+	}
+
+	gnuplot2_2(ica_fre_temp);
+
+	// ジグザグスキャンに変換////////////////////////////////////////////////////////////////////////////
+	//l = 0;//ジグザグスキャンの順番
+	//m = 0;//zig[]の進む順番
+	//for (i = 0; i < 64; i++)
+	//	zig[i] = 0;
+	//for (i = 1; i < 4; i++) {
+	//	for (k = 0; k < 1; k++) {
+	//		zig[l] = m;
+	//		l+=8;
+	//		m++;
+	//	}
+	//	for (j = 0; j < 2 * i - 1; j++) {
+	//		zig[l] = m;
+	//		l -= 7;
+	//		m++;
+	//	}
+	//	for (k = 0; k < 1; k++) {
+	//		zig[l] = m;
+	//		l += 1;
+	//		m++;
+	//	}
+	//	for (j = 0; j < 2 * i; j++) {
+	//		zig[l] = m;
+	//		l += 7;
+	//		m++;
+	//	}
+	//}
+	//for (k = 0; k < 1; k++) {
+	//	zig[l] = m;
+	//	l+=8;
+	//	m++;
+	//}
+	//for (j = 0; j < 7; j++) {
+	//	zig[l] = m;
+	//	l -= 7;
+	//	m++;
+	//}
+
+	//for (i = 3; i > 0; i--) {
+	//	for (k = 0; k < 1; k++) {
+	//		zig[l] = m;
+	//		l+=8;
+	//		m++;
+	//	}
+	//	for (j = 0; j < 2 * i; j++) {
+	//		zig[l] = m;
+	//		l += 7;
+	//		m++;
+	//	}
+	//	for (k = 0; k < 1; k++) {
+	//		zig[l] = m;
+	//		l += 1;
+	//		m++;
+	//	}
+	//	for (j = 0; j < 2 * i - 1; j++) {
+	//		zig[l] = m;
+	//		l -= 7;
+	//		m++;
+	//	}
+	//}
+	//zig[l] = m;
+	//l+=8;
+	//m++;
+	//zig[l] = m;
+	//ジグザグスキャン終了//////////////////////////////////////////////////////////////
 
 		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
+	for (i = 0; i < 64; i++)
+		printf("\n%d", ica_fre[i][0]);
+
 	b_entropy_ica(y, b_ica_ent);
 	double step = 100.0;
 	static double min3 = 0;
@@ -238,7 +336,45 @@ int main()
 	printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
 
 	Q = 100;
-	for (a = 0; a < 10; a++) {
+	for (Q = 100; Q > 0; Q -= 10) {
+		dct(origin, dcoe, 8); // 係数を出力
+		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+
+		for (i = 0; i < 256; i += 8) {
+			for (j = 0; j < 256; j += 8) {
+				m = 0;
+				for (k = 0; k < 8; k++) {
+					for (l = 0; l < 8; l++) {
+						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+
+						m++;
+					}
+				}
+				n++;
+			}
+		}
+
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 1024; j++) {
+				if (x[i][j] != 0)
+					dct_fre[(Q / 10 - 1)][i][j]++;
+			}
+	}
+
+	printf("\n------------------------dct_fre start--------");
+	for (Q = 0; Q < 10; Q++) {
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
+			}
+		}
+	}
+	//gnuplot2_2(dct_fre_temp);
+	for (i = 0; i < 64; i++)
+		printf("\n%d  %d  %d  %d", dct_fre_temp[9][i], dct_fre_temp[8][i], dct_fre_temp[7][i], dct_fre_temp[6][i]);
+
+	Q = 100;
+
 		printf("\nnow Q = %d\n", Q);
 		dct(origin, dcoe, 8); // 係数を出力
 		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
@@ -282,18 +418,21 @@ int main()
 			for (i = 0; i < 50000; i++)
 				if (hist[i] > 0) {
 					sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+
+
 				}
 			for (i = 0; i < 1024; i++) {
-				dct_ent[(Q/10)-1][j][i] = sum1 / 1024;
+				dct_ent[j][i] = sum1 / 1024;
 			}
 
 		}
-		Q -= 10;
-	}
+	
+
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
 
 
 	sum = 0;
@@ -1174,8 +1313,9 @@ int main()
 		block_flag[i] = 0;
 
 	if (yn == 'n') {
-		printf("Do you want to run the MSE or MP ? [ y/n ] : ");
-		scanf("%s", &yn);
+		//printf("Do you want to run the MSE or MP ? [ y/n ] : ");
+		//scanf("%s", &yn);
+		yn = 'y';
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
 		for (Q = 100; Q > 0; Q -= 10) {
@@ -1471,7 +1611,7 @@ int main()
 				}
 				else {
 					for (i = 0; i < 64; i++) {
-						out_ent[(Q/10)-1] += dct_ent[(Q/10)-1][i][j];
+						out_ent[(Q/10)-1] += dct_ent[i][j];
 					}
 				}
 			}

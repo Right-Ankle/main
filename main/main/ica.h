@@ -103,6 +103,7 @@ void b_mse(unsigned char origin[][256], unsigned char gen[][256], double mse[102
 double mse(unsigned char origin[][256], unsigned char gen[][256]);
 void gnuplot(double date[64][1024]);
 void gnuplot2(int date[64]);
+void gnuplot2_2(int date[10][64]);
 void my_copy(char* from[], char* to[]);
 int err(const char* s);
 void segmentation_ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], int mpans[][64], int block_flag[1024], int Q);
