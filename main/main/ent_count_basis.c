@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include<math.h>
 #include "ica.h"
-void ent_count_basis(double w[64][64]) {
+void ent_count_basis(double w[64][64], double result_w[64]) {
 	int i = 0, j = 0, l = 0, m = 0, n = 0, k = 0;
 	static double min = 0, min2 = 0, x[64][1024] = { 0 }, sum = 0, sum1 = 0;
 	static double b_ent_dct[64];
@@ -56,7 +56,9 @@ void ent_count_basis(double w[64][64]) {
 		printf("\n[%d] : %lf\n", i, b_ent_dct[i] / 64);
 		sum += b_ent_dct[i]/64;
 	}
-	printf("\n%lf\n", sum / (64));
+	for (i = 0; i < 64; i++) {
+		result_w[i] = sum / 64;
+	}
 
 
 
