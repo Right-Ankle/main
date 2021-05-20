@@ -12,7 +12,7 @@ int main()
 
 	///宣言//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	FILE* fp, * fp2, * fp3, * fp4, * fp5, * fp6, * fp7, * fp8; //ファイルポインタの定義
+	FILE* fp, * fp2, * fp3, * fp4, * fp5, * fp6, * fp7, * fp8, *fp9; //ファイルポインタの定義
 
 	/// メソッド化予定 ///
 	static int temp_basis[64 * 64]; // 基底出力用
@@ -213,6 +213,11 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
+	if ((fp9 = fopen("OUTPUT\\DCT_basis_test.csv", "w")) == NULL) {
+		fprintf(stderr, "Can not open file\n");
+	}
+
+
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// ///////////////////////// ica //////////////////////////////////
@@ -395,12 +400,21 @@ int main()
 			}
 		}
 
+		fprintf(fp9, "\n\n");
+		for (i = 0; i < 64; i++) {
+			if (i % 8 == 0)
+				fprintf(fp9, "\n");
+			fprintf(fp9, "%lf,", x[i][1]);
+		}
+
 		for (i = 0; i < 64; i++)
 			for (j = 0; j < 1024; j++) {
 				if (x[i][j] != 0)
 					dct_fre[(Q / 10 - 1)][i][j]++;
 			}
 	}
+
+	fclose(fp9);
 
 	printf("\n------------------------dct_fre start--------");
 	for (Q = 0; Q < 10; Q++) {
@@ -1358,7 +1372,7 @@ int main()
 		//scanf("%s", &yn);
 		yn = 'y';
 		ent_count_basis(w, ica_basis_ent);
-		fprintf(fp7, "\nICA_Basis,%lf",ica_basis_ent[0]);
+		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp7, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result");
 		fprintf(fp8, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp8, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result");
@@ -1657,7 +1671,7 @@ int main()
 				}
 				else {
 					for (i = 0; i < 64; i++) {
-						out_ent[(Q/10)-1] += dct_ent[i][j];
+						out_ent[(Q / 10) - 1] += dct_ent[i][j];
 					}
 				}
 			}
@@ -1676,7 +1690,7 @@ int main()
 
 			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++) {
-						ica_fre[i][j]=0;
+					ica_fre[i][j] = 0;
 				}
 			}
 			for (i = 0; i < 64; i++) {
@@ -1721,10 +1735,10 @@ int main()
 				}
 			}
 			for (j = 0; j < 1024; j++) {
-					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
-							sum += dct_ent[i][j];
-					}
+				for (i = 0; i < 64; i++) {
+					if (dcoe_temp[i][j] != 0)
+						sum += dct_ent[i][j];
+				}
 			}
 			fprintf(fp7, "%lf,", sum);
 
@@ -1819,7 +1833,7 @@ int main()
 			//dctの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
 			max = 0;
 			for (i = 0; i < 64; i++)
-				if (dct_fre_temp[((Q/10)-1)][i] > max)
+				if (dct_fre_temp[((Q / 10) - 1)][i] > max)
 					max = dct_fre_temp[((Q / 10) - 1)][i];
 
 			for (i = 0; i < 64; i++)
@@ -1930,6 +1944,10 @@ int main()
 			excel_temp++;
 			// / ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+			//gnuplot2_2(dct_fre_temp);
+
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
 		printf("\n\n");
@@ -1947,6 +1965,7 @@ int main()
 	fclose(fp6);
 	fclose(fp7);
 	fclose(fp8);
+
 	//gnuplot(dcoe_temp);
 	for (i = 0; i < 64; i++) {
 		free(sort_d[i]);
