@@ -2205,9 +2205,38 @@ int main()
 			img_out2(dcoe2, ica_sai, no_op, Q+3);
 
 
-			img_out(origin, no_op, Q);
+			//img_out(origin, no_op, Q);
 
 			// ////////情報量の計算////////////
+			
+
+			//////////////////////////////////////////////////////////////////////////////
+
+			//gnuplot2_2(dct_fre_temp);
+			for (j = 0; j < 1024; j++)
+				no_op[j] = 0;
+
+			for (j = 0; j < 1024; j++) {
+				sum = 0;
+				for (i = 0; i < 64; i++) {
+					sum += mse_ica0[i][j];
+				}
+				if (mse_dct[0][(Q / 10) - 1][j] > sum/64)
+					no_op[j] = 1;
+			}
+
+			for (i = 0; i < 64; i++)
+				for (j = 0; j < 1024; j++)
+					nnny[i][j] = 0;
+
+			seki5(nw, nnny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+			img_out(origin, no_op, Q);
+			img_out2(dcoe2, ica_sai, no_op, Q+4);
+
+			//基底0の情報量
 			fprintf(fp10, "\n");
 			fprintf(fp10, "%d,", Q);
 			sum = 0;
@@ -2279,11 +2308,9 @@ int main()
 			fprintf(fp10, ",=(C%d+D%d+F%d)", excel_temp, excel_temp, excel_temp);
 			fprintf(fp10, ",=(C%d+D%d+F%d+$B$2*G%d)", excel_temp, excel_temp, excel_temp, excel_temp);
 			fprintf(fp10, ",,=(B%d-K%d)", excel_temp, excel_temp);
+			fprintf(fp10, ",,=(M%d/$B$2)", excel_temp);
 			excel_temp++;
 
-			//////////////////////////////////////////////////////////////////////////////
-
-			//gnuplot2_2(dct_fre_temp);
 
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
