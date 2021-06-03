@@ -1653,7 +1653,7 @@ int main()
 			{
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
-			img_out(origin, no_op, Q);
+			//img_out(origin, no_op, Q);
 			//txt_out(bunrui, filename, Q);
 			//txt_out2(ica_basis, filename, Q);
 			//group(ica_basis2, filename, Q);
@@ -1976,13 +1976,14 @@ int main()
 
 			img_out2(dcoe2, ica_sai, no_op, Q + 1);
 
-			for (i = 0; i < 64; i++) {
+			for (i = 0; i < 64; i++) {//初期化
 				ica_group_temp[i] = 0;
 				for (j = 0; j < 64; j++)
 					ica_group[i][j] = 0;
 			}
-			QQQ = 0;
+
 			for (i = 0; i < 64; i++) {
+				QQQ = 0;
 				for (j = 0; j < 1024; j++)
 					if (no_op[j] == 1)
 						if (ica_basis2[64][j] == i)
@@ -1990,6 +1991,13 @@ int main()
 				ica_group_num[i] = QQQ;//基底数分類ごとの領域数
 				ica_group_result[i] = 99;
 			}
+//			//調査中//////
+//			for (i = 0; i < 64; i++)
+//				zig[i] = 0;
+//			for (i = 0; i < 64; i++)
+//				zig[i] = (int)ica_group_num[i];
+//			gnuplot2(zig, Q);
+///// //////////
 
 			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++) {
@@ -2000,13 +2008,17 @@ int main()
 				}
 			}
 
+
 			for (a = 0; a < 64; a++) {//基底数分類番号
 				for (i = 0; i < 64; i++) {//対象基底
 					sum = 0;
 					QQQ = 0; //対象基底の領域数
+					for (b = 0; b < 64; b++)
+						ica_group_temp[i] = 0;
+
 					for (j = 0; j < 1024; j++) {
 						if(no_op[j]==1)
-							if (ica_basis2[64][j] == a && ica_basis2[i][j] != 0) {
+							if (ica_basis2[64][j] == a && nny[i][j] != 0) {
 
 								for (b = 0; b < 64; b++)
 									for (c = 0; c < 1024; c++)
@@ -2015,8 +2027,12 @@ int main()
 								//対象基底を０
 								nnny[i][j] = 0;
 
+								// 初期化（必ず行う）
+								for (b = 0; b < 64; b++)
+									xx[b] = 0.0;
+
 								//再構成
-								seki5_Block(nw, nny, xx, j); // xx64 -> nw * ny
+								seki5_Block(nw, nnny, xx, j); // xx64 -> nw * ny
 								xtogen_Block(xx, block_ica_temp, avg, j); // ica_sai -> 再構成済①
 								avg_inter_Block(block_ica_temp, avg, j); // ica_sai -> 再構成済②
 
@@ -2024,7 +2040,11 @@ int main()
 									for (c = 0; c < 1024; c++)
 										nnny[b][c] = nny[b][c];
 
-								seki5_Block(nw, nny, xx, j); // xx64 -> nw * ny
+								// 初期化（必ず行う）
+								for (b = 0; b < 64; b++)
+									xx[b] = 0.0;
+
+								seki5_Block(nw, nnny, xx, j); // xx64 -> nw * ny
 								xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
 								avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
@@ -2042,19 +2062,34 @@ int main()
 								QQQ++;
 							}
 					}
+
 					if (QQQ != 0)
 						ica_group_temp[i] = sum / QQQ;//画質低下
 				}
+
 				sum = 0;
 				sum2 = 0;
 				for (i = 0; i < 64; i++)
 					if (ica_group_temp[i] > sum) {
 						sum = ica_group_temp[i];
-						sum2 = i;
+						sum2 = (double)i;
 					}
+				if (sum == 0) {
+					ica_group_result[a] = -1;//基底数分類で一番重要な基底番号
+				}
+				else {
+					ica_group_result[a] = sum2;//基底数分類で一番重要な基底番号
+				}
 
-				ica_group_result[a] = sum2;//基底数分類で一番重要な基底番号
 			}
+
+			//調査中//////
+			for (i = 0; i < 64; i++)
+				zig[i] = 0;
+			for (i = 0; i < 64; i++)
+				zig[i] = (int)ica_group_result[i];
+			gnuplot2(zig, Q);
+			/// //////////
 
 			for (i = 0; i < 64; i++)
 				basis_limits[i] = 99;
@@ -2062,30 +2097,76 @@ int main()
 			QQQ = (excel_basis[1] - excel_basis[2] - excel_basis[5]) / ((excel_basis[3] / excel_basis[4]) + excel_basis[0]);//基底制限数
 			printf("\n basis_limits = %d", QQQ);
 
+			//for (i = 0; i < QQQ; i++) {
+			//	while (basis_limits[i] == 99 && sum2!=99) {
+			//		sum = 0;
+			//		sum2 = 99;
+
+			//		for (a = 0; a < 64; a++)
+			//			if (ica_group_num[a] > sum) {
+			//				sum = ica_group_num[a];//分類領域数が大きいやつ
+			//				sum2 = (double)a;//分類番号
+			//			}
+
+
+
+			//		if (sum2 != 99) {//分類番号が99じゃない
+			//			sum = 0;
+			//			for (a = 0; a <= i; a++)//同じ基底が格納されていないか探索
+			//				if (basis_limits[a] == ica_group_result[(int)sum2])
+			//					sum = 1;
+
+			//			if (sum == 0)
+			//				basis_limits[i] = ica_group_result[(int)sum2];//制限下での使用基底を格納
+
+			//			ica_group_num[(int)sum2] = 0;
+			//			//printf("\n%lf", ica_group_result[(int)sum2]);
+			//		}
+			//	}
+			//}
+			
 			for (i = 0; i < QQQ; i++) {
-				while (basis_limits[i] == 99 && sum2!=99) {
-					sum = 0;
-					sum2 = 99;
-
-					for (a = 0; a < 64; a++)
-						if (ica_group_num[a] > sum) {
-							sum = ica_group_num[a];//分類領域数が大きいやつ
-							sum2 = a;
-						}
-					if (sum2 != 99) {
+				b = 0;
+				for (k = 0; k < 64; k++) {
+					if (b == 0) {
 						sum = 0;
-						for (a = 0; a <= i; a++)
-							if (basis_limits[a] == ica_group_result[(int)sum2])
-								sum = 1;
+						sum2 = 99;
 
-						if (sum == 0)
-							basis_limits[i] = ica_group_result[(int)sum2];//制限下での使用基底を格納
+						for (a = 1; a < 64; a++)//基底0個の分類を避けるためa=1から始める
+							if (ica_group_num[a] > sum) {
+								sum = ica_group_num[a];//分類領域数が大きいやつ
+								sum2 = (double)a;//分類番号
+							}
 
-						ica_group_num[(int)sum2] = 0;
-						//printf("\n%lf", ica_group_result[(int)sum2]);
+						if (sum2 != 99) {//分類番号が99じゃない
+							sum = 0;
+							for (a = 0; a <= i; a++)//同じ基底が格納されていないか探索
+								if (basis_limits[a] == ica_group_result[(int)sum2])
+									sum = 1;
+
+							if (sum == 0) {
+								basis_limits[i] = ica_group_result[(int)sum2];//制限下での使用基底を格納
+								b = 1;
+							}
+							ica_group_num[(int)sum2] = 0;
+							//printf("\n%lf", ica_group_result[(int)sum2]);
+						}
 					}
 				}
 			}
+
+
+
+
+			////調査中//////
+			//for (i = 0; i < 64; i++)
+			//	zig[i] = 0;
+			//for (i = 0; i < 64; i++)
+			//	zig[i] = (int)basis_limits[i];
+			//gnuplot2(zig, Q);
+			///// //////////
+
+
 
 			for (i = 0; i < 64; i++)
 				for (j = 0; j < 1024; j++)
@@ -2124,7 +2205,7 @@ int main()
 			img_out2(dcoe2, ica_sai, no_op, Q+3);
 
 
-
+			img_out(origin, no_op, Q);
 
 			// ////////情報量の計算////////////
 			fprintf(fp10, "\n");
