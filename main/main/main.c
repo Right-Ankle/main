@@ -41,6 +41,7 @@ int main()
 	static int ori_temp[256 * 256] = { 0 }; // 原画像変換用
 	static int img_name = 0; // 出力画像名
 	static int no_op[1024] = { 0 }; // 小領域flag
+	static int op_test[1024] = { 0 };//flagのtest (基底1専用)各基底の最適領域
 	static int Q;//圧縮レート
 	static int QQ, QQQ, QQQQ, temp_sai2[64][1024] = { 0 }, semi[2][64] = { 0 };
 	double min2 = 100000;
@@ -86,6 +87,7 @@ int main()
 	static double coe[256][256] = { 0 }, basis2[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test2[64][1024], test3[64][1024], ica_test5[64][64][64], ica_test1[64][64], average2[1024], ica_basis[65][1024], ica_basis2[65][1024];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
 	static double basis1_ent[64][2]; //最適基底数１の各基底の情報　0->情報量の改善量の累積，1->領域数
+	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -222,7 +224,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp9 = fopen("OUTPUT\\DCT_basis_test.csv", "w")) == NULL) {
+	if ((fp9 = fopen("OUTPUT\\true_profit.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -243,6 +245,8 @@ int main()
 	pcaStr = new_pca(origin);
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
+
+	printf("%lf", w[0][0]);
 	/* histの初期化 */
 	for (i = 0; i < 100000; i++) {
 		hist[i] = 0;
@@ -414,12 +418,12 @@ int main()
 			}
 		}
 
-		fprintf(fp9, "\n\n");
-		for (i = 0; i < 64; i++) {
-			if (i % 8 == 0)
-				fprintf(fp9, "\n");
-			fprintf(fp9, "%lf,", x[i][1]);
-		}
+		//fprintf(fp9, "\n\n");
+		//for (i = 0; i < 64; i++) {
+		//	if (i % 8 == 0)
+		//		fprintf(fp9, "\n");
+		//	fprintf(fp9, "%lf,", x[i][1]);
+		//}
 
 		for (i = 0; i < 64; i++)
 			for (j = 0; j < 1024; j++) {
@@ -428,7 +432,7 @@ int main()
 			}
 	}
 
-	fclose(fp9);
+
 
 	printf("\n------------------------dct_fre start--------");
 	for (Q = 0; Q < 10; Q++) {
@@ -2218,17 +2222,19 @@ int main()
 				no_op[j] = 0;
 
 			for (j = 0; j < 1024; j++) {
-				sum = 0;
-				for (i = 0; i < 64; i++) {
-					sum += mse_ica0[i][j];
-				}
-				if (mse_dct[0][(Q / 10) - 1][j] > sum/64)
+				if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
 					no_op[j] = 1;
+				}
+
 			}
 
 			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++)
-					nnny[i][j] = 0;
+				for (j = 0; j < 1024; j++) {
+					if (no_op[j] == 1)
+						nnny[i][j] = nny[i][j];
+					else
+						nnny[i][j] = 0;
+				}
 
 			seki5(nw, nnny, x); // x -> nw * ny
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -2248,6 +2254,7 @@ int main()
 						sum += dct_ent2[i][j];
 				}
 			}
+
 			fprintf(fp10, "%lf,", sum);
 
 			sum = 0;
@@ -2260,6 +2267,8 @@ int main()
 				}
 			}
 			fprintf(fp10, "%lf,", sum);
+
+
 
 			sum = 0;
 			a = 0;
@@ -2308,10 +2317,71 @@ int main()
 
 			fprintf(fp10, ",=(C%d+D%d+F%d)", excel_temp, excel_temp, excel_temp);
 			fprintf(fp10, ",=(C%d+D%d+F%d+$B$2*G%d)", excel_temp, excel_temp, excel_temp, excel_temp);
-			fprintf(fp10, ",,=(B%d-K%d)", excel_temp, excel_temp);
+			fprintf(fp10, ",,=(B%d-J%d)", excel_temp, excel_temp);
 			fprintf(fp10, ",,=(M%d/$B$2)", excel_temp);
 			excel_temp++;
 
+			
+
+			for (a = 0; a < 64; a++)
+				true_profit[a] = 0;
+
+			for (i = 0; i < 64; i++)
+				zig[i] = 0;
+
+
+
+
+			for (a = 0; a < 64; a++) {//該当基底
+				for (j = 0; j < 1024; j++)
+					op_test[j] = 0;
+
+				for (j = 0; j < 1024; j++)
+					if (no_op[j] == 1 && nnny[a][j] != 0) {
+						op_test[j] = 1;
+						zig[a]++;
+					}
+
+				for (j = 0; j < 1024; j++) {
+					for (i = 0; i < 64; i++) {
+						if (dcoe_temp[i][j] != 0)
+							true_profit[a] += dct_ent2[i][j];//dct_only情報量
+					}
+				}
+
+
+				for (j = 0; j < 1024; j++) {
+					if (op_test[j] != 1)
+						for (i = 0; i < 64; i++) {
+							if (dcoe_temp[i][j] != 0)
+								true_profit[a] -= dct_ent2[i][j];//該当最適基底の領域以外のdct情報量
+						}
+				}
+
+				for (j = 0; j < 1024; j++) {
+					if (op_test[j] == 1){
+						for (i = 0; i < 64; i++) {
+							if (nnny[i][j] != 0)
+								true_profit[a] -= ica_ent2[i][j];//該当最適基底の領域のica係数情報量
+						}
+						true_profit[a] -= ica_dc[j];
+					}
+				}
+
+			}
+
+
+
+
+			fprintf(fp9, "\n\n%d", Q);
+			for (i = 0; i < 64; i++)
+				fprintf(fp9, "\n,%d,%lf,%d,%lf", i, true_profit[i], zig[i], true_profit[i]/(double)zig[i]);
+
+			sum = 0;
+			for (i = 0; i < 64; i++)
+				sum += true_profit[i];
+
+			fprintf(fp9, "\n,%lf", sum);
 
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
@@ -2330,6 +2400,7 @@ int main()
 	fclose(fp6);
 	fclose(fp7);
 	fclose(fp8);
+	fclose(fp9);
 	fclose(fp10);
 	//gnuplot(dcoe_temp);
 	for (i = 0; i < 64; i++) {
