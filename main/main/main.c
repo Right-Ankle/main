@@ -85,6 +85,7 @@ int main()
 	static double result_ica[2][1024], result_ica0[2][1024], result_mse[64][1024], y3[3][1024], full_mse[2][65][1024], mp_mse[2][65][1024];
 	static double coe[256][256] = { 0 }, basis2[64][1024] = { 0 }, dcoe[256][256] = { 0 }, test2[64][1024], test3[64][1024], ica_test5[64][64][64], ica_test1[64][64], average2[1024], ica_basis[65][1024], ica_basis2[65][1024];
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
+	static double basis1_ent[64][2]; //最適基底数１の各基底の情報　0->情報量の改善量の累積，1->領域数
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
