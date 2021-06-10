@@ -73,7 +73,8 @@ int main()
 	double ica_imp_basisnum = 0;
 	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"
 	double basis_limits[64];
-
+	double ica_psnr[1024];
+	double dct_psnr[1024];
 	////// double //////
 	static double temp_array[64][1024] = { 0 };//計算用配列
 	static double sum = 0, min = 0, max = 0;//計算用
@@ -88,6 +89,11 @@ int main()
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
 	static double basis1_ent[64][2]; //最適基底数１の各基底の情報　0->情報量の改善量の累積，1->領域数
 	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
+	static double psnr_profit[1024];
+	static double ent_profit[1024];
+	static double basis_profit[1024];
+	static double psnr_sum[64];
+	static double ent_sum[64];
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -2225,7 +2231,6 @@ int main()
 				if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
 					no_op[j] = 1;
 				}
-
 			}
 
 			for (i = 0; i < 64; i++)
@@ -2240,8 +2245,79 @@ int main()
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
+			block_psnr(origin, ica_sai, ica_psnr);
+			block_psnr(origin, dcoe2, dct_psnr);
+
+
+
+			for (a = 0; a < 64; a++)
+				true_profit[a] = 0;
+
+			for (i = 0; i < 64; i++) {
+				zig[i] = 0;
+				psnr_sum[i] = 0;
+				ent_sum[i] = 0;
+			}
+
+			for (i = 0; i < 1024; i++) {
+				psnr_profit[i] = 0;
+				ent_profit[i] = 0;
+				basis_profit[i] = 0;
+			}
+
+			sum = 0;
+			sum2 = 0;
+
+			for (j = 0; j < 1024; j++) {
+				if (no_op[j] == 1) {
+					psnr_profit[j] = ica_psnr[j] - dct_psnr[j];
+				}
+			}
+
+			for (j = 0; j < 1024; j++) {
+				if (no_op[j] == 1) {
+					for (i = 0; i < 64; i++) {
+						if (dcoe_temp[i][j] != 0)
+							ent_profit[j] += dct_ent2[i][j];
+					}
+
+					for (i = 0; i < 64; i++) {
+						if (nnny[i][j] != 0) {
+							ent_profit[j] -= ica_ent2[i][j];
+							basis_profit[j] = i;
+						}
+					}
+					ent_profit[j] -= ica_dc[j];
+				}
+			}
+
+
+			//fprintf(fp9, "\n\n\n\n%d,area,psnr,basis,ent,*,*,*,*,*,*,*", Q);
+			for (j = 0; j < 64; j++) {
+				for (i = 0; i < 1024; i++) {
+					if (no_op[i] == 1)
+						if (j == (int)basis_profit[i]) {
+							//fprintf(fp9, "\n,%d,%lf,%d,%lf", i, psnr_profit[i], (int)basis_profit[i], ent_profit[i]);
+							psnr_sum[j] += psnr_profit[i];
+							ent_sum[j] += ent_profit[i];
+							zig[j]++;
+						}
+				}
+			}
+
+			sum = 0;
+			fprintf(fp9, "\n\n\n\n%d,basis,psnr_ave,ent_ave,area_num",Q);
+			for (i = 0; i < 64; i++) {
+				if (zig[i] != 0)
+					fprintf(fp9, "\n,%d,%lf,%lf,%d", i, psnr_sum[i] / zig[i], ent_sum[i] / zig[i], (int)zig[i]);
+			}
+
+			seki5(nw, nnny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
 			img_out(origin, no_op, Q);
-			img_out2(dcoe2, ica_sai, no_op, Q+4);
+			img_out2(dcoe2, ica_sai, no_op, Q + 4);
 
 			//基底0の情報量
 			fprintf(fp10, "\n");
@@ -2321,67 +2397,7 @@ int main()
 			fprintf(fp10, ",,=(M%d/$B$2)", excel_temp);
 			excel_temp++;
 
-			
 
-			for (a = 0; a < 64; a++)
-				true_profit[a] = 0;
-
-			for (i = 0; i < 64; i++)
-				zig[i] = 0;
-
-
-
-
-			for (a = 0; a < 64; a++) {//該当基底
-				for (j = 0; j < 1024; j++)
-					op_test[j] = 0;
-
-				for (j = 0; j < 1024; j++)
-					if (no_op[j] == 1 && nnny[a][j] != 0) {
-						op_test[j] = 1;
-						zig[a]++;
-					}
-
-				for (j = 0; j < 1024; j++) {
-					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
-							true_profit[a] += dct_ent2[i][j];//dct_only情報量
-					}
-				}
-
-
-				for (j = 0; j < 1024; j++) {
-					if (op_test[j] != 1)
-						for (i = 0; i < 64; i++) {
-							if (dcoe_temp[i][j] != 0)
-								true_profit[a] -= dct_ent2[i][j];//該当最適基底の領域以外のdct情報量
-						}
-				}
-
-				for (j = 0; j < 1024; j++) {
-					if (op_test[j] == 1){
-						for (i = 0; i < 64; i++) {
-							if (nnny[i][j] != 0)
-								true_profit[a] -= ica_ent2[i][j];//該当最適基底の領域のica係数情報量
-						}
-						true_profit[a] -= ica_dc[j];
-					}
-				}
-
-			}
-
-
-
-
-			fprintf(fp9, "\n\n%d", Q);
-			for (i = 0; i < 64; i++)
-				fprintf(fp9, "\n,%d,%lf,%d,%lf", i, true_profit[i], zig[i], true_profit[i]/(double)zig[i]);
-
-			sum = 0;
-			for (i = 0; i < 64; i++)
-				sum += true_profit[i];
-
-			fprintf(fp9, "\n,%lf", sum);
 
 		} // dctの最初に戻る
 		printf("\r [ Execution finished ]          ");
