@@ -75,6 +75,7 @@ int main()
 	double basis_limits[64];
 	double ica_psnr[1024];
 	double dct_psnr[1024];
+	double using_ent[2][64]; //0->基底領域の情報量, 1->領域の情報量
 	////// double //////
 	static double temp_array[64][1024] = { 0 };//計算用配列
 	static double sum = 0, min = 0, max = 0;//計算用
@@ -1494,7 +1495,7 @@ int main()
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
 
-					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {
+					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {// 
 						no_op[j] = 1; // no_op 1 ならica
 						QQ++;
 
@@ -1678,6 +1679,12 @@ int main()
 			//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
 			for (i = 0; i < 1024; i++)
 				block_flag[i] = 0;
+
+			for (j = 0; j < 1024; j++)
+				op_test[j] = 0;
+
+			for (j = 0; j < 1024; j++)
+				op_test[j] = no_op[j];
 
 			//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
 			//for (i = 0; i < 1024; i++)
@@ -2099,7 +2106,7 @@ int main()
 				zig[i] = 0;
 			for (i = 0; i < 64; i++)
 				zig[i] = (int)ica_group_result[i];
-			gnuplot2(zig, Q);
+			//gnuplot2(zig, Q);
 			/// //////////
 
 			for (i = 0; i < 64; i++)
@@ -2219,19 +2226,34 @@ int main()
 			//img_out(origin, no_op, Q);
 
 			// ////////情報量の計算////////////
-			
+
+			seki5(nw, nnny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+			block_psnr(origin, ica_sai, ica_psnr);
+			block_psnr(origin, dcoe2, dct_psnr);
 
 			//////////////////////////////////////////////////////////////////////////////
 
 			//gnuplot2_2(dct_fre_temp);
+
+
 			for (j = 0; j < 1024; j++)
 				no_op[j] = 0;
 
-			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
+			for (j = 0; j < 1024; j++) { //基底数が1の領域のみ有効
+				if (ica_basis2[64][j] == 1) {
 					no_op[j] = 1;
 				}
 			}
+
+			//for (j = 0; j < 1024; j++) { //情報量の良さのみでの領域分割
+			//	if (op_test[j] == 1)
+			//		if (ica_basis2[64][j] == 1) {//mseだから低い方が画質高い
+			//			no_op[j] = 1;
+			//		}
+			//}
 
 			for (i = 0; i < 64; i++)
 				for (j = 0; j < 1024; j++) {
@@ -2241,12 +2263,7 @@ int main()
 						nnny[i][j] = 0;
 				}
 
-			seki5(nw, nnny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-			block_psnr(origin, ica_sai, ica_psnr);
-			block_psnr(origin, dcoe2, dct_psnr);
 
 
 
@@ -2396,6 +2413,7 @@ int main()
 			fprintf(fp10, ",,=(B%d-J%d)", excel_temp, excel_temp);
 			fprintf(fp10, ",,=(M%d/$B$2)", excel_temp);
 			excel_temp++;
+
 
 
 
