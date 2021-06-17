@@ -2245,11 +2245,12 @@ int main()
 			//////////////////////////////////////////////////////////////////////////////
 
 			//gnuplot2_2(dct_fre_temp);
+			
 			for (j = 0; j < 1024; j++)
 				no_op[j] = 0;
 
 			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 0 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
+				if (ica_basis2[64][j] == 0) {//mseだから低い方が画質高い
 					no_op[j] = 1;
 				}
 			}
@@ -2264,7 +2265,7 @@ int main()
 				}
 			}
 
-
+			
 
 			for (j = 0; j < 1024; j++)
 				no_op[j] = 0;
@@ -2277,7 +2278,7 @@ int main()
 			//}
 
 			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
+				if (ica_basis2[64][j] == 1) {//mseだから低い方が画質高い
 					no_op[j] = 1;
 				}
 			}
@@ -2357,9 +2358,10 @@ int main()
 			sum = 0;
 			fprintf(fp9, "\n\n\n\n%d,basis,psnr_ave,ent_ave,area_num",Q);
 			for (i = 0; i < 64; i++) {
-				if (zig[i] != 0)
-					fprintf(fp9, "\n,%d,%lf,%lf,%d", i, psnr_sum[i] , ent_sum[i] , (int)zig[i]);
+				if (zig[i] != 0) {
+					fprintf(fp9, "\n,%d,%lf,%lf,%d", i, psnr_sum[i], ent_sum[i], (int)zig[i]);
 					c++;
+				}
 			}
 
 			// 画質の良さを基に基底を並び替え
