@@ -135,9 +135,6 @@
     <ClCompile Include="gnuplot4.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="gnuplot5.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="txt_out.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ent_count_basis.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="gnuplot5.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

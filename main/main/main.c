@@ -169,7 +169,7 @@ int main()
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
 
-	printf("\n (1, barbara  2, cameraman  3, mandrill  4, earth  5, Airplane)\n filename plz .... : ");
+	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
 	if (i == 2)
 		strcpy(filename, filename2);
@@ -179,6 +179,14 @@ int main()
 		strcpy(filename, filename14);
 	else if (i == 5)
 		strcpy(filename, filename3);
+	else if (i == 6)
+		strcpy(filename, filename6);
+	else if (i == 7)
+		strcpy(filename, filename9);
+	else if (i == 8)
+		strcpy(filename, filename13);
+	else if (i == 9)
+		strcpy(filename, filename10);
 
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
@@ -2364,6 +2372,8 @@ int main()
 				}
 			}
 
+			//img_out2(dcoe2, ica_sai, no_op, Q + 8);
+
 			// 画質の良さを基に基底を並び替え
 			for (i = 0; i < 64; i++) {
 
@@ -2415,18 +2425,33 @@ int main()
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
 			}
+			//for (a = 0; a < 64; a++) {
+			//	for (j = 0; j < 1024; j++) {
+			//		if (ica_basis2[64][j] == 0 || (ica_basis2[64][j] == 1 && basis_profit[j] == sort_basis_temp[a])) {//mseだから低い方が画質高い
+			//			no_op[j] = 1;
+			//		}
+			//	}
+			//}
+			// 
 			for (a = 0; a < 64; a++) {
 				for (j = 0; j < 1024; j++) {
-					if (ica_basis2[64][j] == 0 || (ica_basis2[64][j] == 1 && basis_profit[j] == sort_basis_temp[a])) {//mseだから低い方が画質高い
+					if (ica_basis2[64][j] == 0) {//mseだから低い方が画質高い
 						no_op[j] = 1;
 					}
 				}
 			}
 
+
 			img_out(origin, no_op, Q);
 
 
-
+			for (i = 0; i < 64; i++)
+				for (j = 0; j < 1024; j++) {
+					if (no_op[j] == 1)
+						nnny[i][j] = nny[i][j];
+					else
+						nnny[i][j] = 0;
+				}
 
 			//for (j = 0; j < 1024; j++) {
 			//	no_op[j] = 0;
@@ -2436,6 +2461,8 @@ int main()
 			//		no_op[j] = 1;
 			//	}
 			//}
+
+
 
 			seki5(nw, nnny, x); // x -> nw * ny
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
