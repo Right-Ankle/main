@@ -1261,27 +1261,22 @@ int main()
 		fprintf(fp6, "\n\n  DCT vs ICA  \n\n    Area with a small number of basis\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
 
 		for (j = 0; j < 1024; j++) {
-
-			for (b = 0; b < 1024; b++)
-				for (a = 0; a < 64; a++)
-					ny[a][b] = y[a][b];
-
-			for (c = 0; c < 64; c++) {
+			for (c = 0; c < 64; c++) { //MSE優先度の格納カウント
 
 				threshold = 10000;
 				QQ = 0;
-				//printf("a");
 
-				for (n = 0; n < 64; n++) {
+				for (n = 0; n < 64; n++) { //調査対象基底
+
 					for (a = 0; a < 64; a++)
-						ny[a][j] = y[a][j];
+						ny[a][j] = y[a][j]; //係数の初期化
 
 					if (c != 0)
 						for (a = 0; a < c; a++)
-							ny[(int)full_mse[0][a][j]][j] = 0;
+							ny[(int)full_mse[0][a][j]][j] = 0; //選出済みの基底の係数を0
 
 					if (ny[n][j] != 0) {
-						ny[n][j] = 0; // iつ目の基底選択
+						ny[n][j] = 0; // 調査対象の基底の係数値を0
 
 						// 初期化（必ず行う）
 						for (a = 0; a < 64; a++)
@@ -1291,22 +1286,13 @@ int main()
 						xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
 						avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-						//for (b = 0; b < 8; b++)
-						//	for (a = 0; a < 8; a++)
-						//		for (l = 0; l < 8; l++)
-						//			for (m = 0; m < 8; m++)
-						//				seg[64 * 8 * b + 8 * a + l * 64 + m] = block_ica[b * 8 + a];
-
-						//sprintf(output, "OUTPUT/ICA/%d/[%d].bmp", j, c);
-						//img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-
 						sum = 0.0;
 						mk = j % 32;
 						ml = j / 32;
 
 						for (a = 0; a < 8; a++) {
 							for (b = 0; b < 8; b++) {
-								sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2);
+								sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
 							}
 						}
 
@@ -1314,37 +1300,11 @@ int main()
 							threshold = sum / 64.0;
 							QQ = n;
 						}
-
 					}
 				}
-				full_mse[1][c+1][j] = threshold;
-				full_mse[0][c][j] = (double)QQ;//0~63 いらない順で基底を格納
+				full_mse[1][c+1][j] = threshold; //格納基底のMSE
+				full_mse[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
 			}
-			//	for (a = 0; a < c; a++)
-			//		ny[(int)full_mse[0][a][j]][j] = 0;
-
-			//	// 初期化（必ず行う）
-			//	for (a = 0; a < 64; a++)
-			//		xx[a] = 0.0;
-
-			//	seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-			//	xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-			//	avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-			//	for (b = 0; b < 8; b++)
-			//		for (a = 0; a < 8; a++)
-			//			for (l = 0; l < 8; l++)
-			//				for (m = 0; m < 8; m++)
-			//					seg[64 * 8 * b + 8 * a + l * 64 + m] = block_ica[b * 8 + a];
-
-			//	sprintf(output, "OUTPUT/ICA/%d/[%d].bmp", j, c);
-			//	img_write_gray(seg, output, 64, 64); // outputに出力画像を書き出す
-
-			//}
-
-
-
-
 			printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 		}
 		printf("\r [ Execution finished ]          ");

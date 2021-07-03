@@ -19,23 +19,23 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 
 	for(k = 0; k < 1024; k++)
 		for(l = 0; l < 64; l++)
-			y2[l][k] = y[l][k];
+			y2[l][k] = y[l][k]; //ica係数をコピー
 
-	seki(w, y2, xori);
+	seki(w, y2, xori); //ica係数とica基底の積
 	//xtogen(xori, gen, avg);
 	//gentox(gen, xori);
 
-	seki(w, y2, x);
+	seki(w, y2, x); //ica係数とica基底の積
 	//xtogen(x, gen, avg);
 	//gentox(gen, x);
 
 	printf("\n Mutching pursuits START\n");
 
 
-	for (count = 0; count < 64; count++) {
+	for (count = 0; count < 64; count++) { //MP法の格納カウント
 
-		for (j = 0; j < 64; j++) {
-			// temp -> y2の対角成分0
+		for (j = 0; j < 64; j++) {//調査対象基底
+			//temp -> 対象基底以外の係数を0 対象基底のみでのica基底との積
 			for (k = 0; k < 1024; k++)
 				for (l = 0; l < 64; l++)
 					if (j == l)
@@ -43,7 +43,7 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 					else
 						temp[l][k] = 0.0;
 
-			seki(w, temp, x2);
+			seki(w, temp, x2);//積
 			//xtogen(x2, gen, avg);
 			//gentox(gen, x2);
 
@@ -54,7 +54,7 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 					atemp[k] = x[k][i];
 					btemp[k] = x2[k][i];
 				}
-				in[i][j] = inner_product(atemp, btemp);
+				in[i][j] = inner_product(atemp, btemp); //直流なし再構成と対象基底のみ再構成の内積
 			}
 		}
 
@@ -69,24 +69,23 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 			}
 
 			//最大値と添字を保存
-			mpans[i][count] = key[i];
+			mpans[i][count] = key[i]; //MP法の優先度の決定
 			inans[i][count] = max;
 
 			y2[key[i]][i] = 0.0; //ica係数のブロック内番号jは０
 		}
 
-		seki(w, y2, x);
+		//seki(w, y2, x);
 		//xtogen(x, gen, avg);
 		//gentox(gen, x);
 
-		for (i = 0; i < 1024; i++) {
-			for (k = 0; k < 64; k++) {
-				atemp[k] = xori[k][i]; // ica係数*基底
-				btemp[k] = x[k][i];    // 最大値のところ0のica係数 * 基底
-			}
-
-			inans2[i][count] = inner_product(atemp, btemp);
-		}
+		//for (i = 0; i < 1024; i++) {
+		//	for (k = 0; k < 64; k++) {
+		//		atemp[k] = xori[k][i]; // ica係数*基底
+		//		btemp[k] = x[k][i];    // 最大値のところ0のica係数 * 基底
+		//	}
+		//	inans2[i][count] = inner_product(atemp, btemp);
+		//}
 
 		////count 4ずつに'とりこ'？
 		//if (count % gauge == 0)
