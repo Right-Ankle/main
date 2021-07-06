@@ -9,11 +9,12 @@
 void gnuplot(double date[64][1024]) {
 	FILE* gp;
 	static double temp[64], max, min;
+	int i, j;
 	//gp = _popen(GNUPLOT_PATH, "w");
 	printf("\n+ - - - - - Now Plotting - - - - +\n");
-	for (int i = 0; i < 1024; i++) {
+	for (i = 0; i < 1024; i++) {
 		//printf("%d\n", i);
-		for (int j = 0; j < 64; j++) {
+		for (j = 0; j < 64; j++) {
 			temp[j] = date[j][i];
 			if (j == 0) {
 				max = temp[j];
@@ -49,7 +50,7 @@ void gnuplot(double date[64][1024]) {
 		// gnuplot‚ÉƒRƒ}ƒ“ƒh‚ð‘—‚é
 		//fprintf(gp, "set terminal png color font 'VL PGothic,20' enhanced\n");
 		fprintf(gp, "set terminal png\n");
-		fprintf(gp, "set output 'OUTPUT\\ICA\\%d\\area[%d].png'\n", i, i);
+		fprintf(gp, "set output 'OUTPUT\\ICA\\area[%d].png'\n", i);
 		fprintf(gp, "set boxwidth 0.5 relative\n");
 		fprintf(gp, "set style fill solid\n");
 		fprintf(gp, "set grid\n");
