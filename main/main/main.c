@@ -2380,12 +2380,12 @@ int main()
 				}
 			}
 			//fprintf(fp4, "\n\n Q = %d", Q);
-			//for (a = 0; a < 64; a++) {
-			//	if (sort_basis_temp[a] != 99) {
-			//		printf("\n%d", (int)sort_basis_temp[a]);
-			//		fprintf(fp4, "\n %d", (int)sort_basis_temp[a]);
-			//	}
-			//}
+			for (a = 0; a < 64; a++) {
+				if (sort_basis_temp[a] != 99) {
+					printf("\n%d", (int)sort_basis_temp[a]);
+					fprintf(fp4, "\n %d", (int)sort_basis_temp[a]);
+				}
+			}
 			//基底１の結果
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
@@ -2407,24 +2407,9 @@ int main()
 						nnny[i][j] = 0;
 				}
 
-			//for (j = 0; j < 1024; j++) {
-			//	no_op[j] = 0;
-			//}
-			//for (j = 0; j < 1024; j++) {
-			//	if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
-			//		no_op[j] = 1;
-			//	}
-			//}
-
-
-
 			seki5(nw, nnny, x); // x -> nw * ny
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-
-
-
 
 			img_out2(dcoe2, ica_sai, no_op, Q + 5);
 
@@ -2508,13 +2493,6 @@ int main()
 
 			//img_out2(dcoe2, ica_sai, no_op, Q + 5);
 
-			//for (a = 0; a < 64; a++) {
-			//	for (j = 0; j < 1024; j++) {
-			//		if (ica_basis2[64][j] == 0) {//mseだから低い方が画質高い
-			//			no_op[j] = 1;
-			//		}
-			//	}
-			//}
 
 
 
@@ -2668,15 +2646,9 @@ int main()
 				}
 			}
 
-			//基底１の結果
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
 			}
-
-
-
-
-
 
 			//正しい選出基底が格納されていない　最適・準最適基底が格納されていない
 			for (j = 0; j < 1024; j++) {
@@ -2688,24 +2660,11 @@ int main()
 						if ((ica_basis2[64][j] == 1 && 0 < psnr_profit2[(int)sort_basis_temp[a]][j])) {//mseだから低い方が画質高い
 							if (psnr_profit2[(int)sort_basis_temp[a]][j] > sum) {
 								sum = psnr_profit2[(int)sort_basis_temp[a]][j];
-								QQ = a;
+								QQ = (int)sort_basis_temp[a];//格納基底番号は正常
 							}
 						}
 					}
 				}
-
-
-				//QQの値がおかしい
-				if (QQ != 99)
-					printf("\n%d  %d", j, QQ);
-
-
-
-
-
-
-
-
 
 				//正しい選出基底が格納されていない　最適・準最適基底が格納されていない
 				if (ica_basis2[64][j] == 0 || QQ != 99) {
@@ -2717,40 +2676,26 @@ int main()
 
 			img_out(origin, no_op, Q);//フラグ領域出力 //出力領域正常
 
-
-
-
+			for (j = 0; j < 1024; j++) {
+				for (i = 0; i < 64; i++) {
+					nnny[i][j] = 0;
+				}
+			}
 
 			for (j = 0; j < 1024; j++) {
 				if (ica_basis2[64][j] == 1 && no_op[j] == 1) {
-					nnny[(int)basis_profit[j]][j] = y[(int)basis_profit[j]][j];//最適・準最適基底のみ係数を復元
+					nnny[(int)basis_profit[j]][j] = y[(int)basis_profit[j]][j];//最適・準最適基底のみ係数を復元 //復元基底は正常
+					//printf("\n%d", (int)basis_profit[j]);
 				}
-				else
-					nnny[i][j] = 0;
 			}
-
-			//for (j = 0; j < 1024; j++) {
-			//	no_op[j] = 0;
-			//}
-			//for (j = 0; j < 1024; j++) {
-			//	if (ica_basis2[64][j] == 1 && mse_dct[0][(Q / 10) - 1][j] > full_mse[1][0][j]) {//mseだから低い方が画質高い
-			//		no_op[j] = 1;
-			//	}
-			//}
-
-
 
 			seki5(nw, nnny, x); // x -> nw * ny
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-
-
-
-
 			img_out2(dcoe2, ica_sai, no_op, Q + 4);
 
-			//基底0の情報量
+			//情報量
 			fprintf(fp10, "\n");
 			fprintf(fp10, "%d,", Q);
 			sum = 0;
@@ -2827,8 +2772,6 @@ int main()
 			fprintf(fp10, ",,=(B%d-J%d)", excel_temp, excel_temp);
 			fprintf(fp10, ",,=(M%d/$B$2)", excel_temp);
 			excel_temp++;
-
-			//img_out2(dcoe2, ica_sai, no_op, Q + 6);
 
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
