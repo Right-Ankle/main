@@ -67,6 +67,7 @@ void quantization(double coe[][256], int Q);
 void idct(double coe[][256], unsigned char sai[][256], int n);
 void idct_Block(double coe[64][1024], unsigned char sai[64], int n, int num);
 void block_psnr(unsigned char origin[][256], unsigned char gen[][256], double b_psnr[1024]);
+void block_mse(unsigned char origin[][256], unsigned char gen[][256], double b_mse[1024]);
 void dctcoe_conv(double in[256][256], double out[64][1024]);
 void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]);
 void IBS(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], int block_flag[1024], double ibs[64]);

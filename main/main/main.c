@@ -74,8 +74,8 @@ int main()
 	double ica_imp_basisnum = 0;
 	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"
 	double basis_limits[64];
-	double ica_psnr[1024];
-	double dct_psnr[1024];
+	double ica_mse[1024];
+	double dct_mse[1024];
 	double using_ent[2][64]; //0->基底領域の情報量, 1->領域の情報量
 	double psnr_temp2;
 	int count_temp[64];
@@ -94,14 +94,14 @@ int main()
 	static double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, all_mse[4][1024], bunrui[4][1024];
 	static double basis1_ent[64][2]; //最適基底数１の各基底の情報　0->情報量の改善量の累積，1->領域数
 	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
-	static double psnr_profit[1024];
-	static double psnr_profit2[64][1024];
+	static double mse_profit[1024];
+	static double mse_profit2[64][1024];
 	static double ent_profit[1024];
 	static double ent_profit2[64][1024];
 	static double basis_profit[1024];
-	static double psnr_sum[64];//基底ごとの画質の良さ
+	static double mse_sum[64];//基底ごとの画質の良さ
 	static double ent_sum[64];//基底ごとの情報量の良さ
-	static double psnr_temp[64];//計算用
+	static double mse_temp[64];//計算用
 	static double sort_basis1[64];//基底1個で画質改善量の大きい基底から順に格納
 	static double sort_basis2[64];//基底1個で画質改善量の大きい基底から順に格納
 	static double sort_basis_temp[64];//基底1個で画質改善量の大きい基底から順に格納
@@ -2216,8 +2216,8 @@ int main()
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
 			for (i = 0; i < 1024; i++) {
-				ica_psnr[i] = 0;
-				dct_psnr[i] = 0;
+				ica_mse[i] = 0;
+				dct_mse[i] = 0;
 			}
 
 
@@ -2275,8 +2275,8 @@ int main()
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-			block_psnr(origin, ica_sai, ica_psnr);
-			block_psnr(origin, dcoe2, dct_psnr);
+			block_mse(origin, ica_sai, ica_mse);
+			block_mse(origin, dcoe2, dct_mse);
 
 
 
@@ -2285,12 +2285,12 @@ int main()
 
 			for (i = 0; i < 64; i++) {
 				zig[i] = 0;
-				psnr_sum[i] = 0;
+				mse_sum[i] = 0;
 				ent_sum[i] = 0;
 			}
 
 			for (i = 0; i < 1024; i++) {
-				psnr_profit[i] = 0;
+				mse_profit[i] = 0;
 				ent_profit[i] = 0;
 				basis_profit[i] = 99;
 			}
@@ -2300,7 +2300,7 @@ int main()
 
 			for (j = 0; j < 1024; j++) {
 				if (no_op[j] == 1) {
-					psnr_profit[j] = ica_psnr[j] - dct_psnr[j];
+					mse_profit[j] = dct_mse[j] - ica_mse[j];
 				}
 			}
 
@@ -2328,7 +2328,7 @@ int main()
 					if (no_op[i] == 1)
 						if (j == (int)basis_profit[i]) {
 							//fprintf(fp9, "\n,%d,%lf,%d,%lf", i, psnr_profit[i], (int)basis_profit[i], ent_profit[i]);
-							psnr_sum[j] += psnr_profit[i];
+							mse_sum[j] += mse_profit[i];
 							ent_sum[j] += ent_profit[i];
 							zig[j]++;
 						}
@@ -2352,19 +2352,19 @@ int main()
 			if (yn == 'yy') {
 			for (i = 0; i < 64; i++) {
 
-				psnr_temp[i] = psnr_sum[i];
+				mse_temp[i] = mse_sum[i];
 				sort_basis1[i] = 99;
 			}
 
 			for (a = 0; a < 64; a++) { //対象基底
 				sum = 0;
 				for (i = 0; i < 64; i++) {
-					if (sum < psnr_temp[i]) {
+					if (sum < mse_temp[i]) {
 						sort_basis1[a] = (double)i;
-						sum = psnr_temp[i];
+						sum = mse_temp[i];
 					}
 				}
-				psnr_temp[(int)sort_basis1[a]] = 0;
+				mse_temp[(int)sort_basis1[a]] = 0;
 			}
 
 			for (a = 0; a < 64; a++) {
@@ -2377,7 +2377,7 @@ int main()
 			fprintf(fp, "\n\n%d", Q);
 			for (a = 0; a < 64; a++) {
 				if (sort_basis1[a] != 99) {
-					fprintf(fp, "\n%d : %d   %lf   %lf", a, (int)sort_basis1[a], psnr_sum[(int)sort_basis1[a]], ent_sum[(int)sort_basis1[a]]);
+					fprintf(fp, "\n%d : %d   %lf   %lf", a, (int)sort_basis1[a], mse_sum[(int)sort_basis1[a]], ent_sum[(int)sort_basis1[a]]);
 					c++;
 				}
 			}
@@ -2546,7 +2546,7 @@ int main()
 				}
 				for (i = 0; i < 64; i++) {
 					zig[i] = 0;
-					psnr_sum[i] = 0;
+					mse_sum[i] = 0;
 					ent_sum[i] = 0;
 				}
 				for (a = 0; a < 64; a++) {
@@ -2564,7 +2564,7 @@ int main()
 					fprintf(fp9, ",,DCT:%d,ICA:%d", (int)bunrui[0][i], (int)bunrui[2][i]);//ICAとDCT領域の個数を出力
 				fprintf(fp9, "\n,");
 				for (i = 0; i < 1024; i++)
-					fprintf(fp9, ",%d,psnr,ent", i);
+					fprintf(fp9, ",%d,mse,ent", i);
 
 				for (b = 0; b < 64; b++) {//調査対象基底のみで再構成して、画質の改善量を出力
 
@@ -2585,12 +2585,12 @@ int main()
 					avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
 					for (j = 0; j < 1024; j++) {
-						ica_psnr[j] = 0;
-						dct_psnr[j] = 0;
+						ica_mse[j] = 0;
+						dct_mse[j] = 0;
 					}
 
-					block_psnr(origin, ica_sai, ica_psnr);
-					block_psnr(origin, dcoe2, dct_psnr);
+					block_mse(origin, ica_sai, ica_mse);
+					block_mse(origin, dcoe2, dct_mse);
 
 
 
@@ -2598,7 +2598,7 @@ int main()
 						true_profit[a] = 0;
 
 					for (i = 0; i < 1024; i++) {
-						psnr_profit2[b][i] = 0;
+						mse_profit2[b][i] = 0;
 						ent_profit2[b][i] = 0;
 						basis_profit[i] = 99;
 					}
@@ -2608,7 +2608,7 @@ int main()
 
 					for (j = 0; j < 1024; j++) {
 						if (no_op[j] == 1) {
-							psnr_profit2[b][j] = ica_psnr[j] - dct_psnr[j];//画質改善量を格納
+							mse_profit2[b][j] = dct_mse[j] - ica_mse[j];//画質改善量を格納
 						}
 					}
 
@@ -2632,9 +2632,9 @@ int main()
 					sum = 0;
 					fprintf(fp9, "\n%d,", b);
 					for (i = 0; i < 1024; i++) {
-						if (no_op[i] == 1 && psnr_profit2[b][i] > 0) {//改善量がプラスなら出力＆基底ごとに全ての領域の改善量を累積
-							fprintf(fp9, ",%lf,%lf,%lf", dct_psnr[i], psnr_profit2[b][i], ent_profit2[b][i]);
-							psnr_sum[b] += psnr_profit2[b][i];
+						if (no_op[i] == 1 && mse_profit2[b][i] > 0) {//改善量がプラスなら出力＆基底ごとに全ての領域の改善量を累積
+							fprintf(fp9, ",%lf,%lf,%lf", dct_mse[i], mse_profit2[b][i], ent_profit2[b][i]);
+							mse_sum[b] += mse_profit2[b][i];
 							ent_sum[b] += ent_profit2[b][i];
 						}
 						else {
@@ -2643,132 +2643,132 @@ int main()
 					}
 				}
 
-					// ///////////////////////////////////////////////////////////////////////////////////////////////
+				// ///////////////////////////////////////////////////////////////////////////////////////////////
 
-					//準最適のループ選出を修正中////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				//準最適のループ選出を修正中////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-					for (j = 0; j < 1024; j++) {
-						no_op2[j] = 99;//初期化
-						if (ica_basis2[64][j] == 0)
-							no_op2[j] = 100;//0基底領域
-					}
+				for (j = 0; j < 1024; j++) {
+					no_op2[j] = 99;//初期化
+					if (ica_basis2[64][j] == 0)
+						no_op2[j] = 100;//0基底領域
+				}
+				for (i = 0; i < 64; i++) {//初期化
+					sort_basis2[i] = 99;//最終選出基底格納 99番基底で初期化
+				}
+
+				fprintf(fp, "\n\n\n%d*************************************************************************************", Q);
+				l = 1;//選出個数カウント
+				sum1 = 0;
+
+				for (k = 0; k < 64; k++) {//選出カウント
+
+					fprintf(fp, "\n\n%d\n\n", k);
+
 					for (i = 0; i < 64; i++) {//初期化
-						sort_basis2[i] = 99;//最終選出基底格納 99番基底で初期化
+						mse_sum[i] = 0;//画質累積
+						ent_sum[i] = 0;//情報累積
+						mse_temp[i] = 0;//psnr計算用
+						count_temp[i] = 0;
+						sort_basis1[i] = 99;//画質ソート用 99番基底で初期化
 					}
 
-					fprintf(fp, "\n\n\n%d*************************************************************************************", Q);
-					l = 1;//選出個数カウント
-					sum1 = 0;
+					for (b = 0; b < 64; b++) {//対象基底
+						sum = 0;
 
-					for (k = 0; k < 64; k++) {//選出カウント
+						for (a = 0; a < 64; a++)
+							if (sort_basis2[a] == (double)b)
+								sum = 1;//既選出基底を除外
 
-						fprintf(fp, "\n\n%d\n\n", k);
-
-						for (i = 0; i < 64; i++) {//初期化
-							psnr_sum[i] = 0;//画質累積
-							ent_sum[i] = 0;//情報累積
-							psnr_temp[i] = 0;//psnr計算用
-							count_temp[i] = 0;
-							sort_basis1[i] = 99;//画質ソート用 99番基底で初期化
-						}
-
-						for (b = 0; b < 64; b++) {//対象基底
-							sum = 0;
-
-							for (a = 0; a < 64; a++)
-								if (sort_basis2[a] == (double)b)
-									sum = 1;//既選出基底を除外
-
-							if (sum == 0) {
-								for (i = 0; i < 1024; i++) {
-									if (no_op[i] == 1 && psnr_profit2[b][i] > 0 && no_op2[i] == 99) {//基底1領域　＆　画質改善＋　＆　既選出基底の領域を除外
-										psnr_sum[b] += psnr_profit2[b][i];
-										ent_sum[b] += ent_profit2[b][i];
-										count_temp[b]++;
-									}
+						if (sum == 0) {
+							for (i = 0; i < 1024; i++) {
+								if (no_op[i] == 1 && mse_profit2[b][i] > 0 && no_op2[i] == 99) {//基底1領域　＆　画質改善＋　＆　既選出基底の領域を除外
+									mse_sum[b] += mse_profit2[b][i];
+									ent_sum[b] += ent_profit2[b][i];
+									count_temp[b]++;
 								}
 							}
 						}
-
-						for (i = 0; i < 64; i++) {
-							psnr_temp[i] = psnr_sum[i];//計算用にコピー
-							//printf("\n%d :  %lf", i, psnr_sum[i]); //格納は正常
-						}
-
-						for (a = 0; a < 64; a++) { //ソートカウント
-							sum = 0;
-							c = 0;
-							for (i = 0; i < 64; i++) {//基底番号
-								if (sum < psnr_temp[i]) {
-									sort_basis1[a] = (double)i;
-									c = i;
-									sum = psnr_temp[i];//最大画質を格納
-								}
-							}
-							psnr_temp[c] = 0;//最大画質の基底を除外
-						}
-
-						//sort_basis1[35] = 99; //35番目に0番基底が入ってしまう　なぜ？
-
-						for (a = 0; a < 64; a++) {//改善＋のソート結果の出力 （なくてもいい）
-							if (sort_basis1[a] != 99) {
-								c = (int)sort_basis1[a];
-								fprintf(fp, "\n%d : %d   %lf   %lf", a, (int)sort_basis1[a], psnr_sum[c], ent_sum[c]);
-							}
-						}
-
-						for (i = 0; i < 64; i++) {
-							sort_basis_temp[i] = sort_basis1[i];//ソートしたものをコピー
-						}
-
-						c = 99;//選出基底番号
-
-						for (a = 0; a < 64; a++) {
-							d = (int)sort_basis1[a];
-							if ((basis0_ent + ent_sum[d] + sum1 > ica_basis_ent[0] * (double)l) && c == 99) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
-								sum1 += ent_sum[d];
-								c = a;//選出基底番号格納
-								l++;
-								//printf("\n%d", a); //基底選出は正常
-							}
-							else {
-								sort_basis_temp[a] = 99;//選出基底以外を除外
-							}
-						}
-
-						//for(i=0;i<64;i++)
-						//	printf("\n%d : %d", k, (int)sort_basis_temp[i]);
-						if (c != 99)
-							sort_basis2[k] = sort_basis_temp[c];//選出基底番号以外99
-
-						//fprintf(fp4, "\n\n Q = %d", Q);
-						//for (a = 0; a < 64; a++) {
-						//	if (sort_basis_temp[a] != 99) {
-						//		//printf("\n%d", (int)sort_basis_temp[a]);//基底選出は正常
-						//		//printf("\n%lf %lf", ent_sum[a], psnr_sum[a]);
-						//		fprintf(fp4, "\n %d", (int)sort_basis_temp[a]);
-						//	}
-						//}
-
-						//for (j = 0; j < 1024; j++) {
-						//	no_op[j] = 0;
-						//}
-
-						//領域ごとに使用する基底を決定
-						for (j = 0; j < 1024; j++) {
-							d = (int)sort_basis2[k];
-							if (no_op2[j] == 99 && 0 < psnr_profit2[d][j]) {//未選出領域　＆＆　選出基底の画質改善＋
-								no_op2[j] = (int)sort_basis2[k];
-							}
-						}
-
-						//printf("\n%d", (int)basis_profit[j]);
-						//no_op[j] = 1;//基底0個と　1個のうち選出基底が最適or準最適基底の領域をフラグ
-						//if (QQ!=99)
-						//	printf("\n%d : %d", j, (int)basis_profit[j]);
-
 					}
-				
+
+					for (i = 0; i < 64; i++) {
+						mse_temp[i] = mse_sum[i];//計算用にコピー
+						//printf("\n%d :  %lf", i, psnr_sum[i]); //格納は正常
+					}
+
+					for (a = 0; a < 64; a++) { //ソートカウント
+						sum = 0;
+						c = 0;
+						for (i = 0; i < 64; i++) {//基底番号
+							if (sum < mse_temp[i]) {
+								sort_basis1[a] = (double)i;
+								c = i;
+								sum = mse_temp[i];//最大画質を格納
+							}
+						}
+						mse_temp[c] = 0;//最大画質の基底を除外
+					}
+
+					//sort_basis1[35] = 99; //35番目に0番基底が入ってしまう　なぜ？
+
+					for (a = 0; a < 64; a++) {//改善＋のソート結果の出力 （なくてもいい）
+						if (sort_basis1[a] != 99) {
+							c = (int)sort_basis1[a];
+							fprintf(fp, "\n%d : %d   %lf   %lf", a, (int)sort_basis1[a], mse_sum[c], ent_sum[c]);
+						}
+					}
+
+					for (i = 0; i < 64; i++) {
+						sort_basis_temp[i] = sort_basis1[i];//ソートしたものをコピー
+					}
+
+					c = 99;//選出基底番号
+
+					for (a = 0; a < 64; a++) {
+						d = (int)sort_basis1[a];
+						if ((basis0_ent + ent_sum[d] + sum1 > ica_basis_ent[0] * (double)l) && c == 99) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+							sum1 += ent_sum[d];
+							c = a;//選出基底番号格納
+							l++;
+							//printf("\n%d", a); //基底選出は正常
+						}
+						else {
+							sort_basis_temp[a] = 99;//選出基底以外を除外
+						}
+					}
+
+					//for(i=0;i<64;i++)
+					//	printf("\n%d : %d", k, (int)sort_basis_temp[i]);
+					if (c != 99)
+						sort_basis2[k] = sort_basis_temp[c];//選出基底番号以外99
+
+					//fprintf(fp4, "\n\n Q = %d", Q);
+					//for (a = 0; a < 64; a++) {
+					//	if (sort_basis_temp[a] != 99) {
+					//		//printf("\n%d", (int)sort_basis_temp[a]);//基底選出は正常
+					//		//printf("\n%lf %lf", ent_sum[a], psnr_sum[a]);
+					//		fprintf(fp4, "\n %d", (int)sort_basis_temp[a]);
+					//	}
+					//}
+
+					//for (j = 0; j < 1024; j++) {
+					//	no_op[j] = 0;
+					//}
+
+					//領域ごとに使用する基底を決定
+					for (j = 0; j < 1024; j++) {
+						d = (int)sort_basis2[k];
+						if (no_op2[j] == 99 && 0 < mse_profit2[d][j]) {//未選出領域　＆＆　選出基底の画質改善＋
+							no_op2[j] = (int)sort_basis2[k];
+						}
+					}
+
+					//printf("\n%d", (int)basis_profit[j]);
+					//no_op[j] = 1;//基底0個と　1個のうち選出基底が最適or準最適基底の領域をフラグ
+					//if (QQ!=99)
+					//	printf("\n%d : %d", j, (int)basis_profit[j]);
+
+				}
+
 				//img_out(origin, no_op, Q);//フラグ領域出力 //出力領域正常
 
 				for (a = 0; a < 64; a++)
@@ -2781,8 +2781,8 @@ int main()
 					for (a = 0; a < 64; a++) {//選出カウント
 						if (sort_basis2[a] != 99 && no_op2[j] != 99 && no_op2[j] != 100) {//選出基底　＆＆　選出領域
 							d = (int)sort_basis2[a];
-							if (sum < psnr_profit2[d][j]) {
-								sum = psnr_profit2[d][j];
+							if (sum < mse_profit2[d][j]) {
+								sum = mse_profit2[d][j];
 								c = a;//最大改善の選出番号を記憶
 							}
 						}
@@ -2805,59 +2805,6 @@ int main()
 					}
 					no_op[j] = 0;
 				}
-
-				
-
-
-				if (Q == 40 || Q == 30 || Q == 10) {
-					for (j = 0; j < 1024; j++) {
-						if (Q == 40) {
-							sum = 0;
-							for (i = 0; i < 64; i++) {
-								if (sum < psnr_profit2[(int)sort_basis2[i]][j])
-									sum = psnr_profit2[(int)sort_basis2[i]][j];
-							}
-							if (no_op2[j] == 48)
-								no_op2[j] = 99;
-							if (no_op2[j] == 99 && 0 < psnr_profit2[0][j] && sum < psnr_profit2[0][j]) {
-								no_op2[j] = 0;
-							}
-						}
-
-						if (Q == 30) {
-							sum = 0;
-							for (i = 0; i < 64; i++) {
-								if (sum < psnr_profit2[(int)sort_basis2[i]][j])
-									sum = psnr_profit2[(int)sort_basis2[i]][j];
-							}
-							if (no_op2[j] == 48)
-								no_op2[j] = 99;
-							if (no_op2[j] == 99 && 0 < psnr_profit2[39][j] && sum < psnr_profit2[39][j]) {
-								no_op2[j] = 39;
-							}
-						}
-
-						if (Q == 10) {
-							sum = 0;
-							for (i = 0; i < 64; i++) {
-								if (sum < psnr_profit2[(int)sort_basis2[i]][j])
-									sum = psnr_profit2[(int)sort_basis2[i]][j];
-							}
-							//psnrの改善値が全体に与える影響
-							//if (no_op2[j] == 48)
-								no_op2[j] = 99;
-							//if (no_op2[j] == 99 && 0 < psnr_profit2[0][j] && sum < psnr_profit2[0][j]) {
-								if (j == 8) {
-									no_op2[j] = 0;
-								}
-						}
-
-					}
-				}
-
-				
-
-
 
 				fprintf(fp3, "\n\n%d", Q);
 				for (j = 0; j < 1024; j++) {
@@ -2946,6 +2893,7 @@ int main()
 				for (j = 0; j < 1024; j++) {
 					sum += test_area[j];
 				}
+
 				for (i = 0; i < 256; i++)
 					for (j = 0; j < 256; j++) {
 						k = i / 8;
@@ -2957,28 +2905,7 @@ int main()
 							dct_ica_sai[i][j] = ica_sai[i][j];
 						}
 					}
-				if (Q == 10) {
-					for (j = 0; j < 1024; j++) {
-						sum = 0.0;
-						mk = j % 32;
-						ml = j / 32;
-						if (j == 8) {
-							for (a = 0; a < 8; a++) {
-								for (b = 0; b < 8; b++) {
-									sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
-								}
-							}
-							printf("\n ica_MSE : %lf", sum/64);
-							sum = 0;
-							for (a = 0; a < 8; a++) {
-								for (b = 0; b < 8; b++) {
-									sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
-								}
-							}
-							printf("\n dct_MSE : %lf\n\n", sum/64);
-						}
-					}
-				}
+			
 
 				fprintf(fp10, "%lf,", sum / a);
 				psnr_temp2 = psnr(origin, dct_ica_sai);

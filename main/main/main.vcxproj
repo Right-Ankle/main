@@ -22,6 +22,7 @@
     <ClCompile Include="avg_inter.c" />
     <ClCompile Include="avg_inter_Block.c" />
     <ClCompile Include="bitmap.c" />
+    <ClCompile Include="block_mse.c" />
     <ClCompile Include="block_psnr.c" />
     <ClCompile Include="b_entropy_dct.c" />
     <ClCompile Include="b_entropy_ica.c" />
