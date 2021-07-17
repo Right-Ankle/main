@@ -15,9 +15,9 @@ void block_psnr(unsigned char origin[][256], unsigned char gen[][256], double b_
 	double sum = 0.0;
 	static unsigned char ori_temp[64][1024] = {0}, gen_temp[64][1024] = {0};
 
-	if((fp = fopen("b_psnr.pgm","wb")) == NULL){
-		fprintf(stderr,"Can not open file\n");
-	}
+	//if((fp = fopen("b_psnr.pgm","wb")) == NULL){
+	//	fprintf(stderr,"Can not open file\n");
+	//}
 
 	for(i = 0; i < 1024; i++)
 		b_psnr[i] = 0.0;
@@ -61,8 +61,8 @@ void block_psnr(unsigned char origin[][256], unsigned char gen[][256], double b_
 		b_psnr[i] = 10 * log10((255 * 255) / (sum / (8 * 8)));
 	}
 
-	fprintf(fp,"P5\n256 256\n255\n");
-	fwrite(gen, sizeof(unsigned char), 256 * 256, fp);
+	//fprintf(fp,"P5\n256 256\n255\n");
+	//fwrite(gen, sizeof(unsigned char), 256 * 256, fp);
 
-	fclose(fp);
+	//fclose(fp);
 }
