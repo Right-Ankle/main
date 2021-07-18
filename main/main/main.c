@@ -79,6 +79,7 @@ int main()
 	double using_ent[2][64]; //0->基底領域の情報量, 1->領域の情報量
 	double psnr_temp2;
 	int count_temp[64];
+	double basis_temp2[65][1024];//複数の選出基底格納用
 
 	////// double //////
 	static double temp_array[64][1024] = { 0 };//計算用配列
@@ -2791,13 +2792,127 @@ int main()
 						no_op2[j] = (int)sort_basis2[c];
 				}
 
-
+				c = 0;
 				fprintf(fp4, "\n\n Q = %d", Q);
 				for (a = 0; a < 64; a++) {
 					if (sort_basis2[a] != 99) {
 						fprintf(fp4, "\n %d", (int)sort_basis2[a]);
+						c++;//選出基底の数を数える
 					}
 				}
+
+				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				for (j = 0; j < 1024; j++) {
+					for (i = 0; i < 64; i++)
+						basis_temp2[i][j] = 99;//99番基底で初期化
+					basis_temp2[64][j] = 100000;//mse初期化
+				}
+
+				if (c >= 2) {//基底2個で画質＋の領域をICA領域
+
+					for (a = 0; a < c - 1; a++) {
+						for (b = a + 1; b < c; b++) {
+
+							for (j = 0; j < 1024; j++)
+								for (i = 0; i < 64; i++)
+									ny[i][j] = 0; //係数初期化
+
+							for (j = 0; j < 1024; j++) {
+								if (ica_basis2[64][j] >= c) {
+
+									ny[(int)sort_basis2[a]][j] = y[(int)sort_basis2[a]][j];
+									ny[(int)sort_basis2[b]][j] = y[(int)sort_basis2[b]][j];
+
+									for (m = 0; m < 64; m++)
+										xx[m] = 0.0;
+
+									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+									sum = 0.0;
+									mk = j % 32;
+									ml = j / 32;
+
+									// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+									// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+									for (m = 0; m < 8; m++) {
+										for (l = 0; l < 8; l++) {
+											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+										}
+									}
+									if (basis_temp2[64][j] > sum / 64) {
+										basis_temp2[64][j] = sum / 64;
+										basis_temp2[0][j] = sort_basis2[a];
+										basis_temp2[1][j] = sort_basis2[b];
+									}
+								}
+							}
+						}
+					}
+				 }
+
+				if (c >= 3) {//基底2個で画質＋の領域をICA領域
+
+					for (a = 0; a < c - 2; a++) {
+						for (b = a + 1; b < c - 1; b++) {
+							for (d = b + 1; d < c; d++) {
+
+								for (j = 0; j < 1024; j++)
+									for (i = 0; i < 64; i++)
+										ny[i][j] = 0; //係数初期化
+
+								for (j = 0; j < 1024; j++) {
+									if (ica_basis2[64][j] >= c) {
+
+										ny[(int)sort_basis2[a]][j] = y[(int)sort_basis2[a]][j];
+										ny[(int)sort_basis2[b]][j] = y[(int)sort_basis2[b]][j];
+										ny[(int)sort_basis2[d]][j] = y[(int)sort_basis2[d]][j];
+
+										for (m = 0; m < 64; m++)
+											xx[m] = 0.0;
+
+										seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+										xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+										avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+										sum = 0.0;
+										mk = j % 32;
+										ml = j / 32;
+
+										// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+										// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+										for (m = 0; m < 8; m++) {
+											for (l = 0; l < 8; l++) {
+												sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+											}
+										}
+										if (basis_temp2[64][j] > sum / 64) {
+											basis_temp2[64][j] = sum / 64;
+											basis_temp2[0][j] = sort_basis2[a];
+											basis_temp2[1][j] = sort_basis2[b];
+											basis_temp2[2][j] = sort_basis2[d];
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				 
+				 
+				 
+				 
+				 
+				 
+				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++) {
@@ -2816,6 +2931,25 @@ int main()
 						no_op[j] = 1;
 					}
 				}
+
+				fprintf(fp2, "\n\n\n\n%d:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::",Q);
+				//複数基底使用可能領域もフラグを立てる
+				for (j = 0; j < 1024; j++) {
+					if (basis_temp2[64][j] < dct_mse[j] && ica_basis2[64][j] != 99) {
+						fprintf(fp2, "\n\n%d  :  ica %lf (%d),  dct  %lf (%d)", j, basis_temp2[64][j], (int)bunrui[2][j], dct_mse[j], (int)bunrui[0][j]);
+						for (i = 0; i < 64; i++) {
+							if (basis_temp2[i][j] != 99) {
+								nnny[(int)basis_temp2[i][j]][j] = y[(int)basis_temp2[i][j]][j];//最適・準最適基底のみ係数を復元 //復元基底は正常
+								fprintf(fp2, "\n%d", (int)basis_temp2[i][j]);
+							}
+						}
+						no_op[j] = 1;
+					}
+				}
+
+
+
+
 
 				seki5(nw, nnny, x); // x -> nw * ny
 				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
