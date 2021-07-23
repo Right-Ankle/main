@@ -2805,7 +2805,7 @@ int main()
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++)
 						basis_temp2[i][j] = 99;//99番基底で初期化
-					basis_temp2[64][j] = 100000;//mse初期化
+					basis_temp2[64][j] = 0;//改善情報量初期化
 				}
 
 				if (c >= 2) {//基底2個で画質＋の領域をICA領域
@@ -2818,6 +2818,10 @@ int main()
 									ny[i][j] = 0; //係数初期化
 
 							for (j = 0; j < 1024; j++) {
+
+								for (i = 0; i < 64; i++)
+									ny[i][j] = 0; //係数初期化
+
 								if (ica_basis2[64][j] >= c) {
 
 									ny[(int)sort_basis2[a]][j] = y[(int)sort_basis2[a]][j];
@@ -2841,10 +2845,43 @@ int main()
 											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
 										}
 									}
-									if (basis_temp2[64][j] > sum / 64) {
-										basis_temp2[64][j] = sum / 64;
-										basis_temp2[0][j] = sort_basis2[a];
-										basis_temp2[1][j] = sort_basis2[b];
+
+									//情報量の調査
+									if (dct_mse[j] > sum / 64) {
+										sum = 0;
+
+										for (m = 0; m < 1024; m++) {
+											for (l = 0; l < 64; l++) {
+												if (dcoe_temp[l][m] != 0)
+													sum += dct_ent2[l][m]; //dct単独
+											}
+										}
+
+										for (m = 0; m < 1024; m++) {
+											if (j != m) {
+												for (l = 0; l < 64; l++) {
+													if (dcoe_temp[l][m] != 0)
+														sum -= dct_ent2[l][m];//対象領域以外をDCT_Block
+												}
+											}
+										}
+
+										for (m = 0; m < 1024; m++) {
+											if (j==m) {
+												for (l = 0; l < 64; l++) {
+													if (ny[l][m] != 0) {
+														sum -= ica_ent2[l][m];//対象領域をICA_Block
+													}
+												}
+												sum -= ica_dc[m];//ica_dc
+											}
+										}
+
+										if (basis_temp2[64][j] < sum) {
+											basis_temp2[64][j] = sum;
+											basis_temp2[0][j] = sort_basis2[a];
+											basis_temp2[1][j] = sort_basis2[b];
+										}
 									}
 								}
 							}
@@ -2863,6 +2900,10 @@ int main()
 										ny[i][j] = 0; //係数初期化
 
 								for (j = 0; j < 1024; j++) {
+
+									for (i = 0; i < 64; i++)
+										ny[i][j] = 0; //係数初期化
+
 									if (ica_basis2[64][j] >= c) {
 
 										ny[(int)sort_basis2[a]][j] = y[(int)sort_basis2[a]][j];
@@ -2887,11 +2928,43 @@ int main()
 												sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
 											}
 										}
-										if (basis_temp2[64][j] > sum / 64) {
-											basis_temp2[64][j] = sum / 64;
-											basis_temp2[0][j] = sort_basis2[a];
-											basis_temp2[1][j] = sort_basis2[b];
-											basis_temp2[2][j] = sort_basis2[d];
+
+										if (dct_mse[j] > sum / 64) {
+											sum = 0;
+
+											for (m = 0; m < 1024; m++) {
+												for (l = 0; l < 64; l++) {
+													if (dcoe_temp[l][m] != 0)
+														sum += dct_ent2[l][m]; //dct単独
+												}
+											}
+
+											for (m = 0; m < 1024; m++) {
+												if (j != m) {
+													for (l = 0; l < 64; l++) {
+														if (dcoe_temp[l][m] != 0)
+															sum -= dct_ent2[l][m];//対象領域以外をDCT_Block
+													}
+												}
+											}
+
+											for (m = 0; m < 1024; m++) {
+												if (j == m) {
+													for (l = 0; l < 64; l++) {
+														if (ny[l][m] != 0) {
+															sum -= ica_ent2[l][m];//対象領域をICA_Block
+														}
+													}
+													sum -= ica_dc[m];//ica_dc
+												}
+											}
+
+											if (basis_temp2[64][j] < sum) {
+												basis_temp2[64][j] = sum;
+												basis_temp2[0][j] = sort_basis2[a];
+												basis_temp2[1][j] = sort_basis2[b];
+												basis_temp2[2][j] = sort_basis2[d];
+											}
 										}
 									}
 								}
@@ -2935,7 +3008,7 @@ int main()
 				fprintf(fp2, "\n\n\n\n%d:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::",Q);
 				//複数基底使用可能領域もフラグを立てる
 				for (j = 0; j < 1024; j++) {
-					if (basis_temp2[64][j] < dct_mse[j] && ica_basis2[64][j] != 99) {
+					if (basis_temp2[64][j] > 0 && ica_basis2[64][j] != 99) {
 						fprintf(fp2, "\n\n%d  :  ica %lf (%d),  dct  %lf (%d)", j, basis_temp2[64][j], (int)bunrui[2][j], dct_mse[j], (int)bunrui[0][j]);
 						for (i = 0; i < 64; i++) {
 							if (basis_temp2[i][j] != 99) {
