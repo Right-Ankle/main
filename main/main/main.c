@@ -1509,7 +1509,7 @@ int main()
 					}
 					fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
 					fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
-					fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[1][j], bunrui[0][j]);
+					fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[2][j], bunrui[3][j]);
 				}
 
 				fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
@@ -2552,7 +2552,7 @@ int main()
 				}
 				for (a = 0; a < 64; a++) {
 					for (j = 0; j < 1024; j++) {
-						if (ica_basis2[64][j] == 1) {//基底1個領域のみフラグ
+						if (ica_basis2[64][j] == 1 || ica_basis2[64][j]==0) {//基底1個領域のみフラグ
 							no_op[j] = 1;
 						}
 					}
@@ -2629,12 +2629,23 @@ int main()
 						}
 					}
 
+					for (j = 0; j < 1024; j++) {
+						ent_profit[j] = 0;
+						if (ica_basis2[64][j] == 0) {
+							for (i = 0; i < 64; i++) {
+								if (dcoe_temp[i][j] != 0)
+									ent_profit[j] += dct_ent2[i][j];
+							}
+
+							ent_profit[j] -= ica_dc[j];
+						}
+					}
 
 					sum = 0;
 					fprintf(fp9, "\n%d,", b);
 					for (i = 0; i < 1024; i++) {
-						if (no_op[i] == 1 && mse_profit2[b][i] > 0) {//改善量がプラスなら出力＆基底ごとに全ての領域の改善量を累積
-							fprintf(fp9, ",%lf,%lf,%lf", dct_mse[i], mse_profit2[b][i], ent_profit2[b][i]);
+						if (no_op[i] == 1 && 0 < mse_profit2[b][i] && (dct_mse[i] - mse_profit2[b][i]) < bunrui[3][i]) {//改善量がプラスなら出力＆基底ごとに全ての領域の改善量を累積
+							fprintf(fp9, ",%lf,%lf,%lf", ent_profit[i], mse_profit2[b][i], ent_profit2[b][i]);
 							mse_sum[b] += mse_profit2[b][i];
 							ent_sum[b] += ent_profit2[b][i];
 						}
@@ -2650,8 +2661,8 @@ int main()
 
 				for (j = 0; j < 1024; j++) {
 					no_op2[j] = 99;//初期化
-					if (ica_basis2[64][j] == 0)
-						no_op2[j] = 100;//0基底領域
+					//if (ica_basis2[64][j] == 0)
+					//	no_op2[j] = 100;//0基底領域
 				}
 				for (i = 0; i < 64; i++) {//初期化
 					sort_basis2[i] = 99;//最終選出基底格納 99番基底で初期化
@@ -2775,6 +2786,12 @@ int main()
 				for (a = 0; a < 64; a++)
 					if (sort_basis2[a] != 99)
 						printf("\n%d  :  %d", a, (int)sort_basis2[a]);//選出基底出力
+
+				for (j = 0; j < 1024; j++) {
+					if (no_op2[j] == 99 && ica_basis2[64][j]==0) {//未選出領域＆＆基底0領域
+						no_op2[j] = 100;
+					}
+				}
 
 				for (j = 0; j < 1024; j++) {
 					sum = 0;
