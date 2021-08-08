@@ -112,6 +112,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>PGOptimize</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -184,18 +185,20 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <Optimization>MaxSpeed</Optimization>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <HeapReserveSize>2036870912</HeapReserveSize>
-      <HeapCommitSize>2036870912</HeapCommitSize>
-      <StackReserveSize>2036870912</StackReserveSize>
-      <StackCommitSize>2036870912</StackCommitSize>
+      <HeapReserveSize>10036870912</HeapReserveSize>
+      <HeapCommitSize>10036870912</HeapCommitSize>
+      <StackReserveSize>10036870912</StackReserveSize>
+      <StackCommitSize>10036870912</StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
