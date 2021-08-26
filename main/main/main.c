@@ -68,13 +68,15 @@ int main()
 	double psnr_temp2;
 	static double comb[1024][64][2] = { 0 };//0->画質，1->情報量
 	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
-	double ****comb3_0; //0->画質，1->情報量
-	double ****comb3_1;//0->画質，1->情報量
-	double comb_result3[64][64][64][2] = { 0 };//0->累積画質，1->累積情報量
-	double comb_result2[64][64][2] = { 0 };//0->累積画質，1->累積情報量
+	double**** comb3_0; //0->画質，1->情報量
+	double**** comb3_1;//0->画質，1->情報量
+	double comb_result3[64][64][64][3] = { 0 };//0->累積画質，1->累積情報量
+	double comb_result2[64][64][3] = { 0 };//0->累積画質，1->累積情報量
+	double comb_result[64][3] = { 0 };//0->累積画質，1->累積情報量
 	double comb_sort3[64][64][64] = { 0 };
 	double comb_sort2[64][64] = { 0 };
-	double comb_after_sort[100][5] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
+	double comb_sort[64] = { 0 };
+	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
 
 
 	////// double //////
@@ -1486,7 +1488,7 @@ int main()
 				}
 			}
 			//0の情報量ok
-			
+
 			//sum = 0;
 			//fprintf(fp9, "\n\n\n\n%d,basis,psnr_ave,ent_ave,area_num",Q);
 			//for (i = 0; i < 64; i++) {
@@ -1765,6 +1767,8 @@ int main()
 				//		for (c = b + 1; c < 64; c++) {
 				//			comb_result3[a][b][c][0] = 0;
 				//			comb_result3[a][b][c][1] = 0;
+				//  		comb_result3[a][b][c][2] = 0;
+				//         comb_sort3[a][b][c] = 0;
 				//		}
 				//	}
 				//}
@@ -1804,16 +1808,17 @@ int main()
 				//	}
 				//}
 				//累積（基底2つ）
-				k=0;
+				k = 0;
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						comb_result2[a][b][0] = 0;
 						comb_result2[a][b][1] = 0;
+						comb_result2[a][b][2] = 0;
 						comb_sort2[a][b] = 0;
 					}
 				}
 
-				//0dame
+				//累積（基底2つ）
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						for (j = 0; j < 1024; j++) {
@@ -1825,6 +1830,8 @@ int main()
 								comb_result2[a][b][1] += comb2[j][a][b][1];
 								//printf("\n\n[%d, %d] %lf, %lf", a, b, comb2[j][a][b][1], dct_mse[j] - comb2[j][a][b][0]);
 								//printf("\n%lf, %lf", comb_result2[a][b][1], comb_result2[a][b][0]);
+								comb_result2[a][b][2]++;
+
 							}
 
 							//MSEだから小さい順
@@ -1835,6 +1842,7 @@ int main()
 								sum = dct_mse[j] - comb[j][k][0];
 								comb_result2[a][b][0] += sum;
 								comb_result2[a][b][1] += comb[j][k][1];
+								comb_result2[a][b][2]++;
 								//printf("\n\n[%d, %d -> %d] %lf, %lf", a, b, k, comb[j][k][1], dct_mse[j] - comb[j][k][0]);
 								//printf("\n[%d, %d] %lf, %lf", a, b, comb_result2[a][b][1], comb_result2[a][b][0]);
 							}
@@ -1843,6 +1851,25 @@ int main()
 					}
 				}
 
+				//累積（基底1つ）
+				for (a = 0; a < 64; a++) {
+					comb_result[a][0] = 0;
+					comb_result[a][1] = 0;
+					comb_result[a][2] = 0;
+					comb_sort[a] = 0;
+				}
+
+				for (a = 0; a < 64; a++)
+					for (j = 0; j < 1024; j++)
+						if (dct_mse[j] > comb[j][a][0]) {
+							sum = dct_mse[j] - comb[j][a][0];
+							comb_result[a][0] += sum;
+							comb_result[a][1] += comb[j][a][1];
+							comb_result[a][2]++;
+						}
+
+
+
 				//画質順でソート
 				for (i = 0; i < 100; i++) {
 					comb_after_sort[i][0] = 0;
@@ -1850,10 +1877,11 @@ int main()
 					comb_after_sort[i][2] = 99;
 					comb_after_sort[i][3] = 99;
 					comb_after_sort[i][4] = 99;
+					comb_after_sort[i][5] = 0;
 				}
 
 				// 0dame
-				
+
 				//for (a = 0; a < 64 - 2; a++)
 				//	for (b = a + 1; b < 64 - 1; b++)
 				//		for (c = b + 1; c < 64; c++)
@@ -1863,9 +1891,11 @@ int main()
 					for (b = a + 1; b < 64; b++)
 						comb_sort2[a][b] = comb_result2[a][b][0];//copy
 
+				for (a = 0; a < 64; a++)
+					comb_sort[a] = comb_result[a][0];//copy
 
 
-				for (i = 0; i < 10; i++) {
+				for (i = 0; i < 10; i++) {//3個のソート
 					max = 0;
 					k = l = m = n = o = 99;
 					//for (a = 0; a < 64 - 2; a++)
@@ -1877,7 +1907,18 @@ int main()
 					//				l = b;
 					//				m = c;
 					//			}
+					//if (k != 99) {
+					//	comb_after_sort[i][2] = (double)k;
+					//	comb_after_sort[i][3] = (double)l;
+					//	comb_after_sort[i][4] = (double)m;
+					//	comb_sort3[k][l][m] = 0;//99番基底が入らないか？
+					//}
+				}
 
+
+				for (i = 10; i < 20; i++) {//２個のソート
+					max = 0;
+					k = l = m = n = o = 99;
 					for (a = 0; a < 64 - 1; a++)
 						for (b = a + 1; b < 64; b++)
 							if (comb_sort2[a][b] > max) {//改善画質累積の比較のため，最大を探索
@@ -1885,59 +1926,69 @@ int main()
 								n = a;
 								o = b;
 							}
-
-					if (n == 99 && k != 99) {//ソート結果を格納
-						//comb_after_sort[i][0] = comb_result3[k][l][m][0];
-						//comb_after_sort[i][1] = comb_result3[k][l][m][1];
-						comb_after_sort[i][2] = (double)k;
-						comb_after_sort[i][3] = (double)l;
-						comb_after_sort[i][4] = (double)m;
-						comb_sort3[k][l][m] = 0;//99番基底が入らないか？
-					}
-					else if (n != 99) {
+					if (n != 99) {
 						comb_after_sort[i][0] = comb_result2[n][o][0];
 						comb_after_sort[i][1] = comb_result2[n][o][1];
 						comb_after_sort[i][2] = (double)n;
 						comb_after_sort[i][3] = (double)o;
 						comb_after_sort[i][4] = 99;
+						comb_after_sort[i][5] = comb_result2[n][o][2];
 						comb_sort2[n][o] = 0;//99番基底が入らないか？
-					} else {
-						comb_after_sort[i][0] = 0;
-						comb_after_sort[i][1] = 0;
-						comb_after_sort[i][2] = 99;
+					}
+				}
+
+				for (i = 20; i < 30; i++) {//1個のソート
+					max = 0;
+					k = l = m = n = o = 99;
+					for (a = 0; a < 64; a++)
+						if (comb_sort[a] > max) {//改善画質累積の比較のため，最大を探索
+							max = comb_sort[a];//2sort
+							n = a;
+						}
+					if (n != 99) {
+						comb_after_sort[i][0] = comb_result[n][0];
+						comb_after_sort[i][1] = comb_result[n][1];
+						comb_after_sort[i][2] = (double)n;
 						comb_after_sort[i][3] = 99;
 						comb_after_sort[i][4] = 99;
+						comb_after_sort[i][5] = comb_result[n][2];
+						comb_sort[n] = 0;//99番基底が入らないか？
 					}
-
-
 				}
+
+
+			
 
 				//基底選出
 				k = 0;
 
-				for (a = 0; a < 10; a++) {
+				for (a = 0; a < 30; a++) {
 					//printf("\n %lf, %lf",comb_after_sort[a][0], comb_after_sort[a][1]);
-					if (comb_after_sort[a][4] == 99)
+					if (a>=20)
+						c = 1;
+					else if (a>=10&&a<20)
 						c = 2;
 					else
 						c = 3;
 
 					if (k == 0) {
 						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
-							printf("\n [%d , %d]  %lf + %lf >>  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
+							printf("\n [%d , %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
 							k++;
-						} else {
-							printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
+						}
+						else {
+							printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							comb_after_sort[a][0] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][1] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][2] = 99;//選出基底以外全て初期化
 							comb_after_sort[a][3] = 99;//選出基底以外全て初期化
 							comb_after_sort[a][4] = 99;//選出基底以外全て初期化
 						}
-					} else {
-						printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
+					}
+					else {
+						printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 					}
 				}
 
