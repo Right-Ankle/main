@@ -67,7 +67,7 @@ int main()
 	double dct_mse[1024];
 	double psnr_temp2;
 	static double comb[1024][64][2] = { 0 };//0->画質，1->情報量
-	static double comb2[1024][63][63][2] = { 0 };//0->画質，1->情報量
+	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
 	double ****comb3_0; //0->画質，1->情報量
 	double ****comb3_1;//0->画質，1->情報量
 	double comb_result3[64][64][64][2] = { 0 };//0->累積画質，1->累積情報量
@@ -127,7 +127,7 @@ int main()
 	//		system(g);
 	//	}
 	//}
-	printf("\n\n");
+
 	//_mkdir("coe"); //原画像のブロック画像を拡大して出力
 	//	for (j = 0; j < 1024; j++) {
 	//	sprintf(g, "mkdir OUTPUT\\ICA\\%d", j);
@@ -136,7 +136,7 @@ int main()
 	printf("mkdir end\n");
 	i = 1;
 	sum = -((i / (double)(1000)) * (log((i / (double)(1000))) / log(2)));
-	printf("\n\n%lf", sum);
+	//printf("\n\n%lf", sum);
 
 	//
 //読み込むファイル名
@@ -239,7 +239,7 @@ int main()
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
 
-	printf("%lf", w[0][0]);
+	//printf("%lf", w[0][0]);
 	/* histの初期化 */
 	for (i = 0; i < 10000; i++) {
 		hist[i] = 0;
@@ -309,8 +309,8 @@ int main()
 
 
 		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
-	for (i = 0; i < 64; i++)
-		printf("\n%d", ica_fre[i][0]);
+	//for (i = 0; i < 64; i++)
+	//	printf("\n%d", ica_fre[i][0]);
 
 	b_entropy_ica(y, b_ica_ent);
 	step = 100;
@@ -320,7 +320,7 @@ int main()
 	for (i = 0; i < 1024; i++)
 		sum += b_ica_ent[i];
 	sum /= 1024 * 64;
-	printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
+	//printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
 
 	Q = 100;
 	for (Q = 100; Q > 0; Q -= 10) {
@@ -357,7 +357,7 @@ int main()
 
 
 
-	printf("\n------------------------dct_fre start--------");
+	//printf("\n------------------------dct_fre start--------");
 	for (Q = 0; Q < 10; Q++) {
 		for (i = 0; i < 64; i++) {
 			for (j = 0; j < 1024; j++) {
@@ -371,7 +371,7 @@ int main()
 
 	Q = 100;
 
-	printf("\nnow Q = %d\n", Q);
+	//printf("\nnow Q = %d\n", Q);
 	dct(origin, dcoe, 8); // 係数を出力
 	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 	idct(dcoe, dcoe2, 8); // 普通の再構成
@@ -507,7 +507,7 @@ int main()
 		//printf("\n%lf", sum);
 		sum1 += sum;
 	}
-	printf("\n1y : %lf\n", sum1 / 64);
+	//printf("\n1y : %lf\n", sum1 / 64);
 
 	for (a = 0; a < 1024; a++)
 		b_ica_ent[a] = 0;
@@ -517,7 +517,7 @@ int main()
 	for (a = 0; a < 1024; a++)
 		sum += b_ica_ent[a];
 	sum /= 256 * 256;
-	printf("\n%lf", sum);
+	//printf("\n%lf", sum);
 
 
 
@@ -807,10 +807,14 @@ int main()
 			//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 			//idct(dcoe, dcoe2, 8); // 普通の再構成
 			//b_entropy_dct(dcoe);
-			for (i = 0; i < 1024; i++) {
-				if (ica_basis2[64][i] != 99)
-					printf("\n %lf", ica_basis2[64][i]);
-			}
+			a = 0;
+			//for (i = 0; i < 1024; i++) {
+			//	if (ica_basis2[64][i] != 99) {
+			//		printf("\n %lf", ica_basis2[64][i]);
+			//		a++;
+			//	}
+			//}
+			//printf("\ncount:%d", a);
 			//mp(y, avg, w, mpans);
 
 			//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
@@ -1242,7 +1246,7 @@ int main()
 				basis_limits[i] = 99;
 
 			QQQ = (int)(excel_basis[1] - excel_basis[2] - excel_basis[5]) / ((excel_basis[3] / excel_basis[4]) + excel_basis[0]);//基底制限数
-			printf("\n basis_limits = %d", QQQ);
+			//printf("\n basis_limits = %d", QQQ);
 
 			//for (i = 0; i < QQQ; i++) {
 			//	while (basis_limits[i] == 99 && sum2!=99) {
@@ -1381,7 +1385,7 @@ int main()
 			}
 			basis0_ent = 0;
 			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
+				if (ica_basis2[64][j] == 0) {
 					for (i = 0; i < 64; i++) {
 						if (dcoe_temp[i][j] != 0)
 							basis0_ent += dct_ent2[i][j];
@@ -1389,7 +1393,7 @@ int main()
 					basis0_ent -= ica_dc[j];
 				}
 			}
-
+			printf("\nbasis_ent0 = %lf", basis0_ent);
 
 
 			for (j = 0; j < 1024; j++)
@@ -1466,6 +1470,8 @@ int main()
 				}
 			}
 
+			//0の情報量ok
+
 
 			//fprintf(fp9, "\n\n\n\n%d,area,psnr,basis,ent,*,*,*,*,*,*,*", Q);
 			for (j = 0; j < 64; j++) {
@@ -1479,7 +1485,8 @@ int main()
 						}
 				}
 			}
-
+			//0の情報量ok
+			
 			//sum = 0;
 			//fprintf(fp9, "\n\n\n\n%d,basis,psnr_ave,ent_ave,area_num",Q);
 			//for (i = 0; i < 64; i++) {
@@ -1497,38 +1504,45 @@ int main()
 
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				//0の情報量ok
 
+// 動的配列の宣言
+				//comb3_0 = (double****)malloc(sizeof(double***) * 1024);
+				//for (a = 0; a < 1024; a++) {
+				//	comb3_0[a] = (double***)malloc(sizeof(double**) * 64);
+				//	for (b = 0; b < 64; b++) {
+				//		comb3_0[a][b] = (double**)malloc(sizeof(double*) * 64);
+				//		for (c = 0; c < 64; c++) {
+				//			comb3_0[a][b][c] = (double*)malloc(sizeof(double) * 64);
+				//		}
+				//	}
+				//}
+				//comb3_1 = (double****)malloc(sizeof(double***) * 1024);
+				//for (a = 0; a < 1024; a++) {
+				//	comb3_1[a] = (double***)malloc(sizeof(double**) * 64);
+				//	for (b = 0; b < 64; b++) {
+				//		comb3_1[a][b] = (double**)malloc(sizeof(double*) * 64);
+				//		for (c = 0; c < 64; c++) {
+				//			comb3_1[a][b][c] = (double*)malloc(sizeof(double) * 64);
+				//		}
+				//	}
+				//}
 
-				// 動的配列の宣言
-				comb3_0 = (double****)malloc(sizeof(double***) * 1024);
-				comb3_1 = (double****)malloc(sizeof(double***) * 1024);
-				for (a = 0; a < 1024; a++) {
-					comb3_0[a] = (double***)malloc(sizeof(double**) * 64);
-					comb3_1[a] = (double***)malloc(sizeof(double**) * 64);
-					for (b = 0; b < 64; b++) {
-						comb3_0[a][b] = (double**)malloc(sizeof(double*) * 64);
-						comb3_1[a][b] = (double**)malloc(sizeof(double*) * 64);
-						for (c = 0; c < 64; c++) {
-							comb3_0[a][b][c] = (double*)malloc(sizeof(double) * 64);
-							comb3_1[a][b][c] = (double*)malloc(sizeof(double) * 64);
-						}
-					}
-				}
-					
-				
+				//0の情報量ok
 
-
-				//初期化　 MSE=10000 情報量=0が初期値
 				for (j = 0; j < 1024; j++)
-					for (a = 0; a < 64; a++)
+					for (a = 0; a < 64; a++) {
+						comb[j][a][0] = 10000;
+						comb[j][a][1] = 0;
 						for (b = 0; b < 64; b++) {
 							comb2[j][a][b][0] = 10000;
 							comb2[j][a][b][1] = 0;
 							//for (c = 0; c < 64; c++) {
-							//	comb3_0[j][a][b][c] = 10000;
+							//	comb3_0[j][a][b][c] = 1000;
 							//	comb3_1[j][a][b][c] = 0;
 							//}
 						}
+					}
 
 				//基底1個で画質＋の領域の画質・情報改善を全探索で算出
 				for (a = 0; a < 64; a++) {
@@ -1542,7 +1556,7 @@ int main()
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
 
-						if (ica_basis2[64][j] == 1) {//基底1個領域を対象
+						if (ica_basis2[64][j] == 1) {//基底2個領域を対象
 
 							ny[a][j] = y[a][j];
 
@@ -1616,7 +1630,7 @@ int main()
 								ny[i][j] = 0; //係数初期化
 
 							if (ica_basis2[64][j] == 2) {//基底2個領域を対象
-								printf("\n %d, %d ", a, b);
+
 								ny[a][j] = y[a][j];
 								ny[b][j] = y[b][j];
 
@@ -1644,32 +1658,18 @@ int main()
 								//情報量の調査
 								sum = 0;
 
-								for (m = 0; m < 1024; m++) {
-									for (l = 0; l < 64; l++) {
-										if (dcoe_temp[l][m] != 0)
-											sum += dct_ent2[l][m]; //dct単独
-									}
+								for (l = 0; l < 64; l++) {
+									if (dcoe_temp[l][m] != 0)
+										sum += dct_ent2[l][j]; //dct単独
 								}
 
-								for (m = 0; m < 1024; m++) {
-									if (j != m) {
-										for (l = 0; l < 64; l++) {
-											if (dcoe_temp[l][m] != 0)
-												sum -= dct_ent2[l][m];//対象領域以外をDCT_Block
-										}
+								for (l = 0; l < 64; l++) {
+									if (ny[l][m] != 0) {
+										sum -= ica_ent2[l][j];//対象領域をICA_Block
 									}
 								}
+								sum -= ica_dc[m];//ica_dc
 
-								for (m = 0; m < 1024; m++) {
-									if (j == m) {
-										for (l = 0; l < 64; l++) {
-											if (ny[l][m] != 0) {
-												sum -= ica_ent2[l][m];//対象領域をICA_Block
-											}
-										}
-										sum -= ica_dc[m];//ica_dc
-									}
-								}
 								comb2[j][a][b][1] = sum;
 							}
 						}
@@ -1677,95 +1677,105 @@ int main()
 				}
 
 
+				//0dame
+
 				//基底3個で画質＋の領域の画質・情報改善を全探索で算出
 
+				for (a = 0; a < 64 - 2; a++) {
+					for (b = a + 1; b < 64 - 1; b++) {
+						for (d = b + 1; d < 64; d++) {
+
+							for (j = 0; j < 1024; j++)
+								for (i = 0; i < 64; i++)
+									ny[i][j] = 0; //係数初期化
+
+							for (j = 0; j < 1024; j++) {
+
+								for (i = 0; i < 64; i++)
+									ny[i][j] = 0; //係数初期化
+
+								if (ica_basis2[64][j] == 999) {
+
+									ny[a][j] = y[a][j];
+									ny[b][j] = y[b][j];
+									ny[d][j] = y[d][j];
+
+									for (m = 0; m < 64; m++)
+										xx[m] = 0.0;
+
+									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+									sum = 0.0;
+									mk = j % 32;
+									ml = j / 32;
+
+									//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+								   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+									for (m = 0; m < 8; m++) {
+										for (l = 0; l < 8; l++) {
+											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+										}
+									}
+
+									//comb3_0[j][a][b][d] = sum / 64;
+
+									//情報量の調査
+									sum = 0;
+
+									for (m = 0; m < 1024; m++) {
+										for (l = 0; l < 64; l++) {
+											if (dcoe_temp[l][m] != 0)
+												sum += dct_ent2[l][m]; //dct単独
+										}
+									}
+
+									for (m = 0; m < 1024; m++) {
+										if (j != m) {
+											for (l = 0; l < 64; l++) {
+												if (dcoe_temp[l][m] != 0)
+													sum -= dct_ent2[l][m];//対象領域以外をDCT_Block
+											}
+										}
+									}
+
+									for (m = 0; m < 1024; m++) {
+										if (j == m) {
+											for (l = 0; l < 64; l++) {
+												if (ny[l][m] != 0) {
+													sum -= ica_ent2[l][m];//対象領域をICA_Block
+												}
+											}
+											sum -= ica_dc[m];//ica_dc
+										}
+									}
+
+									//comb3_1[j][a][b][d] = sum;
+
+								}
+							}
+						}
+					}
+				}
+
+				//累積（基底3つ）
 				//for (a = 0; a < 64 - 2; a++) {
 				//	for (b = a + 1; b < 64 - 1; b++) {
-				//		for (d = b + 1; d < 64; d++) {
-
-				//			for (j = 0; j < 1024; j++)
-				//				for (i = 0; i < 64; i++)
-				//					ny[i][j] = 0; //係数初期化
-
-				//			for (j = 0; j < 1024; j++) {
-
-				//				for (i = 0; i < 64; i++)
-				//					ny[i][j] = 0; //係数初期化
-
-				//				if (ica_basis2[64][j] == 3) {
-
-				//					ny[a][j] = y[a][j];
-				//					ny[b][j] = y[b][j];
-				//					ny[d][j] = y[d][j];
-
-				//					for (m = 0; m < 64; m++)
-				//						xx[m] = 0.0;
-
-				//					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-				//					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-				//					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-				//					sum = 0.0;
-				//					mk = j % 32;
-				//					ml = j / 32;
-
-				//					// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-				//					// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-				//					for (m = 0; m < 8; m++) {
-				//						for (l = 0; l < 8; l++) {
-				//							sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
-				//						}
-				//					}
-
-				//					comb3_0[j][a][b][d] = sum / 64;
-
-				//					//情報量の調査
-				//					sum = 0;
-
-				//					for (m = 0; m < 1024; m++) {
-				//						for (l = 0; l < 64; l++) {
-				//							if (dcoe_temp[l][m] != 0)
-				//								sum += dct_ent2[l][m]; //dct単独
-				//						}
-				//					}
-
-				//					for (m = 0; m < 1024; m++) {
-				//						if (j != m) {
-				//							for (l = 0; l < 64; l++) {
-				//								if (dcoe_temp[l][m] != 0)
-				//									sum -= dct_ent2[l][m];//対象領域以外をDCT_Block
-				//							}
-				//						}
-				//					}
-
-				//					for (m = 0; m < 1024; m++) {
-				//						if (j == m) {
-				//							for (l = 0; l < 64; l++) {
-				//								if (ny[l][m] != 0) {
-				//									sum -= ica_ent2[l][m];//対象領域をICA_Block
-				//								}
-				//							}
-				//							sum -= ica_dc[m];//ica_dc
-				//						}
-				//					}
-
-				//					comb3_1[j][a][b][d] = sum;
-
-				//				}
-				//			}
+				//		for (c = b + 1; c < 64; c++) {
+				//			comb_result3[a][b][c][0] = 0;
+				//			comb_result3[a][b][c][1] = 0;
 				//		}
 				//	}
 				//}
-
-				//累積（基底3つ）
 
 				//for (a = 0; a < 64 - 2; a++) {
 				//	for (b = a + 1; b < 64 - 1; b++) {
 				//		for (c = b + 1; c < 64; c++) {
 				//			for (j = 0; j < 1024; j++) {
 				//				//画質・情報量
-				//				comb_result3[a][b][c][0] += comb3_0[j][a][b][c];
-				//				comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
+				//				//comb_result3[a][b][c][0] += comb3_0[j][a][b][c];
+				//				//comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 
 				//				max = comb2[j][a][b][0];//MSEだから小さい順
 				//				k = a;
@@ -1778,8 +1788,8 @@ int main()
 				//					k = a;
 				//					l = c;
 				//				}
-				//				comb_result3[a][b][c][0] += comb2[j][k][l][0];//画質の一番いい基底のみ
-				//				comb_result3[a][b][c][1] += comb2[j][k][l][1];
+				//				//comb_result3[a][b][c][0] += comb2[j][k][l][0];//画質の一番いい基底のみ
+				//				//comb_result3[a][b][c][1] += comb2[j][k][l][1];
 
 				//				max = comb[j][a][0];//MSEだから小さい順
 				//				k = a;
@@ -1787,52 +1797,77 @@ int main()
 				//					k = b;
 				//				if (max > comb[j][c][0])
 				//					k = c;
-				//				comb_result3[a][b][c][0] += comb[j][k][0];
-				//				comb_result3[a][b][c][1] += comb[j][k][1];
+				//				//comb_result3[a][b][c][0] += comb[j][k][0];
+				//				//comb_result3[a][b][c][1] += comb[j][k][1];
 				//			}
 				//		}
 				//	}
 				//}
-				
 				//累積（基底2つ）
+				k=0;
+				for (a = 0; a < 64 - 1; a++) {
+					for (b = a + 1; b < 64; b++) {
+						comb_result2[a][b][0] = 0;
+						comb_result2[a][b][1] = 0;
+						comb_sort2[a][b] = 0;
+					}
+				}
+
+				//0dame
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						for (j = 0; j < 1024; j++) {
-							//画質・情報量
 							if (dct_mse[j] > comb2[j][a][b][0]) {
-								comb_result2[a][b][0] += dct_mse[j] - comb2[j][a][b][0];//dctからの画質改善量を累積
-								printf("\n%lf", comb_result2[a][b][0]);
+								//画質・情報量
+								sum = dct_mse[j] - comb2[j][a][b][0];
+								comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
+								//printf("\n%lf", comb_result2[a][b][0]);
 								comb_result2[a][b][1] += comb2[j][a][b][1];
+								//printf("\n\n[%d, %d] %lf, %lf", a, b, comb2[j][a][b][1], dct_mse[j] - comb2[j][a][b][0]);
+								//printf("\n%lf, %lf", comb_result2[a][b][1], comb_result2[a][b][0]);
 							}
-							//max = comb[j][a][0];//MSEだから小さい順
-							//k = a;
-							//if (max > comb[j][b][0])
-							//	k = b;
-							//comb_result2[a][b][0] += comb[j][k][0];
-							//comb_result2[a][b][1] += comb[j][k][1];
+
+							//MSEだから小さい順
+							k = a;
+							if (comb[j][a][0] > comb[j][b][0])
+								k = b;
+							if (dct_mse[j] > comb[j][k][0]) {
+								sum = dct_mse[j] - comb[j][k][0];
+								comb_result2[a][b][0] += sum;
+								comb_result2[a][b][1] += comb[j][k][1];
+								//printf("\n\n[%d, %d -> %d] %lf, %lf", a, b, k, comb[j][k][1], dct_mse[j] - comb[j][k][0]);
+								//printf("\n[%d, %d] %lf, %lf", a, b, comb_result2[a][b][1], comb_result2[a][b][0]);
+							}
+
 						}
 					}
 				}
 
 				//画質順でソート
+				for (i = 0; i < 100; i++) {
+					comb_after_sort[i][0] = 0;
+					comb_after_sort[i][1] = 0;
+					comb_after_sort[i][2] = 99;
+					comb_after_sort[i][3] = 99;
+					comb_after_sort[i][4] = 99;
+				}
 
-
-				for (a = 0; a < 64 - 2; a++)
-					for (b = a + 1; b < 64 - 1; b++)
-						for (c = b + 1; c < 64; c++)
-							comb_sort3[a][b][c] = comb_result3[a][b][c][0];//copy
+				// 0dame
+				
+				//for (a = 0; a < 64 - 2; a++)
+				//	for (b = a + 1; b < 64 - 1; b++)
+				//		for (c = b + 1; c < 64; c++)
+				//			comb_sort3[a][b][c] = comb_result3[a][b][c][0];//copy
 
 				for (a = 0; a < 64 - 1; a++)
 					for (b = a + 1; b < 64; b++)
 						comb_sort2[a][b] = comb_result2[a][b][0];//copy
-					
 
 
 
 				for (i = 0; i < 10; i++) {
-					max = 0;//累積画質の最大値
-					k = l = m = n = o = 99;//累積画質最大の基底番号
-
+					max = 0;
+					k = l = m = n = o = 99;
 					//for (a = 0; a < 64 - 2; a++)
 					//	for (b = a + 1; b < 64 - 1; b++)
 					//		for (c = b + 1; c < 64; c++)
@@ -1845,19 +1880,19 @@ int main()
 
 					for (a = 0; a < 64 - 1; a++)
 						for (b = a + 1; b < 64; b++)
-							if (comb_sort2[a][b] > max) {
+							if (comb_sort2[a][b] > max) {//改善画質累積の比較のため，最大を探索
 								max = comb_sort2[a][b];//2sort
 								n = a;
 								o = b;
 							}
 
 					if (n == 99 && k != 99) {//ソート結果を格納
-						comb_after_sort[i][0] = comb_result3[k][l][m][0];
-						comb_after_sort[i][1] = comb_result3[k][l][m][1];
+						//comb_after_sort[i][0] = comb_result3[k][l][m][0];
+						//comb_after_sort[i][1] = comb_result3[k][l][m][1];
 						comb_after_sort[i][2] = (double)k;
 						comb_after_sort[i][3] = (double)l;
 						comb_after_sort[i][4] = (double)m;
-						comb_sort3[k][l][m] = 10000;//99番基底が入らないか？
+						comb_sort3[k][l][m] = 0;//99番基底が入らないか？
 					}
 					else if (n != 99) {
 						comb_after_sort[i][0] = comb_result2[n][o][0];
@@ -1865,9 +1900,8 @@ int main()
 						comb_after_sort[i][2] = (double)n;
 						comb_after_sort[i][3] = (double)o;
 						comb_after_sort[i][4] = 99;
-						comb_sort2[n][o] = 0;//選択したため，累積画質を０
-					}
-					else {
+						comb_sort2[n][o] = 0;//99番基底が入らないか？
+					} else {
 						comb_after_sort[i][0] = 0;
 						comb_after_sort[i][1] = 0;
 						comb_after_sort[i][2] = 99;
@@ -1882,18 +1916,28 @@ int main()
 				k = 0;
 
 				for (a = 0; a < 10; a++) {
-
+					//printf("\n %lf, %lf",comb_after_sort[a][0], comb_after_sort[a][1]);
 					if (comb_after_sort[a][4] == 99)
 						c = 2;
 					else
 						c = 3;
 
-					if (k = 0) {
-						if ((basis0_ent + comb_after_sort[a][1] > ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+					if (k == 0) {
+						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+							printf("\n [%d , %d]  %lf + %lf >>  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
 							k++;
+						} else {
+							printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
+							comb_after_sort[a][0] = 0;//選出基底以外全て初期化
+							comb_after_sort[a][1] = 0;//選出基底以外全て初期化
+							comb_after_sort[a][2] = 99;//選出基底以外全て初期化
+							comb_after_sort[a][3] = 99;//選出基底以外全て初期化
+							comb_after_sort[a][4] = 99;//選出基底以外全て初期化
 						}
+					} else {
+						printf("\n [%d , %d]  %lf + %lf <  %lf  :  %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0]);
 					}
 				}
 
@@ -1902,7 +1946,7 @@ int main()
 				b = (int)comb_after_sort[0][3];
 				c = (int)comb_after_sort[0][4];
 
-				printf("\n  %d,  %d,  %d", a, b, c);
+				printf("\n%d, %d, %d", a, b, c);
 
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++)
@@ -1914,7 +1958,7 @@ int main()
 
 
 				for (j = 0; j < 1024; j++) {
-					if (c != 99 && a != 99) {//選出基底3津の時
+					if (c != 99) {//選出基底3津の時
 						//基底3で画質最大
 						//if (ica_basis2[64][j] == 3 && comb3_0[j][a][b][c] < dct_mse[j]) {
 						//	ny[a][j] = y[a][j];
@@ -1954,21 +1998,22 @@ int main()
 							no_op[j] = 1;
 						}
 					}
-					else if (c == 99 && a != 99) {//選出基底2津の時
+					else if (c == 99) {//選出基底2津の時
 						if (ica_basis2[64][j] == 2 && comb2[j][a][b][0] < dct_mse[j]) {
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							no_op[j] = 1;
 						}
-						//if (ica_basis2[64][j] == 1) {
-						//	max = comb[j][a][0];//MSEだから小さい順
-						//	m = a;
-						//	if (max > comb[j][b][0])
-						//		m = b;
-						//	if (comb[j][m][0] < dct_mse[j])
-						//		ny[m][j] = y[m][j];
-						//	no_op[j] = 1;
-						//}
+						if (ica_basis2[64][j] == 1) {
+							max = comb[j][a][0];//MSEだから小さい順
+							m = a;
+							if (max > comb[j][b][0])
+								m = b;
+							if (comb[j][m][0] < dct_mse[j]) {
+								ny[m][j] = y[m][j];
+								no_op[j] = 1;
+							}
+						}
 
 					}
 				}
@@ -2020,7 +2065,7 @@ int main()
 				for (j = 0; j < 1024; j++) {
 					if (no_op[j] == 1) {
 						for (i = 0; i < 64; i++) {
-							if (nnny[i][j] != 0) {
+							if (ny[i][j] != 0) {
 								sum += ica_ent2[i][j];
 								test_area[j]++;
 								if (test_basis[i] == 0)
@@ -2077,28 +2122,15 @@ int main()
 				psnr_temp2 = psnr(origin, dcoe2);
 				fprintf(fp10, ",,%lf", psnr_temp2);
 
-
-				for (a = 0; a < 1024; a++) {
-					for (b = 0; b < 64; b++) {
-						for (c = 0; c < 64; c++) {
-							free(comb3_1[a][b][c]);
-							free(comb3_0[a][b][c]);
-						}
-						free(comb3_1[a][b]);
-						free(comb3_0[a][b]);
-					}
-					free(comb3_1[a]);
-					free(comb3_0[a]);
-				}
-				free(comb3_1);
-				free(comb3_0);
-
+				//free(comb3_0);
+				//free(comb3_1);
 			}
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		} // dctの最初に戻る
 
 	}
+
 
 
 

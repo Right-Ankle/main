@@ -13,7 +13,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 	char output[1000];
 	int a, b, i, l, k;
 	//gp = _popen(GNUPLOT_PATH, "w");
-	printf(" now output  - - - ->");
+	printf(" \n now output  - - - ->");
 	for (a = 0; a < 256; a++)
 		for (b = 0; b < 256; b++)
 			temp_sai[a * 256 + b] = origin[a][b];
@@ -46,7 +46,7 @@ void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag
 	char output[1000];
 	int a, b, i, l, k;
 	//gp = _popen(GNUPLOT_PATH, "w");
-	printf(" now output  - - - ->");
+	printf(" \n now output  - - - ->");
 	for (a = 0; a < 256; a++)
 		for (b = 0; b < 256; b++) {
 			temp_ica[a * 256 + b] = ica[a][b];
