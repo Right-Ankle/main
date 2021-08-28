@@ -1529,13 +1529,13 @@ int main()
 
 				for (j = 0; j < 1024; j++)
 					for (a = 0; a < 64; a++) {
-						comb[j][a][0] = 10000;
+						comb[j][a][0] = 100000;
 						comb[j][a][1] = 0;
 						for (b = 0; b < 64; b++) {
-							comb2[j][a][b][0] = 10000;
+							comb2[j][a][b][0] = 100000;
 							comb2[j][a][b][1] = 0;
 							for (c = 0; c < 64; c++) {
-								comb3_0[j][a][b][c] = 10000;
+								comb3_0[j][a][b][c] = 100000;
 								comb3_1[j][a][b][c] = 0;
 							}
 						}
@@ -1553,7 +1553,7 @@ int main()
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
 
-						if (ica_basis2[64][j] == 1) {//基底2個領域を対象
+						if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底1個領域を対象
 
 							ny[a][j] = y[a][j];
 
@@ -1612,7 +1612,7 @@ int main()
 							for (i = 0; i < 64; i++)
 								ny[i][j] = 0; //係数初期化
 
-							if (ica_basis2[64][j] == 2) {//基底2個領域を対象
+							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
 
 								ny[a][j] = y[a][j];
 								ny[b][j] = y[b][j];
@@ -1677,7 +1677,7 @@ int main()
 								for (i = 0; i < 64; i++)
 									ny[i][j] = 0; //係数初期化
 
-								if (ica_basis2[64][j] == 3) {
+								if (ica_basis2[64][j] != 99&&ica_basis2[64][j]!=0) {
 
 									ny[a][j] = y[a][j];
 									ny[b][j] = y[b][j];
@@ -1746,13 +1746,7 @@ int main()
 						for (c = b + 1; c < 64; c++) {
 							for (j = 0; j < 1024; j++) {
 								//画質・情報量
-								//3個
-								if (dct_mse[j] > comb3_0[j][a][b][c]) {
-									sum = dct_mse[j] - comb3_0[j][a][b][c];
-									comb_result3[a][b][c][0] += sum;
-									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
-									comb_result3[a][b][c][2]++;
-								}
+
 								//2個
 								max = comb2[j][a][b][0];//MSEだから小さい順
 								k = a;
@@ -1765,23 +1759,31 @@ int main()
 									k = a;
 									l = c;
 								}
-								if (dct_mse[j] > comb2[j][k][l][0]) {
+								//1個
+								max = comb[j][a][0];//MSEだから小さい順
+								m = a;
+								if (max > comb[j][b][0])
+									m = b;
+								if (max > comb[j][c][0])
+									m = c;
+
+								//1vs2vs3個で画質比較
+								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]>-0.00001) {
+									sum = dct_mse[j] - comb3_0[j][a][b][c];
+									comb_result3[a][b][c][0] += sum;
+									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
+									comb_result3[a][b][c][2]++;
+								}
+								else if (comb2[j][k][l][0] < comb[j][m][0]&& dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > -0.00001) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
 								}
-								//1個
-								max = comb[j][a][0];//MSEだから小さい順
-								k = a;
-								if (max > comb[j][b][0])
-									k = b;
-								if (max > comb[j][c][0])
-									k = c;
-								if (dct_mse[j] > comb[j][k][0]) {
-									sum = dct_mse[j] - comb[j][k][0];
+								else if (dct_mse[j] > comb[j][m][0]) {
+									sum = dct_mse[j] - comb[j][m][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
-									comb_result3[a][b][c][1] += comb[j][k][1];
+									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
 								}
 							}
@@ -1804,25 +1806,25 @@ int main()
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						for (j = 0; j < 1024; j++) {
-							if (dct_mse[j] > comb2[j][a][b][0]) {
+							//1個
+							k = a;
+							if (comb[j][a][0] > comb[j][b][0])
+								k = b;
+
+							//1vs2個の画質比較
+							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0] && comb2[j][k][l][1] > -0.00001) {
 								//画質・情報量
 								sum = dct_mse[j] - comb2[j][a][b][0];
 								comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
 								comb_result2[a][b][1] += comb2[j][a][b][1];
 								comb_result2[a][b][2]++;
 							}
-
-							//1個
-							k = a;
-							if (comb[j][a][0] > comb[j][b][0])
-								k = b;
-							if (dct_mse[j] > comb[j][k][0]) {
+							else if (dct_mse[j] > comb[j][k][0]) {
 								sum = dct_mse[j] - comb[j][k][0];
 								comb_result2[a][b][0] += sum;
 								comb_result2[a][b][1] += comb[j][k][1];
 								comb_result2[a][b][2]++;
 							}
-
 						}
 					}
 				}
@@ -2007,62 +2009,60 @@ int main()
 				for (j = 0; j < 1024; j++) {
 					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
 						//基底3で画質最大
-						if (ica_basis2[64][j] == 3 && comb3_0[j][a][b][c] < dct_mse[j] && comb3_1[j][a][b][c]>0) {
+						//2個
+						max = comb2[j][a][b][0];//MSEだから小さい順
+						k = a;
+						l = b;
+						if (max > comb2[j][b][c][0]) {
+							k = b;
+							l = c;
+						}
+						if (max > comb2[j][a][c][0]) {
+							k = a;
+							l = c;
+						}
+						//1個
+						max = comb[j][a][0];//MSEだから小さい順
+						m = a;
+						if (max > comb[j][b][0])
+							m = b;
+						if (max > comb[j][c][0])
+							m = c;
+
+						//1vs2vs3個で画質比較
+						if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]&& comb3_1[j][a][b][c]>-0.00001) {
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							ny[c][j] = y[c][j];
 							no_op[j] = 1;
 						}
-						//基底2で画質最大
-						if (ica_basis2[64][j] == 2) {
-							max = comb2[j][a][b][0];//MSEだから小さい順
-							k = a;
-							l = b;
-							if (max > comb2[j][b][c][0]) {
-								k = b;
-								l = c;
-							}
-							if (max > comb2[j][a][c][0]) {
-								k = a;
-								l = c;
-							}
-							if (comb2[j][k][l][0] < dct_mse[j]&&comb2[j][k][l][1]>0) {//DCTよりも画質が良いなら使用
-								ny[k][j] = y[k][j];
-								ny[l][j] = y[l][j];
-								no_op[j] = 1;
-							}
+						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] >-0.00001) {
+							ny[k][j] = y[k][j];
+							ny[l][j] = y[l][j];
+							no_op[j] = 1;
 						}
-						//基底1で画質最大
-						if (ica_basis2[64][j] == 1) {
-							max = comb[j][a][0];//MSEだから小さい順
-							m = a;
-							if (max > comb[j][b][0])
-								m = b;
-							if (max > comb[j][c][0])
-								m = c;
-							if (comb[j][m][0] < dct_mse[j]) {
-								ny[m][j] = y[m][j];
-								no_op[j] = 1;
-							}
+						else if (dct_mse[j] > comb[j][m][0]) {
+							ny[m][j] = y[m][j];
+							no_op[j] = 1;
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
-						if (ica_basis2[64][j] == 2 && comb2[j][a][b][0] < dct_mse[j] && comb2[j][k][l][1]>0) {
+						//1個
+						k = a;
+						if (comb[j][a][0] > comb[j][b][0])
+							k = b;
+
+						//1vs2個の画質比較
+						if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]&& comb2[j][a][b][1] > -0.00001) {
+							//画質・情報量
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							no_op[j] = 1;
 						}
-						if (ica_basis2[64][j] == 1) {
-							max = comb[j][a][0];//MSEだから小さい順
-							m = a;
-							if (max > comb[j][b][0])
-								m = b;
-							if (comb[j][m][0] < dct_mse[j]) {
-								ny[m][j] = y[m][j];
-								no_op[j] = 1;
-							}
+						else if (dct_mse[j] > comb[j][k][0]) {
+							ny[k][j] = y[k][j];
+							no_op[j] = 1;
 						}
-
 					}
 					else if (a != 99 && b == 99 && c == 99) {
 						if (comb[j][a][0] < dct_mse[j]) {
