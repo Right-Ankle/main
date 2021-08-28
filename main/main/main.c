@@ -77,6 +77,7 @@ int main()
 	double comb_sort2[64][64] = { 0 };
 	double comb_sort[64] = { 0 };
 	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
+	double comb_basis[64] = { 0 };// 0or1  0->基底を使ってない　1->基底を使っている
 
 
 	////// double //////
@@ -1586,11 +1587,6 @@ int main()
 							}
 
 							for (l = 0; l < 64; l++) {
-								if (dcoe_temp[l][j] != 0)
-									sum -= dct_ent2[l][j];//対象領域以外をDCT_Block
-							}
-
-							for (l = 0; l < 64; l++) {
 								if (ny[l][j] != 0) {
 									sum -= ica_ent2[l][j];//対象領域をICA_Block
 								}
@@ -1716,13 +1712,6 @@ int main()
 										if (dcoe_temp[l][j] != 0)
 											sum += dct_ent2[l][j]; //dct単独
 									}
-
-									for (l = 0; l < 64; l++) {
-										if (dcoe_temp[l][j] != 0)
-											sum -= dct_ent2[l][j];//対象領域以外をDCT_Block
-									}
-
-
 
 									for (l = 0; l < 64; l++) {
 										if (ny[l][j] != 0) {
@@ -1952,6 +1941,7 @@ int main()
 				//基底選出
 				k = 0;
 				c = 0;
+				d = 0;
 				sum = 0;
 				for (a = 0; a < 30; a++) {
 					//printf("\n %lf, %lf",comb_after_sort[a][0], comb_after_sort[a][1]);
@@ -1963,8 +1953,8 @@ int main()
 					else
 						c = 3;
 
-					//if (k == 0) {
-						if ((basis0_ent + sum + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+					if (k == 0) {
+						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
 							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
@@ -1978,10 +1968,10 @@ int main()
 							comb_after_sort[a][3] = 99;//選出基底以外全て初期化
 							comb_after_sort[a][4] = 99;//選出基底以外全て初期化
 						}
-					//}
-					//else {
-					//	printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
-					//}
+					}
+					else {
+						printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+					}
 
 					if (a == 9)
 						printf("\n");
@@ -1990,11 +1980,20 @@ int main()
 				}
 
 				//選出基底のうち，領域内で使用する基底を決定
-				a = (int)comb_after_sort[0][2];
-				b = (int)comb_after_sort[0][3];
-				c = (int)comb_after_sort[0][4];
+				if (k == 1) {
+					a = (int)comb_after_sort[0][2];
+					b = (int)comb_after_sort[0][3];
+					c = (int)comb_after_sort[0][4];
+				}
+				else {
+					a = 99;
+					b = 99;
+					c = 99;
+				}
 
 				printf("\n%d, %d, %d", a, b, c);
+
+
 
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++)
@@ -2006,9 +2005,9 @@ int main()
 
 
 				for (j = 0; j < 1024; j++) {
-					if (c != 99) {//選出基底3津の時
+					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
 						//基底3で画質最大
-						if (ica_basis2[64][j] == 3 && comb3_0[j][a][b][c] < dct_mse[j]) {
+						if (ica_basis2[64][j] == 3 && comb3_0[j][a][b][c] < dct_mse[j] && comb3_1[j][a][b][c]>0) {
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							ny[c][j] = y[c][j];
@@ -2027,7 +2026,7 @@ int main()
 								k = a;
 								l = c;
 							}
-							if (comb2[j][k][l][0] < dct_mse[j]) {//DCTよりも画質が良いなら使用
+							if (comb2[j][k][l][0] < dct_mse[j]&&comb2[j][k][l][1]>0) {//DCTよりも画質が良いなら使用
 								ny[k][j] = y[k][j];
 								ny[l][j] = y[l][j];
 								no_op[j] = 1;
@@ -2041,13 +2040,14 @@ int main()
 								m = b;
 							if (max > comb[j][c][0])
 								m = c;
-							if (comb[j][m][0] < dct_mse[j])
+							if (comb[j][m][0] < dct_mse[j]) {
 								ny[m][j] = y[m][j];
-							no_op[j] = 1;
+								no_op[j] = 1;
+							}
 						}
 					}
-					else if (b != 99) {//選出基底2津の時
-						if (ica_basis2[64][j] == 2 && comb2[j][a][b][0] < dct_mse[j]) {
+					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
+						if (ica_basis2[64][j] == 2 && comb2[j][a][b][0] < dct_mse[j] && comb2[j][k][l][1]>0) {
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							no_op[j] = 1;
@@ -2063,6 +2063,12 @@ int main()
 							}
 						}
 
+					}
+					else if (a != 99 && b == 99 && c == 99) {
+						if (comb[j][a][0] < dct_mse[j]) {
+							ny[a][j] = y[a][j];
+							no_op[j] = 1;
+						}
 					}
 
 				}
