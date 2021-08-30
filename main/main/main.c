@@ -1768,13 +1768,13 @@ int main()
 									m = c;
 
 								//1vs2vs3個で画質比較
-								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]>-0.00001) {
+								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
 									comb_result3[a][b][c][0] += sum;
 									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 									comb_result3[a][b][c][2]++;
 								}
-								else if (comb2[j][k][l][0] < comb[j][m][0]&& dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > -0.00001) {
+								else if (comb2[j][k][l][0] < comb[j][m][0]&& dct_mse[j] > comb2[j][k][l][0]) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
@@ -1812,7 +1812,7 @@ int main()
 								k = b;
 
 							//1vs2個の画質比較
-							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0] && comb2[j][k][l][1] > -0.00001) {
+							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
 								//画質・情報量
 								sum = dct_mse[j] - comb2[j][a][b][0];
 								comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
@@ -2030,13 +2030,13 @@ int main()
 							m = c;
 
 						//1vs2vs3個で画質比較
-						if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]&& comb3_1[j][a][b][c]>-0.00001) {
+						if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
 							ny[c][j] = y[c][j];
 							no_op[j] = 1;
 						}
-						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] >-0.00001) {
+						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
 							ny[l][j] = y[l][j];
 							no_op[j] = 1;
@@ -2053,7 +2053,7 @@ int main()
 							k = b;
 
 						//1vs2個の画質比較
-						if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]&& comb2[j][a][b][1] > -0.00001) {
+						if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
 							//画質・情報量
 							ny[a][j] = y[a][j];
 							ny[b][j] = y[b][j];
