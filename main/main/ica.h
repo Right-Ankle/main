@@ -122,6 +122,7 @@ void ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], do
 void ent_count(double y[256][256], double ica_dc[1024]);
 void ent_count_basis(double w[64][64], double result_w[64]);
 void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag[1024], int name);
+void img_out3(unsigned char origin[][256]);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 
