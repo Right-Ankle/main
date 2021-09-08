@@ -44,6 +44,7 @@ int main()
 	int test_basis[64];
 	int test_area[1024];
 	double dct_ent[64][1024];
+	static double dct_ent_mse[10][1024][2];//0->画質，1->情報量
 	double ica_ent[64][1024];
 	double dct_ent2[64][1024];
 	double ica_ent2[64][1024];
@@ -81,7 +82,7 @@ int main()
 
 
 	////// double //////
-	static double sum = 0, min = 0, max = 0;//計算用
+	static double sum = 0, min = 0, max = 0, gra_a, gra_b, border_ab;//計算用
 	static double threshold = 0, percent = 0;//閾値で使用
 	static double b_ica_ent[1024]; //各ica基底の情報量
 	static double b_dct_ent[1024]; //各ica基底の情報量
@@ -359,16 +360,6 @@ int main()
 			}
 	}
 
-
-
-	//printf("\n------------------------dct_fre start--------");
-	for (Q = 0; Q < 10; Q++) {
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
-			}
-		}
-	}
 	//gnuplot2_2(dct_fre_temp);
 	//for (i = 0; i < 64; i++)
 	//	printf("\n%d  %d  %d  %d", dct_fre_temp[9][i], dct_fre_temp[8][i], dct_fre_temp[7][i], dct_fre_temp[6][i]);
@@ -427,6 +418,73 @@ int main()
 
 	}
 
+	for (Q = 0; Q < 10; Q++) {
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
+			}
+		}
+
+		max = 0;
+		for (i = 0; i < 64; i++)
+			if (dct_fre_temp[Q][i] > max)
+				max = dct_fre_temp[Q][i];
+
+		for (i = 0; i < 64; i++)
+			basis_temp[i] = 0;
+
+		for (i = 0; i < 64; i++)
+			basis_temp[i] = ((max - dct_fre_temp[Q][i]) / max) + 1;
+
+		sum = 0;
+		for (i = 0; i < 64; i++)
+			sum += basis_temp[i];
+
+		sum2 = 0;
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 1024; j++)
+				sum2 += dct_ent[i][j];
+
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 1024; j++)
+				dct_ent2[i][j] = 0;
+
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++)
+				dct_ent2[i][j] = (sum2 * (basis_temp[i] / sum) / 1024);
+		}
+
+
+		dct(origin, dcoe, 8); // 係数を出力
+		a = (Q + 1) * 10;
+		quantization(dcoe, a); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+		idct(dcoe, dcoe2, 8); // 普通の再構成
+		block_mse(origin, dcoe2, dct_mse);
+
+		for (i = 0; i < 256; i += 8) {
+			for (j = 0; j < 256; j += 8) {
+				m = 0;
+				for (k = 0; k < 8; k++) {
+					for (l = 0; l < 8; l++) {
+						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+
+						m++;
+					}
+				}
+				n++;
+			}
+		}
+
+		for (j = 0; j < 1024; j++) {
+			sum = 0;
+			for (l = 0; l < 64; l++) {
+				if (x[l][j] != 0)
+					sum += dct_ent2[l][j]; //dct単独
+			}
+			dct_ent_mse[Q][j][0] = dct_mse[j];//全てのレートのDCTのすべての領域の画質・情報量
+			dct_ent_mse[Q][j][1] = sum;
+		}
+	}
 
 
 	seki5(nw, ny, x); // x -> nw * ny
@@ -1747,6 +1805,28 @@ int main()
 						for (c = b + 1; c < 64; c++) {
 							for (j = 0; j < 1024; j++) {
 								//画質・情報量
+								
+								//AとBに分割
+								if (Q == 100) { //gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
+									//AとBの直線の傾きを求める
+									//AとBに分けるための傾きを求める
+
+								} 
+								else if (Q == 10) {
+
+								}
+								else {
+
+								}
+
+								//AorBの分割
+                                //点と直線の距離を求める
+
+
+
+
+
+
 
 								//2個
 								max = comb2[j][a][b][0];//MSEだから小さい順
@@ -1769,6 +1849,8 @@ int main()
 									m = c;
 
 								//1vs2vs3個で画質比較
+								// 有効・無効の判別
+								// Ixをgra_abに代入したyよりIyが大きければ有効（累積）
 								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]>-0.00001) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
 									comb_result3[a][b][c][0] += sum;
