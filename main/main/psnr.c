@@ -4,8 +4,14 @@
 /*  引数として渡された2つの画像からPSNRを計算し，その値を返します。	*/
 /****************************************************************/
 
+#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
-#include<math.h>
+#include <stdlib.h>
+#include <math.h>
+#include <direct.h>
+#include <Windows.h>
+#include <string.h>
+#include "ica.h"
 
 double psnr(unsigned char origin[][256], unsigned char saikousei[][256]){
 

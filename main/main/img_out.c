@@ -11,7 +11,11 @@
 int img_out(unsigned char origin[][256], int date1[1024], int name) {
 	static int temp_sai[256 * 256];
 	char output[1000];
-	int a, b, i, l, k;
+	int a, b, i, l, k, Q;
+
+	Q = name % 1000;
+	name = (name - Q) / 1000;
+
 	//gp = _popen(GNUPLOT_PATH, "w");
 	printf(" \n now outputing  - - - ->");
 	for (a = 0; a < 256; a++)
@@ -30,7 +34,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 		}
 	}
 
-	sprintf(output, "OUTPUT\\%d.bmp", name);
+	sprintf(output, "OUTPUT\\test\\%d\\%d.bmp", Q, name);
 	img_write_gray(temp_sai, output, 256, 256); // output‚Éo—Í‰æ‘œ‚ð‘‚«o‚·
 	name++;
 

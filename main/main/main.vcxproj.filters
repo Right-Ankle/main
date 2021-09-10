@@ -189,6 +189,9 @@
     <ClCompile Include="block_mse.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ssim.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ica.h">
