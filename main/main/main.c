@@ -35,7 +35,6 @@ int main()
 	static int a, b, c, d, i, j, k, l, m, n, o, mk, ml; //計算用
 	static int ori_temp[256 * 256] = { 0 }; // 原画像変換用
 	static int no_op[1024] = { 0 }; // 小領域flag
-	static int no_op2[1024] = { 0 };
 	static int Q;//圧縮レート
 	static int QQ, QQQ, QQQQ;
 	double min2 = 100000;
@@ -45,7 +44,6 @@ int main()
 	int test_basis[64];
 	int test_area[1024];
 	double dct_ent[64][1024];
-	static double dct_ent_mse[10][1024][2];//0->画質，1->情報量
 	double ica_ent[64][1024];
 	double dct_ent2[64][1024];
 	double ica_ent2[64][1024];
@@ -72,37 +70,18 @@ int main()
 	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
 	double**** comb3_0; //0->画質，1->情報量
 	double**** comb3_1;//0->画質，1->情報量
-	double comb_result3[64][64][64][4] = { 0 };//0->累積画質，1->累積情報量，2->領域数，3->ベクトル量の累積
-	double comb_result2[64][64][4] = { 0 };//0->累積画質，1->累積情報量，2->領域数，3->ベクトル量の累積
-	double comb_result[64][4] = { 0 };//0->累積画質，1->累積情報量，2->領域数，3->ベクトル量の累積
+	double comb_result3[64][64][64][3] = { 0 };//0->累積画質，1->累積情報量
+	double comb_result2[64][64][3] = { 0 };//0->累積画質，1->累積情報量
+	double comb_result[64][3] = { 0 };//0->累積画質，1->累積情報量
 	double comb_sort3[64][64][64] = { 0 };
 	double comb_sort2[64][64] = { 0 };
 	double comb_sort[64] = { 0 };
-	double comb_after_sort[100][7] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)，5->領域数，6->累積ベクトル量
+	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
 	double comb_basis[64] = { 0 };// 0or1  0->基底を使ってない　1->基底を使っている
 
 
 	////// double //////
 	static double sum = 0, min = 0, max = 0;//計算用
-	static double cod_mse[3];//y座標
-	static double cod_ent[3];//x座標
-	static double gra_a;//Aの傾き
-	static double gra_b;//Bの傾き
-	static double border_ab;//AとBを分ける傾き
-	static double gra_3;//3の傾き
-	static double gra_2;//2の傾き 領域数を計測時に使用
-	static double gra_1;//1の傾き 領域数を計測時に使用
-	static double gra_2a;//2の傾きabの組み合わせ
-	static double gra_2b;//2の傾きbcの組み合わせ
-	static double gra_2c;//2の傾きacの組み合わせ
-	static double gra_1a;//1の傾き a
-	static double gra_1b;//1の傾き b
-	static double gra_1c;//1の傾き c
-	static double vec3;//3のベクトル
-	static double vec2;//2のベクトル
-	static double vec1;//1のベクトル
-	static double cod_x;//ica x座標
-	static double cod_y;//ica y座標
 	static double threshold = 0, percent = 0;//閾値で使用
 	static double b_ica_ent[1024]; //各ica基底の情報量
 	static double b_dct_ent[1024]; //各ica基底の情報量
@@ -143,15 +122,14 @@ int main()
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
-	for (i = 1; i < 11; i++) {
-		sprintf(g, "mkdir OUTPUT\\test\\%d", i * 10);
-		system(g);
-	}
+	//for (i = 1; i < 5; i++) {
+	//	sprintf(g, "mkdir OUTPUT\\test\\%d", i);
+	//	system(g);
 	//	for (j = 0; j < 64; j++) {
 	//		sprintf(g, "mkdir OUTPUT\\test\\%d\\%d", i, j);
 	//		system(g);
 	//	}
-
+	//}
 
 	//_mkdir("coe"); //原画像のブロック画像を拡大して出力
 	//	for (j = 0; j < 1024; j++) {
@@ -252,7 +230,6 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	//img_out3(origin);
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// ///////////////////////// ica //////////////////////////////////
@@ -381,6 +358,16 @@ int main()
 			}
 	}
 
+
+
+	//printf("\n------------------------dct_fre start--------");
+	for (Q = 0; Q < 10; Q++) {
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
+			}
+		}
+	}
 	//gnuplot2_2(dct_fre_temp);
 	//for (i = 0; i < 64; i++)
 	//	printf("\n%d  %d  %d  %d", dct_fre_temp[9][i], dct_fre_temp[8][i], dct_fre_temp[7][i], dct_fre_temp[6][i]);
@@ -439,73 +426,6 @@ int main()
 
 	}
 
-	for (Q = 0; Q < 10; Q++) {
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
-			}
-		}
-
-		max = 0;
-		for (i = 0; i < 64; i++)
-			if (dct_fre_temp[Q][i] > max)
-				max = dct_fre_temp[Q][i];
-
-		for (i = 0; i < 64; i++)
-			basis_temp[i] = 0;
-
-		for (i = 0; i < 64; i++)
-			basis_temp[i] = ((max - dct_fre_temp[Q][i]) / max) + 1;
-
-		sum = 0;
-		for (i = 0; i < 64; i++)
-			sum += basis_temp[i];
-
-		sum2 = 0;
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++)
-				sum2 += dct_ent[i][j];
-
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++)
-				dct_ent2[i][j] = 0;
-
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++)
-				dct_ent2[i][j] = (sum2 * (basis_temp[i] / sum) / 1024);
-		}
-
-
-		dct(origin, dcoe, 8); // 係数を出力
-		a = (Q + 1) * 10;
-		quantization(dcoe, a); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-		idct(dcoe, dcoe2, 8); // 普通の再構成
-		block_mse(origin, dcoe2, dct_mse);
-
-		for (i = 0; i < 256; i += 8) {
-			for (j = 0; j < 256; j += 8) {
-				m = 0;
-				for (k = 0; k < 8; k++) {
-					for (l = 0; l < 8; l++) {
-						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
-
-						m++;
-					}
-				}
-				n++;
-			}
-		}
-
-		for (j = 0; j < 1024; j++) {
-			sum = 0;
-			for (l = 0; l < 64; l++) {
-				if (x[l][j] != 0)
-					sum += dct_ent2[l][j]; //dct単独
-			}
-			dct_ent_mse[Q][j][0] = dct_mse[j];//全てのレートのDCTのすべての領域の画質・情報量
-			dct_ent_mse[Q][j][1] = sum;
-		}
-	}
 
 
 	seki5(nw, ny, x); // x -> nw * ny
@@ -1583,32 +1503,7 @@ int main()
 
 			// 画質の良さを基に基底を並び替え
 			/////////////////////////////////////////////////////////////////////////////
-			
-			for (i = 0; i < 1024; i++) {
-				for (j = 0; j < 64; j++)
-					ny[j][i] = 0;
-				no_op2[i] = 0;
-				if (ica_basis2[64][i] == 0) {
-					no_op2[i] = 1;
-				}
-			}
-			seki5(nw, ny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-			img_out2(dcoe2, ica_sai, no_op2, Q + 2);
-			for (i = 0; i < 256; i++)
-				for (j = 0; j < 256; j++) {
-					k = i / 8;
-					m = j / 8;
-					if (no_op2[32 * k + m] == 0) {
-						dct_ica_sai[i][j] = dcoe2[i][j];
-					}
-					else if (no_op2[32 * k + m] == 1) {
-						dct_ica_sai[i][j] = ica_sai[i][j];
-					}
-				}
-			sum=SSIM(origin, dct_ica_sai, 256, 256);
-			printf("\nSSIM[%d] : %lf", Q, sum);
+
 
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1841,7 +1736,6 @@ int main()
 							comb_result3[a][b][c][0] = 0;
 							comb_result3[a][b][c][1] = 0;
 							comb_result3[a][b][c][2] = 0;
-							comb_result3[a][b][c][3] = 0;
 							comb_sort3[a][b][c] = 0;
 						}
 					}
@@ -1851,185 +1745,46 @@ int main()
 					for (b = a + 1; b < 64 - 1; b++) {
 						for (c = b + 1; c < 64; c++) {
 							for (j = 0; j < 1024; j++) {
-								if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
-									//画質・情報量
-									//初期化
-									vec1 = 0;
-									vec2 = 0;
-									vec3 = 0;
-									cod_mse[1] = 0;//今のレートの座標
-									cod_ent[1] = 0;
+								//画質・情報量
 
-									//AとBに分割
-									//今、上位、下位のレートのx座標を求める
-									if (Q == 100) {
-										cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-										cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-										cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-										cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-									}
-									else if (Q == 10) {
-										cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-										cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-										cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-										cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-									}
-									else {
-										cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-										cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-										cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-										cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-									}
+								//2個
+								max = comb2[j][a][b][0];//MSEだから小さい順
+								k = a;
+								l = b;
+								if (max > comb2[j][b][c][0]) {
+									k = b;
+									l = c;
+								}
+								if (max > comb2[j][a][c][0]) {
+									k = a;
+									l = c;
+								}
+								//1個
+								max = comb[j][a][0];//MSEだから小さい順
+								m = a;
+								if (max > comb[j][b][0])
+									m = b;
+								if (max > comb[j][c][0])
+									m = c;
 
-
-									//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-									//AとBの直線の傾きを求める
-									//AとBに分けるための傾きを求める
-									gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-									gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-									border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
-									//AorBの分割
-									//3この分割
-									cod_x = -comb3_1[j][a][b][c];
-									cod_y = comb3_0[j][a][b][c] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_3 = gra_a;
-									else//Bルート
-										gra_3 = gra_b;
-
-									//2この分割
-									//abの組み合わせ
-									cod_x = -comb2[j][a][b][1];
-									cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_2a = gra_a;
-									else//Bルート
-										gra_2a = gra_b;
-									//bcの組み合わせ
-									cod_x = -comb2[j][b][c][1];
-									cod_y = comb2[j][b][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_2b = gra_a;
-									else//Bルート
-										gra_2b = gra_b;
-									//acの組み合わせ
-									cod_x = -comb2[j][a][c][1];
-									cod_y = comb2[j][a][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_2c = gra_a;
-									else//Bルート
-										gra_2c = gra_b;
-
-									//1この分割
-									//aの組み合わせ
-									cod_x = -comb[j][a][1];
-									cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_1a = gra_a;
-									else//Bルート
-										gra_1a = gra_b;
-									//bの組み合わせ
-									cod_x = -comb[j][b][1];
-									cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_1b = gra_a;
-									else//Bルート
-										gra_1b = gra_b;
-									//cの組み合わせ
-									cod_x = -comb[j][c][1];
-									cod_y = comb[j][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (border_ab * cod_x > cod_y)//Aルート
-										gra_1c = gra_a;
-									else//Bルート
-										gra_1c = gra_b;
-
-									//点と直線の距離を求める
-									//3個
-									cod_x = -comb3_1[j][a][b][c];
-									cod_y = comb3_0[j][a][b][c] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_3 * cod_x > cod_y)//座標が線分よりも上=有効
-										vec3 = fabs(gra_3 * cod_x - cod_y) / sqrt(gra_3 * gra_3 + 1);//線分からの距離
-
-									//2個
-									cod_x = -comb2[j][a][b][1];
-									cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_2a * cod_x > cod_y) {//座標が線分よりも上=有効
-										vec2 = fabs(gra_2a * cod_x - cod_y) / sqrt(gra_2a * gra_2a + 1);//線分からの距離
-										k = a;
-										l = b;
-									}
-									cod_x = -comb2[j][b][c][1];
-									cod_y = comb2[j][b][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_2b * cod_x > cod_y) {//座標が線分よりも上=有効
-										sum = fabs(gra_2b * cod_x - cod_y) / sqrt(gra_2b * gra_2b + 1);//線分からの距離
-										if (vec2 < sum) {
-											k = b;
-											l = c;
-											vec2 = sum;
-										}
-									}
-									cod_x = -comb2[j][a][c][1];
-									cod_y = comb2[j][a][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_2c * cod_x > cod_y) {//座標が線分よりも上=有効
-										sum = fabs(gra_2c * cod_x - cod_y) / sqrt(gra_2c * gra_2c + 1);//線分からの距離
-										if (vec2 < sum) {
-											k = a;
-											l = c;
-											vec2 = sum;
-										}
-									}
-
-									//1個
-									cod_x = -comb[j][a][1];
-									cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
-										vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-										m = a;
-									}
-									cod_x = -comb[j][b][1];
-									cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_1b * cod_x > cod_y) {//座標が線分よりも上=有効
-										sum = fabs(gra_1b * cod_x - cod_y) / sqrt(gra_1b * gra_1b + 1);//線分からの距離
-										if (vec1 < sum) {
-											m = b;
-											vec1 = sum;
-										}
-									}
-									cod_x = -comb[j][c][1];
-									cod_y = comb[j][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-									if (gra_1c * cod_x > cod_y) {//座標が線分よりも上=有効
-										sum = fabs(gra_1c * cod_x - cod_y) / sqrt(gra_1c * gra_1c + 1);//線分からの距離
-										if (vec1 < sum) {
-											m = c;
-											vec1 = sum;
-										}
-									}
-
-									//1vs2vs3個で画質比較
-									// 有効・無効の判別
-									// Ixをgra_abに代入したyよりIyが大きければ有効（累積）
-									if (vec3 > vec2 && vec3 > vec1 && vec3 != 0) {
-										sum = dct_mse[j] - comb3_0[j][a][b][c];
-										comb_result3[a][b][c][0] += sum;
-										comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
-										comb_result3[a][b][c][2]++;
-										comb_result3[a][b][c][3] += vec3;
-									}
-									else if (vec2 > vec1 && vec2 != 0) {
-										sum = dct_mse[j] - comb2[j][k][l][0];
-										comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
-										comb_result3[a][b][c][1] += comb2[j][k][l][1];
-										comb_result3[a][b][c][2]++;
-										comb_result3[a][b][c][3] += vec2;
-									}
-									else if (vec1 != 0) {
-										sum = dct_mse[j] - comb[j][m][0];
-										comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
-										comb_result3[a][b][c][1] += comb[j][m][1];
-										comb_result3[a][b][c][2]++;
-										comb_result3[a][b][c][3] += vec1;
-									}
+								//1vs2vs3個で画質比較
+								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
+									sum = dct_mse[j] - comb3_0[j][a][b][c];
+									comb_result3[a][b][c][0] += sum;
+									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
+									comb_result3[a][b][c][2]++;
+								}
+								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
+									sum = dct_mse[j] - comb2[j][k][l][0];
+									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
+									comb_result3[a][b][c][1] += comb2[j][k][l][1];
+									comb_result3[a][b][c][2]++;
+								}
+								else if (dct_mse[j] > comb[j][m][0]) {
+									sum = dct_mse[j] - comb[j][m][0];
+									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
+									comb_result3[a][b][c][1] += comb[j][m][1];
+									comb_result3[a][b][c][2]++;
 								}
 							}
 						}
@@ -2043,7 +1798,6 @@ int main()
 						comb_result2[a][b][0] = 0;
 						comb_result2[a][b][1] = 0;
 						comb_result2[a][b][2] = 0;
-						comb_result2[a][b][3] = 0;
 						comb_sort2[a][b] = 0;
 					}
 				}
@@ -2052,108 +1806,24 @@ int main()
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						for (j = 0; j < 1024; j++) {
-							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
-								vec1 = 0;
-								vec2 = 0;
-								cod_mse[1] = 0;//今のレートの座標
-								cod_ent[1] = 0;
+							//1個
+							k = a;
+							if (comb[j][a][0] > comb[j][b][0])
+								k = b;
 
-								//AとBに分割
-								//今、上位、下位のレートのx座標を求める
-								if (Q == 100) {
-									cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-									cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-									cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-									cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-								}
-								else if (Q == 10) {
-									cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-									cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-									cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-									cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-								}
-								else {
-									cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-									cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-									cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-									cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-								}
-
-
-								//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-								//AとBの直線の傾きを求める
-								//AとBに分けるための傾きを求める
-								gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-								gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-								border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
-								//AorBの分割
-								//2この分割
-								//abの組み合わせ
-								cod_x = -comb2[j][a][b][1];
-								cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (border_ab * cod_x > cod_y)//Aルート
-									gra_2a = gra_a;
-								else//Bルート
-									gra_2a = gra_b;
-
-								//1この分割
-								//aの組み合わせ
-								cod_x = -comb[j][a][1];
-								cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (border_ab * cod_x > cod_y)//Aルート
-									gra_1a = gra_a;
-								else//Bルート
-									gra_1a = gra_b;
-								//bの組み合わせ
-								cod_x = -comb[j][b][1];
-								cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (border_ab * cod_x > cod_y)//Aルート
-									gra_1b = gra_a;
-								else//Bルート
-									gra_1b = gra_b;
-
-								//点と直線の距離を求める
-								//2個
-								cod_x = -comb2[j][a][b][1];
-								cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (gra_2a * cod_x > cod_y)//座標が線分よりも上=有効
-									vec2 = fabs(gra_2a * cod_x - cod_y) / sqrt(gra_2a * gra_2a + 1);//線分からの距離
-
-								//1個
-								cod_x = -comb[j][a][1];
-								cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
-									vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-									m = a;
-								}
-								cod_x = -comb[j][b][1];
-								cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (gra_1b * cod_x > cod_y) {//座標が線分よりも上=有効
-									sum = fabs(gra_1b * cod_x - cod_y) / sqrt(gra_1b * gra_1b + 1);//線分からの距離
-									if (vec1 < sum) {
-										vec1 = sum;
-										m = b;
-									}
-								}
-
-								//1vs2個で画質比較
-								// 有効・無効の判別
-								// Ixをgra_abに代入したyよりIyが大きければ有効（累積）
-								if (vec2 > vec1 && vec2 != 0) {
-									sum = dct_mse[j] - comb2[j][a][b][0];
-									comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
-									comb_result2[a][b][1] += comb2[j][a][b][1];
-									comb_result2[a][b][2]++;
-									comb_result2[a][b][3] += vec2;
-								}
-								else if (vec1 != 0) {
-									sum = dct_mse[j] - comb[j][m][0];
-									comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
-									comb_result2[a][b][1] += comb[j][m][1];
-									comb_result2[a][b][2]++;
-									comb_result2[a][b][3] += vec1;
-								}
+							//1vs2個の画質比較
+							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
+								//画質・情報量
+								sum = dct_mse[j] - comb2[j][a][b][0];
+								comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
+								comb_result2[a][b][1] += comb2[j][a][b][1];
+								comb_result2[a][b][2]++;
+							}
+							else if (dct_mse[j] > comb[j][k][0]) {
+								sum = dct_mse[j] - comb[j][k][0];
+								comb_result2[a][b][0] += sum;
+								comb_result2[a][b][1] += comb[j][k][1];
+								comb_result2[a][b][2]++;
 							}
 						}
 					}
@@ -2168,72 +1838,17 @@ int main()
 				}
 
 				for (a = 0; a < 64; a++)
-					for (j = 0; j < 1024; j++) {
-						if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
-							vec1 = 0;
-							cod_mse[1] = 0;//今のレートの座標
-							cod_ent[1] = 0;
-
-							//AとBに分割
-							//今、上位、下位のレートのx座標を求める
-							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-							}
-							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-
-
-							//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-							//AとBの直線の傾きを求める
-							//AとBに分けるための傾きを求める
-							gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-							gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-							border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-							
-							//AorBの分割
-							//1この分割
-							//aの組み合わせ
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1a = gra_a;
-							else//Bルート
-								gra_1a = gra_b;
-
-							//点と直線の距離を求める
-							//1個
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1a * cod_x > cod_y)//座標が線分よりも上=有効////////////////////////////////////////////////////////////////////////////////////////調査中
-								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-
-							//1個で画質比較
-							// 有効・無効の判別
-							// Ixをgra_abに代入したyよりIyが大きければ有効（累積）
-							if (vec1 != 0) {
-								sum = dct_ent_mse[(Q / 10) - 1][j][0] - comb[j][a][0];
-								comb_result[a][0] += sum;//dctからの画質改善量を累積
-								comb_result[a][1] += comb[j][a][1];
-								comb_result[a][2]++;
-								comb_result[a][3] += vec1;
-							}
+					for (j = 0; j < 1024; j++)
+						if (dct_mse[j] > comb[j][a][0]) {
+							sum = dct_mse[j] - comb[j][a][0];
+							comb_result[a][0] += sum;
+							comb_result[a][1] += comb[j][a][1];
+							comb_result[a][2]++;
 						}
-					}
 
-				//累積ベクトル順でソート
+
+
+				//画質順でソート
 				for (i = 0; i < 100; i++) {
 					comb_after_sort[i][0] = 0;
 					comb_after_sort[i][1] = 0;
@@ -2241,20 +1856,22 @@ int main()
 					comb_after_sort[i][3] = 99;
 					comb_after_sort[i][4] = 99;
 					comb_after_sort[i][5] = 0;
-					comb_after_sort[i][6] = 0;
 				}
+
+				// 0dame
 
 				for (a = 0; a < 64 - 2; a++)
 					for (b = a + 1; b < 64 - 1; b++)
 						for (c = b + 1; c < 64; c++)
-							comb_sort3[a][b][c] = comb_result3[a][b][c][3];//copy
+							comb_sort3[a][b][c] = comb_result3[a][b][c][0];//copy
 
 				for (a = 0; a < 64 - 1; a++)
 					for (b = a + 1; b < 64; b++)
-						comb_sort2[a][b] = comb_result2[a][b][3];//copy
+						comb_sort2[a][b] = comb_result2[a][b][0];//copy
 
 				for (a = 0; a < 64; a++)
-					comb_sort[a] = comb_result[a][3];//copy
+					comb_sort[a] = comb_result[a][0];//copy
+
 
 				for (i = 0; i < 10; i++) {//3個のソート
 					max = 0;
@@ -2262,7 +1879,7 @@ int main()
 					for (a = 0; a < 64 - 2; a++)
 						for (b = a + 1; b < 64 - 1; b++)
 							for (c = b + 1; c < 64; c++)
-								if (comb_sort3[a][b][c] > max) {//最大を探索
+								if (comb_sort3[a][b][c] > max) {//改善画質累積の比較のため，最大を探索
 									max = comb_sort3[a][b][c];//3sort
 									k = a;
 									l = b;
@@ -2275,17 +1892,17 @@ int main()
 						comb_after_sort[i][3] = (double)l;
 						comb_after_sort[i][4] = (double)m;
 						comb_after_sort[i][5] = comb_result3[k][l][m][2];
-						comb_after_sort[i][6] = comb_result3[k][l][m][3];
 						comb_sort3[k][l][m] = 0;//99番基底が入らないか？
 					}
 				}
+
 
 				for (i = 10; i < 20; i++) {//２個のソート
 					max = 0;
 					k = l = m = n = o = 99;
 					for (a = 0; a < 64 - 1; a++)
 						for (b = a + 1; b < 64; b++)
-							if (comb_sort2[a][b] > max) {//最大を探索
+							if (comb_sort2[a][b] > max) {//改善画質累積の比較のため，最大を探索
 								max = comb_sort2[a][b];//2sort
 								n = a;
 								o = b;
@@ -2297,7 +1914,6 @@ int main()
 						comb_after_sort[i][3] = (double)o;
 						comb_after_sort[i][4] = 99;
 						comb_after_sort[i][5] = comb_result2[n][o][2];
-						comb_after_sort[i][6] = comb_result2[n][o][3];
 						comb_sort2[n][o] = 0;//99番基底が入らないか？
 					}
 				}
@@ -2306,7 +1922,7 @@ int main()
 					max = 0;
 					k = l = m = n = o = 99;
 					for (a = 0; a < 64; a++)
-						if (comb_sort[a] > max) {//最大を探索
+						if (comb_sort[a] > max) {//改善画質累積の比較のため，最大を探索
 							max = comb_sort[a];//2sort
 							n = a;
 						}
@@ -2317,10 +1933,11 @@ int main()
 						comb_after_sort[i][3] = 99;
 						comb_after_sort[i][4] = 99;
 						comb_after_sort[i][5] = comb_result[n][2];
-						comb_after_sort[i][6] = comb_result[n][3];
 						comb_sort[n] = 0;//99番基底が入らないか？
 					}
 				}
+
+
 
 
 				//基底選出
@@ -2340,13 +1957,13 @@ int main()
 
 					if (k == 0) {
 						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
-							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)  vec : %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5], comb_after_sort[a][6]);
+							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
 							k++;
 						}
 						else {
-							printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)  vec : %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5], comb_after_sort[a][6]);
+							printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							comb_after_sort[a][0] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][1] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][2] = 99;//選出基底以外全て初期化
@@ -2355,7 +1972,7 @@ int main()
 						}
 					}
 					else {
-						printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)  vec : %lf", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5], comb_after_sort[a][6]);
+						printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 					}
 
 					if (a == 9)
@@ -2379,7 +1996,7 @@ int main()
 				printf("\n%d, %d, %d", a, b, c);
 
 
-				//領域で使用する基底を決定
+
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++)
 						ny[i][j] = 0;
@@ -2390,406 +2007,72 @@ int main()
 
 
 				for (j = 0; j < 1024; j++) {
-					if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
-						if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
-							//基底3で画質最大
-									//初期化
-							vec1 = 0;
-							vec2 = 0;
-							vec3 = 0;
-							cod_mse[1] = 0;//今のレートの座標
-							cod_ent[1] = 0;
-
-							//AとBに分割
-							//今、上位、下位のレートのx座標を求める
-							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-							}
-							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-
-
-							//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-							//AとBの直線の傾きを求める
-							//AとBに分けるための傾きを求める
-							gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-							gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-							border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
-							//AorBの分割
-							//3この分割
-							cod_x = -comb3_1[j][a][b][c];
-							cod_y = comb3_0[j][a][b][c] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_3 = gra_a;
-							else//Bルート
-								gra_3 = gra_b;
-
-							//2この分割
-							//abの組み合わせ
-							cod_x = -comb2[j][a][b][1];
-							cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_2a = gra_a;
-							else//Bルート
-								gra_2a = gra_b;
-							//bcの組み合わせ
-							cod_x = -comb2[j][b][c][1];
-							cod_y = comb2[j][b][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_2b = gra_a;
-							else//Bルート
-								gra_2b = gra_b;
-							//acの組み合わせ
-							cod_x = -comb2[j][a][c][1];
-							cod_y = comb2[j][a][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_2c = gra_a;
-							else//Bルート
-								gra_2c = gra_b;
-
-							//1この分割
-							//aの組み合わせ
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1a = gra_a;
-							else//Bルート
-								gra_1a = gra_b;
-							//bの組み合わせ
-							cod_x = -comb[j][b][1];
-							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1b = gra_a;
-							else//Bルート
-								gra_1b = gra_b;
-							//cの組み合わせ
-							cod_x = -comb[j][c][1];
-							cod_y = comb[j][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1c = gra_a;
-							else//Bルート
-								gra_1c = gra_b;
-
-							//点と直線の距離を求める
-							//3個
-							cod_x = -comb3_1[j][a][b][c];
-							cod_y = comb3_0[j][a][b][c] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_3 * cod_x > cod_y)//座標が線分よりも上=有効
-								vec3 = fabs(gra_3 * cod_x - cod_y) / sqrt(gra_3 * gra_3 + 1);//線分からの距離
-
-							//2個
-							cod_x = -comb2[j][a][b][1];
-							cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_2a * cod_x > cod_y) {//座標が線分よりも上=有効
-								vec2 = fabs(gra_2a * cod_x - cod_y) / sqrt(gra_2a * gra_2a + 1);//線分からの距離
-								k = a;
-								l = b;
-								gra_2 = gra_2a;
-							}
-							cod_x = -comb2[j][b][c][1];
-							cod_y = comb2[j][b][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_2b * cod_x > cod_y) {//座標が線分よりも上=有効
-								sum = fabs(gra_2b * cod_x - cod_y) / sqrt(gra_2b * gra_2b + 1);//線分からの距離
-								if (vec2 < sum) {
-									k = b;
-									l = c;
-									vec2 = sum;
-									gra_2 = gra_2b;
-								}
-							}
-							cod_x = -comb2[j][a][c][1];
-							cod_y = comb2[j][a][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_2c * cod_x > cod_y) {//座標が線分よりも上=有効
-								sum = fabs(gra_2c * cod_x - cod_y) / sqrt(gra_2c * gra_2c + 1);//線分からの距離
-								if (vec2 < sum) {
-									k = a;
-									l = c;
-									vec2 = sum;
-									gra_2 = gra_2c;
-								}
-							}
-
-							//1個
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
-								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-								m = a;
-								gra_1 = gra_1a;
-							}
-							cod_x = -comb[j][b][1];
-							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1b * cod_x > cod_y) {//座標が線分よりも上=有効
-								sum = fabs(gra_1b * cod_x - cod_y) / sqrt(gra_1b * gra_1b + 1);//線分からの距離
-								if (vec1 < sum) {
-									m = b;
-									vec1 = sum;
-									gra_1 = gra_1b;
-								}
-							}
-							cod_x = -comb[j][c][1];
-							cod_y = comb[j][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1c * cod_x > cod_y) {//座標が線分よりも上=有効
-								sum = fabs(gra_1c * cod_x - cod_y) / sqrt(gra_1c * gra_1c + 1);//線分からの距離
-								if (vec1 < sum) {
-									m = c;
-									vec1 = sum;
-									gra_1 = gra_1c;
-								}
-							}
-
-							//1vs2vs3個で画質比較
-							if (vec3 > vec2 && vec3 > vec1 && vec3 != 0) {
-								ny[a][j] = y[a][j];
-								ny[b][j] = y[b][j];
-								ny[c][j] = y[c][j];
-								no_op[j] = 1;
-								cod_x = -comb3_1[j][a][b][c];
-								cod_y = comb3_0[j][a][b][c] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_3 * cod_x > cod_y)
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_3 * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
-							else if (vec2 > vec1 && vec2 != 0) {
-								ny[k][j] = y[k][j];
-								ny[l][j] = y[l][j];
-								no_op[j] = 1;
-								cod_x = -comb2[j][k][l][1];
-								cod_y = comb2[j][k][l][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_2 * cod_x > cod_y)
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_2 * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
-							else if (vec1 != 0) {
-								ny[m][j] = y[m][j];
-								no_op[j] = 1;
-								cod_x = -comb[j][m][1];
-								cod_y = comb[j][m][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_1 * cod_x > cod_y)
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_1 * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
+					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
+						//基底3で画質最大
+						//2個
+						max = comb2[j][a][b][0];//MSEだから小さい順
+						k = a;
+						l = b;
+						if (max > comb2[j][b][c][0]) {
+							k = b;
+							l = c;
 						}
-						else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
-							vec1 = 0;
-							vec2 = 0;
-							cod_mse[1] = 0;//今のレートの座標
-							cod_ent[1] = 0;
-
-							//AとBに分割
-							//今、上位、下位のレートのx座標を求める
-							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-							}
-							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-
-
-							//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-							//AとBの直線の傾きを求める
-							//AとBに分けるための傾きを求める
-							gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-							gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-							border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
-							//AorBの分割
-							//2この分割
-							//abの組み合わせ
-							cod_x = -comb2[j][a][b][1];
-							cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_2a = gra_a;
-							else//Bルート
-								gra_2a = gra_b;
-
-							//1この分割
-							//aの組み合わせ
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1a = gra_a;
-							else//Bルート
-								gra_1a = gra_b;
-							//bの組み合わせ
-							cod_x = -comb[j][b][1];
-							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1b = gra_a;
-							else//Bルート
-								gra_1b = gra_b;
-
-							//点と直線の距離を求める
-							//2個
-							cod_x = -comb2[j][a][b][1];
-							cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_2a * cod_x > cod_y)//座標が線分よりも上=有効
-								vec2 = fabs(gra_2a * cod_x - cod_y) / sqrt(gra_2a * gra_2a + 1);//線分からの距離
-
-							//1個
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
-								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-								m = a;
-								gra_1 = gra_1a;
-							}
-							cod_x = -comb[j][b][1];
-							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1b * cod_x > cod_y) {//座標が線分よりも上=有効
-								sum = fabs(gra_1b * cod_x - cod_y) / sqrt(gra_1b * gra_1b + 1);//線分からの距離
-								if (vec1 < sum) {
-									vec1 = sum;
-									m = b;
-									gra_1 = gra_1b;
-								}
-							}
-
-							//1vs2個の画質比較
-							if (vec2 > vec1 && vec2 != 0) {
-								//画質・情報量
-								ny[a][j] = y[a][j];
-								ny[b][j] = y[b][j];
-								no_op[j] = 1;
-								cod_x = -comb2[j][a][b][1];
-								cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_2a * cod_x > cod_y)//あえてgra_2aにしてる
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_2a * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
-							else if (vec1 != 0) {
-								ny[m][j] = y[m][j];
-								no_op[j] = 1;
-								cod_x = -comb[j][m][1];
-								cod_y = comb[j][m][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_1 * cod_x > cod_y)
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_1 * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
+						if (max > comb2[j][a][c][0]) {
+							k = a;
+							l = c;
 						}
-						else if (a != 99 && b == 99 && c == 99) {
-							vec1 = 0;
-							cod_mse[1] = 0;//今のレートの座標
-							cod_ent[1] = 0;
+						//1個
+						max = comb[j][a][0];//MSEだから小さい順
+						m = a;
+						if (max > comb[j][b][0])
+							m = b;
+						if (max > comb[j][c][0])
+							m = c;
 
-							//AとBに分割
-							//今、上位、下位のレートのx座標を求める
-							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
-							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
-								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
-							}
-							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
-								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
-								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
-							}
+						//1vs2vs3個で画質比較
+						if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
+							ny[a][j] = y[a][j];
+							ny[b][j] = y[b][j];
+							ny[c][j] = y[c][j];
+							no_op[j] = 1;
+						}
+						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
+							ny[k][j] = y[k][j];
+							ny[l][j] = y[l][j];
+							no_op[j] = 1;
+						}
+						else if (dct_mse[j] > comb[j][m][0]) {
+							ny[m][j] = y[m][j];
+							no_op[j] = 1;
+						}
+					}
+					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
+						//1個
+						k = a;
+						if (comb[j][a][0] > comb[j][b][0])
+							k = b;
 
-
-							//gra_a=Aの傾き，gra_b=Bの傾き，border_ab=ABの境界線
-							//AとBの直線の傾きを求める
-							//AとBに分けるための傾きを求める
-							gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
-							gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
-							border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
-							//AorBの分割
-							//1この分割
-							//aの組み合わせ
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (border_ab * cod_x > cod_y)//Aルート
-								gra_1a = gra_a;
-							else//Bルート
-								gra_1a = gra_b;
-
-							//点と直線の距離を求める
-							//1個
-							cod_x = -comb[j][a][1];
-							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1a * cod_x > cod_y)//座標が線分よりも上=有効
-								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
-
-							if (vec1 != 0) {
-								ny[a][j] = y[a][j];
-								no_op[j] = 1;
-								cod_x = -comb[j][a][1];
-								cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_1a * cod_x > cod_y)//gra_1aからかえるの面倒だったからそのまま
-									no_op2[j] = 1;
-								else if (cod_x < 0 && cod_y < 0)
-									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_1a * cod_x > cod_y)
-									no_op2[j] = 3;
-							}
+						//1vs2個の画質比較
+						if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
+							//画質・情報量
+							ny[a][j] = y[a][j];
+							ny[b][j] = y[b][j];
+							no_op[j] = 1;
+						}
+						else if (dct_mse[j] > comb[j][k][0]) {
+							ny[k][j] = y[k][j];
+							no_op[j] = 1;
+						}
+					}
+					else if (a != 99 && b == 99 && c == 99) {
+						if (comb[j][a][0] < dct_mse[j]) {
+							ny[a][j] = y[a][j];
+							no_op[j] = 1;
 						}
 					}
 
 				}
-				a = b = c = d = 0;
-				for (j = 0; j < 1024; j++) {
-					if (no_op2[j] == 0)
-						a++;
-					if (no_op2[j] == 1)
-						b++;
-					if (no_op2[j] == 2)
-						c++;
-					if (no_op2[j] == 3)
-						d++;
-				}
-				printf("\n\n [0] : %d, [1] : %d, [2] : %d , [3] : %d", a, b, c, d);
 
-				for (j = 0; j < 1024; j++)
-					no_op2[j] = 0;
 				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2895,6 +2178,33 @@ int main()
 				fprintf(fp10, ",,%lf", psnr_temp2);
 				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
 				fprintf(fp10, ",,%lf", psnr_temp2);
+
+				for (i = 0; i < 1024; i++) {
+					for (j = 0; j < 64; j++)
+						ny[j][i] = 0;
+					no_op[i] = 0;
+					if (ica_basis2[64][i] == 0) {
+						no_op[i] = 1;
+					}
+				}
+				seki5(nw, ny, x); // x -> nw * ny
+				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+				avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+				//img_out2(dcoe2, ica_sai, no_op, Q + 2);
+				for (i = 0; i < 256; i++)
+					for (j = 0; j < 256; j++) {
+						k = i / 8;
+						m = j / 8;
+						if (no_op[32 * k + m] == 0) {
+							dct_ica_sai[i][j] = dcoe2[i][j];
+						}
+						else if (no_op[32 * k + m] == 1) {
+							dct_ica_sai[i][j] = ica_sai[i][j];
+						}
+					}
+				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
+				fprintf(fp10, ",,%lf", psnr_temp2);
+
 
 				for (a = 0; a < 1024; a++) {
 					for (b = 0; b < 64; b++) {
