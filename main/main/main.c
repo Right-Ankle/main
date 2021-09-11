@@ -90,6 +90,8 @@ int main()
 	static double gra_b;//Bの傾き
 	static double border_ab;//AとBを分ける傾き
 	static double gra_3;//3の傾き
+	static double gra_2;//2の傾き 領域数を計測時に使用
+	static double gra_1;//1の傾き 領域数を計測時に使用
 	static double gra_2a;//2の傾きabの組み合わせ
 	static double gra_2b;//2の傾きbcの組み合わせ
 	static double gra_2c;//2の傾きacの組み合わせ
@@ -1581,13 +1583,38 @@ int main()
 
 			// 画質の良さを基に基底を並び替え
 			/////////////////////////////////////////////////////////////////////////////
-
+			
+			for (i = 0; i < 1024; i++) {
+				for (j = 0; j < 64; j++)
+					ny[j][i] = 0;
+				no_op2[i] = 0;
+				if (ica_basis2[64][i] == 0) {
+					no_op2[i] = 1;
+				}
+			}
+			seki5(nw, ny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+			img_out2(dcoe2, ica_sai, no_op2, Q + 2);
+			for (i = 0; i < 256; i++)
+				for (j = 0; j < 256; j++) {
+					k = i / 8;
+					m = j / 8;
+					if (no_op2[32 * k + m] == 0) {
+						dct_ica_sai[i][j] = dcoe2[i][j];
+					}
+					else if (no_op2[32 * k + m] == 1) {
+						dct_ica_sai[i][j] = ica_sai[i][j];
+					}
+				}
+			sum=SSIM(origin, dct_ica_sai, 256, 256);
+			printf("\nSSIM[%d] : %lf", Q, sum);
 
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//0の情報量ok
 
-                // 動的配列の宣言
+				// 動的配列の宣言
 				comb3_0 = (double****)malloc(sizeof(double***) * 1024);
 				comb3_1 = (double****)malloc(sizeof(double***) * 1024);
 				for (a = 0; a < 1024; a++) {
@@ -1755,7 +1782,7 @@ int main()
 								for (i = 0; i < 64; i++)
 									ny[i][j] = 0; //係数初期化
 
-								if (ica_basis2[64][j] != 99&&ica_basis2[64][j]!=0) {
+								if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
 
 									ny[a][j] = y[a][j];
 									ny[b][j] = y[b][j];
@@ -1836,21 +1863,21 @@ int main()
 									//AとBに分割
 									//今、上位、下位のレートのx座標を求める
 									if (Q == 100) {
-										cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+										cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 										cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-										cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+										cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 										cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 									}
 									else if (Q == 10) {
-										cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+										cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 										cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-										cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+										cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 										cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 									}
 									else {
-										cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+										cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 										cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-										cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+										cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 										cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 									}
 
@@ -1947,7 +1974,7 @@ int main()
 									if (gra_2c * cod_x > cod_y) {//座標が線分よりも上=有効
 										sum = fabs(gra_2c * cod_x - cod_y) / sqrt(gra_2c * gra_2c + 1);//線分からの距離
 										if (vec2 < sum) {
-											k = b;
+											k = a;
 											l = c;
 											vec2 = sum;
 										}
@@ -2034,21 +2061,21 @@ int main()
 								//AとBに分割
 								//今、上位、下位のレートのx座標を求める
 								if (Q == 100) {
-									cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+									cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 									cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-									cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+									cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 									cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 								}
 								else if (Q == 10) {
-									cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+									cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 									cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-									cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+									cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 									cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 								}
 								else {
-									cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+									cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 									cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-									cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+									cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 									cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 								}
 
@@ -2150,21 +2177,21 @@ int main()
 							//AとBに分割
 							//今、上位、下位のレートのx座標を求める
 							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 							}
 							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 
@@ -2175,7 +2202,7 @@ int main()
 							gra_a = cod_mse[0] / cod_ent[0]; //Dy+1/Dx+1
 							gra_b = cod_mse[2] / cod_ent[2]; //Dy-1.Dx-1
 							border_ab = -(cod_ent[0] - cod_ent[2]) / (cod_mse[0] - cod_mse[2]);//AとBに分けるための傾き
-
+							
 							//AorBの分割
 							//1この分割
 							//aの組み合わせ
@@ -2190,7 +2217,7 @@ int main()
 							//1個
 							cod_x = -comb[j][a][1];
 							cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-							if (gra_1a * cod_x > cod_y)//座標が線分よりも上=有効
+							if (gra_1a * cod_x > cod_y)//座標が線分よりも上=有効////////////////////////////////////////////////////////////////////////////////////////調査中
 								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
 
 							//1個で画質比較
@@ -2304,9 +2331,9 @@ int main()
 				for (a = 0; a < 30; a++) {
 					//printf("\n %lf, %lf",comb_after_sort[a][0], comb_after_sort[a][1]);
 
-					if (a>=20)
+					if (a >= 20)
 						c = 1;
-					else if (a>=10&&a<20)
+					else if (a >= 10 && a < 20)
 						c = 2;
 					else
 						c = 3;
@@ -2376,21 +2403,21 @@ int main()
 							//AとBに分割
 							//今、上位、下位のレートのx座標を求める
 							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 							}
 							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 
@@ -2471,6 +2498,7 @@ int main()
 								vec2 = fabs(gra_2a * cod_x - cod_y) / sqrt(gra_2a * gra_2a + 1);//線分からの距離
 								k = a;
 								l = b;
+								gra_2 = gra_2a;
 							}
 							cod_x = -comb2[j][b][c][1];
 							cod_y = comb2[j][b][c][0] - dct_ent_mse[(Q / 10) - 1][j][0];
@@ -2480,6 +2508,7 @@ int main()
 									k = b;
 									l = c;
 									vec2 = sum;
+									gra_2 = gra_2b;
 								}
 							}
 							cod_x = -comb2[j][a][c][1];
@@ -2487,9 +2516,10 @@ int main()
 							if (gra_2c * cod_x > cod_y) {//座標が線分よりも上=有効
 								sum = fabs(gra_2c * cod_x - cod_y) / sqrt(gra_2c * gra_2c + 1);//線分からの距離
 								if (vec2 < sum) {
-									k = b;
+									k = a;
 									l = c;
 									vec2 = sum;
+									gra_2 = gra_2c;
 								}
 							}
 
@@ -2499,6 +2529,7 @@ int main()
 							if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
 								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
 								m = a;
+								gra_1 = gra_1a;
 							}
 							cod_x = -comb[j][b][1];
 							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
@@ -2507,6 +2538,7 @@ int main()
 								if (vec1 < sum) {
 									m = b;
 									vec1 = sum;
+									gra_1 = gra_1b;
 								}
 							}
 							cod_x = -comb[j][c][1];
@@ -2516,6 +2548,7 @@ int main()
 								if (vec1 < sum) {
 									m = c;
 									vec1 = sum;
+									gra_1 = gra_1c;
 								}
 							}
 
@@ -2538,10 +2571,26 @@ int main()
 								ny[k][j] = y[k][j];
 								ny[l][j] = y[l][j];
 								no_op[j] = 1;
+								cod_x = -comb2[j][k][l][1];
+								cod_y = comb2[j][k][l][0] - dct_ent_mse[(Q / 10) - 1][j][0];
+								if (cod_y > 0 && gra_2 * cod_x > cod_y)
+									no_op2[j] = 1;
+								else if (cod_x < 0 && cod_y < 0)
+									no_op2[j] = 2;
+								else if (cod_x > 0 && gra_2 * cod_x > cod_y)
+									no_op2[j] = 3;
 							}
 							else if (vec1 != 0) {
 								ny[m][j] = y[m][j];
 								no_op[j] = 1;
+								cod_x = -comb[j][m][1];
+								cod_y = comb[j][m][0] - dct_ent_mse[(Q / 10) - 1][j][0];
+								if (cod_y > 0 && gra_1 * cod_x > cod_y)
+									no_op2[j] = 1;
+								else if (cod_x < 0 && cod_y < 0)
+									no_op2[j] = 2;
+								else if (cod_x > 0 && gra_1 * cod_x > cod_y)
+									no_op2[j] = 3;
 							}
 						}
 						else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -2553,21 +2602,21 @@ int main()
 							//AとBに分割
 							//今、上位、下位のレートのx座標を求める
 							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 							}
 							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 
@@ -2618,6 +2667,7 @@ int main()
 							if (gra_1a * cod_x > cod_y) {//座標が線分よりも上=有効
 								vec1 = fabs(gra_1a * cod_x - cod_y) / sqrt(gra_1a * gra_1a + 1);//線分からの距離
 								m = a;
+								gra_1 = gra_1a;
 							}
 							cod_x = -comb[j][b][1];
 							cod_y = comb[j][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
@@ -2626,6 +2676,7 @@ int main()
 								if (vec1 < sum) {
 									vec1 = sum;
 									m = b;
+									gra_1 = gra_1b;
 								}
 							}
 
@@ -2637,16 +2688,24 @@ int main()
 								no_op[j] = 1;
 								cod_x = -comb2[j][a][b][1];
 								cod_y = comb2[j][a][b][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_3 * cod_x > cod_y)
+								if (cod_y > 0 && gra_2a * cod_x > cod_y)//あえてgra_2aにしてる
 									no_op2[j] = 1;
 								else if (cod_x < 0 && cod_y < 0)
 									no_op2[j] = 2;
-								else if (cod_x > 0 && gra_3 * cod_x > cod_y)
+								else if (cod_x > 0 && gra_2a * cod_x > cod_y)
 									no_op2[j] = 3;
 							}
 							else if (vec1 != 0) {
 								ny[m][j] = y[m][j];
 								no_op[j] = 1;
+								cod_x = -comb[j][m][1];
+								cod_y = comb[j][m][0] - dct_ent_mse[(Q / 10) - 1][j][0];
+								if (cod_y > 0 && gra_1 * cod_x > cod_y)
+									no_op2[j] = 1;
+								else if (cod_x < 0 && cod_y < 0)
+									no_op2[j] = 2;
+								else if (cod_x > 0 && gra_1 * cod_x > cod_y)
+									no_op2[j] = 3;
 							}
 						}
 						else if (a != 99 && b == 99 && c == 99) {
@@ -2657,21 +2716,21 @@ int main()
 							//AとBに分割
 							//今、上位、下位のレートのx座標を求める
 							if (Q == 100) {
-								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0]); //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1]);
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 							else if (Q == 10) {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = -(dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]);//1つ下位のレートの座標
+								cod_mse[2] = -(dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]);//1つ下位のレートの座標
 								cod_ent[2] = -(dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1]);
 							}
 							else {
-								cod_mse[0] = dct_ent_mse[(Q / 10)][j][0] - dct_ent_mse[(Q / 10) - 1][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
+								cod_mse[0] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10)][j][0]; //1つ上位のレートの座標 ((*情報量がx軸 画質がy軸*))
 								cod_ent[0] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10)][j][1];
-								cod_mse[2] = dct_ent_mse[(Q / 10) - 2][j][0] - dct_ent_mse[(Q / 10) - 1][j][0];//1つ下位のレートの座標
+								cod_mse[2] = dct_ent_mse[(Q / 10) - 1][j][0] - dct_ent_mse[(Q / 10) - 2][j][0];//1つ下位のレートの座標
 								cod_ent[2] = dct_ent_mse[(Q / 10) - 1][j][1] - dct_ent_mse[(Q / 10) - 2][j][1];
 							}
 
@@ -2705,7 +2764,7 @@ int main()
 								no_op[j] = 1;
 								cod_x = -comb[j][a][1];
 								cod_y = comb[j][a][0] - dct_ent_mse[(Q / 10) - 1][j][0];
-								if (cod_y > 0 && gra_1a * cod_x > cod_y)
+								if (cod_y > 0 && gra_1a * cod_x > cod_y)//gra_1aからかえるの面倒だったからそのまま
 									no_op2[j] = 1;
 								else if (cod_x < 0 && cod_y < 0)
 									no_op2[j] = 2;
