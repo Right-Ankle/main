@@ -25,7 +25,9 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 		if (date1[i] == 0) {
 			for (b = 0; b < 8; b++) {
 				for (a = 0; a < 8; a++) {
-					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] =0;
+					if (temp_sai[256 * 8 * l + 8 * k + a + 256 * b] < 0)
+						temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
 				}
 			}
 		}
@@ -116,4 +118,45 @@ void img_out3(unsigned char origin[][256]) {
 	printf(" end\n\n");
 
 
+}
+
+void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int name) {
+	static int temp_sai[256 * 256];
+	char output[1000];
+	int a, b, i, l, k, Q;
+
+	//gp = _popen(GNUPLOT_PATH, "w");
+	printf(" \n now outputing  - - - ->");
+	for (a = 0; a < 256; a++)
+		for (b = 0; b < 256; b++)
+			temp_sai[a * 256 + b] = origin[a][b];
+
+	for (i = 0; i < 1024; i++) {
+		k = i % 32;
+		l = i / 32;
+
+		if (data1[i] == 0) {
+			for (b = 0; b < 8; b++) {
+				for (a = 0; a < 8; a++) {
+					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] =0;
+				}
+			}
+		}
+
+		if (data2[i] == 0) {
+			for (b = 0; b < 8; b++) {
+				for (a = 0; a < 8; a++) {
+					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] -= 120;
+					if (temp_sai[256 * 8 * l + 8 * k + a + 256 * b] < 0)
+						temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
+				}
+			}
+		}
+	}
+
+	sprintf(output, "OUTPUT\\%d.bmp", (int)name);
+	img_write_gray(temp_sai, output, 256, 256); // output‚Éo—Í‰æ‘œ‚ğ‘‚«o‚·
+	name++;
+
+	printf(" end\n\n");
 }
