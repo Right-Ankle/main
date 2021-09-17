@@ -42,6 +42,7 @@ int main()
 	static int no_op_3[1024] = { 0 };
 	static int no_op_all[1024];
 	static int no_op_ica[1024];
+	static int no_op_dct[1024];
 	static int Q;//圧縮レート
 	static int QQ, QQQ, QQQQ;
 	double min2 = 100000;
@@ -251,8 +252,8 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin_30);
-	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin);
+	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
 
 	//printf("%lf", w[0][0]);
@@ -658,7 +659,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 20) {
+		for (Q = 100; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -1517,56 +1518,59 @@ int main()
 			// 画質の良さを基に基底を並び替え
 			/////////////////////////////////////////////////////////////////////////////
 
-			//for (j = 0; j < 1024; j++) {
-			//	no_op_0[j] = 0;
-			//	no_op_1[j] = 0;
-			//	no_op_2[j] = 0;
-			//	no_op_3[j] = 0;
-			//	no_op_all[j] = 0;
-			//	no_op_ica[j] = 0;
-			//	if (ica_basis2[64][j] != 99)
-			//		no_op_ica[j] = 1;
-			//	if (ica_basis2[64][j]!=99 && bunrui[0][j] - bunrui[2][j] >= 3 && bunrui[1][j] - bunrui[3][j]>=50) {//選出基底3津の時 
-			//		//1vs2vs3個で画質比較
-			//		if (ica_basis2[64][j] < 4)
-			//			no_op_all[j] = 1;
-			//		if (ica_basis2[64][j] == 3)
-			//			no_op_3[j] = 1;
-			//		if (ica_basis2[64][j] == 2)
-			//			no_op_2[j] = 1;
-			//		if (ica_basis2[64][j] == 1)
-			//			no_op_1[j] = 1;
-			//		if(ica_basis2[64][j] ==0)
-			//			no_op_0[j] = 1;
-			//	}
-			//}
+			for (j = 0; j < 1024; j++) {
+				no_op_0[j] = 0;
+				no_op_1[j] = 0;
+				no_op_2[j] = 0;
+				no_op_3[j] = 0;
+				no_op_all[j] = 0;
+				no_op_ica[j] = 0;
+				no_op_dct[j] = 0;
+				if (ica_basis2[64][j] != 99)
+					no_op_ica[j] = 1;
+				if (ica_basis2[64][j]==99 && bunrui[2][j] - bunrui[0][j] >= 3) {//選出基底3津の時    && bunrui[3][j] - bunrui[1][j]>=50
+					//1vs2vs3個で画質比較
+					//if (ica_basis2[64][j] < 4)
+					//	no_op_all[j] = 1;
+					//if (ica_basis2[64][j] == 3)
+					//	no_op_3[j] = 1;
+					//if (ica_basis2[64][j] == 2)
+					//	no_op_2[j] = 1;
+					//if (ica_basis2[64][j] == 1)
+					//	no_op_1[j] = 1;
+					//if(ica_basis2[64][j] ==0)
+					//	no_op_0[j] = 1;
+					no_op_dct[j] = 1;
+				}
+			}
 			//img_out(origin, no_op_0, Q);
 			//img_out(origin, no_op_1, Q + 1);
 			//img_out(origin, no_op_2, Q + 2);
 			//img_out(origin, no_op_3, Q + 3);
 			//img_out(origin, no_op_ica, Q + 5);
 			//img_out4(origin, no_op_ica, no_op_all, Q + 4);
+			img_out(origin, no_op_dct, Q + 6);
 
 
-			if (yn == 'y') {
+			if (yn == 'n') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//0の情報量ok
 
 				// 動的配列の宣言
-				comb3_0 = (double****)malloc(sizeof(double***) * 1024);
-				comb3_1 = (double****)malloc(sizeof(double***) * 1024);
-				for (a = 0; a < 1024; a++) {
-					comb3_0[a] = (double***)malloc(sizeof(double**) * 64);
-					comb3_1[a] = (double***)malloc(sizeof(double**) * 64);
-					for (b = 0; b < 64; b++) {
-						comb3_0[a][b] = (double**)malloc(sizeof(double*) * 64);
-						comb3_1[a][b] = (double**)malloc(sizeof(double*) * 64);
-						for (c = 0; c < 64; c++) {
-							comb3_0[a][b][c] = (double*)malloc(sizeof(double) * 64);
-							comb3_1[a][b][c] = (double*)malloc(sizeof(double) * 64);
-						}
-					}
-				}
+				//comb3_0 = (double****)malloc(sizeof(double***) * 1024);
+				//comb3_1 = (double****)malloc(sizeof(double***) * 1024);
+				//for (a = 0; a < 1024; a++) {
+				//	comb3_0[a] = (double***)malloc(sizeof(double**) * 64);
+				//	comb3_1[a] = (double***)malloc(sizeof(double**) * 64);
+				//	for (b = 0; b < 64; b++) {
+				//		comb3_0[a][b] = (double**)malloc(sizeof(double*) * 64);
+				//		comb3_1[a][b] = (double**)malloc(sizeof(double*) * 64);
+				//		for (c = 0; c < 64; c++) {
+				//			comb3_0[a][b][c] = (double*)malloc(sizeof(double) * 64);
+				//			comb3_1[a][b][c] = (double*)malloc(sizeof(double) * 64);
+				//		}
+				//	}
+				//}
 
 				//0の情報量ok
 

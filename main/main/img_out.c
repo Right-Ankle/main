@@ -25,7 +25,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 		if (date1[i] == 0) {
 			for (b = 0; b < 8; b++) {
 				for (a = 0; a < 8; a++) {
-					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] =0;
+					temp_sai[256 * 8 * l + 8 * k + a + 256 * b] -=100;
 					if (temp_sai[256 * 8 * l + 8 * k + a + 256 * b] < 0)
 						temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
 				}

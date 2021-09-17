@@ -104,7 +104,7 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
     // 縦にコピーしてるだけ(ブロックごとに計算するため。コピー時は特に関係ない)
 	for (i = 0; i < 1024; i++){
 		for (j = 0; j < 64; j++){
-			xx[j][i] = x[j][i];
+			xx[j][i] = x[j][i];//原画像をコピー
 		}
 	}
     //
@@ -118,9 +118,9 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 	/*　反復開始　e -> 反復回数*/
 	for (t = 0; t < e; t++){
 
-		new_seki(w, xx, yy, 1024);	//行列の積を計算
+		new_seki(w, xx, yy, 1024);	//行列の積を計算 //正規分布となる確率を作り出すため
 //
-		new_sigmoid(yy, sig, 1024);	//シグモイド関数を適用, sigの範囲は0~1
+		new_sigmoid(yy, sig, 1024);	//シグモイド関数を適用, sigの範囲は0~1 //活性化関数により正規分布とする
 
 		new_ytoyt(yy, yt, 1024);	//y の転置行列を計算
 
