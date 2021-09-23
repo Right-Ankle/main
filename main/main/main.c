@@ -1552,7 +1552,7 @@ int main()
 			img_out(origin, no_op_dct, Q + 6);
 
 
-			if (yn == 'n') {
+			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//0の情報量ok
 
@@ -1581,10 +1581,10 @@ int main()
 						for (b = 0; b < 64; b++) {
 							comb2[j][a][b][0] = 100000;
 							comb2[j][a][b][1] = 0;
-							for (c = 0; c < 64; c++) {
-								comb3_0[j][a][b][c] = 100000;
-								comb3_1[j][a][b][c] = 0;
-							}
+							//for (c = 0; c < 64; c++) {
+							//	comb3_0[j][a][b][c] = 100000;
+							//	comb3_1[j][a][b][c] = 0;
+							//}
 						}
 					}
 
@@ -1646,235 +1646,235 @@ int main()
 				}
 
 
-				//基底2個で画質＋の領域の画質・情報改善を全探索で算出
-				for (a = 0; a < 64 - 1; a++) {
-					for (b = a + 1; b < 64; b++) {
+				////基底2個で画質＋の領域の画質・情報改善を全探索で算出
+				//for (a = 0; a < 64 - 1; a++) {
+				//	for (b = a + 1; b < 64; b++) {
 
-						for (j = 0; j < 1024; j++)
-							for (i = 0; i < 64; i++)
-								ny[i][j] = 0; //係数初期化
+				//		for (j = 0; j < 1024; j++)
+				//			for (i = 0; i < 64; i++)
+				//				ny[i][j] = 0; //係数初期化
 
-						for (j = 0; j < 1024; j++) {
+				//		for (j = 0; j < 1024; j++) {
 
-							for (i = 0; i < 64; i++)
-								ny[i][j] = 0; //係数初期化
+				//			for (i = 0; i < 64; i++)
+				//				ny[i][j] = 0; //係数初期化
 
-							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
+				//			if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
 
-								ny[a][j] = y[a][j];
-								ny[b][j] = y[b][j];
+				//				ny[a][j] = y[a][j];
+				//				ny[b][j] = y[b][j];
 
-								for (m = 0; m < 64; m++)
-									xx[m] = 0.0;
+				//				for (m = 0; m < 64; m++)
+				//					xx[m] = 0.0;
 
-								seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-								xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-								avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+				//				seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+				//				xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+				//				avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-								sum = 0.0;
-								mk = j % 32;
-								ml = j / 32;
+				//				sum = 0.0;
+				//				mk = j % 32;
+				//				ml = j / 32;
 
-								// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-								// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-								for (m = 0; m < 8; m++) {
-									for (l = 0; l < 8; l++) {
-										sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
-									}
-								}
+				//				// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+				//				// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+				//				for (m = 0; m < 8; m++) {
+				//					for (l = 0; l < 8; l++) {
+				//						sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+				//					}
+				//				}
 
-								comb2[j][a][b][0] = sum / 64;
+				//				comb2[j][a][b][0] = sum / 64;
 
-								//情報量の調査
-								sum = 0;
+				//				//情報量の調査
+				//				sum = 0;
 
-								for (l = 0; l < 64; l++) {
-									if (dcoe_temp[l][j] != 0)
-										sum += dct_ent2[l][j]; //dct単独
-								}
+				//				for (l = 0; l < 64; l++) {
+				//					if (dcoe_temp[l][j] != 0)
+				//						sum += dct_ent2[l][j]; //dct単独
+				//				}
 
-								for (l = 0; l < 64; l++) {
-									if (ny[l][j] != 0) {
-										sum -= ica_ent2[l][j];//対象領域をICA_Block
-									}
-								}
-								sum -= ica_dc[j];//ica_dc
+				//				for (l = 0; l < 64; l++) {
+				//					if (ny[l][j] != 0) {
+				//						sum -= ica_ent2[l][j];//対象領域をICA_Block
+				//					}
+				//				}
+				//				sum -= ica_dc[j];//ica_dc
 
-								comb2[j][a][b][1] = sum;
-							}
-						}
-					}
-				}
-
-
-				//0dame
-
-				//基底3個で画質＋の領域の画質・情報改善を全探索で算出
-
-				for (a = 0; a < 64 - 2; a++) {
-					for (b = a + 1; b < 64 - 1; b++) {
-						for (d = b + 1; d < 64; d++) {
-
-							for (j = 0; j < 1024; j++)
-								for (i = 0; i < 64; i++)
-									ny[i][j] = 0; //係数初期化
-
-							for (j = 0; j < 1024; j++) {
-
-								for (i = 0; i < 64; i++)
-									ny[i][j] = 0; //係数初期化
-
-								if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
-
-									ny[a][j] = y[a][j];
-									ny[b][j] = y[b][j];
-									ny[d][j] = y[d][j];
-
-									for (m = 0; m < 64; m++)
-										xx[m] = 0.0;
-
-									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-									sum = 0.0;
-									mk = j % 32;
-									ml = j / 32;
-
-									//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-								   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-									for (m = 0; m < 8; m++) {
-										for (l = 0; l < 8; l++) {
-											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
-										}
-									}
-
-									comb3_0[j][a][b][d] = sum / 64;
-
-									//情報量の調査
-									sum = 0;
+				//				comb2[j][a][b][1] = sum;
+				//			}
+				//		}
+				//	}
+				//}
 
 
-									for (l = 0; l < 64; l++) {
-										if (dcoe_temp[l][j] != 0)
-											sum += dct_ent2[l][j]; //dct単独
-									}
+				////0dame
 
-									for (l = 0; l < 64; l++) {
-										if (ny[l][j] != 0) {
-											sum -= ica_ent2[l][j];//対象領域をICA_Block
-										}
-									}
-									sum -= ica_dc[j];//ica_dc
+				////基底3個で画質＋の領域の画質・情報改善を全探索で算出
+
+				//for (a = 0; a < 64 - 2; a++) {
+				//	for (b = a + 1; b < 64 - 1; b++) {
+				//		for (d = b + 1; d < 64; d++) {
+
+				//			for (j = 0; j < 1024; j++)
+				//				for (i = 0; i < 64; i++)
+				//					ny[i][j] = 0; //係数初期化
+
+				//			for (j = 0; j < 1024; j++) {
+
+				//				for (i = 0; i < 64; i++)
+				//					ny[i][j] = 0; //係数初期化
+
+				//				if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
+
+				//					ny[a][j] = y[a][j];
+				//					ny[b][j] = y[b][j];
+				//					ny[d][j] = y[d][j];
+
+				//					for (m = 0; m < 64; m++)
+				//						xx[m] = 0.0;
+
+				//					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+				//					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+				//					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+				//					sum = 0.0;
+				//					mk = j % 32;
+				//					ml = j / 32;
+
+				//					//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+				//				   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+				//					for (m = 0; m < 8; m++) {
+				//						for (l = 0; l < 8; l++) {
+				//							sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+				//						}
+				//					}
+
+				//					comb3_0[j][a][b][d] = sum / 64;
+
+				//					//情報量の調査
+				//					sum = 0;
 
 
-									comb3_1[j][a][b][d] = sum;
+				//					for (l = 0; l < 64; l++) {
+				//						if (dcoe_temp[l][j] != 0)
+				//							sum += dct_ent2[l][j]; //dct単独
+				//					}
 
-								}
-							}
-						}
-					}
-				}
+				//					for (l = 0; l < 64; l++) {
+				//						if (ny[l][j] != 0) {
+				//							sum -= ica_ent2[l][j];//対象領域をICA_Block
+				//						}
+				//					}
+				//					sum -= ica_dc[j];//ica_dc
 
-				//累積（基底3つ）
-				for (a = 0; a < 64 - 2; a++) {
-					for (b = a + 1; b < 64 - 1; b++) {
-						for (c = b + 1; c < 64; c++) {
-							comb_result3[a][b][c][0] = 0;
-							comb_result3[a][b][c][1] = 0;
-							comb_result3[a][b][c][2] = 0;
-							comb_sort3[a][b][c] = 0;
-						}
-					}
-				}
 
-				for (a = 0; a < 64 - 2; a++) {
-					for (b = a + 1; b < 64 - 1; b++) {
-						for (c = b + 1; c < 64; c++) {
-							for (j = 0; j < 1024; j++) {
-								//画質・情報量
+				//					comb3_1[j][a][b][d] = sum;
 
-								//2個
-								max = comb2[j][a][b][0];//MSEだから小さい順
-								k = a;
-								l = b;
-								if (max > comb2[j][b][c][0]) {
-									k = b;
-									l = c;
-								}
-								if (max > comb2[j][a][c][0]) {
-									k = a;
-									l = c;
-								}
-								//1個
-								max = comb[j][a][0];//MSEだから小さい順
-								m = a;
-								if (max > comb[j][b][0])
-									m = b;
-								if (max > comb[j][c][0])
-									m = c;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
 
-								//1vs2vs3個で画質比較
-								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]>-0.00001) {
-									sum = dct_mse[j] - comb3_0[j][a][b][c];
-									comb_result3[a][b][c][0] += sum;
-									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
-									comb_result3[a][b][c][2]++;
-								}
-								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > -0.00001) {
-									sum = dct_mse[j] - comb2[j][k][l][0];
-									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
-									comb_result3[a][b][c][1] += comb2[j][k][l][1];
-									comb_result3[a][b][c][2]++;
-								}
-								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > -0.00001) {
-									sum = dct_mse[j] - comb[j][m][0];
-									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
-									comb_result3[a][b][c][1] += comb[j][m][1];
-									comb_result3[a][b][c][2]++;
-								}
-							}
-						}
-					}
-				}
+				////累積（基底3つ）
+				//for (a = 0; a < 64 - 2; a++) {
+				//	for (b = a + 1; b < 64 - 1; b++) {
+				//		for (c = b + 1; c < 64; c++) {
+				//			comb_result3[a][b][c][0] = 0;
+				//			comb_result3[a][b][c][1] = 0;
+				//			comb_result3[a][b][c][2] = 0;
+				//			comb_sort3[a][b][c] = 0;
+				//		}
+				//	}
+				//}
 
-				//累積（基底2つ）
-				k = 0;
-				for (a = 0; a < 64 - 1; a++) {
-					for (b = a + 1; b < 64; b++) {
-						comb_result2[a][b][0] = 0;
-						comb_result2[a][b][1] = 0;
-						comb_result2[a][b][2] = 0;
-						comb_sort2[a][b] = 0;
-					}
-				}
+				//for (a = 0; a < 64 - 2; a++) {
+				//	for (b = a + 1; b < 64 - 1; b++) {
+				//		for (c = b + 1; c < 64; c++) {
+				//			for (j = 0; j < 1024; j++) {
+				//				//画質・情報量
 
-				//累積（基底2つ）
-				for (a = 0; a < 64 - 1; a++) {
-					for (b = a + 1; b < 64; b++) {
-						for (j = 0; j < 1024; j++) {
-							//1個
-							k = a;
-							if (comb[j][a][0] > comb[j][b][0])
-								k = b;
+				//				//2個
+				//				max = comb2[j][a][b][0];//MSEだから小さい順
+				//				k = a;
+				//				l = b;
+				//				if (max > comb2[j][b][c][0]) {
+				//					k = b;
+				//					l = c;
+				//				}
+				//				if (max > comb2[j][a][c][0]) {
+				//					k = a;
+				//					l = c;
+				//				}
+				//				//1個
+				//				max = comb[j][a][0];//MSEだから小さい順
+				//				m = a;
+				//				if (max > comb[j][b][0])
+				//					m = b;
+				//				if (max > comb[j][c][0])
+				//					m = c;
 
-							//1vs2個の画質比較
-							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0] && comb2[j][a][b][1] > -0.00001) {
-								//画質・情報量
-								sum = dct_mse[j] - comb2[j][a][b][0];
-								comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
-								comb_result2[a][b][1] += comb2[j][a][b][1];
-								comb_result2[a][b][2]++;
-							}
-							else if (dct_mse[j] > comb[j][k][0] && comb[j][k][1] > -0.00001) {
-								sum = dct_mse[j] - comb[j][k][0];
-								comb_result2[a][b][0] += sum;
-								comb_result2[a][b][1] += comb[j][k][1];
-								comb_result2[a][b][2]++;
-							}
-						}
-					}
-				}
+				//				//1vs2vs3個で画質比較
+				//				if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]>-0.00001) {
+				//					sum = dct_mse[j] - comb3_0[j][a][b][c];
+				//					comb_result3[a][b][c][0] += sum;
+				//					comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
+				//					comb_result3[a][b][c][2]++;
+				//				}
+				//				else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > -0.00001) {
+				//					sum = dct_mse[j] - comb2[j][k][l][0];
+				//					comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
+				//					comb_result3[a][b][c][1] += comb2[j][k][l][1];
+				//					comb_result3[a][b][c][2]++;
+				//				}
+				//				else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > -0.00001) {
+				//					sum = dct_mse[j] - comb[j][m][0];
+				//					comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
+				//					comb_result3[a][b][c][1] += comb[j][m][1];
+				//					comb_result3[a][b][c][2]++;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
+
+				////累積（基底2つ）
+				//k = 0;
+				//for (a = 0; a < 64 - 1; a++) {
+				//	for (b = a + 1; b < 64; b++) {
+				//		comb_result2[a][b][0] = 0;
+				//		comb_result2[a][b][1] = 0;
+				//		comb_result2[a][b][2] = 0;
+				//		comb_sort2[a][b] = 0;
+				//	}
+				//}
+
+				////累積（基底2つ）
+				//for (a = 0; a < 64 - 1; a++) {
+				//	for (b = a + 1; b < 64; b++) {
+				//		for (j = 0; j < 1024; j++) {
+				//			//1個
+				//			k = a;
+				//			if (comb[j][a][0] > comb[j][b][0])
+				//				k = b;
+
+				//			//1vs2個の画質比較
+				//			if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0] && comb2[j][a][b][1] > -0.00001) {
+				//				//画質・情報量
+				//				sum = dct_mse[j] - comb2[j][a][b][0];
+				//				comb_result2[a][b][0] += sum;//dctからの画質改善量を累積
+				//				comb_result2[a][b][1] += comb2[j][a][b][1];
+				//				comb_result2[a][b][2]++;
+				//			}
+				//			else if (dct_mse[j] > comb[j][k][0] && comb[j][k][1] > -0.00001) {
+				//				sum = dct_mse[j] - comb[j][k][0];
+				//				comb_result2[a][b][0] += sum;
+				//				comb_result2[a][b][1] += comb[j][k][1];
+				//				comb_result2[a][b][2]++;
+				//			}
+				//		}
+				//	}
+				//}
 
 				//累積（基底1つ）
 				for (a = 0; a < 64; a++) {
@@ -1920,50 +1920,50 @@ int main()
 					comb_sort[a] = comb_result[a][0];//copy
 
 
-				for (i = 0; i < 10; i++) {//3個のソート
-					max = 0;
-					k = l = m = n = o = 99;
-					for (a = 0; a < 64 - 2; a++)
-						for (b = a + 1; b < 64 - 1; b++)
-							for (c = b + 1; c < 64; c++)
-								if (comb_sort3[a][b][c] > max) {//改善画質累積の比較のため，最大を探索
-									max = comb_sort3[a][b][c];//3sort
-									k = a;
-									l = b;
-									m = c;
-								}
-					if (k != 99) {
-						comb_after_sort[i][0] = comb_result3[k][l][m][0];
-						comb_after_sort[i][1] = comb_result3[k][l][m][1];
-						comb_after_sort[i][2] = (double)k;
-						comb_after_sort[i][3] = (double)l;
-						comb_after_sort[i][4] = (double)m;
-						comb_after_sort[i][5] = comb_result3[k][l][m][2];
-						comb_sort3[k][l][m] = 0;//99番基底が入らないか？
-					}
-				}
+				//for (i = 0; i < 10; i++) {//3個のソート
+				//	max = 0;
+				//	k = l = m = n = o = 99;
+				//	for (a = 0; a < 64 - 2; a++)
+				//		for (b = a + 1; b < 64 - 1; b++)
+				//			for (c = b + 1; c < 64; c++)
+				//				if (comb_sort3[a][b][c] > max) {//改善画質累積の比較のため，最大を探索
+				//					max = comb_sort3[a][b][c];//3sort
+				//					k = a;
+				//					l = b;
+				//					m = c;
+				//				}
+				//	if (k != 99) {
+				//		comb_after_sort[i][0] = comb_result3[k][l][m][0];
+				//		comb_after_sort[i][1] = comb_result3[k][l][m][1];
+				//		comb_after_sort[i][2] = (double)k;
+				//		comb_after_sort[i][3] = (double)l;
+				//		comb_after_sort[i][4] = (double)m;
+				//		comb_after_sort[i][5] = comb_result3[k][l][m][2];
+				//		comb_sort3[k][l][m] = 0;//99番基底が入らないか？
+				//	}
+				//}
 
 
-				for (i = 10; i < 20; i++) {//２個のソート
-					max = 0;
-					k = l = m = n = o = 99;
-					for (a = 0; a < 64 - 1; a++)
-						for (b = a + 1; b < 64; b++)
-							if (comb_sort2[a][b] > max) {//改善画質累積の比較のため，最大を探索
-								max = comb_sort2[a][b];//2sort
-								n = a;
-								o = b;
-							}
-					if (n != 99) {
-						comb_after_sort[i][0] = comb_result2[n][o][0];
-						comb_after_sort[i][1] = comb_result2[n][o][1];
-						comb_after_sort[i][2] = (double)n;
-						comb_after_sort[i][3] = (double)o;
-						comb_after_sort[i][4] = 99;
-						comb_after_sort[i][5] = comb_result2[n][o][2];
-						comb_sort2[n][o] = 0;//99番基底が入らないか？
-					}
-				}
+				//for (i = 10; i < 20; i++) {//２個のソート
+				//	max = 0;
+				//	k = l = m = n = o = 99;
+				//	for (a = 0; a < 64 - 1; a++)
+				//		for (b = a + 1; b < 64; b++)
+				//			if (comb_sort2[a][b] > max) {//改善画質累積の比較のため，最大を探索
+				//				max = comb_sort2[a][b];//2sort
+				//				n = a;
+				//				o = b;
+				//			}
+				//	if (n != 99) {
+				//		comb_after_sort[i][0] = comb_result2[n][o][0];
+				//		comb_after_sort[i][1] = comb_result2[n][o][1];
+				//		comb_after_sort[i][2] = (double)n;
+				//		comb_after_sort[i][3] = (double)o;
+				//		comb_after_sort[i][4] = 99;
+				//		comb_after_sort[i][5] = comb_result2[n][o][2];
+				//		comb_sort2[n][o] = 0;//99番基底が入らないか？
+				//	}
+				//}
 
 				for (i = 20; i < 30; i++) {//1個のソート
 					max = 0;
@@ -2272,20 +2272,20 @@ int main()
 
 
 
-				for (a = 0; a < 1024; a++) {
-					for (b = 0; b < 64; b++) {
-						for (c = 0; c < 64; c++) {
-							free(comb3_1[a][b][c]);
-							free(comb3_0[a][b][c]);
-						}
-						free(comb3_1[a][b]);
-						free(comb3_0[a][b]);
-					}
-					free(comb3_1[a]);
-					free(comb3_0[a]);
-				}
-				free(comb3_1);
-				free(comb3_0);
+				//for (a = 0; a < 1024; a++) {
+				//	for (b = 0; b < 64; b++) {
+				//		for (c = 0; c < 64; c++) {
+				//			free(comb3_1[a][b][c]);
+				//			free(comb3_0[a][b][c]);
+				//		}
+				//		free(comb3_1[a][b]);
+				//		free(comb3_0[a][b]);
+				//	}
+				//	free(comb3_1[a]);
+				//	free(comb3_0[a]);
+				//}
+				//free(comb3_1);
+				//free(comb3_0);
 
 			}
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

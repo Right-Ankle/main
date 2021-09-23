@@ -162,7 +162,23 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 			temp_basis[i * 64 + j] = npca_basis[i][j];
 	img_write_gray(temp_basis, output, 64, 64);
 
+	// ICA基底出力
+	for (i = 0; i < 64; i++) {
+		m = i % 8;
+		n = i / 8;
+		for (a = 0; a < 8; a++)
+			for (b = 0; b < 8; b++)
+				ica[a * 8 + b] = temp_basis[64 * 8 * m + 8 * n + b + 64 * a];
+		for (a = 0; a < 8; a++)
+			for (b = 0; b < 8; b++)
+				for (k = 0; k < 8; k++)
+					for (l = 0; l < 8; l++)
+						temp_basis2[64 * 8 * a + 8 * b + l + 64 * k] = ica[a * 8 + b];
+		sprintf(output, "OUTPUT\\test\\PCA[%d].bmp", i);
+		img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
+	}
 	sprintf(output, "OUTPUT\\ICA_BASIS.bmp"); //ICA基底bmpで出力
+
 	for (i = 0; i < 64; i++)
 		for (j = 0; j < 64; j++)
 			temp_basis[i * 64 + j] = nica_basis[i][j];
