@@ -125,6 +125,7 @@ void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag
 void img_out3(unsigned char origin[][256]);
 void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int name);
 double SSIM(unsigned char data1[][256], unsigned char data2[][256], int width, int heigth);
+double b_SSIM(double data1[][8], double data2[][8], int width, int heigth);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
 

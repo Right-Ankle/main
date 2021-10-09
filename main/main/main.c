@@ -96,6 +96,10 @@ int main()
 	static double b_dct_ent[1024]; //各ica基底の情報量
 	static double mse_dct[2][10][1024]; //mse
 	static double full_mse[2][65][1024];
+	static double full_ssim[2][65][1024];
+	static double ssim_dct[2][10][1024];
+	static double ssim_temp1[8][8];
+	static double ssim_temp2[8][8];
 	double dcoe[256][256] = { 0 }, ica_basis[65][1024], ica_basis2[65][1024];
 	double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, bunrui[4][1024];
 	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
@@ -167,7 +171,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '1', '0', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '3', '0', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -253,10 +257,10 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin_30);
-	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin);
+	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
-	gnuplot(y);
+	//gnuplot(y);
 
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
@@ -461,7 +465,9 @@ int main()
 
 	}
 
-
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++)
+			ny[j][i] = y[j][i]; // ny -> yy(ica係数コピー)
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -470,7 +476,7 @@ int main()
 	sprintf(output, "OUTPUT\\ICA_SAI_average.bmp"); //再構成画像bmpで出力
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
-			temp_sai[i * 256 + j] = ica_sai[i][j];
+			temp_sai[i * 256 + j] = (int)ica_sai[i][j];
 	img_write_gray(temp_sai, output, 256, 256);
 
 
@@ -562,6 +568,122 @@ int main()
 	sum /= 256 * 256;
 	//printf("\n%lf", sum);
 
+	//////////////////////////////////////////////////// ssim で優先度を付ける ////////////////////////////////////
+
+		// 1 -> 64 までのssim調査
+
+	fprintf(fp5, "\n\n Use image  :  %s\n\n\n", filename);
+	fprintf(fp5, "\n\n  DCT vs ICA  \n\n    Area with a small number of basis\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
+
+	for (j = 0; j < 1024; j++) {
+		for (c = 0; c < 64; c++) { //MSE優先度の格納カウント
+
+			threshold = 0;
+			QQ = 99;
+
+			for (n = 0; n < 64; n++) { //調査対象基底
+
+				for (a = 0; a < 64; a++)
+					ny[a][j] = y[a][j]; //係数の初期化
+
+				if (c != 0) {
+					for (a = 0; a < c; a++) {
+						if ((int)full_ssim[0][a][j] != 99)
+							ny[(int)full_ssim[0][a][j]][j] = 0; //選出済みの基底の係数を0
+					}
+				}
+
+				if (ny[n][j] != 0) {
+					ny[n][j] = 0; // 調査対象の基底の係数値を0
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							ssim_temp1[b][a] = (double)block_ica[b * 8 + a];
+							ssim_temp2[b][a] = (double)origin[ml * 8 + b][mk * 8 + a];
+						}
+					}
+
+					sum = b_SSIM(ssim_temp2, ssim_temp1, 8, 8);
+
+					if (threshold < sum) {//抜いた場合にssimが一番高くなる基底を抜く（一番いらない）
+						threshold = sum;
+						QQ = n;
+					}
+				}
+			}
+			full_ssim[1][c + 1][j] = threshold; //格納基底のMSE
+			full_ssim[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
+		}
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+	}
+	printf("\r [ Execution finished ]          ");
+	printf("\n\n");
+
+	//gnuplot(temp_array);
+
+	for (j = 0; j < 1024; j++)
+		for (n = 0; n < 64; n++)
+			ny[n][j] = y[n][j];
+
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+	for (j = 0; j < 1024; j++) {
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				ssim_temp1[b][a] = (double)ica_sai[ml * 8 + b][mk * 8 + a];
+				ssim_temp2[b][a] = (double)origin[ml * 8 + b][mk * 8 + a];
+			}
+		}
+		full_ssim[1][0][j] = b_SSIM(ssim_temp2, ssim_temp1, 256, 256);//基底すべて用いた場合のMSE
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+	}
+	printf("\r [ Execution finished ]          ");
+	printf("\n\n");
+
+	for (j = 0; j < 1024; j++)
+		for (n = 0; n < 64; n++)
+			ny[n][j] = 0;
+
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+	for (j = 0; j < 1024; j++) {
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				ssim_temp1[b][a] = (double)ica_sai[ml * 8 + b][mk * 8 + a];
+				ssim_temp2[b][a] = (double)origin[ml * 8 + b][mk * 8 + a];
+			}
+		}
+		full_ssim[1][64][j] = b_SSIM(ssim_temp2, ssim_temp1, 256, 256);//基底すべて用いた場合のMSE
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
 
@@ -630,7 +752,7 @@ int main()
 
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
-			ny[n][j] = y[n][j]; // iつ目の基底選択
+			ny[n][j] = y[n][j]; 
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -646,11 +768,14 @@ int main()
 			}
 		}
 		full_mse[1][0][j] = sum / 64;//基底すべて用いた場合のMSE
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
+	printf("\r [ Execution finished ]          ");
+	printf("\n\n");
 
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
-			ny[n][j] = 0; // iつ目の基底選択
+			ny[n][j] = 0; 
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -665,7 +790,7 @@ int main()
 				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
 			}
 		}
-		full_mse[1][64][j] = sum / 64;//基底すべて用いた場合のMSE
+		full_mse[1][64][j] = sum / 64;//基底使わない場合のMSE
 	}
 
 	/*	printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
@@ -696,7 +821,7 @@ int main()
 	if (yn == 'n') {
 		//printf("Do you want to run the MSE or MP ? [ y/n ] : ");
 		//scanf("%s", &yn);
-		yn = 'y';
+		yn = 'd';
 		ent_count_basis(w, ica_basis_ent);
 		excel_basis[0] = ica_basis_ent[0];
 		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
@@ -708,7 +833,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 40; Q > 0; Q -= 100) {
+		for (Q = 100; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -745,8 +870,11 @@ int main()
 				for (a = 0; a < 8; a++) {
 					for (b = 0; b < 8; b++) {
 						sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
+						ssim_temp1[b][a] = (double)dcoe2[ml * 8 + b][mk * 8 + a];
+						ssim_temp2[b][a] = (double)origin[ml * 8 + b][mk * 8 + a];
 					}
 				}
+				ssim_dct[0][(Q / 10) - 1][j] = b_SSIM(ssim_temp2, ssim_temp1, 8, 8);
 				mse_dct[0][(Q / 10) - 1][j] = sum / 64;//平均
 
 				//sum = sum / (256.0 * 256.0); mse_ica
@@ -757,7 +885,8 @@ int main()
 					if (dcoe_temp[b][j] != 0)
 						i++;
 
-				mse_dct[1][(Q / 10) - 1][j] = i;
+				mse_dct[1][(Q / 10) - 1][j] = (double)i;
+				ssim_dct[1][(Q / 10) - 1][j] = (double)i;
 			}
 
 
@@ -861,10 +990,66 @@ int main()
 			{
 				a = 1;
 			}
-			else if (yn == 'd')
+			else if (yn == 'd')//ssimを用いた優先度による領域分割
 			{
-				ent_out(origin, y, avg, w, ny, no_op, Q);
+				for (j = 0; j < 1024; j++) {
+					//for (a = 9; a > 0; a -= 1) {
+					a = Q / 10 - 1; // Q = 30
+
+					for (b = 0; b < 65; b++) {
+						ica_basis[b][j] = 0;
+						ica_basis2[b][j] = 99;
+					}
+
+					for (b = 0; b < 65; b++)
+						if (ssim_dct[0][a][j] < full_ssim[1][b][j]) {
+							bunrui[3][j] = full_ssim[1][b][j];
+							bunrui[2][j] = 64.0 - b;
+						}
+					if (mse_dct[0][a][j] > full_ssim[1][0][j]) {
+						bunrui[3][j] = full_ssim[1][0][j];
+						bunrui[2][j] = 64.0;
+					}
+
+					bunrui[0][j] = ssim_dct[1][a][j];
+					bunrui[1][j] = ssim_dct[0][a][j];
+
+					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] < bunrui[3][j]) {// 
+						no_op[j] = 1; // no_op 1 ならica
+						QQ++;
+
+						if (bunrui[2][j] == 0)
+							ica_basis[64][j] = 1; // 基底0
+						else {
+							for (b = 63; b > 63 - bunrui[2][j]; b--) {
+								ica_basis[(int)full_ssim[0][b][j]][j] = 1;
+								ny[(int)full_ssim[0][b][j]][j] = y[(int)full_ssim[0][b][j]][j];//重要な順で格納
+								//printf("%d\n", (int)ica_basis[65-a][j]);
+							}
+						}
+						//printf("%d\n", j);
+						ica_basis2[64][j] = bunrui[2][j];
+
+						for (b = 63; b > 63 - bunrui[2][j]; b--) {
+							ica_basis2[(int)full_ssim[0][b][j]][j] = 1;
+							nny[(int)full_ssim[0][b][j]][j] = y[(int)full_ssim[0][b][j]][j];
+						}
+
+					}
+					else {
+						ica_basis[64][j] = 2;
+						for (b = 0; b < 64; b++)
+							ica_basis[b][j] = 3;
+					}
+					fprintf(fp5, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
+					fprintf(fp5, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT ssim : %lf\n", (int)ssim_dct[1][a][j], (a + 1) * 10, ssim_dct[0][a][j]);
+					fprintf(fp5, "\n\n    ICA NUM : %2d\n\n    ICA ssim : %lf\n", (int)bunrui[2][j], bunrui[3][j]);
+				}
+
+				fprintf(fp5, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
+				fprintf(fp5, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 			}
+
 			//img_out(origin, no_op, Q);
 			//txt_out(bunrui, filename, Q);
 			//txt_out2(ica_basis, filename, Q);
@@ -951,12 +1136,6 @@ int main()
 			//	fprintf(fp7, "%lf,", (double)ica_fre_temp[i]);
 			//}
 
-			fprintf(fp7, "\n");
-			fprintf(fp7, "%d,", Q);
-			sum = 0;
-
-
-
 			for (i = 0; i < 256; i += 8) {
 				for (j = 0; j < 256; j += 8) {
 					m = 0;
@@ -975,7 +1154,7 @@ int main()
 						sum += dct_ent[i][j];
 				}
 			}
-			fprintf(fp7, "%lf,", sum);
+			//fprintf(fp7, "%lf,", sum);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++) {
@@ -986,7 +1165,7 @@ int main()
 					}
 				}
 			}
-			fprintf(fp7, "%lf,", sum);
+			//fprintf(fp7, "%lf,", sum);
 
 			sum = 0;
 			a = 0;
@@ -1009,8 +1188,8 @@ int main()
 					a++;
 				}
 			}
-			fprintf(fp7, "%lf,", sum);
-			fprintf(fp7, "%lf,", (double)a);
+			//fprintf(fp7, "%lf,", sum);
+			//fprintf(fp7, "%lf,", (double)a);
 
 			sum = 0;
 
@@ -1019,18 +1198,20 @@ int main()
 					sum += ica_dc[j];
 				}
 			}
-			fprintf(fp7, "%lf,", sum);
+			//fprintf(fp7, "%lf,", sum);
 			sum = 0;
 			for (i = 0; i < 64; i++)
 				sum += test_basis[i];
-			fprintf(fp7, "%lf,", sum);
+			//fprintf(fp7, "%lf,", sum);
 			sum = 0;
 			for (j = 0; j < 1024; j++) {
 				sum += test_area[j];
 			}
-			fprintf(fp7, "%lf,", sum / a);
+			//fprintf(fp7, "%lf,", sum / a);
 
-			fprintf(fp7, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
+			//fprintf(fp7, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
+
+			//fprintf(fp7, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
 
 
 			//icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
@@ -1096,32 +1277,25 @@ int main()
 			}
 			//.///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			fprintf(fp8, "\n");
-			fprintf(fp8, "%d,", Q);
+			seki5(nw, ny, x); // x -> nw * ny
+			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+			img_out2(dcoe2, ica_sai, no_op, Q + 4);
+			img_out(dcoe2, no_op, Q + 9);
+			//情報量
+			fprintf(fp7, "\n");
+			fprintf(fp7, "%d,", Q);
 			sum = 0;
 
-
-
-			for (i = 0; i < 256; i += 8) {
-				for (j = 0; j < 256; j += 8) {
-					m = 0;
-					for (k = 0; k < 8; k++) {
-						for (l = 0; l < 8; l++) {
-							dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
-							m++;
-						}
-					}
-					n++;
-				}
-			}
 			for (j = 0; j < 1024; j++) {
 				for (i = 0; i < 64; i++) {
 					if (dcoe_temp[i][j] != 0)
 						sum += dct_ent2[i][j];
 				}
 			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[1] = sum;
+
+			fprintf(fp7, "%lf,", sum);
 
 			sum = 0;
 			for (j = 0; j < 1024; j++) {
@@ -1132,8 +1306,9 @@ int main()
 					}
 				}
 			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[2] = sum;
+			fprintf(fp7, "%lf,", sum);
+
+
 
 			sum = 0;
 			a = 0;
@@ -1156,10 +1331,9 @@ int main()
 					a++;
 				}
 			}
-			fprintf(fp8, "%lf,", sum);
-			fprintf(fp8, "%lf,", (double)a);
-			excel_basis[3] = sum;
-			excel_basis[4] = a;
+			fprintf(fp7, "%lf,", sum);
+			fprintf(fp7, "%lf,", (double)a);
+
 
 			sum = 0;
 
@@ -1168,20 +1342,43 @@ int main()
 					sum += ica_dc[j];
 				}
 			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[5] = sum;
+			fprintf(fp7, "%lf,", sum);
 
 			sum = 0;
 			for (i = 0; i < 64; i++)
 				sum += test_basis[i];
-			fprintf(fp8, "%lf,", sum);
+			fprintf(fp7, "%lf,", sum);
 			sum = 0;
 			for (j = 0; j < 1024; j++) {
 				sum += test_area[j];
 			}
-			fprintf(fp8, "%lf,", sum / a);
 
-			fprintf(fp8, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
+			for (i = 0; i < 256; i++)
+				for (j = 0; j < 256; j++) {
+					k = i / 8;
+					m = j / 8;
+					if (no_op[32 * k + m] == 0) {
+						dct_ica_sai[i][j] = dcoe2[i][j];
+					}
+					else if (no_op[32 * k + m] == 1) {
+						dct_ica_sai[i][j] = ica_sai[i][j];
+					}
+				}
+
+
+			fprintf(fp7, "%lf,", sum / a);
+			psnr_temp2 = psnr(origin, dct_ica_sai);
+			fprintf(fp7, ",=(C%d+D%d+F%d)", excel_temp, excel_temp, excel_temp);
+			fprintf(fp7, ",=(C%d+D%d+F%d+$B$2*G%d)", excel_temp, excel_temp, excel_temp, excel_temp);
+			fprintf(fp7, ",%lf", psnr_temp2);
+			fprintf(fp7, ",,=(B%d-J%d)", excel_temp, excel_temp);
+			fprintf(fp7, ",,=(N%d/$B$2)", excel_temp);
+
+			psnr_temp2 = psnr(origin, dcoe2);
+			fprintf(fp7, ",,%lf", psnr_temp2);
+			psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
+			fprintf(fp7, ",,%lf", psnr_temp2);
+
 			// / ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2305,7 +2502,7 @@ int main()
 				fprintf(fp10, ",%lf", psnr_temp2);
 				fprintf(fp10, ",,=(B%d-J%d)", excel_temp, excel_temp);
 				fprintf(fp10, ",,=(N%d/$B$2)", excel_temp);
-				excel_temp++;
+
 				psnr_temp2 = psnr(origin, dcoe2);
 				fprintf(fp10, ",,%lf", psnr_temp2);
 				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
@@ -2358,7 +2555,7 @@ int main()
 
 			}
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+			excel_temp++;
 		} // dctの最初に戻る
 
 	}
