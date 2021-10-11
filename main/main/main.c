@@ -1058,11 +1058,16 @@ int main()
 			//idct(dcoe, dcoe2, 8); // 普通の再構成
 			//b_entropy_dct(dcoe);
 			a = 0;
+			b = 0;
 			for (i = 0; i < 64; i++)
 				basis_temp[i] = 0;
 			for (i = 0; i < 1024; i++) 
-				if (ica_basis2[64][i] != 99) 
+				if (ica_basis2[64][i] != 99 && ica_basis2[64][i]!=0) {
 					basis_temp[(int)ica_basis2[64][i]]++;
+					b += (int)ica_basis2[64][i];
+					a++;
+				}
+			printf("\n\n ICA_Block = %d, use basis average = %lf\n", a, (double)b / (double)a);
 
 			gnuplot5(basis_temp, Q);
 

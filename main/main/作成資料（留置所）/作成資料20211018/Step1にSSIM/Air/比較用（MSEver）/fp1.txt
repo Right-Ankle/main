@@ -1,0 +1,72 @@
+
+ now Q is 70
+
+
+ ICA_Block = 413, use basis average = 8.953995
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 60
+
+
+ ICA_Block = 428, use basis average = 7.376168
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 50
+
+
+ ICA_Block = 405, use basis average = 6.595062
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 40
+
+
+ ICA_Block = 397, use basis average = 5.594458
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 30
+
+
+ ICA_Block = 359, use basis average = 4.874652
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 20
+
+
+ ICA_Block = 337, use basis average = 3.943620
+----plot start----
+
+ now outputing  - - - -> end
+
+
+ now outputing  - - - -> end
+
+ now Q is 10
+
+
+ ICA_Block = 275, use basis average = 2.330909
+----plot start----
