@@ -832,7 +832,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 70; Q > 0; Q -= 10) {
+		for (Q = 10; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -1289,6 +1289,20 @@ int main()
 
 			img_out2(dcoe2, ica_sai, no_op, Q + 4);
 			img_out(origin, no_op, Q + 9);
+
+			for (j = 0; j < 1024; j++) {
+				if (no_op[j] == 0)
+					no_op[j] = 1;
+				else if (no_op[j] == 1)
+					no_op[j] = 0;
+			}
+			img_out(origin, no_op, Q + 8);
+			for (j = 0; j < 1024; j++) {
+				if (no_op[j] == 0)
+					no_op[j] = 1;
+				else if (no_op[j] == 1)
+					no_op[j] = 0;
+			}
 			//情報量
 			fprintf(fp7, "\n");
 			fprintf(fp7, "%d,", Q);
