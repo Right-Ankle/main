@@ -708,7 +708,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 100) {
+		for (Q = 60; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 
