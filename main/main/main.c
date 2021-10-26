@@ -346,6 +346,25 @@ int main()
 	//gnuplot2_2(ica_fre_temp);
 
 
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 1024; j++) {
+			if (y[i][j] > 2 || y[i][j] < -2)
+				ny[i][j] = y[i][j];
+			else
+				ny[i][j] = 0;
+			if (j == 309)
+				printf("\n%lf", ny[i][j]);
+		}
+
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+	img_out3(ica_sai);
+
+	//gnuplot(ny);
+
+
 		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	//for (i = 0; i < 64; i++)
 	//	printf("\n%d", ica_fre[i][0]);
@@ -884,6 +903,18 @@ int main()
 			//mp(y, avg, w, mpans);
 
 			//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
+
+			for (j = 0; j < 1024; j++) {
+				no_op_0[j] = 0;
+				no_op_1[j] = 0;
+				if (ica_basis2[64][j]==0)
+					no_op_0[j] = 1;
+				if (full_mse[0][63][j] == 40 && ica_basis2[64][j] != 99)
+					no_op_1[j] = 1;
+			}
+			img_out(origin, no_op_0, 23);
+			//img_out(origin, no_op_1, 40);
+
 
 			//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
 			//for (i = 0; i < 1024; i++)

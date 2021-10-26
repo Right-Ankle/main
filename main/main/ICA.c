@@ -163,15 +163,15 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 	img_write_gray(temp_basis, output, 64, 64);
 
 	// DC出力
-	for (j = 0; j < 1024; j++) {
-		for (a = 0; a < 8; a++)
-			for (b = 0; b < 8; b++)
-				for (k = 0; k < 8; k++)
-					for (l = 0; l < 8; l++)
-						temp_basis2[64 * 8 * a + 8 * b + l + 64 * k] = (int)avg[j];
-		sprintf(output, "OUTPUT\\test\\AVG[%d].bmp", j);
-		img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
-	}
+	//for (j = 0; j < 1024; j++) {
+	//	for (a = 0; a < 8; a++)
+	//		for (b = 0; b < 8; b++)
+	//			for (k = 0; k < 8; k++)
+	//				for (l = 0; l < 8; l++)
+	//					temp_basis2[64 * 8 * a + 8 * b + l + 64 * k] = (int)avg[j];
+	//	sprintf(output, "OUTPUT\\test\\AVG[%d].bmp", j);
+	//	img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
+	//}
 
 	// ICA基底出力
 	for (i = 0; i < 64; i++) {
