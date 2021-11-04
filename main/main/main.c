@@ -880,7 +880,7 @@ int main()
 			else if (yn == 'n')
 			{
 				// mp法の確認
-
+				basis0_ent = 0;
 
 				if (mp_count == 0) {
 
@@ -990,7 +990,7 @@ int main()
 			{
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
-			yn = 'y';
+
 			//img_out(origin, no_op, Q);
 			//txt_out(bunrui, filename, Q);
 			//txt_out2(ica_basis, filename, Q);
@@ -1605,6 +1605,8 @@ int main()
 			}
 			printf("\nbasis_ent0 = %lf", basis0_ent);
 
+			if (yn == 'n')
+				basis0_ent = 0;
 
 			for (j = 0; j < 1024; j++)
 				no_op[j] = 0;
@@ -1741,7 +1743,7 @@ int main()
 			//img_out(origin, no_op_ica, Q + 5);
 			//img_out4(origin, no_op_ica, no_op_all, Q + 4);
 
-
+			yn = 'y';
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//0の情報量ok
@@ -2205,7 +2207,7 @@ int main()
 						c = 3;
 
 					if (k == 0) {
-						if ((comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
 							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
