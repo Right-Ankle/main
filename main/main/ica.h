@@ -51,6 +51,7 @@ void seki(double w[][64], double x[][1024], double y[][1024]);
 void seki5(double w[][64], double x[][1024], double y[][1024]);
 void seki5_Block(double w[][64], double x[][1024], double y[64], int num);
 void xtogen(double x[][1024], unsigned char gen[][256], double avg[1024]);
+void xtogen2(double x[][1024], unsigned char gen[][256]);
 void xtogen_Block(double x[64], unsigned char gen[64], double avg[1024], int num);
 void avg_inter(unsigned char gen[][256], double avg[1024]);
 void avg_inter_Block(unsigned char gen[8][8], double avg[1024], int num);

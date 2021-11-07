@@ -44,6 +44,7 @@ int main()
 	static int no_op_3[1024] = { 0 };
 	static int no_op_all[1024];
 	static int no_op_ica[1024];
+	static int count[2][1024];
 	static int Q;//圧縮レート
 	static int QQ, QQQ, QQQQ;
 	double min2 = 100000;
@@ -100,6 +101,7 @@ int main()
 	static double full_mse[2][65][1024];
 	double dcoe[256][256] = { 0 }, ica_basis[65][1024], ica_basis2[65][1024];
 	double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, bunrui[4][1024];
+	static double dcoe_temp2[64][1024];
 	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
 	static double mse_profit[1024];
 	static double ent_profit[1024];
@@ -107,6 +109,8 @@ int main()
 	static double mse_sum[64];//基底ごとの画質の良さ
 	static double ent_sum[64];//基底ごとの情報量の良さ
 	static double basis0_ent = 0;
+	static double avg_temp[1024];
+	static double hybrid_temp[4][20][1024];//ブロックごとの最適な基底の組み合わせ　0→MSE，1~3→基底番号（0~63=DCT, 64~127=ICA）
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -354,15 +358,15 @@ int main()
 				ny[i][j] = y[i][j];
 			else
 				ny[i][j] = 0;
-			if (j == 309)
-				printf("\n%lf", ny[i][j]);
+			//if (j == 309)
+				//printf("\n%lf", ny[i][j]);
 		}
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-	img_out3(ica_sai);
+	//img_out3(ica_sai);
 
 	//gnuplot(ny);
 
@@ -391,7 +395,7 @@ int main()
 				m = 0;
 				for (k = 0; k < 8; k++) {
 					for (l = 0; l < 8; l++) {
-						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+						dcoe_temp[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
 
 						m++;
 					}
@@ -409,7 +413,7 @@ int main()
 
 		for (i = 0; i < 64; i++)
 			for (j = 0; j < 1024; j++) {
-				if (x[i][j] != 0)
+				if (dcoe_temp[i][j] != 0)
 					dct_fre[(Q / 10 - 1)][i][j]++;
 			}
 	}
@@ -428,12 +432,224 @@ int main()
 	//for (i = 0; i < 64; i++)
 	//	printf("\n%d  %d  %d  %d", dct_fre_temp[9][i], dct_fre_temp[8][i], dct_fre_temp[7][i], dct_fre_temp[6][i]);
 
-	Q = 100;
+	Q = 50;
 
 	//printf("\nnow Q = %d\n", Q);
 	dct(origin, dcoe, 8); // 係数を出力
 	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+	//for (i = 0; i < 256; i++)
+	//	for (j = 0; j < 256; j++) {
+	//		if (i % 8 == 0 && j % 8 == 0) {
+	//			dcoe[i][j] = 0;
+	//			printf("\n %d, %d", i, j);
+	//		}
+	//	}
 	idct(dcoe, dcoe2, 8); // 普通の再構成
+
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 1024; j++)
+			ny[i][j] = 0;
+	for (j = 0; j < 1024; j++) {
+		avg_temp[j] = 0;
+	}
+
+	seki5(nw, ny, x); // x -> nw * ny
+	xtogen(x, ica_sai, avg_temp); // ica_sai -> 再構成済①
+	//avg_inter(ica_sai, avg_temp); // ica_sai -> 再構成済②
+
+	for (i = 0; i < 256; i++)
+		for (j = 0; j < 256; j++) {
+			ica_sai[i][j] = (dcoe2[i][j] + ica_sai[i][j]);
+			if (ica_sai[i][j] > 255)
+				ica_sai[i][j] = 255;
+			if (ica_sai[i][j] < 0)
+				ica_sai[i][j] = 0;
+		}
+
+	img_out3(ica_sai);
+
+	for (j = 0; j < 1024; j++) {
+		sum = 0.0;
+		sum1 = 0;
+		mk = j % 32;
+		ml = j / 32;
+
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2); //MSE
+				sum1+= pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
+			}
+		}
+		//printf("\n[%d] : %lf,  %lf  (%lf)", j, sum / 64, sum1 / 64, (sum1-sum)/64);
+
+	}
+
+
+	// hybrid method test
+
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			m = 0;
+			for (k = 0; k < 8; k++) {
+				for (l = 0; l < 8; l++) {
+					dcoe_temp[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+					dcoe_temp2[m][n] = 0;
+					m++;
+				}
+			}
+			n++;
+		}
+	}
+
+	for (j = 0; j < 1024; j++)
+		for (i = 0; i < 20; i++) {
+			hybrid_temp[0][i][j] = 100000;
+			hybrid_temp[1][i][j] = 999;
+			hybrid_temp[2][i][j] = 999;
+			hybrid_temp[3][i][j] = 999;
+		}
+
+	for (a = 0; a < 128 - 2; a++) {
+		for (b = a + 1; b < 128 - 1; b++) {
+			for (c = b + 1; c < 128; c++) {
+
+				//処理削減のため，DCT係数が0の基底を含む組み合わせは飛ばします
+				QQ = 0;
+				if (a < 64)//0~63がDCT，64~127がICA
+					if (dcoe_temp[a][j] == 0)
+						QQ = 1;
+				if (b < 64)//0~63がDCT，64~127がICA
+					if (dcoe_temp[b][j] == 0)
+						QQ = 1;
+				if (c < 64)//0~63がDCT，64~127がICA
+					if (dcoe_temp[c][j] == 0)
+						QQ = 1;
+
+
+				if (QQ == 0) {
+					for (j = 0; j < 1024; j++) {
+						for (i = 0; i < 64; i++) {//DCT&ICA係数を初期化
+							ny[i][j] = 0;
+							dcoe_temp2[i][j] = 0;
+						}
+						// 対象とする基底の係数値を復元
+						if (a > 64)//0~63がDCT，64~127がICA　1個目
+							ny[a - 64][j] = y[a - 64][j];
+						else
+							dcoe_temp2[a][j] = dcoe_temp[a][j];
+						if (b > 64)//0~63がDCT，64~127がICA　2個目
+							ny[b - 64][j] = y[b - 64][j];
+						else
+							dcoe_temp2[b][j] = dcoe_temp[b][j];
+						if (c > 64)//0~63がDCT，64~127がICA　3個目
+							ny[c - 64][j] = y[c - 64][j];
+						else
+							dcoe_temp2[c][j] = dcoe_temp[c][j];
+					}
+
+					//DCT再構成
+					xtogen2(dcoe_temp2, dcoe);
+					idct(dcoe, dcoe2, 8); // 普通の再構成
+					//ICA再構成
+					seki5(nw, ny, x); // x -> nw * ny
+					xtogen(x, ica_sai, avg_temp); // ica_sai -> 再構成済①
+					//再構成を合体
+					for (i = 0; i < 256; i++)
+						for (j = 0; j < 256; j++) {
+							ica_sai[i][j] = dcoe2[i][j] + ica_sai[i][j];
+							if (ica_sai[i][j] > 255)
+								ica_sai[i][j] = 255;
+							if (ica_sai[i][j] < 0)
+								ica_sai[i][j] = 0;
+						}
+
+					for (j = 0; j < 1024; j++) {
+						sum = 0.0;
+						mk = j % 32;
+						ml = j / 32;
+						for (k = 0; k < 8; k++) {
+							for (l = 0; l < 8; l++) {
+								sum += pow(origin[ml * 8 + l][mk * 8 + k] - ica_sai[ml * 8 + l][mk * 8 + k], 2); //MSE
+							}
+						}
+						sum = sum / 64;
+
+						i = 0;
+						for (k = 0; k < 5; k++) {//ブロックごとのTop20の組み合わせを強い順に並び替え
+							if (i == 0) {
+								if (hybrid_temp[0][k][j] > sum) {
+									for (l = k + 1; l < 5; l++)
+										for (m = 0; m < 4; m++)
+											hybrid_temp[m][l][j] = hybrid_temp[m][l - 1][j];//一つ下位にずらす
+									hybrid_temp[0][k][j] = sum;
+									hybrid_temp[1][k][j] = (double)a;
+									hybrid_temp[2][k][j] = (double)b;
+									hybrid_temp[3][k][j] = (double)c;
+									i++;
+								}
+							}
+						}
+					}
+				}
+				printf("\r Now Running  :  [%d], [%d], [%d]", a, b, c);
+				
+			}
+		}
+	}
+	printf("\n\n");
+
+	for (j = 0; j < 1024; j++) {
+		count[0][j] = 0;
+		count[1][j] = 0;
+	}
+
+	// 各ブロックのICA・DCT基底の数をカウント
+	for (j = 0; j < 1024; j++) {
+		for (k = 0; k < 5; k++) {
+			for (l = 1; l < 4; l++)
+				if (hybrid_temp[l][k][j] < 64)
+					count[0][j]++;
+				else if (hybrid_temp[l][k][j] > 64 && hybrid_temp[l][k][j] < 128)
+					count[1][j]++;
+		}
+	}
+
+
+	dct(origin, dcoe, 8); // 係数を出力
+	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+	idct(dcoe, dcoe2, 8); // 普通の再構成
+	for (j = 0; j < 1024; j++) {
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2); //MSE
+				//sum1 += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
+			}
+		}
+		fprintf(fp, "\n\n[%d] : %lf", j, sum / 64);
+		for (i = 0; i < 5; i++)
+			if (hybrid_temp[1][i][j] != 999)
+				fprintf(fp, "\n   [%d] : %lf  :  %d, %d, %d", i, hybrid_temp[0][i][j], (int)hybrid_temp[1][i][j], (int)hybrid_temp[2][i][j], (int)hybrid_temp[3][i][j]);
+		fprintf(fp, "\n   DCT : %d,  ICA : %d", count[0][j], count[1][j]);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	b_entropy_dct(dcoe, b_dct_ent);
 
@@ -442,7 +658,7 @@ int main()
 			m = 0;
 			for (k = 0; k < 8; k++) {
 				for (l = 0; l < 8; l++) {
-					x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
+					dcoe_temp[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
 
 					m++;
 				}
@@ -458,16 +674,16 @@ int main()
 		}
 
 		sum1 = 0;
-		min3 = x[j][0];
+		min3 = dcoe_temp[j][0];
 
 		for (i = 0; i < 1024; i++)
-			if (x[j][i] < min3)
-				min3 = x[j][i]; // histの左端
+			if (dcoe_temp[j][i] < min3)
+				min3 = dcoe_temp[j][i]; // histの左端
 
 
 		for (i = 0; i < 1024; i++) {
 			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
-			hist[(int)((x[j][i] - min3)) + 1]++;	//ステップ幅1
+			hist[(int)((dcoe_temp[j][i] - min3)) + 1]++;	//ステップ幅1
 		}
 
 		for (i = 0; i < 50000; i++)
