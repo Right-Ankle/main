@@ -73,6 +73,7 @@
     <ClCompile Include="seki3.c" />
     <ClCompile Include="seki5.c" />
     <ClCompile Include="seki5_Block.c" />
+    <ClCompile Include="smoothing.c" />
     <ClCompile Include="ssim.c" />
     <ClCompile Include="txt_out2.c" />
     <ClCompile Include="txt_out.c" />
