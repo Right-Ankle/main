@@ -168,7 +168,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '1', '0', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '1', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -248,7 +248,7 @@ int main()
 
 	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	smoothing(origin, average_temp, 2);
+	//smoothing(origin, average_temp, 2);
 
 	// ///////////////////////// ica //////////////////////////////////
 	// ICA基底・係数
@@ -256,8 +256,8 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(average_temp);
-	ICA(average_temp, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin_30);
+	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
 
@@ -711,7 +711,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 70; Q > 0; Q -= 30) {
+		for (Q = 10; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -871,7 +871,7 @@ int main()
 
 			for (j = 0; j < 1024; j++) {
 				no_op_1[j] = 0;
-				if (ica_basis2[64][j] != 99 && ica_basis2[64][j]!=0)
+				if (ica_basis2[64][j] != 99)
 					no_op_1[j] = 1;
 			}
 			img_out(origin, no_op_1, Q+6);
@@ -2209,7 +2209,7 @@ int main()
 					}
 
 				}
-				img_out(origin, no_op, Q + 5);
+
 				img_out(origin, no_op_0, Q);
 				img_out(origin, no_op_1, Q + 1);
 				img_out(origin, no_op_2, Q + 2);

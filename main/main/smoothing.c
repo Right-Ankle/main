@@ -8,6 +8,7 @@
 #include <string.h>
 #include "ica.h"
 
+// 配列を定義して，少しいじるだけで他のフィルタも適用可能
 void smoothing(unsigned char origin[][256], unsigned char out[][256], int size) {
 	int i, j, k, l;
 	double sum;
