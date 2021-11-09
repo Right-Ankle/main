@@ -25,6 +25,7 @@ int main()
 	static unsigned char origin_30[256][256] = { 0 };	//原画像（256*256のみ対応）
 
 	static int temp_sai[256 * 256];
+	double aaa[4][3];
 
 
 	static unsigned char nica_basis[64][64]; //ica基底変換用
@@ -256,8 +257,8 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin_30);
-	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin);
+	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
 
@@ -711,7 +712,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 100) {
+		for (Q = 50; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -869,12 +870,28 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
-			for (j = 0; j < 1024; j++) {
-				no_op_1[j] = 0;
-				if (ica_basis2[64][j] != 99)
-					no_op_1[j] = 1;
-			}
-			img_out(origin, no_op_1, Q+6);
+			//for (j = 0; j < 1024; j++) {
+			//	no_op_1[j] = 0;//47
+			//	no_op_2[j] = 0;//13
+			//	no_op_3[j] = 0; //10,48
+			//	if (ica_basis2[64][j] < 4 && ica_basis2[64][j] != 0) {
+			//		//printf("\n[%d]", j);
+			//		for (i = 0; i < 64; i++) {
+			//			if (ica_basis2[59][j] == 1 && ica_basis2[64][j] == 1)
+			//				no_op_1[j] = 1;
+			//			if (ica_basis2[39][j] == 1 && ica_basis2[59][j] == 1 && ica_basis2[64][j] == 2)
+			//				no_op_2[j] = 1;
+			//			if (ica_basis2[0][j] == 1 && ica_basis2[48][j] == 1 && ica_basis2[59][j] == 1 && ica_basis2[64][j] == 3)
+			//				no_op_3[j] = 1;
+			//			//if (ica_basis2[i][j] == 1)
+			//			//	printf(" %d,", i);
+			//		}
+			//	}
+			//}
+			//img_out(origin, no_op_1, Q + 1);
+			//img_out(origin, no_op_2, Q + 2);
+			//img_out(origin, no_op_3, Q + 3);
+			//img_out(origin, no_op_1, Q+1);
 			//img_out(origin, no_op, Q);
 			//txt_out(bunrui, filename, Q);
 			//txt_out2(ica_basis, filename, Q);
@@ -1613,6 +1630,16 @@ int main()
 			//img_out(origin, no_op_ica, Q + 5);
 			//img_out4(origin, no_op_ica, no_op_all, Q + 4);
 
+			for (j = 0; j < 1024; j++) {
+				no_op_1[j] = 0;
+				no_op_2[j] = 0;
+				no_op_3[j] = 0;
+				//if (ica_basis2[64][j] == 0) {
+				//	no_op_1[j] = 1;
+				//	no_op_2[j] = 1;
+				//	no_op_3[j] = 1;
+				//}
+			}
 
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1849,12 +1876,20 @@ int main()
 						}
 					}
 				}
+				
 
-				for (a = 0; a < 64 - 2; a++) {
-					for (b = a + 1; b < 64 - 1; b++) {
-						for (c = b + 1; c < 64; c++) {
-							for (j = 0; j < 1024; j++) {
+
+				for (j = 0; j < 1024; j++) {
+					aaa[0][0] = aaa[0][1] = aaa[0][2] = 100000;
+					aaa[1][0] = aaa[1][1] = aaa[1][2] = 99;
+					aaa[2][0] = aaa[2][1] = aaa[2][2] = 99;
+					aaa[3][0] = aaa[3][1] = aaa[3][2] = 99;
+					for (a = 0; a < 64 - 2; a++) {
+						for (b = a + 1; b < 64 - 1; b++) {
+							for (c = b + 1; c < 64; c++) {
+
 								//画質・情報量
+
 
 								//2個
 								max = comb2[j][a][b][0];//MSEだから小さい順
@@ -1876,29 +1911,78 @@ int main()
 								if (max > comb[j][c][0])
 									m = c;
 
+
+
+								//if (ica_basis2[64][j]==1) {
+								//	if ((dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0) || (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) || (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0))
+								//		printf("\n %d : ", j);
+								//	if (dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0)
+								//		printf("[%d, %d, %d] ", a, b, c);
+								//	if (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0)
+								//		printf("[%d, %d] ", k, l);
+								//	if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0)
+								//		printf("[%d] ", m);
+								//}
+
+
+
+								if (j == 1000)
+									if ((dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0) || (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) || (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0))
+										printf("\n %d : ", j);
 								//1vs2vs3個で画質比較
 								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]> 0) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
 									comb_result3[a][b][c][0] += sum;
 									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000)
+										printf("[%d, %d, %d]", a, b, c);
+									if (aaa[0][2] > comb3_0[j][a][b][c]) {
+										aaa[0][2] = comb3_0[j][a][b][c];
+										aaa[1][2] = a;
+										aaa[2][2] = b;
+										aaa[3][2] = c;
+									}
 								}
 								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000)
+										printf(" [%d, %d]", k, l);
+									if (aaa[0][1] > comb2[j][k][l][0]) {
+										aaa[0][1] = comb2[j][k][l][0];
+										aaa[1][1] = k;
+										aaa[2][1] = l;
+									}
 								}
 								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 									sum = dct_mse[j] - comb[j][m][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000)
+										printf(" [%d]", m);
+									if (aaa[0][0] > comb[j][m][0]) {
+										aaa[0][0] = comb[j][m][0];
+										aaa[1][0] = m;
+									}
 								}
 							}
 						}
 					}
+					if (aaa[1][2] == 0 && aaa[2][2] == 48 && aaa[3][2] == 59)
+						no_op_3[j] = 1;
+					if (aaa[1][1] == 39 && aaa[2][1] == 59)
+						no_op_2[j] = 1;
+					if (aaa[1][0] == 59)
+						no_op_1[j] = 1;
 				}
+
+				img_out(origin, no_op_1, Q + 1);
+				img_out(origin, no_op_2, Q + 2);
+				img_out(origin, no_op_3, Q + 3);
 
 				//累積（基底2つ）
 				k = 0;
