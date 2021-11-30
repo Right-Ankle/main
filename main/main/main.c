@@ -169,7 +169,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '1', '6', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '6', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -257,8 +257,8 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin);
-	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin_30);
+	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
 
@@ -712,7 +712,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 50; Q > 0; Q -= 100) {
+		for (Q = 60; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -805,7 +805,7 @@ int main()
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
 
-					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {// 
+					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {//
 						no_op[j] = 1; // no_op 1 ならica
 						QQ++;
 
@@ -901,12 +901,13 @@ int main()
 			//idct(dcoe, dcoe2, 8); // 普通の再構成
 			//b_entropy_dct(dcoe);
 			a = 0;
-			//for (i = 0; i < 1024; i++) {
-			//	if (ica_basis2[64][i] != 99) {
-			//		printf("\n %lf", ica_basis2[64][i]);
-			//		a++;
-			//	}
-			//}
+			for (i = 0; i < 1024; i++) {
+				no_op_1[i] = 0;
+				if (ica_basis2[64][i] != 99) {
+					no_op_1[i] = 1;
+				}
+			}
+			img_out(origin, no_op_1, Q+6);
 			//printf("\ncount:%d", a);
 			//mp(y, avg, w, mpans);
 
@@ -916,7 +917,7 @@ int main()
 			//for (i = 0; i < 1024; i++)
 			//	block_flag[i] = 0;
 		//b_entropy_ica(ny);
-		// 
+		//
 				// ヒストグラム作成時　使用フラグのない領域はカウントしない////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			for (i = 0; i < 64; i++) // 使用基底種類数を調査
 				test_basis[i] = 0;
@@ -1499,7 +1500,7 @@ int main()
 				no_op[j] = 0;
 
 			//// 基底数1の全領域にフラグ
-			//for (j = 0; j < 1024; j++) { //基底数が1の領域のみ有効 
+			//for (j = 0; j < 1024; j++) { //基底数が1の領域のみ有効
 			//	if (ica_basis2[64][j] == 1) {
 			//		no_op[j] = 1;
 			//	}
@@ -1609,7 +1610,7 @@ int main()
 			//	no_op_ica[j] = 0;
 			//	if (ica_basis2[64][j] != 99)
 			//		no_op_ica[j] = 1;
-			//	if (ica_basis2[64][j]!=99 && bunrui[0][j] - bunrui[2][j] >= 3 && bunrui[1][j] - bunrui[3][j]>=50) {//選出基底3津の時 
+			//	if (ica_basis2[64][j]!=99 && bunrui[0][j] - bunrui[2][j] >= 3 && bunrui[1][j] - bunrui[3][j]>=50) {//選出基底3津の時
 			//		//1vs2vs3個で画質比較
 			//		if (ica_basis2[64][j] < 4)
 			//			no_op_all[j] = 1;
@@ -1876,7 +1877,7 @@ int main()
 						}
 					}
 				}
-				
+
 
 
 				for (j = 0; j < 1024; j++) {
@@ -1926,63 +1927,32 @@ int main()
 
 
 
-								if (j == 1000)
-									if ((dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0) || (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) || (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0))
-										printf("\n %d : ", j);
+
 								//1vs2vs3個で画質比較
 								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]> 0) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
 									comb_result3[a][b][c][0] += sum;
 									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000)
-										printf("[%d, %d, %d]", a, b, c);
-									if (aaa[0][2] > comb3_0[j][a][b][c]) {
-										aaa[0][2] = comb3_0[j][a][b][c];
-										aaa[1][2] = a;
-										aaa[2][2] = b;
-										aaa[3][2] = c;
-									}
 								}
 								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000)
-										printf(" [%d, %d]", k, l);
-									if (aaa[0][1] > comb2[j][k][l][0]) {
-										aaa[0][1] = comb2[j][k][l][0];
-										aaa[1][1] = k;
-										aaa[2][1] = l;
-									}
 								}
 								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 									sum = dct_mse[j] - comb[j][m][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000)
-										printf(" [%d]", m);
-									if (aaa[0][0] > comb[j][m][0]) {
-										aaa[0][0] = comb[j][m][0];
-										aaa[1][0] = m;
 									}
 								}
 							}
 						}
 					}
-					if (aaa[1][2] == 0 && aaa[2][2] == 48 && aaa[3][2] == 59)
-						no_op_3[j] = 1;
-					if (aaa[1][1] == 39 && aaa[2][1] == 59)
-						no_op_2[j] = 1;
-					if (aaa[1][0] == 59)
-						no_op_1[j] = 1;
-				}
 
-				img_out(origin, no_op_1, Q + 1);
-				img_out(origin, no_op_2, Q + 2);
-				img_out(origin, no_op_3, Q + 3);
+
 
 				//累積（基底2つ）
 				k = 0;
