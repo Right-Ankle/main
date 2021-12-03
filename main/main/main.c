@@ -44,6 +44,7 @@ int main()
 	static int no_op_1[1024] = { 0 };
 	static int no_op_2[1024] = { 0 };
 	static int no_op_3[1024] = { 0 };
+	static int no_op_4[1024] = { 0 };
 	static int no_op_all[1024];
 	static int no_op_ica[1024];
 	static int Q;//圧縮レート
@@ -169,7 +170,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '6', '6', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '5', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -712,7 +713,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 60; Q > 0; Q -= 100) {
+		for (Q = 50; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -2186,6 +2187,7 @@ int main()
 					no_op_1[j] = 0;
 					no_op_2[j] = 0;
 					no_op_3[j] = 0;
+					no_op_4[j] = 0;
 					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
 						//基底3で画質最大
 						//2個
@@ -2215,6 +2217,7 @@ int main()
 							ny[c][j] = y[c][j];
 							no_op[j] = 1;
 							no_op_3[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d,%d,%d", a, b, c);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
@@ -2222,12 +2225,14 @@ int main()
 							ny[l][j] = y[l][j];
 							no_op[j] = 1;
 							no_op_2[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d,%d", k, l);
 						}
 						else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 							ny[m][j] = y[m][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d", m);
 						}
 					}
@@ -2244,12 +2249,14 @@ int main()
 							ny[b][j] = y[b][j];
 							no_op[j] = 1;
 							no_op_2[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d,%d", a, b);
 						}
 						else if (dct_mse[j] > comb[j][k][0] && comb[j][k][1] > 0) {
 							ny[k][j] = y[k][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d", k);
 						}
 					}
@@ -2258,16 +2265,18 @@ int main()
 							ny[a][j] = y[a][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
+							no_op_4[j] = 1;
 							fprintf(fp9, ",,%d", a);
 						}
 					}
 
 				}
 
-				img_out(origin, no_op_0, Q);
-				img_out(origin, no_op_1, Q + 1);
-				img_out(origin, no_op_2, Q + 2);
-				img_out(origin, no_op_3, Q + 3);
+				img_out(origin, no_op_0, Q);//0ブロック
+				img_out(origin, no_op_1, Q + 1);//基底1ブロック
+				img_out(origin, no_op_2, Q + 2);//基底2ブロック
+				img_out(origin, no_op_3, Q + 3);//基底3ブロック
+				img_out(origin, no_op_4, Q + 5);//0抜きICAブロック
 
 				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2276,7 +2285,7 @@ int main()
 				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 				avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-				img_out2(dcoe2, ica_sai, no_op, Q + 4);
+				img_out2(dcoe2, ica_sai, no_op, Q + 4);//ICAブロック
 
 				//情報量
 				fprintf(fp10, "\n");
