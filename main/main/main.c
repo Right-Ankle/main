@@ -67,6 +67,7 @@ int main()
 	int zig[64];
 	int excel_temp = 4;
 	double ica_dc[1024];
+	double ica_ica[1024];
 	double ica_basis_ent[64];
 	double basis_temp[64];
 	double ica_group[64][64];
@@ -133,6 +134,7 @@ int main()
 	_mkdir("OUTPUT\\DCT"); //実験中のICAとDCTの再構成画像を出力
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
+
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//for (i = 1; i < 5; i++) {
 	//	sprintf(g, "mkdir OUTPUT\\test\\%d", i);
@@ -170,7 +172,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '5', '6', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '7', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -262,6 +264,13 @@ int main()
 	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
+
+	for (j = 0; j < 64; j++) {
+		for (i = 0; i < 1024; i++)
+			ica_ica[i] = y[j][i];
+
+		gnuplot2(ica_ica, j);
+	}
 
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
@@ -906,9 +915,12 @@ int main()
 				no_op_1[i] = 0;
 				if (ica_basis2[64][i] != 99) {
 					no_op_1[i] = 1;
+					a++;
 				}
 			}
 			img_out(origin, no_op_1, Q+6);
+
+
 			//printf("\ncount:%d", a);
 			//mp(y, avg, w, mpans);
 

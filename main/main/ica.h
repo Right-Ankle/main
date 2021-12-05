@@ -104,7 +104,7 @@ void make_cost(double rate[1024], double dis[1024], double cost[1024]);
 void b_mse(unsigned char origin[][256], unsigned char gen[][256], double mse[1024]);
 double mse(unsigned char origin[][256], unsigned char gen[][256]);
 void gnuplot(double date[64][1024]);
-void gnuplot2(int date[64], int Q);
+void gnuplot2(double date[1024], int Q);
 void gnuplot2_2(int date[10][64]);
 void my_copy(char* from[], char* to[]);
 int err(const char* s);

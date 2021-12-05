@@ -173,7 +173,7 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 	//	img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
 	//}
 
-	// ICA基底出力
+	// PCA基底出力
 	for (i = 0; i < 64; i++) {
 		m = i % 8;
 		n = i / 8;
