@@ -261,8 +261,8 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin_30);
-	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin);
+	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
 
@@ -680,7 +680,7 @@ int main()
 				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
 			}
 		}
-		full_mse[1][64][j] = sum / 64;//基底すべて用いた場合のMSE
+		full_mse[1][64][j] = sum / 64;//基底すべて用いない場合のMSE
 	}
 
 	/*	printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
@@ -914,14 +914,14 @@ int main()
 
 			for (i = 0; i < 1024; i++) {
 				no_op_1[i] = 0;
-				if (ica_basis2[64][i] != 99 && ica_basis2[64][i] !=0) { //< 4　を　!=99　に変更中
+				if (ica_basis2[64][i] < 4 && ica_basis2[64][i] !=0) { //< 4　を　!=99　に変更中
 					no_op_1[i] = 1;
 					for (j = 0; j < 64; j++) {
 						coe_temp[j] = 0;
 						coe_temp[j] = y[j][i];
 					}
 					gnuplot5_2(coe_temp, i);
-					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
+					//printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
 				}
 			}
 			img_out(origin, no_op_1, Q+6);
@@ -929,8 +929,10 @@ int main()
 			a = b = c = d = 0;
 			for (i = 0; i < 1024; i++) {
 
-				if (ica_basis2[64][i] != 99 && ica_basis2[64][i] != 0)
+				if (ica_basis2[64][i]<4 && ica_basis2[64][i] != 0) {
 					a++;
+					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
+				}
 				if (ica_basis2[64][i] == 1) {
 					b++;
 					//printf("\n [ 1 ] %d", i);
@@ -944,7 +946,46 @@ int main()
 					//printf("\n [ 3 ] %d", i);
 				}
 			}
+
+
 			printf("\n 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf),", b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a);
+
+			for (i = 0; i < 1024; i++) {
+
+				if (i == 44 || i == 227 || i == 331 || i == 190) {
+					max = fabsf(y[0][i]);
+					for (j = 0; j < 64; j++) {
+						nnny[j][i] = 0;
+						if (max < fabsf(y[j][i])) {
+							max = fabsf(y[j][i]);
+							a = j;
+						}
+					}
+
+					nnny[a][i] = y[a][i];
+
+					// 初期化（必ず行う）
+					for (a = 0; a < 64; a++)
+						xx[a] = 0.0;
+
+					seki5_Block(nw, nnny, xx, i); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, i); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, i); // ica_sai -> 再構成済②
+
+					sum = 0.0;
+					mk = i % 32;
+					ml = i / 32;
+
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
+						}
+					}
+
+					printf("\n [ %d ] %lf", i, sum / 64.0);
+				}
+			}
+
 			//printf("\n all = ");
 
 			//printf("\ncount:%d", a);

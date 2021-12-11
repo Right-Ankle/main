@@ -1,0 +1,4 @@
+
+ICA_Basis,0.005482
+Q,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result
+70,0.651019,0.296694,0.414878,532.000000,0.053670,64.000000,6.951128,,=(B4-C4-F4)/((D4/E4)+$B$2)
