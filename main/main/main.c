@@ -750,10 +750,7 @@ int main()
 			full_mse[1][c + 1][j] = threshold; //格納基底のMSE
 			full_mse[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
 		}
-		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
-	printf("\r [ Execution finished ]          ");
-	printf("\n\n");
 
 	//gnuplot(temp_array);
 
@@ -828,7 +825,7 @@ int main()
 	if (yn == 'n') {
 		//printf("Do you want to run the MSE or MP ? [ y/n ] : ");
 		//scanf("%s", &yn);
-		yn = 'd';
+		yn = 'y';
 		ent_count_basis(w, ica_basis_ent);
 		excel_basis[0] = ica_basis_ent[0];
 		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
@@ -892,7 +889,7 @@ int main()
 					if (dcoe_temp[b][j] != 0)
 						i++;
 
-				mse_dct[1][(Q / 10) - 1][j] = i;
+				mse_dct[1][(Q / 10) - 1][j] = (double)i;
 				ssim_dct[1][(Q / 10) - 1][j] = (double)i;
 			}
 
@@ -1056,14 +1053,25 @@ int main()
 				fprintf(fp5, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
 				fprintf(fp5, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 
-				for (j = 0; j < 1024; j++)
-					if (ica_basis2[64][j] == 99)
-						if (mse_dct[0][a][j] > full_mse[1][64][j]) {
-							ica_basis2[64][j] = 0;
-							no_op[j] = 1;
-
-						}
+				for (j = 0; j < 1024; j++) {
+					no_op_1[j] = 0;
+					if (mse_dct[0][a][j] > full_mse[1][64][j]) {
+						ica_basis2[64][j] = 0;
+						no_op[j] = 1;
+						for (i = 0; i < 64; i++)
+							nny[i][j] = 0;
+					}
+				}
 			}
+
+			for (j = 0; j < 1024; j++) {
+				no_op_1[j] = 0;
+				if (ica_basis2[64][j] == 0) {//mse_dct[0][a][j] > full_mse[1][64][j]
+					no_op_1[j] = 1;
+				}
+			}
+			img_out(origin, no_op_1, Q + 3);
+
 			yn = 'y';
 			//for (j = 0; j < 1024; j++) {
 			//	no_op_1[j] = 0;//47
@@ -1107,12 +1115,12 @@ int main()
 						coe_temp[j] = 0;
 						coe_temp[j] = y[j][i];
 					}
-					gnuplot5_2(coe_temp, i);
+					//gnuplot5_2(coe_temp, i);
 				}
-				if (ica_basis2[64][i] < 4 && ica_basis2[64][i] != 0)
+				if (ica_basis2[64][i] < 4)
 					no_op_2[i] = 1;
 			}
-			img_out(origin, no_op_1, Q + 6);
+			//img_out(origin, no_op_1, Q + 6);
 			img_out(origin, no_op_2, Q + 6);
 
 			a = b = c = d = 0;
