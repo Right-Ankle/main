@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include <stdlib.h>
@@ -138,6 +139,7 @@ int main()
 	_mkdir("OUTPUT\\DCT"); //実験中のICAとDCTの再構成画像を出力
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
+
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//for (i = 1; i < 5; i++) {
 	//	sprintf(g, "mkdir OUTPUT\\test\\%d", i);
@@ -263,10 +265,17 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-	pcaStr = new_pca(origin);
-	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+	pcaStr = new_pca(origin_30);
+	ICA(origin_30, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
+
+	for (j = 0; j < 64; j++) {
+		for (i = 0; i < 1024; i++)
+			ica_ica[i] = y[j][i];
+
+		//gnuplot2(ica_ica, j);
+	}
 
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
@@ -466,15 +475,12 @@ int main()
 
 			}
 		for (i = 0; i < 1024; i++) {
-			dct_ent[j][i] = 0;
 			dct_ent[j][i] = sum1 / (1024 * 64);
 		}
 
 	}
 
-	for (i = 0; i < 1024; i++)
-		for (j = 0; j < 64; j++)
-			ny[j][i] = y[j][i]; // ny -> yy(ica係数コピー)
+
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -483,7 +489,7 @@ int main()
 	sprintf(output, "OUTPUT\\ICA_SAI_average.bmp"); //再構成画像bmpで出力
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
-			temp_sai[i * 256 + j] = (int)ica_sai[i][j];
+			temp_sai[i * 256 + j] = ica_sai[i][j];
 	img_write_gray(temp_sai, output, 256, 256);
 
 
@@ -575,7 +581,11 @@ int main()
 	sum /= 256 * 256;
 	//printf("\n%lf", sum);
 
-	//////////////////////////////////////////////////// ssim で優先度を付ける ////////////////////////////////////
+
+
+
+	///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////// ssim で優先度を付ける ////////////////////////////////////
 
 		// 1 -> 64 までのssim調査
 
@@ -687,16 +697,6 @@ int main()
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-	///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 	// 1 -> 64 までのMSE調査
 
 	fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
@@ -750,13 +750,16 @@ int main()
 			full_mse[1][c + 1][j] = threshold; //格納基底のMSE
 			full_mse[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
 		}
+		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
+	printf("\r [ Execution finished ]          ");
+	printf("\n\n");
 
 	//gnuplot(temp_array);
 
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
-			ny[n][j] = y[n][j];
+			ny[n][j] = y[n][j]; // iつ目の基底選択
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -772,14 +775,12 @@ int main()
 			}
 		}
 		full_mse[1][0][j] = sum / 64;//基底すべて用いた場合のMSE
-		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
+		//printf("\n%d : %lf", j, sum / 64.0);
 	}
-	printf("\r [ Execution finished ]          ");
-	printf("\n\n");
 
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
-			ny[n][j] = 0;
+			ny[n][j] = 0; // iつ目の基底選択
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -794,7 +795,7 @@ int main()
 				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
 			}
 		}
-		full_mse[1][64][j] = sum / 64;//基底使わない場合のMSE
+		full_mse[1][64][j] = sum / 64;//基底すべて用いない場合のMSE
 	}
 
 	/*	printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
@@ -825,7 +826,7 @@ int main()
 	if (yn == 'n') {
 		//printf("Do you want to run the MSE or MP ? [ y/n ] : ");
 		//scanf("%s", &yn);
-		yn = 'y';
+		yn = 'd';
 		ent_count_basis(w, ica_basis_ent);
 		excel_basis[0] = ica_basis_ent[0];
 		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
@@ -896,13 +897,19 @@ int main()
 
 			//////////////////出力終了///////////////////////
 
+
+			//////////////////出力終了///////////////////////
+
 			QQ = 0;
 			int mp_count = 0;
 
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
 				for (i = 0; i < 4; i++)
-					bunrui[i][j] = 0;
+					if (i == 2 || i == 0)
+						bunrui[i][j] = 99;
+					else
+						bunrui[i][j] = 10000;
 				for (i = 0; i < 64; i++)
 					ny[i][j] = 0;
 				for (i = 0; i < 64; i++)
@@ -921,15 +928,16 @@ int main()
 						ica_basis2[b][j] = 99;
 					}
 
-					for (b = 0; b < 65; b++)
-						if (mse_dct[0][a][j] > full_mse[1][b][j]) {
-							bunrui[3][j] = full_mse[1][b][j];
-							bunrui[2][j] = 64.0 - b;
-						}
 					if (mse_dct[0][a][j] < full_mse[1][0][j]) {
 						bunrui[3][j] = full_mse[1][0][j];
 						bunrui[2][j] = 64.0;
 					}
+
+					for (b = 0; b < 65; b++)
+						if (mse_dct[0][a][j] >= full_mse[1][b][j]) {
+							bunrui[3][j] = full_mse[1][b][j];
+							bunrui[2][j] = 64.0 - (double)b;
+						}
 
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
@@ -1054,7 +1062,7 @@ int main()
 				fprintf(fp5, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
 
 				for (j = 0; j < 1024; j++) {
-					no_op_1[j] = 0;
+					//no_op_1[j] = 0;
 					if (mse_dct[0][a][j] > full_mse[1][64][j]) {
 						ica_basis2[64][j] = 0;
 						no_op[j] = 1;
@@ -1064,15 +1072,6 @@ int main()
 				}
 			}
 
-			for (j = 0; j < 1024; j++) {
-				no_op_1[j] = 0;
-				if (ica_basis2[64][j] == 0) {//mse_dct[0][a][j] > full_mse[1][64][j]
-					no_op_1[j] = 1;
-				}
-			}
-			img_out(origin, no_op_1, Q + 3);
-
-			yn = 'y';
 			//for (j = 0; j < 1024; j++) {
 			//	no_op_1[j] = 0;//47
 			//	no_op_2[j] = 0;//13
@@ -1104,31 +1103,26 @@ int main()
 			//idct(dcoe, dcoe2, 8); // 普通の再構成
 			//b_entropy_dct(dcoe);
 
-
-
 			for (i = 0; i < 1024; i++) {
 				no_op_1[i] = 0;
-				no_op_2[i] = 0;
-				if (ica_basis2[64][i] !=99 && ica_basis2[64][i] != 0) { //< 4　を　!=99　に変更中
+				if (ica_basis2[64][i] < 4 && ica_basis2[64][i] != 0) { //< 4　を　!=99　に変更中
 					no_op_1[i] = 1;
 					for (j = 0; j < 64; j++) {
 						coe_temp[j] = 0;
 						coe_temp[j] = y[j][i];
 					}
-					//gnuplot5_2(coe_temp, i);
+					gnuplot5_2(coe_temp, i);
+					//printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
 				}
-				if (ica_basis2[64][i] < 4)
-					no_op_2[i] = 1;
 			}
-			//img_out(origin, no_op_1, Q + 6);
-			img_out(origin, no_op_2, Q + 6);
 
 			a = b = c = d = 0;
 			for (i = 0; i < 1024; i++) {
-
-				if (ica_basis2[64][i] != 99 && ica_basis2[64][i] != 0) {
+				no_op_1[i] = 0;
+				if (ica_basis2[64][i] <4 && ica_basis2[64][i] != 0) {
 					a++;
 					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
+					no_op_1[i] = 1;
 				}
 				if (ica_basis2[64][i] == 1) {
 					b++;
@@ -1142,9 +1136,13 @@ int main()
 					d++;
 					//printf("\n [ 3 ] %d", i);
 				}
+
 			}
+			img_out(origin, no_op_1, Q + 6);
+
 			printf("\n 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf),", b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a);
 
+			//printf("\n all = ");
 
 			//printf("\ncount:%d", a);
 			//mp(y, avg, w, mpans);
@@ -1879,7 +1877,7 @@ int main()
 				//	no_op_3[j] = 1;
 				//}
 			}
-
+			yn = 'y';
 			if (yn == 'y') {
 				////////複数基底を見当中/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//0の情報量ok
