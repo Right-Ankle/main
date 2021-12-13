@@ -177,7 +177,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '7', '6', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '9', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -838,7 +838,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 70; Q > 0; Q -= 100) {
+		for (Q = 90; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -1103,23 +1103,23 @@ int main()
 			//idct(dcoe, dcoe2, 8); // 普通の再構成
 			//b_entropy_dct(dcoe);
 
-			for (i = 0; i < 1024; i++) {
-				no_op_1[i] = 0;
-				if (ica_basis2[64][i] < 4 && ica_basis2[64][i] != 0) { //< 4　を　!=99　に変更中
-					no_op_1[i] = 1;
-					for (j = 0; j < 64; j++) {
-						coe_temp[j] = 0;
-						coe_temp[j] = y[j][i];
-					}
-					gnuplot5_2(coe_temp, i);
-					//printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
-				}
-			}
+			//for (i = 0; i < 1024; i++) {
+			//	no_op_1[i] = 0;
+			//	if (ica_basis2[64][i] < 4 && ica_basis2[64][i] != 0) { //< 4　を　!=99　に変更中
+			//		no_op_1[i] = 1;
+			//		for (j = 0; j < 64; j++) {
+			//			coe_temp[j] = 0;
+			//			coe_temp[j] = y[j][i];
+			//		}
+			//		gnuplot5_2(coe_temp, i);
+			//		//printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
+			//	}
+			//}
 
 			a = b = c = d = 0;
 			for (i = 0; i < 1024; i++) {
 				no_op_1[i] = 0;
-				if (ica_basis2[64][i] <4 && ica_basis2[64][i] != 0) {
+				if (ica_basis2[64][i] <4 && ica_basis2[64][i] != 0) {// && ica_basis2[64][i] != 0
 					a++;
 					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
 					no_op_1[i] = 1;
@@ -1138,7 +1138,7 @@ int main()
 				}
 
 			}
-			img_out(origin, no_op_1, Q + 6);
+			img_out(origin, no_op_1, Q + 6);//3以下画像出力
 
 			printf("\n 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf),", b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a);
 
