@@ -16,7 +16,7 @@ void gnuplot5(double date[64], int name) {
 	if (yn == 'y') {
 
 		FILE* gp;
-		static int max, min;
+		static double max, min;
 		double temp[64];
 
 		//gp = _popen(GNUPLOT_PATH, "w");
@@ -35,6 +35,15 @@ void gnuplot5(double date[64], int name) {
 			}
 		}
 
+		if (max < 0)
+			max = max - max / 5;
+		else
+			max = max + max / 5;
+
+		if (min > 0)
+			min = min - min / 5;
+		else
+			min = min + min / 5;
 
 
 		gp = _popen("gnuplot -persist", "w"); // パイプを開き、gnuplotの立ち上げ
@@ -46,7 +55,7 @@ void gnuplot5(double date[64], int name) {
 		// gnuplotにコマンドを送る
 
 		fprintf(gp, "set terminal png\n");
-		sprintf(out, "OUTPUT\\plot[%d].png", name);
+		sprintf(out, "OUTPUT\\MSE\\plot[%d].png", name);
 		fprintf(gp, "set output '%s'\n", out);
 		fprintf(gp, "set boxwidth 0.5 relative\n");
 		fprintf(gp, "set style fill solid\n");
