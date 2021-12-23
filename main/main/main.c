@@ -273,7 +273,7 @@ int main()
 
 		}
 		//gnuplot2(ica_ica, j);
-		gnuplot5(coe_temp, i);
+		//gnuplot5(coe_temp, i);
 	}
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
@@ -725,7 +725,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 100) {
+		for (Q = 70; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -941,7 +941,7 @@ int main()
 
 				if (ica_basis2[64][i] == 0)
 					j++;
-				if (ica_basis2[64][i] < 4)// && ica_basis2[64][i] != 0 画像出力用
+				if (ica_basis2[64][i] !=99)// && ica_basis2[64][i] != 0 画像出力用
 					no_op_1[i] = 1;
 
 				if (ica_basis2[64][i] == 1) {
@@ -957,7 +957,7 @@ int main()
 					//printf("\n [ 3 ] %d", i);
 				}
 			}
-			//img_out(origin, no_op_1, Q + 6);//3以下画像出力
+			img_out(origin, no_op_1, Q + 6);//3以下画像出力
 
 			printf("\n [0 = %d] 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf), all = %d/%d(%lf)", j, b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a, b + c + d, a, (double)(b + c + d) / (double)a);
 
@@ -2435,7 +2435,7 @@ int main()
 				excel_temp++;
 				psnr_temp2 = psnr(origin, dcoe2);
 				fprintf(fp10, ",,%lf", psnr_temp2);
-				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
+				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);//再構成画像のSSIM
 				fprintf(fp10, ",,%lf", psnr_temp2);
 
 				img_out(ica_sai, no_op, Q + 4);//全体のICA領域
@@ -2463,7 +2463,7 @@ int main()
 							dct_ica_sai[i][j] = ica_sai[i][j];
 						}
 					}
-				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
+				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256); //0ブロックのみのSSIM
 				fprintf(fp10, ",,%lf", psnr_temp2);
 
 
