@@ -110,6 +110,7 @@ int main()
 	static double mse_sum[64];//基底ごとの画質の良さ
 	static double ent_sum[64];//基底ごとの情報量の良さ
 	static double basis0_ent = 0;
+	double avg_test[1024];
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -725,7 +726,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 70; Q > 0; Q -= 100) {
+		for (Q = 10; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -2369,7 +2370,7 @@ int main()
 
 
 				sum = 0;
-				a = 0;
+				mk = 0;
 				for (i = 0; i < 64; i++)
 					test_basis[i] = 0;
 
@@ -2386,13 +2387,13 @@ int main()
 									test_basis[i] = 1;
 							}
 						}
-						a++;
+						mk++;
 					}
 				}
 				fprintf(fp10, "%lf,", sum);
-				fprintf(fp10, "%lf,", (double)a);
+				fprintf(fp10, "%lf,", (double)mk);
 				excel_basis[3] = sum;
-				excel_basis[4] = a;
+				excel_basis[4] = mk;
 
 				sum = 0;
 
@@ -2423,46 +2424,74 @@ int main()
 							dct_ica_sai[i][j] = ica_sai[i][j];
 						}
 					}
+				for (j = 0; j < 1024; j++)
+					no_op_4[j] = 1;
+				img_out(dct_ica_sai, no_op_4, Q + 9);//0抜きICAブロック
 
-
-				fprintf(fp10, "%lf,", sum / a);
+				fprintf(fp10, "%lf,", sum / mk);
 				psnr_temp2 = psnr(origin, dct_ica_sai);
 				fprintf(fp10, ",=(C%d+D%d+F%d)", excel_temp, excel_temp, excel_temp);
 				fprintf(fp10, ",=(C%d+D%d+F%d+$B$2*G%d)", excel_temp, excel_temp, excel_temp, excel_temp);
 				fprintf(fp10, ",%lf", psnr_temp2);
 				fprintf(fp10, ",,=(B%d-J%d)", excel_temp, excel_temp);
 				fprintf(fp10, ",,=(N%d/$B$2)", excel_temp);
-				excel_temp++;
-				psnr_temp2 = psnr(origin, dcoe2);
-				fprintf(fp10, ",,%lf", psnr_temp2);
 				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);//再構成画像のSSIM
 				fprintf(fp10, ",,%lf", psnr_temp2);
+				excel_temp++;
+				psnr_temp2 = psnr(origin, dcoe2);
+				fprintf(fp10, ",dct,,%lf", psnr_temp2);
+
 
 				img_out(ica_sai, no_op, Q + 4);//全体のICA領域
 
+
+				// 選出基底をDCTに付加してみり
+
 				for (i = 0; i < 1024; i++) {
+					avg_test[i] = 0;
 					for (j = 0; j < 64; j++)
-						ny[j][i] = 0;
-					no_op[i] = 0;
-					if (ica_basis2[64][i] == 0) {
-						no_op[i] = 1;
+						nny[j][i] = 0;
+
+					if (no_op[i] == 0) {
+						if (a != 99) {
+							nny[a][i] = y[a][i];
+						}
+
+						if (b != 99) {
+							nny[b][i] = y[b][i];
+						}
+
+						if (c != 99) {
+							nny[c][i] = y[c][i];
+						}
 					}
+
 				}
-				seki5(nw, ny, x); // x -> nw * ny
-				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-				avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+				for (i = 0; i < 1024; i++) {
+					avg_test[i] = 0;
+				}
+				seki5(nw, nny, x); // x -> nw * ny
+				xtogen(x, ica_sai, avg_test); // ica_sai -> 再構成済①
+				avg_inter(ica_sai, avg_test); // ica_sai -> 再構成済②
 				//img_out2(dcoe2, ica_sai, no_op, Q + 2);
 				for (i = 0; i < 256; i++)
 					for (j = 0; j < 256; j++) {
 						k = i / 8;
 						m = j / 8;
 						if (no_op[32 * k + m] == 0) {
-							dct_ica_sai[i][j] = dcoe2[i][j];
-						}
-						else if (no_op[32 * k + m] == 1) {
-							dct_ica_sai[i][j] = ica_sai[i][j];
+							dct_ica_sai[i][j] += ica_sai[i][j];
+							if (dct_ica_sai[i][j] > 255)
+								dct_ica_sai[i][j] = 255;
+							if(dct_ica_sai[i][j] < 0)
+								dct_ica_sai[i][j] = 0;
 						}
 					}
+				for (j = 0; j < 1024; j++)
+					no_op_4[j] = 1;
+				img_out(dct_ica_sai, no_op_4, Q + 8);//0抜きICAブロック
+				psnr_temp2 = psnr(origin, dct_ica_sai);
+				fprintf(fp10, ",D&I,,%lf", psnr_temp2);
 				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256); //0ブロックのみのSSIM
 				fprintf(fp10, ",,%lf", psnr_temp2);
 
@@ -2489,6 +2518,8 @@ int main()
 		} // dctの最初に戻る
 
 	}
+
+
 
 
 	for (i = 0; i < 64; i++)
