@@ -92,6 +92,7 @@ int main()
 	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
 	double comb_basis[64] = { 0 };// 0or1  0->基底を使ってない　1->基底を使っている
 	double coe_temp[64];
+	double mse_test[4];
 
 
 	////// double //////
@@ -111,6 +112,7 @@ int main()
 	static double ent_sum[64];//基底ごとの情報量の良さ
 	static double basis0_ent = 0;
 	double avg_test[1024];
+	static double dcoe3[256][256];
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -726,7 +728,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 100) {
+		for (Q = 60; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -748,12 +750,23 @@ int main()
 					for (k = 0; k < 8; k++) {
 						for (l = 0; l < 8; l++) {
 							dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
+							if (k == 0 && l == 0)
+								dcoe3[i + k][j + l] = dcoe[i + k][j + l];
+							else
+								dcoe3[i + k][j + l] = 0;
 							m++;
 						}
 					}
 					n++;
 				}
 			}
+
+
+			//idct(dcoe3, dcoe2, 8); // 普通の再構成
+
+			//for (i = 0; i < 1024; i++)
+			//	no_op[i] = 1;
+			//img_out(dcoe2, no_op, Q);
 
 			for (j = 0; j < 1024; j++) {
 
@@ -931,6 +944,23 @@ int main()
 			//	}
 			//}
 
+			for (i = 0; i < 64; i++) {
+				comb_basis[i] = 0;
+				for (j = 0; j < 1024; j++) {
+					if ((int)ica_basis2[64][j] == i)
+						comb_basis[i]++;
+				}
+			}
+			gnuplot5(comb_basis, Q);
+
+			for (i = 0; i < 1024; i++) {
+				no_op_1[i] = 0;
+				if (ica_basis2[64][i] != 99) {
+					a++;
+					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
+
+				}
+			}
 			a = b = c = d = j = 0;
 			for (i = 0; i < 1024; i++) {
 				no_op_1[i] = 0;
@@ -2444,56 +2474,149 @@ int main()
 
 				img_out(ica_sai, no_op, Q + 4);//全体のICA領域
 
+				fprintf(fp, "\nbasis : %d, %d, %d\n\n", a, b, c);
 
 				// 選出基底をDCTに付加してみり
-
 				for (i = 0; i < 1024; i++) {
+					no_op_0[i] = no_op_1[i] = no_op_2[i] = no_op_3[i] = 0;
+				}
+				for (i = 0; i < 1024; i++) {
+					for (j = 0; j < 4; j++)
+						mse_test[j] = 100000;//MSEを格納するために初期化
 					avg_test[i] = 0;
 					for (j = 0; j < 64; j++)
 						nny[j][i] = 0;
 
 					if (no_op[i] == 0) {
+
+						mse_test[0] = mse_dct[0][(Q / 10 - 1)][i];//DCT単独のMSE
+
 						if (a != 99) {
+							for (j = 0; j < 64; j++)
+								nny[j][i] = 0;
 							nny[a][i] = y[a][i];
+
+							for (j = 0; j < 64; j++)
+								xx[j] = 0.0;
+							seki5_Block(nw, nny, xx, i); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg_test, i); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg_test, i); // ica_sai -> 再構成済②
+
+							mk = i % 32;
+							ml = i / 32;
+							sum = 0;
+
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									sum += pow(origin[ml * 8 + l][mk * 8 + m] - (dcoe2[ml * 8 + l][mk * 8 + m] + block_ica[l * 8 + m]), 2);//aを加えた場合のMSE
+								}
+							}
+							mse_test[1] = sum / 64;
 						}
 
 						if (b != 99) {
+							for (j = 0; j < 64; j++)
+								nny[j][i] = 0;
 							nny[b][i] = y[b][i];
+
+							for (j = 0; j < 64; j++)
+								xx[j] = 0.0;
+							seki5_Block(nw, nny, xx, i); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg_test, i); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg_test, i); // ica_sai -> 再構成済②
+
+							mk = i % 32;
+							ml = i / 32;
+							sum = 0;
+
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									sum += pow(origin[ml * 8 + l][mk * 8 + m] - (dcoe2[ml * 8 + l][mk * 8 + m] + block_ica[l * 8 + m]), 2);//bを加えた場合のMSE
+								}
+							}
+							mse_test[2] = sum / 64;
 						}
 
 						if (c != 99) {
+							for (j = 0; j < 64; j++)
+								nny[j][i] = 0;
 							nny[c][i] = y[c][i];
-						}
-					}
 
-				}
+							for (j = 0; j < 64; j++)
+								xx[j] = 0.0;
+							seki5_Block(nw, nny, xx, i); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg_test, i); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg_test, i); // ica_sai -> 再構成済②
 
-				for (i = 0; i < 1024; i++) {
-					avg_test[i] = 0;
-				}
-				seki5(nw, nny, x); // x -> nw * ny
-				xtogen(x, ica_sai, avg_test); // ica_sai -> 再構成済①
-				avg_inter(ica_sai, avg_test); // ica_sai -> 再構成済②
-				//img_out2(dcoe2, ica_sai, no_op, Q + 2);
-				for (i = 0; i < 256; i++)
-					for (j = 0; j < 256; j++) {
-						k = i / 8;
-						m = j / 8;
-						if (no_op[32 * k + m] == 0) {
-							dct_ica_sai[i][j] += ica_sai[i][j];
-							if (dct_ica_sai[i][j] > 255)
-								dct_ica_sai[i][j] = 255;
-							if(dct_ica_sai[i][j] < 0)
-								dct_ica_sai[i][j] = 0;
+							mk = i % 32;
+							ml = i / 32;
+							sum = 0;
+
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									sum += pow(origin[ml * 8 + l][mk * 8 + m] - (dcoe2[ml * 8 + l][mk * 8 + m] + block_ica[l * 8 + m]), 2);//cを加えた場合のMSE
+								}
+							}
+							mse_test[3] = sum / 64;
 						}
+						fprintf(fp, "\n [%d]  dct:%lf  a:%lf  b:%lf  c:%lf", i, mse_test[0], mse_test[1], mse_test[2], mse_test[3]);
+
+						min = mse_test[0];
+						k = 0;
+						for (j = 1; j < 4; j++)
+							if (min > mse_test[j]) {
+								k = j;
+								min = mse_test[j];
+							}
+						fprintf(fp, "   (%d)", k);
+						if (a != 99)
+							fprintf(fp, "    [%d]:%lf", a, y[a][i]);
+						if (b != 99)
+							fprintf(fp, ", [%d]:%lf", b, y[b][i]);
+						if (c != 99)
+							fprintf(fp, ", [%d]:%lf", c, y[c][i]);
+
+						if (k == 0)
+							no_op_0[i] = 1;
+						if (k == 1)
+							no_op_1[i] = 1;
+						if (k == 2)
+							no_op_2[i] = 1;
+						if (k == 3)
+							no_op_3[i] = 1;
 					}
-				for (j = 0; j < 1024; j++)
-					no_op_4[j] = 1;
-				img_out(dct_ica_sai, no_op_4, Q + 8);//0抜きICAブロック
-				psnr_temp2 = psnr(origin, dct_ica_sai);
-				fprintf(fp10, ",D&I,,%lf", psnr_temp2);
-				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256); //0ブロックのみのSSIM
-				fprintf(fp10, ",,%lf", psnr_temp2);
+				}
+				img_out(origin, no_op_0, Q);
+				img_out(origin, no_op_1, Q + 1);
+				img_out(origin, no_op_2, Q + 2);
+				img_out(origin, no_op_3, Q + 3);
+
+				//for (i = 0; i < 1024; i++) {
+				//	avg_test[i] = 0;
+				//}
+				//seki5(nw, nny, x); // x -> nw * ny
+				//xtogen(x, ica_sai, avg_test); // ica_sai -> 再構成済①
+				//avg_inter(ica_sai, avg_test); // ica_sai -> 再構成済②
+				////img_out2(dcoe2, ica_sai, no_op, Q + 2);
+				//for (i = 0; i < 256; i++)
+				//	for (j = 0; j < 256; j++) {
+				//		k = i / 8;
+				//		m = j / 8;
+				//		if (no_op[32 * k + m] == 0) {
+				//			dct_ica_sai[i][j] += ica_sai[i][j];
+				//			if (dct_ica_sai[i][j] > 255)
+				//				dct_ica_sai[i][j] = 255;
+				//			if(dct_ica_sai[i][j] < 0)
+				//				dct_ica_sai[i][j] = 0;
+				//		}
+				//	}
+				//for (j = 0; j < 1024; j++)
+				//	no_op_4[j] = 1;
+				//img_out(dct_ica_sai, no_op_4, Q + 8);//0抜きICAブロック
+				//psnr_temp2 = psnr(origin, dct_ica_sai);
+				//fprintf(fp10, ",D&I,,%lf", psnr_temp2);
+				//psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256); //0ブロックのみのSSIM
+				//fprintf(fp10, ",,%lf", psnr_temp2);
 
 
 
