@@ -173,7 +173,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '8', '6', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '1', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -265,14 +265,16 @@ int main()
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
 	//gnuplot(y);
+	for (i = 0; i < 1024; i++) {
+		for (j = 0; j < 64; j++) {
 
-	for (j = 0; j < 64; j++) {
-		for (i = 0; i < 1024; i++)
-			ica_ica[i] = y[j][i];
+			//ica_ica[i] = y[j][i];
+			coe_temp[j] = y[j][i];
 
+		}
 		//gnuplot2(ica_ica, j);
+		//gnuplot5(coe_temp, i);
 	}
-
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
 
@@ -723,7 +725,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 100; Q > 0; Q -= 100) {
+		for (Q = 50; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -734,9 +736,9 @@ int main()
 			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 			idct(dcoe, dcoe2, 8); // 普通の再構成
 
-			//for (i = 0; i < 1024; i++)
-			//	no_op[i] = 1;
-			//img_out(dcoe2, no_op, Q);
+			for (i = 0; i < 1024; i++)
+				no_op[i] = 1;
+			img_out(dcoe2, no_op, Q);
 
 			n = 0;
 			for (i = 0; i < 256; i += 8) {
@@ -928,7 +930,7 @@ int main()
 			//	}
 			//}
 
-			a = b = c = d = 0;
+			a = b = c = d = j = 0;
 			for (i = 0; i < 1024; i++) {
 				no_op_1[i] = 0;
 				if (ica_basis2[64][i] != 99 && ica_basis2[64][i] != 0) {
@@ -937,6 +939,8 @@ int main()
 
 				}
 
+				if (ica_basis2[64][i] == 0)
+					j++;
 				if (ica_basis2[64][i] < 4)// && ica_basis2[64][i] != 0 画像出力用
 					no_op_1[i] = 1;
 
@@ -953,8 +957,9 @@ int main()
 					//printf("\n [ 3 ] %d", i);
 				}
 			}
+			//img_out(origin, no_op_1, Q + 6);//3以下画像出力
 
-			printf("\n 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf), all = %d/%d(%lf)", b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a, b + c + d, a, (double)(b + c + d) / (double)a);
+			printf("\n [0 = %d] 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf), all = %d/%d(%lf)", j, b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a, b + c + d, a, (double)(b + c + d) / (double)a);
 
 			//printf("\n all = ");
 
@@ -1740,10 +1745,69 @@ int main()
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
 
-						if((int)full_mse[0][63][j]==a)
-							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底1個領域を対象
+						if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底1個領域を対象
+
+							ny[a][j] = y[a][j];
+
+							for (m = 0; m < 64; m++)
+								xx[m] = 0.0;
+
+							seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+							sum = 0.0;
+							mk = j % 32;
+							ml = j / 32;
+
+							// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+							// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+								}
+							}
+
+							comb[j][a][0] = sum / 64;
+
+							//情報量の調査
+							sum = 0;
+
+							for (l = 0; l < 64; l++) {
+								if (dcoe_temp[l][j] != 0)
+									sum += dct_ent2[l][j]; //dct単独
+							}
+
+							for (l = 0; l < 64; l++) {
+								if (ny[l][j] != 0) {
+									sum -= ica_ent2[l][j];//対象領域をICA_Block
+								}
+							}
+							sum -= ica_dc[j];//ica_dc
+
+							comb[j][a][1] = sum;
+						}
+					}
+				}
+
+
+				//基底2個で画質＋の領域の画質・情報改善を全探索で算出
+				for (a = 0; a < 64 - 1; a++) {
+					for (b = a + 1; b < 64; b++) {
+
+						for (j = 0; j < 1024; j++)
+							for (i = 0; i < 64; i++)
+								ny[i][j] = 0; //係数初期化
+
+						for (j = 0; j < 1024; j++) {
+
+							for (i = 0; i < 64; i++)
+								ny[i][j] = 0; //係数初期化
+
+							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
 
 								ny[a][j] = y[a][j];
+								ny[b][j] = y[b][j];
 
 								for (m = 0; m < 64; m++)
 									xx[m] = 0.0;
@@ -1764,7 +1828,7 @@ int main()
 									}
 								}
 
-								comb[j][a][0] = sum / 64;
+								comb2[j][a][b][0] = sum / 64;
 
 								//情報量の調査
 								sum = 0;
@@ -1781,71 +1845,8 @@ int main()
 								}
 								sum -= ica_dc[j];//ica_dc
 
-								comb[j][a][1] = sum;
-								printf("\n[%d] ", j);
+								comb2[j][a][b][1] = sum;
 							}
-					}
-				}
-
-
-				//基底2個で画質＋の領域の画質・情報改善を全探索で算出
-				for (a = 0; a < 64 - 1; a++) {
-					for (b = a + 1; b < 64; b++) {
-
-						for (j = 0; j < 1024; j++)
-							for (i = 0; i < 64; i++)
-								ny[i][j] = 0; //係数初期化
-
-						for (j = 0; j < 1024; j++) {
-
-							for (i = 0; i < 64; i++)
-								ny[i][j] = 0; //係数初期化
-							if ((int)full_mse[0][63][j] == a || (int)full_mse[0][62][j] == a)
-								if ((int)full_mse[0][63][j] == b || (int)full_mse[0][62][j] == b)
-									if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
-
-										ny[a][j] = y[a][j];
-										ny[b][j] = y[b][j];
-
-										for (m = 0; m < 64; m++)
-											xx[m] = 0.0;
-
-										seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-										xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-										avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-										sum = 0.0;
-										mk = j % 32;
-										ml = j / 32;
-
-										// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-										// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-										for (m = 0; m < 8; m++) {
-											for (l = 0; l < 8; l++) {
-												sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
-											}
-										}
-
-										comb2[j][a][b][0] = sum / 64;
-
-										//情報量の調査
-										sum = 0;
-
-										for (l = 0; l < 64; l++) {
-											if (dcoe_temp[l][j] != 0)
-												sum += dct_ent2[l][j]; //dct単独
-										}
-
-										for (l = 0; l < 64; l++) {
-											if (ny[l][j] != 0) {
-												sum -= ica_ent2[l][j];//対象領域をICA_Block
-											}
-										}
-										sum -= ica_dc[j];//ica_dc
-
-										comb2[j][a][b][1] = sum;
-										printf("\n[%d] ", j);
-									}
 						}
 					}
 				}
@@ -1867,56 +1868,54 @@ int main()
 
 								for (i = 0; i < 64; i++)
 									ny[i][j] = 0; //係数初期化
-								if ((int)full_mse[0][63][j] == a || (int)full_mse[0][62][j] == a || (int)full_mse[0][61][j] == a)
-									if ((int)full_mse[0][63][j] == b || (int)full_mse[0][62][j] == b || (int)full_mse[0][61][j] == b)
-										if ((int)full_mse[0][63][j] == c || (int)full_mse[0][62][j] == c || (int)full_mse[0][61][j] == c)
-											if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
 
-												ny[a][j] = y[a][j];
-												ny[b][j] = y[b][j];
-												ny[d][j] = y[d][j];
+								if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
 
-												for (m = 0; m < 64; m++)
-													xx[m] = 0.0;
+									ny[a][j] = y[a][j];
+									ny[b][j] = y[b][j];
+									ny[d][j] = y[d][j];
 
-												seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-												xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-												avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+									for (m = 0; m < 64; m++)
+										xx[m] = 0.0;
 
-												sum = 0.0;
-												mk = j % 32;
-												ml = j / 32;
+									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-												//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-											   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-												for (m = 0; m < 8; m++) {
-													for (l = 0; l < 8; l++) {
-														sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
-													}
-												}
+									sum = 0.0;
+									mk = j % 32;
+									ml = j / 32;
 
-												comb3_0[j][a][b][d] = sum / 64;
+									//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+								   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+									for (m = 0; m < 8; m++) {
+										for (l = 0; l < 8; l++) {
+											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+										}
+									}
 
-												//情報量の調査
-												sum = 0;
+									comb3_0[j][a][b][d] = sum / 64;
+
+									//情報量の調査
+									sum = 0;
 
 
-												for (l = 0; l < 64; l++) {
-													if (dcoe_temp[l][j] != 0)
-														sum += dct_ent2[l][j]; //dct単独
-												}
+									for (l = 0; l < 64; l++) {
+										if (dcoe_temp[l][j] != 0)
+											sum += dct_ent2[l][j]; //dct単独
+									}
 
-												for (l = 0; l < 64; l++) {
-													if (ny[l][j] != 0) {
-														sum -= ica_ent2[l][j];//対象領域をICA_Block
-													}
-												}
-												sum -= ica_dc[j];//ica_dc
+									for (l = 0; l < 64; l++) {
+										if (ny[l][j] != 0) {
+											sum -= ica_ent2[l][j];//対象領域をICA_Block
+										}
+									}
+									sum -= ica_dc[j];//ica_dc
 
 
-												comb3_1[j][a][b][d] = sum;
-												printf("\n[%d] ", j);
-											}
+									comb3_1[j][a][b][d] = sum;
+
+								}
 							}
 						}
 					}
@@ -1944,6 +1943,9 @@ int main()
 					for (a = 0; a < 64 - 2; a++) {
 						for (b = a + 1; b < 64 - 1; b++) {
 							for (c = b + 1; c < 64; c++) {
+
+								//画質・情報量
+
 
 								//2個
 								max = comb2[j][a][b][0];//MSEだから小さい順
@@ -1978,6 +1980,9 @@ int main()
 								//		printf("[%d] ", m);
 								//}
 
+
+
+
 								//1vs2vs3個で画質比較
 								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]> 0) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
@@ -1996,7 +2001,6 @@ int main()
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
-									printf("\n[%d]:%d,%d,%d:%d ",j,a,b,c, m);
 								}
 							}
 						}
@@ -2170,7 +2174,7 @@ int main()
 						c = 3;
 
 					if (k == 0) {
-						if ((comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+						if ((basis0_ent + comb_after_sort[a][1]) > (ica_basis_ent[0] * (double)c)) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
 							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
@@ -2178,11 +2182,11 @@ int main()
 						}
 						else {
 							printf("\n [%d , %d, %d]  %lf + %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], basis0_ent, comb_after_sort[a][1], ica_basis_ent[0] * (double)c, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
-							//comb_after_sort[a][0] = 0;//選出基底以外全て初期化
-							//comb_after_sort[a][1] = 0;//選出基底以外全て初期化
-							//comb_after_sort[a][2] = 99;//選出基底以外全て初期化
-							//comb_after_sort[a][3] = 99;//選出基底以外全て初期化
-							//comb_after_sort[a][4] = 99;//選出基底以外全て初期化
+							comb_after_sort[a][0] = 0;//選出基底以外全て初期化
+							comb_after_sort[a][1] = 0;//選出基底以外全て初期化
+							comb_after_sort[a][2] = 99;//選出基底以外全て初期化
+							comb_after_sort[a][3] = 99;//選出基底以外全て初期化
+							comb_after_sort[a][4] = 99;//選出基底以外全て初期化
 						}
 					}
 					else {
@@ -2196,20 +2200,10 @@ int main()
 				}
 
 				//選出基底のうち，領域内で使用する基底を決定
-				if (Q==10) {
+				if (k == 1) {
 					a = (int)comb_after_sort[0][2];
 					b = (int)comb_after_sort[0][3];
 					c = (int)comb_after_sort[0][4];
-				}
-				else if (Q ==100) {
-					a = (int)comb_after_sort[10][2];
-					b = (int)comb_after_sort[10][3];
-					c = (int)comb_after_sort[10][4];
-				}
-				else if (Q == 20) {
-					a = (int)comb_after_sort[20][2];
-					b = (int)comb_after_sort[20][3];
-					c = (int)comb_after_sort[20][4];
 				}
 				else {
 					a = 99;
@@ -2226,10 +2220,10 @@ int main()
 					for (i = 0; i < 64; i++)
 						ny[i][j] = 0;
 					no_op[j] = 0;
-					//if (ica_basis2[64][j] == 0) {
-					//	no_op[j] = 1;
-					//	no_op_0[j] = 1;
-					//}
+					if (ica_basis2[64][j] == 0) {
+						no_op[j] = 1;
+						no_op_0[j] = 1;
+					}
 				}
 
 				fprintf(fp9, "\n\n\n,Q%d\n,Area_num,,ica_basis2,", Q);
@@ -2332,7 +2326,7 @@ int main()
 
 				}
 
-				img_out(origin, no_op_0, Q);//0ブロック
+				//img_out(origin, no_op_0, Q);//0ブロック
 				img_out(origin, no_op_1, Q + 1);//基底1ブロック
 				img_out(origin, no_op_2, Q + 2);//基底2ブロック
 				img_out(origin, no_op_3, Q + 3);//基底3ブロック
