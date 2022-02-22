@@ -261,6 +261,7 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
+
 	pcaStr = new_pca(origin);
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
@@ -275,6 +276,7 @@ int main()
 		//gnuplot2(ica_ica, j);
 		//gnuplot5(coe_temp, i);
 	}
+
 	static double** xxx;
 	xxx = (double**)malloc(sizeof(double*) * 64);
 
@@ -725,7 +727,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 50; Q > 0; Q -= 100) {
+		for (Q = 60; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 
@@ -1920,6 +1922,12 @@ int main()
 						}
 					}
 				}
+				sum = 0;
+				for (l = 0; l < 64; l++) {
+					if (dcoe_temp[l][1000] != 0)
+						sum += dct_ent2[l][1000]; //dct単独
+				}
+				printf("\n\n 1000 (dct only) : %lf, %lf\n\n", sum, dct_mse[1000]);
 
 				//累積（基底3つ）
 				for (a = 0; a < 64 - 2; a++) {
@@ -1989,18 +1997,27 @@ int main()
 									comb_result3[a][b][c][0] += sum;
 									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000) {
+										printf("\n %d : [%d,%d,%d] (%lf , %lf)", j, a, b, c, -sum, comb3_1[j][a][b][c]);
+									}
 								}
 								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000) {
+										printf("\n %d : [%d,%d] (%lf , %lf)", j, k,l, -sum, comb2[j][k][l][1]);
+									}
 								}
 								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 									sum = dct_mse[j] - comb[j][m][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
+									if (j == 1000) {
+										printf("\n %d : [%d] (%lf , %lf)", j, m, -sum, comb[j][m][1]);
+									}
 								}
 							}
 						}
@@ -2437,6 +2454,8 @@ int main()
 				fprintf(fp10, ",,%lf", psnr_temp2);
 				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
 				fprintf(fp10, ",,%lf", psnr_temp2);
+				psnr_temp2 = SSIM(origin, dcoe2, 256, 256);
+				fprintf(fp10, ",,%lf", psnr_temp2);
 
 				img_out(ica_sai, no_op, Q + 4);//全体のICA領域
 
@@ -2463,8 +2482,8 @@ int main()
 							dct_ica_sai[i][j] = ica_sai[i][j];
 						}
 					}
-				psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
-				fprintf(fp10, ",,%lf", psnr_temp2);
+				//psnr_temp2 = SSIM(origin, dct_ica_sai, 256, 256);
+				//fprintf(fp10, ",,%lf", psnr_temp2);
 
 
 
