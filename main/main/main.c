@@ -66,6 +66,7 @@ int main()
 	int ica_fre_temp[64];
 	int zig[64];
 	int excel_temp = 4;
+	int step = 100;
 	double ica_dc[1024];
 	double ica_ica[1024];
 	double ica_basis_ent[64];
@@ -92,6 +93,8 @@ int main()
 	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
 	double comb_basis[64] = { 0 };// 0or1  0->基底を使ってない　1->基底を使っている
 	double coe_temp[64];
+	static double min3 = 0;
+	double sum1 = 0;
 
 
 	////// double //////
@@ -114,8 +117,10 @@ int main()
 	//stract関数用
 	static struct pca pcaStr = { 0 };
 
+	// 宣言終了.//////////////////////////////////////////////////////////////////////////////////
 
-	// 出力用フォルダの初期化
+
+	// 出力用フォルダの初期化/////////////////////////////////////////////////////////////////////////
 	printf("mkdir start\n");
 	//printf("+ - - - - - Now Running - - - - +\n");
 	//フォルダ作成　(なければ作成)
@@ -152,12 +157,11 @@ int main()
 	//	system(g);
 	//}
 	printf("mkdir end\n");
-	i = 1;
-	sum = -((i / (double)(1000)) * (log((i / (double)(1000))) / log(2)));
-	//printf("\n\n%lf", sum);
+	// フォルダ初期化 処理終了//////////////////////////////////////////////////////////////////////////
 
-	//
-//読み込むファイル名
+
+	// 画像入力 処理 /////////////////////////////////////////////////////////////////
+    //読み込むファイル名
 	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
 	static char filename2[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
 	static char filename3[20] = { 'a', 'i', 'r', 'p', 'l', 'a', 'n', 'e', '.', 'b', 'm', 'p' };
@@ -173,7 +177,6 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '1', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -201,16 +204,10 @@ int main()
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
 			origin[i][j] = ori_temp[i * 256 + j];
+	///画像入力 処理終了//////////////////////////////////////////////////////////////////////////////////////////////
 
-	strcpy(filename, filename16);
-	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
-		return -1;
 
-	for (i = 0; i < 256; i++)
-		for (j = 0; j < 256; j++)
-			origin_30[i][j] = ori_temp[i * 256 + j];
-
-	//出力ファイル　宣言
+	//出力ファイル　宣言 ///////////////////////////////////////////////////////////////////////////
 	if ((fp = fopen("OUTPUT\\fp1.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
@@ -250,12 +247,10 @@ int main()
 	if ((fp10 = fopen("OUTPUT\\ICA_limits_result.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
+	/////////////////宣言処理 終了//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/////////////////宣言処理 終了///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//smoothing(origin, average_temp, 2);
-
-	// ///////////////////////// ica //////////////////////////////////
+	// ///////////////////////// ica基底と係数を求める //////////////////////////////////
 	// ICA基底・係数
 	// origin = 画素値(256*256),  y = ica係数(ブロックで64個で1024ブロック分),  w = ica基底(64個の計算法の中にそれぞれ64個の計算法がある)
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
@@ -265,69 +260,8 @@ int main()
 	pcaStr = new_pca(origin);
 	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 
-	//gnuplot(y);
-	for (i = 0; i < 1024; i++) {
-		for (j = 0; j < 64; j++) {
-
-			//ica_ica[i] = y[j][i];
-			coe_temp[j] = y[j][i];
-
-		}
-		//gnuplot2(ica_ica, j);
-		//gnuplot5(coe_temp, i);
-	}
-
-	static double** xxx;
-	xxx = (double**)malloc(sizeof(double*) * 64);
-
-	// 構造体1つ1つにもメモリを確保
-	for (i = 0; i < 64; i++)
-		// 64個に1024バイト
-		xxx[i] = (double*)malloc(sizeof(double) * 1024);
-
-	gentox(origin, x); //256*256 -> 64*1024に変換
-
-	for (i = 0; i < 1024; i++)
-		for (j = 0; j < 64; j++)
-			xxx[j][i] = x[j][i];//原画像をコピー
-
-	new_pre(xxx, avg, 1024);	//中心化 （xx -> 元の画素値 - 平均値, avg = ブロックごとの平均値）
-
-
-
-	//printf("%lf", w[0][0]);
-	/* histの初期化 */
-	for (i = 0; i < 50000; i++) {
-		hist[i] = 0;
-		hist2[i] = 0;
-	}
-	int step = 100;
-	sum = 0;
-
-	/* hist2の作成 */
-	min2 = avg[0];
-	for (i = 0; i < 1024; i++)
-		if (avg[i] < min2)
-			min2 = avg[i]; // histの左端
-
-	for (i = 0; i < 1024; i++) {
-		printf("\n%d : [%lf]", i, avg[i]);
-		//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
-		hist2[(int)((avg[i] - min2)) + 1]++;	//ステップ幅1
-	}
-
-	/* エントロピーの計算 */
-	for (i = 0; i < 50000; i++)
-		if (hist2[i] > 0) {
-			sum += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
-		}
-	for (i = 0; i < 1024; i++)
-		ica_dc[i] = sum / (1024 * 64);
-
 	// ICA_BASIS 出力よう
 	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
-	//fprintf(fp2, "P5\n64 64\n255\n");
-	//fwrite(nica_basis, sizeof(unsigned char), 64 * 64, fp2);	//ICA基底出力, 64*64 0~255
 
 	// 計算用にコピー
 	for (i = 0; i < 1024; i++)
@@ -338,178 +272,41 @@ int main()
 		for (j = 0; j < 64; j++)
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
-	for (i = 0; i < 64; i++) {
-		for (j = 0; j < 1024; j++) {
-			for (Q = 0; Q < 10; Q++)
-				dct_fre[Q][i][j] = 0;
-			ica_fre[i][j] = 0;
-		}
-		for (Q = 0; Q < 10; Q++)
-			dct_fre_temp[Q][i] = 0;
+
+	///////ICAの情報量を求める///////////////////////////////////////////
+	// DCの情報量 ////////
+	/* histの初期化 */
+	for (i = 0; i < 50000; i++) {
+		hist2[i] = 0;
 	}
 
-	for (i = 0; i < 64; i++) {
-		for (j = 0; j < 1024; j++) {
-			if (y[i][j] != 0)
-				ica_fre[i][j]++;
-		}
-		ica_fre_temp[i] = 0;
-	}
-
-	for (i = 0; i < 64; i++) {
-		for (j = 0; j < 1024; j++) {
-			ica_fre_temp[i] += ica_fre[i][j];
-		}
-	}
-
-	//gnuplot2_2(ica_fre_temp);
-
-
-		///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
-	//for (i = 0; i < 64; i++)
-	//	printf("\n%d", ica_fre[i][0]);
-
-	b_entropy_ica(y, b_ica_ent);
-	step = 100;
-	static double min3 = 0;
-	double sum1 = 0;
-	sum = 0;
+	/* hist2の作成 */
+	min2 = avg[0];
 	for (i = 0; i < 1024; i++)
-		sum += b_ica_ent[i];
-	sum /= 1024 * 64;
-	//printf("\nica all  : %lf", sum); // icaブロックごとの情報量の総和
+		if (avg[i] < min2)
+			min2 = avg[i]; // histの左端
 
-	Q = 100;
-	for (Q = 100; Q > 0; Q -= 10) {
-		dct(origin, dcoe, 8); // 係数を出力
-		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-
-		for (i = 0; i < 256; i += 8) {
-			for (j = 0; j < 256; j += 8) {
-				m = 0;
-				for (k = 0; k < 8; k++) {
-					for (l = 0; l < 8; l++) {
-						x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
-
-						m++;
-					}
-				}
-				n++;
-			}
-		}
-
-		//fprintf(fp9, "\n\n");
-		//for (i = 0; i < 64; i++) {
-		//	if (i % 8 == 0)
-		//		fprintf(fp9, "\n");
-		//	fprintf(fp9, "%lf,", x[i][1]);
-		//}
-
-		for (i = 0; i < 64; i++)
-			for (j = 0; j < 1024; j++) {
-				if (x[i][j] != 0)
-					dct_fre[(Q / 10 - 1)][i][j]++;
-			}
+	for (i = 0; i < 1024; i++) {
+		hist2[(int)((avg[i] - min2)) + 1]++;	//ステップ幅1
 	}
 
-
-
-	//printf("\n------------------------dct_fre start--------");
-	for (Q = 0; Q < 10; Q++) {
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				dct_fre_temp[Q][i] += dct_fre[Q][i][j];
-			}
-		}
-	}
-	//gnuplot2_2(dct_fre_temp);
-	//for (i = 0; i < 64; i++)
-	//	printf("\n%d  %d  %d  %d", dct_fre_temp[9][i], dct_fre_temp[8][i], dct_fre_temp[7][i], dct_fre_temp[6][i]);
-
-	Q = 100;
-
-	//printf("\nnow Q = %d\n", Q);
-	dct(origin, dcoe, 8); // 係数を出力
-	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-	idct(dcoe, dcoe2, 8); // 普通の再構成
-
-	b_entropy_dct(dcoe, b_dct_ent);
-
-	for (i = 0; i < 256; i += 8) {
-		for (j = 0; j < 256; j += 8) {
-			m = 0;
-			for (k = 0; k < 8; k++) {
-				for (l = 0; l < 8; l++) {
-					x[m][n] = dcoe[i + k][j + l]; //256*256 -> 64*1024
-
-					m++;
-				}
-			}
-			n++;
-		}
-	}
-
-	for (j = 0; j < 64; j++) {
-
-		for (i = 0; i < 50000; i++) {
-			hist[i] = 0;
+	sum = 0;
+	/* エントロピーの計算 */
+	for (i = 0; i < 50000; i++)
+		if (hist2[i] > 0) {
+			sum += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
 		}
 
-		sum1 = 0;
-		min3 = x[j][0];
+	for (i = 0; i < 1024; i++)
+		ica_dc[i] = sum / (1024 * 64);// ICAのDC成分の情報量算出
+	// DC 終了///////////
 
-		for (i = 0; i < 1024; i++)
-			if (x[j][i] < min3)
-				min3 = x[j][i]; // histの左端
-
-
-		for (i = 0; i < 1024; i++) {
-			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
-			hist[(int)((x[j][i] - min3)) + 1]++;	//ステップ幅1
-		}
-
-		for (i = 0; i < 50000; i++)
-			if (hist[i] > 0) {
-				sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
-
-
-			}
-		for (i = 0; i < 1024; i++) {
-			dct_ent[j][i] = sum1 / (1024 * 64);
-		}
-
-	}
-
-
-
+	// 係数の情報量 //////////////
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
 
-	sprintf(output, "OUTPUT\\ICA_SAI_average.bmp"); //再構成画像bmpで出力
-	for (i = 0; i < 256; i++)
-		for (j = 0; j < 256; j++)
-			temp_sai[i * 256 + j] = ica_sai[i][j];
-	img_write_gray(temp_sai, output, 256, 256);
-
-
-	sum = 0;
-	for (i = 0; i < 1024; i++)
-		sum += b_dct_ent[i];
-	sum /= 256 * 256;
-	//printf("\n%lf", sum);
-
-	ent_count(dcoe, avg);
-
-
-	/* histの初期化 */
-
-
-
-	/* hist2の作成 */
-
 	for (j = 0; j < 64; j++) {
-
 		for (i = 0; i < 50000; i++) {
 			hist[i] = 0;
 		}
@@ -521,9 +318,7 @@ int main()
 			if (y[j][i] < min3)
 				min3 = y[j][i]; // histの左端
 
-
 		for (i = 0; i < 1024; i++) {
-			//hist[(int)(x[i][n]) + 1]++;	//ステップ幅1
 			hist[(int)((y[j][i] - min3) * step) + 1]++;	//ステップ幅1
 		}
 
@@ -534,59 +329,12 @@ int main()
 		for (i = 0; i < 1024; i++) {
 			ica_ent[j][i] = sum1 / (64 * 1024);
 		}
-
-	}//基底ごとに比率を変える．
-
-	/// 0コメのブロックの係数を全てゼロ//////////////////////////////
-
-
-
-
-
-
-	///////////////////////////// icaのtest /////////////////////
-
-	for (i = 0; i < 64; i++) {
-		for (j = 0; j < 1024; j++) {
-			b = i;
-
-			// 該当係数以外0
-			// i番目の係数（基底）のみ使用。それ以外の係数は0。
-			for (a = 0; a < 64; a++) {
-				if (b == a)
-					ny[a][j] = y[a][j];
-				else
-					ny[a][j] = 0;
-			}
-
-
-		}
-		b_entropy_ica(ny, b_ica_ent);
-		sum = 0;
-		for (a = 0; a < 1024; a++)
-			sum += b_ica_ent[a];
-		sum /= 256 * 256;
-		//printf("\n%lf", sum);
-		sum1 += sum;
 	}
-	//printf("\n1y : %lf\n", sum1 / 64);
-
-	for (a = 0; a < 1024; a++)
-		b_ica_ent[a] = 0;
-
-	b_entropy_ica(y, b_ica_ent);
-	sum = 0;
-	for (a = 0; a < 1024; a++)
-		sum += b_ica_ent[a];
-	sum /= 256 * 256;
-	//printf("\n%lf", sum);
+	// 係数の情報量　終了/////////
+	///////ICAの情報量　終了/////////////////////////////////////
 
 
-
-
-	///////////////////////////////////////////////////////////////////////////////// テスト領域 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+	/////////////////  Step1  のメイン処理　//////////////////////////
 	// 1 -> 64 までのMSE調査
 
 	fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
@@ -645,11 +393,10 @@ int main()
 	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
 
-	//gnuplot(temp_array);
-
+	/// 基底を全て使ったときのMSE
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
-			ny[n][j] = y[n][j]; // iつ目の基底選択
+			ny[n][j] = y[n][j];
 
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
@@ -666,7 +413,10 @@ int main()
 		}
 		full_mse[1][0][j] = sum / 64;//基底すべて用いた場合のMSE
 	}
+	/// 基底を全て使った時終了///////////
 
+
+	/// 基底を0個使った時のMSE /////////
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
 			ny[n][j] = 0; // iつ目の基底選択
@@ -686,35 +436,16 @@ int main()
 		}
 		full_mse[1][64][j] = sum / 64;//基底すべて用いない場合のMSE
 	}
-
-	/*	printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
-	}
-	printf("\r [ Execution finished ]          ");
-	printf("\n\n");*/
-
-
-
-	//printf("What percentage do you use ? : ");
-	//scanf("%lf", &percent);
-	printf("\n");
-
-
-	printf("<ica fin>\n\n");
-	/////////////////////////////////ica 終了/////////////////////////////////////////
+	///基底を使わなかったとき　終了///////////////////
+	/////////////////  Step1  のメイン処理　終了/////////////////////////////////////////////////////////////
 
 
 	// //////////////////////////// dct ////////////////////////////////////////
 	// ICA と大体同じ。DCTの基底は汎用的だから決まっている。係数のみを動かせばいい
 
-	//動作確認
-	printf("<dct start>\n\n");
-	//printf("Do you want to run the DCT ? [ y/n ] : ");
-	//scanf("%s", &yn);
-
 	yn = 'n';
 	if (yn == 'n') {
-		//printf("Do you want to run the MSE or MP ? [ y/n ] : ");
-		//scanf("%s", &yn);
+
 		yn = 'y';
 		ent_count_basis(w, ica_basis_ent);
 		excel_basis[0] = ica_basis_ent[0];
@@ -730,14 +461,12 @@ int main()
 		for (Q = 60; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
-
-			//Q = 100;
-
 			// dct処理
 			dct(origin, dcoe, 8); // 係数を出力
 			quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 			idct(dcoe, dcoe2, 8); // 普通の再構成
 
+			// DCT画像確認用
 			for (i = 0; i < 1024; i++)
 				no_op[i] = 1;
 			img_out(dcoe2, no_op, Q);
@@ -756,8 +485,10 @@ int main()
 				}
 			}
 
-			for (j = 0; j < 1024; j++) {
+			/////////////////// DCTの各ブロックの基底数と画質 /////////////////////////////////////
+			block_mse(origin, dcoe2, dct_mse);
 
+			for (j = 0; j < 1024; j++) {
 				sum = 0.0;
 				mk = j % 32;
 				ml = j / 32;
@@ -768,10 +499,7 @@ int main()
 				}
 				mse_dct[0][(Q / 10) - 1][j] = sum / 64;//平均
 
-				//sum = sum / (256.0 * 256.0); mse_ica
-
 				i = 0;
-
 				for (b = 0; b < 64; b++)
 					if (dcoe_temp[b][j] != 0)
 						i++;
@@ -779,12 +507,12 @@ int main()
 				mse_dct[1][(Q / 10) - 1][j] = i;
 			}
 
+			/////////////////// DCTの各ブロックの基底数と画質 終了/////////////////////////////////////
 
-			//////////////////出力終了///////////////////////
 
-			QQ = 0;
-			int mp_count = 0;
+			/// 領域分割のメイン処理 ///////////////////////////
 
+			// Step1 初期化用
 			for (j = 0; j < 1024; j++) {
 				no_op[j] = 0;
 				for (i = 0; i < 4; i++)
@@ -798,15 +526,11 @@ int main()
 					nny[i][j] = 0;
 			}
 
-
-
 			if (yn == 'y') {
 				for (j = 0; j < 1024; j++) {
-					//for (a = 9; a > 0; a -= 1) {
-					a = Q / 10 - 1; // Q = 30
+					a = Q / 10 - 1; //Qレート
 
 					for (b = 0; b < 65; b++) {
-						ica_basis[b][j] = 0;
 						ica_basis2[b][j] = 99;
 					}
 
@@ -825,59 +549,17 @@ int main()
 
 					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {//
 						no_op[j] = 1; // no_op 1 ならica
-						QQ++;
 
-						if (bunrui[2][j] == 0)
-							ica_basis[64][j] = 1; // 基底0
-						else {
-							for (b = 63; b > 63 - bunrui[2][j]; b--) {
-								ica_basis[(int)full_mse[0][b][j]][j] = 1;
-								ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
-								//printf("%d\n", (int)ica_basis[65-a][j]);
-							}
-						}
 						//printf("%d\n", j);
 						ica_basis2[64][j] = bunrui[2][j];
 
 						for (b = 63; b > 63 - bunrui[2][j]; b--) {
 							ica_basis2[(int)full_mse[0][b][j]][j] = 1;
+							ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
 							nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
 						}
-
 					}
-					else {
-						ica_basis[64][j] = 2;
-						for (b = 0; b < 64; b++)
-							ica_basis[b][j] = 3;
-					}
-					fprintf(fp6, "\n\n -------------------- [ area No.%d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", j);
-					fprintf(fp6, "\n\n    DCT NUM : %2d (%3d)\n\n    DCT mse : %lf\n", (int)mse_dct[1][a][j], (a + 1) * 10, mse_dct[0][a][j]);
-					fprintf(fp6, "\n\n    ICA NUM : %2d\n\n    ICA mse : %lf\n", (int)bunrui[2][j], bunrui[3][j]);
 				}
-
-				fprintf(fp6, "\n\n -------------------- [ Rate %d ] ----------------------------------------------------------------------------------------------------------------------------------- \n\n\n", Q);
-				fprintf(fp6, "\n\n    DCT : %d / 1024\n    ICA : %d / 1024\n", 1024 - QQ, QQ);
-
-				//ent_out(origin, y, avg, w, ny, no_op, Q);
-
-				// // ICA_Blockの使用基底を画像出力
-				//if(Q==40)
-				//	for(j=0;j<1024;j++)
-				//		if (no_op[j] == 1) {
-				//			for (a = 0; a < 4096; a++)
-				//				temp_basis[a] = 0;
-				//				sprintf(output, "OUTPUT\\ICA_BASIS[%d].bmp", j); //ICA基底bmpで出力
-				//				for (i = 0; i < 64; i++) {
-				//					mk = i % 8;
-				//					ml = i / 8;
-				//					if (ny[i][j] != 0) {
-				//						for (a = 0; a < 8; a++)
-				//							for (b = 0; b < 8; b++)
-				//								temp_basis[ml * 64 * 8 + mk * 8 + 64 * a + b] = nica_basis[ml * 8 + a][mk * 8 + b];
-				//						img_write_gray(temp_basis, output, 64, 64);
-				//					}
-				//				}
-				//		}
 			}
 			else if (yn == 'n')
 			{
@@ -888,131 +570,39 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
-			//for (j = 0; j < 1024; j++) {
-			//	no_op_1[j] = 0;//47
-			//	no_op_2[j] = 0;//13
-			//	no_op_3[j] = 0; //10,48
-			//	if (ica_basis2[64][j] < 4 && ica_basis2[64][j] != 0) {
-			//		//printf("\n[%d]", j);
-			//		for (i = 0; i < 64; i++) {
-			//			if (ica_basis2[59][j] == 1 && ica_basis2[64][j] == 1)
-			//				no_op_1[j] = 1;
-			//			if (ica_basis2[39][j] == 1 && ica_basis2[59][j] == 1 && ica_basis2[64][j] == 2)
-			//				no_op_2[j] = 1;
-			//			if (ica_basis2[0][j] == 1 && ica_basis2[48][j] == 1 && ica_basis2[59][j] == 1 && ica_basis2[64][j] == 3)
-			//				no_op_3[j] = 1;
-			//			//if (ica_basis2[i][j] == 1)
-			//			//	printf(" %d,", i);
-			//		}
-			//	}
-			//}
-			//img_out(origin, no_op_1, Q + 1);
-			//img_out(origin, no_op_2, Q + 2);
-			//img_out(origin, no_op_3, Q + 3);
-			//img_out(origin, no_op_1, Q+1);
-			//img_out(origin, no_op, Q);
-			//txt_out(bunrui, filename, Q);
-			//txt_out2(ica_basis, filename, Q);
-			//group(ica_basis2, filename, Q);
-			//dct(origin, dcoe, 8); // 係数を出力
-			//quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-			//idct(dcoe, dcoe2, 8); // 普通の再構成
-			//b_entropy_dct(dcoe);
+			//////領域分割メイン処理　終了/////////////////////////////
 
-			//for (i = 0; i < 1024; i++) {
-			//	no_op_1[i] = 0;
-			//	if (ica_basis2[64][i] < 4 && ica_basis2[64][i] != 0) { //< 4　を　!=99　に変更中
-			//		no_op_1[i] = 1;
-			//		for (j = 0; j < 64; j++) {
-			//			coe_temp[j] = 0;
-			//			coe_temp[j] = y[j][i];
-			//		}
-			//		gnuplot5_2(coe_temp, i);
-			//		//printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
-			//	}
-			//}
 
-			a = b = c = d = j = 0;
-			for (i = 0; i < 1024; i++) {
-				no_op_1[i] = 0;
-				if (ica_basis2[64][i] != 99 && ica_basis2[64][i] != 0) {
-					a++;
-					printf("\n [ %d ] %d", (int)ica_basis2[64][i], i);
 
-				}
+			// 各ブロックの各基底の情報量を求める////////////////////////////////////////////////////////////////////////////
 
-				if (ica_basis2[64][i] == 0)
-					j++;
-				if (ica_basis2[64][i] < 4)// && ica_basis2[64][i] != 0 画像出力用
-					no_op_1[i] = 1;
-
-				if (ica_basis2[64][i] == 1) {
-					b++;
-					//printf("\n [ 1 ] %d", i);
-				}
-				if (ica_basis2[64][i] == 2) {
-					c++;
-					//printf("\n [ 2 ] %d", i);
-				}
-				if (ica_basis2[64][i] == 3) {
-					d++;
-					//printf("\n [ 3 ] %d", i);
-				}
-			}
-			//img_out(origin, no_op_1, Q + 6);//3以下画像出力
-
-			printf("\n [0 = %d] 1 = %d/%d(%lf), 2 = %d/%d(%lf), 3 = %d/%d(%lf), all = %d/%d(%lf)", j, b, a, (double)b / (double)a, c, a, (double)c / (double)a, d, a, (double)d / (double)a, b + c + d, a, (double)(b + c + d) / (double)a);
-
-			//printf("\n all = ");
-
-			//printf("\ncount:%d", a);
-			//mp(y, avg, w, mpans);
-
-			//segmentation_ent_out(origin, y, avg, w, mpans, block_flag, Q);	//領域分割
-
-			//segmentation_RD_single(origin, y, avg, w, mpans, block_flag, Q);
-			//for (i = 0; i < 1024; i++)
-			//	block_flag[i] = 0;
-		//b_entropy_ica(ny);
-		//
-				// ヒストグラム作成時　使用フラグのない領域はカウントしない////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			for (i = 0; i < 64; i++) // 使用基底種類数を調査
-				test_basis[i] = 0;
-
-			sum = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					for (i = 0; i < 64; i++) {
-						if (ny[i][j] != 0) {
-							out_ent[(Q / 10) - 1] += ica_ent[i][j];
-						}
-					}
-				}
-				else {
-					for (i = 0; i < 64; i++) {
-						out_ent[(Q / 10) - 1] += dct_ent[i][j];
-					}
-				}
-			}
-
-			k = 0;
+			////各基底の使用数をカウント　//////////////
+			/// DCT ///
 			for (i = 0; i < 64; i++)
-				if (test_basis[i] == 1)
-					k++;
-			//printf("\n%d\n", k);
+				for (j = 0; j < 1024; j++) {
+					dct_fre[(Q / 10 - 1)][i][j] = 0;
+					if (dcoe_temp[i][j] != 0)
+						dct_fre[(Q / 10 - 1)][i][j]++;
+				}
 
+		for (i = 0; i < 64; i++) {
+			dct_fre_temp[(Q / 10 - 1)][i] = 0;
+			for (j = 0; j < 1024; j++) {
+				dct_fre_temp[(Q / 10 - 1)][i] += dct_fre[(Q / 10 - 1)][i][j];
+			}
+		}
+
+		/// ICA ///
 			seki5(nw, ny, x); // x -> nw * ny
 			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			//img_out2(dcoe2, ica_sai, no_op, Q);
 
 			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++) {
 					ica_fre[i][j] = 0;
 				}
 			}
+
 			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++) {
 					if (no_op[j] == 1) {
@@ -1028,98 +618,14 @@ int main()
 					ica_fre_temp[i] += ica_fre[i][j];
 				}
 			}
-			//gnuplot2(ica_fre_temp, Q);
-
-			//for (i = 0; i < 64; i++) {
-			//	if (i % 8 == 0)
-			//		fprintf(fp7, "\n");
-			//	fprintf(fp7, "%lf,", (double)ica_fre_temp[i]);
-			//}
-
-			fprintf(fp7, "\n");
-			fprintf(fp7, "%d,", Q);
-			sum = 0;
+			///// 各基底の使用数　終了 /////////////////
 
 
 
-			for (i = 0; i < 256; i += 8) {
-				for (j = 0; j < 256; j += 8) {
-					m = 0;
-					for (k = 0; k < 8; k++) {
-						for (l = 0; l < 8; l++) {
-							dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
-							m++;
-						}
-					}
-					n++;
-				}
-			}
-			for (j = 0; j < 1024; j++) {
-				for (i = 0; i < 64; i++) {
-					if (dcoe_temp[i][j] != 0)
-						sum += dct_ent[i][j];
-				}
-			}
-			fprintf(fp7, "%lf,", sum);
+			// icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
+			// 基底1つ1つの情報量を求める際に
 
-			sum = 0;
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 0) {
-					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
-							sum += dct_ent[i][j];
-					}
-				}
-			}
-			fprintf(fp7, "%lf,", sum);
-
-			sum = 0;
-			a = 0;
-			for (i = 0; i < 64; i++)
-				test_basis[i] = 0;
-
-			for (i = 0; i < 1024; i++)
-				test_area[i] = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					for (i = 0; i < 64; i++) {
-						if (ny[i][j] != 0) {
-							sum += ica_ent[i][j];
-							test_area[j]++;
-							if (test_basis[i] == 0)
-								test_basis[i] = 1;
-						}
-					}
-					a++;
-				}
-			}
-			fprintf(fp7, "%lf,", sum);
-			fprintf(fp7, "%lf,", (double)a);
-
-			sum = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					sum += ica_dc[j];
-				}
-			}
-			fprintf(fp7, "%lf,", sum);
-			sum = 0;
-			for (i = 0; i < 64; i++)
-				sum += test_basis[i];
-			fprintf(fp7, "%lf,", sum);
-			sum = 0;
-			for (j = 0; j < 1024; j++) {
-				sum += test_area[j];
-			}
-			fprintf(fp7, "%lf,", sum / a);
-
-			fprintf(fp7, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
-
-
-			//icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
-
+			// 比率により情報量を変更
 			max = 0;
 			for (i = 0; i < 64; i++)
 				if (ica_fre_temp[i] > max)
@@ -1136,21 +642,52 @@ int main()
 				sum += basis_temp[i];
 
 			sum2 = 0;
-			for (i = 0; i < 64; i++)
+			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++)
 					sum2 += ica_ent[i][j];
 
-			for (i = 0; i < 64; i++)
 				for (j = 0; j < 1024; j++)
 					ica_ent2[i][j] = 0;
 
-			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++)
-					ica_ent2[i][j] = (sum2 * (basis_temp[i] / sum) / 1024);
+					ica_ent2[i][j] = (sum2 * basis_temp[i] / (ica_fre_temp[i]));
 			}
-			//.///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			//.//////////////////////////////////////
 
 			//dctの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
+			// 情報量
+			for (j = 0; j < 64; j++)
+				for (i = 0; i < 1024; i++)
+					dct_ent[j][i] = 0;
+
+			for (j = 0; j < 64; j++) {
+				for (i = 0; i < 50000; i++) {
+					hist[i] = 0;
+				}
+
+				sum1 = 0;
+				// 左端
+				min3 = dcoe_temp[j][0];
+				for (i = 0; i < 1024; i++)
+					if (dcoe_temp[j][i] < min3)
+						min3 = dcoe_temp[j][i]; // histの左端
+
+				for (i = 0; i < 1024; i++) {
+					hist[(int)((dcoe_temp[j][i] - min3)) + 1]++;	//ステップ幅1
+				}
+
+				for (i = 0; i < 50000; i++)
+					if (hist[i] > 0) {
+						sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+					}
+
+				for (i = 0; i < 1024; i++) {
+					if (dcoe_temp[j][i] != 0)
+						dct_ent[j][i] = sum1 / (64 * 1024);
+				}
+			}
+
+			// 比率により情報量変更//////////////
 			max = 0;
 			for (i = 0; i < 64; i++)
 				if (dct_fre_temp[((Q / 10) - 1)][i] > max)
@@ -1167,371 +704,23 @@ int main()
 				sum += basis_temp[i];
 
 			sum2 = 0;
-			for (i = 0; i < 64; i++)
+			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++)
 					sum2 += dct_ent[i][j];
 
-			for (i = 0; i < 64; i++)
 				for (j = 0; j < 1024; j++)
 					dct_ent2[i][j] = 0;
 
-			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++)
-					dct_ent2[i][j] = (sum2 * (basis_temp[i] / sum) / 1024);
-			}
-			//.///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			fprintf(fp8, "\n");
-			fprintf(fp8, "%d,", Q);
-			sum = 0;
-
-
-
-			for (i = 0; i < 256; i += 8) {
-				for (j = 0; j < 256; j += 8) {
-					m = 0;
-					for (k = 0; k < 8; k++) {
-						for (l = 0; l < 8; l++) {
-							dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
-							m++;
-						}
-					}
-					n++;
-				}
-			}
-			for (j = 0; j < 1024; j++) {
-				for (i = 0; i < 64; i++) {
 					if (dcoe_temp[i][j] != 0)
-						sum += dct_ent2[i][j];
-				}
+						dct_ent2[i][j] = (sum2 * basis_temp[i] / (dct_fre_temp[((Q / 10) - 1)][i]));
 			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[1] = sum;
+			// 各ブロックの各基底の情報量を求める　終了//////////////////////////////////////////////////////////////////////
 
-			sum = 0;
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 0) {
-					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
-							sum += dct_ent2[i][j];
-					}
-				}
-			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[2] = sum;
 
-			sum = 0;
-			a = 0;
-			for (i = 0; i < 64; i++)
-				test_basis[i] = 0;
 
-			for (i = 0; i < 1024; i++)
-				test_area[i] = 0;
 
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					for (i = 0; i < 64; i++) {
-						if (ny[i][j] != 0) {
-							sum += ica_ent2[i][j];
-							test_area[j]++;
-							if (test_basis[i] == 0)
-								test_basis[i] = 1;
-						}
-					}
-					a++;
-				}
-			}
-			fprintf(fp8, "%lf,", sum);
-			fprintf(fp8, "%lf,", (double)a);
-			excel_basis[3] = sum;
-			excel_basis[4] = a;
-
-			sum = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					sum += ica_dc[j];
-				}
-			}
-			fprintf(fp8, "%lf,", sum);
-			excel_basis[5] = sum;
-
-			sum = 0;
-			for (i = 0; i < 64; i++)
-				sum += test_basis[i];
-			fprintf(fp8, "%lf,", sum);
-			sum = 0;
-			for (j = 0; j < 1024; j++) {
-				sum += test_area[j];
-			}
-			fprintf(fp8, "%lf,", sum / a);
-
-			fprintf(fp8, ",=(B%d-C%d-F%d)/((D%d/E%d)+$B$2)", excel_temp, excel_temp, excel_temp, excel_temp, excel_temp);
-			// / ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-			// / /////////////////////////累積改善量で基底を制限中/////////////////////////////////////////////////
-
-			seki5(nw, nny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			//img_out2(dcoe2, ica_sai, no_op, Q + 1);
-
-			for (i = 0; i < 64; i++) {//初期化
-				ica_group_temp[i] = 0;
-				for (j = 0; j < 64; j++)
-					ica_group[i][j] = 0;
-			}
-
-			for (i = 0; i < 64; i++) {
-				QQQ = 0;
-				for (j = 0; j < 1024; j++)
-					if (no_op[j] == 1)
-						if (ica_basis2[64][j] == i)
-							QQQ++;
-				ica_group_num[i] = QQQ;//基底数分類ごとの領域数
-				ica_group_result[i] = 99;
-			}
-			//			//調査中//////
-			//			for (i = 0; i < 64; i++)
-			//				zig[i] = 0;
-			//			for (i = 0; i < 64; i++)
-			//				zig[i] = (int)ica_group_num[i];
-			//			gnuplot2(zig, Q);
-			///// //////////
-
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					if (i == ica_basis2[64][j])
-						for (a = 0; a < 64; a++)
-							if (ica_basis2[a][j] == 1)
-								ica_group[i][a] = 1;//基底数分類ごとの使用基底フラグ
-				}
-			}
-
-
-			for (a = 0; a < 64; a++) {//基底数分類番号
-				for (i = 0; i < 64; i++) {//対象基底
-					sum = 0;
-					QQQ = 0; //対象基底の領域数
-					for (b = 0; b < 64; b++)
-						ica_group_temp[i] = 0;
-
-					for (j = 0; j < 1024; j++) {
-						if (no_op[j] == 1)
-							if (ica_basis2[64][j] == a && nny[i][j] != 0) {
-
-								for (b = 0; b < 64; b++)
-									for (c = 0; c < 1024; c++)
-										nnny[b][c] = nny[b][c];
-
-								//対象基底を０
-								nnny[i][j] = 0;
-
-								// 初期化（必ず行う）
-								for (b = 0; b < 64; b++)
-									xx[b] = 0.0;
-
-								//再構成
-								seki5_Block(nw, nnny, xx, j); // xx64 -> nw * ny
-								xtogen_Block(xx, block_ica_temp, avg, j); // ica_sai -> 再構成済①
-								avg_inter_Block(block_ica_temp, avg, j); // ica_sai -> 再構成済②
-
-								for (b = 0; b < 64; b++)
-									for (c = 0; c < 1024; c++)
-										nnny[b][c] = nny[b][c];
-
-								// 初期化（必ず行う）
-								for (b = 0; b < 64; b++)
-									xx[b] = 0.0;
-
-								seki5_Block(nw, nnny, xx, j); // xx64 -> nw * ny
-								xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-								avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-								//画質
-								sum2 = 0.0;
-
-								for (c = 0; c < 8; c++) {
-									for (b = 0; b < 8; b++) {
-										sum2 += pow(block_ica_temp[b * 8 + c] - block_ica[b * 8 + c], 2);
-									}
-								}
-
-								sum += (sum2 / 64);
-
-								QQQ++;
-							}
-					}
-
-					if (QQQ != 0)
-						ica_group_temp[i] = sum / QQQ;//画質低下
-				}
-
-				sum = 0;
-				sum2 = 0;
-				for (i = 0; i < 64; i++)
-					if (ica_group_temp[i] > sum) {
-						sum = ica_group_temp[i];
-						sum2 = (double)i;
-					}
-				if (sum == 0) {
-					ica_group_result[a] = -1;//基底数分類で一番重要な基底番号
-				}
-				else {
-					ica_group_result[a] = sum2;//基底数分類で一番重要な基底番号
-				}
-
-			}
-
-			//調査中//////
-			for (i = 0; i < 64; i++)
-				zig[i] = 0;
-			for (i = 0; i < 64; i++)
-				zig[i] = (int)ica_group_result[i];
-			//gnuplot2(zig, Q);
-			/// //////////
-
-			for (i = 0; i < 64; i++)
-				basis_limits[i] = 99;
-
-			QQQ = (int)(excel_basis[1] - excel_basis[2] - excel_basis[5]) / ((excel_basis[3] / excel_basis[4]) + excel_basis[0]);//基底制限数
-			//printf("\n basis_limits = %d", QQQ);
-
-			//for (i = 0; i < QQQ; i++) {
-			//	while (basis_limits[i] == 99 && sum2!=99) {
-			//		sum = 0;
-			//		sum2 = 99;
-
-			//		for (a = 0; a < 64; a++)
-			//			if (ica_group_num[a] > sum) {
-			//				sum = ica_group_num[a];//分類領域数が大きいやつ
-			//				sum2 = (double)a;//分類番号
-			//			}
-
-
-
-			//		if (sum2 != 99) {//分類番号が99じゃない
-			//			sum = 0;
-			//			for (a = 0; a <= i; a++)//同じ基底が格納されていないか探索
-			//				if (basis_limits[a] == ica_group_result[(int)sum2])
-			//					sum = 1;
-
-			//			if (sum == 0)
-			//				basis_limits[i] = ica_group_result[(int)sum2];//制限下での使用基底を格納
-
-			//			ica_group_num[(int)sum2] = 0;
-			//			//printf("\n%lf", ica_group_result[(int)sum2]);
-			//		}
-			//	}
-			//}
-
-			for (i = 0; i < QQQ; i++) {
-				b = 0;
-				for (k = 0; k < 64; k++) {
-					if (b == 0) {
-						sum = 0;
-						sum2 = 99;
-
-						for (a = 1; a < 64; a++)//基底0個の分類を避けるためa=1から始める
-							if (ica_group_num[a] > sum) {
-								sum = ica_group_num[a];//分類領域数が大きいやつ
-								sum2 = (double)a;//分類番号
-							}
-
-						if (sum2 != 99) {//分類番号が99じゃない
-							sum = 0;
-							for (a = 0; a <= i; a++)//同じ基底が格納されていないか探索
-								if (basis_limits[a] == ica_group_result[(int)sum2])
-									sum = 1;
-
-							if (sum == 0) {
-								basis_limits[i] = ica_group_result[(int)sum2];//制限下での使用基底を格納
-								b = 1;
-							}
-							ica_group_num[(int)sum2] = 0;
-							//printf("\n%lf", ica_group_result[(int)sum2]);
-						}
-					}
-				}
-			}
-
-
-
-
-			////調査中//////
-			//for (i = 0; i < 64; i++)
-			//	zig[i] = 0;
-			//for (i = 0; i < 64; i++)
-			//	zig[i] = (int)basis_limits[i];
-			//gnuplot2(zig, Q);
-			///// //////////
-
-
-
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++)
-					nnny[i][j] = 0;
-
-			for (a = 0; a < 64; a++)
-				for (i = 0; i < 64; i++)
-					for (j = 0; j < 1024; j++)
-						if (i == (int)basis_limits[a] && ica_basis2[64][j] <= a) {
-							nnny[i][j] = y[i][j];
-						}
-
-			// 全てに適用
-			seki5(nw, nnny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			//img_out2(dcoe2, ica_sai, no_op, Q + 2);
-
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++)
-					nnny[i][j] = 0;
-
-			//削減前に合わせる
-			for (a = 0; a < 64; a++)
-				for (i = 0; i < 64; i++)
-					for (j = 0; j < 1024; j++)
-						if (i == (int)basis_limits[a]) {
-							nnny[i][j] = nny[i][j];
-						}
-
-			seki5(nw, nnny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			//img_out2(dcoe2, ica_sai, no_op, Q+3);
-
-
-			//img_out(origin, no_op, Q);
-
-			// ////////情報量の計算////////////
-
-			seki5(nw, nnny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			for (i = 0; i < 1024; i++) {
-				ica_mse[i] = 0;
-				dct_mse[i] = 0;
-			}
-
-			//for (j = 0; j < 1024; j++) {
-			//	no_op[j] = 0;
-			//	if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0)
-			//		no_op[j] = 1;
-			//}
-			//img_out(origin, no_op, Q);
-
-
-			//////////////////////////////////////////////////////////////////////////////
-
-			//gnuplot2_2(dct_fre_temp);
-
+			/// 0ブロックの情報量を求める /////////////
 			for (j = 0; j < 1024; j++)
 				no_op[j] = 0;
 
@@ -1544,149 +733,15 @@ int main()
 			for (j = 0; j < 1024; j++) {
 				if (ica_basis2[64][j] == 0) {
 					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
 							basis0_ent += dct_ent2[i][j];
 					}
 					basis0_ent -= ica_dc[j];
 				}
 			}
 			printf("\nbasis_ent0 = %lf", basis0_ent);
+			////0ブロックの情報量を求める　終了////////
 
 
-			for (j = 0; j < 1024; j++)
-				no_op[j] = 0;
-
-			//// 基底数1の全領域にフラグ
-			//for (j = 0; j < 1024; j++) { //基底数が1の領域のみ有効
-			//	if (ica_basis2[64][j] == 1) {
-			//		no_op[j] = 1;
-			//	}
-			//}
-
-			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 1) {//mseだから低い方が画質高い
-					no_op[j] = 1;
-				}
-			}
-
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++) {
-					if (no_op[j] == 1)
-						nnny[i][j] = nny[i][j];
-					else
-						nnny[i][j] = 0;
-				}
-
-			seki5(nw, nnny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			block_mse(origin, ica_sai, ica_mse);
-			block_mse(origin, dcoe2, dct_mse);
-
-
-
-			for (a = 0; a < 64; a++)
-				true_profit[a] = 0;
-
-			for (i = 0; i < 64; i++) {
-				zig[i] = 0;
-				mse_sum[i] = 0;
-				ent_sum[i] = 0;
-			}
-
-			for (i = 0; i < 1024; i++) {
-				mse_profit[i] = 0;
-				ent_profit[i] = 0;
-				basis_profit[i] = 99;
-			}
-
-			sum = 0;
-			sum2 = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					mse_profit[j] = dct_mse[j] - ica_mse[j];
-				}
-			}
-
-			for (j = 0; j < 1024; j++) {
-				if (no_op[j] == 1) {
-					for (i = 0; i < 64; i++) {
-						if (dcoe_temp[i][j] != 0)
-							ent_profit[j] += dct_ent2[i][j];
-					}
-
-					for (i = 0; i < 64; i++) {
-						if (nnny[i][j] != 0) {
-							ent_profit[j] -= ica_ent2[i][j];
-							basis_profit[j] = i;
-						}
-					}
-					ent_profit[j] -= ica_dc[j];
-				}
-			}
-
-			//0の情報量ok
-
-
-			//fprintf(fp9, "\n\n\n\n%d,area,psnr,basis,ent,*,*,*,*,*,*,*", Q);
-			for (j = 0; j < 64; j++) {
-				for (i = 0; i < 1024; i++) {
-					if (no_op[i] == 1)
-						if (j == (int)basis_profit[i]) {
-							//fprintf(fp9, "\n,%d,%lf,%d,%lf", i, psnr_profit[i], (int)basis_profit[i], ent_profit[i]);
-							mse_sum[j] += mse_profit[i];
-							ent_sum[j] += ent_profit[i];
-							zig[j]++;
-						}
-				}
-			}
-			//0の情報量ok
-
-			//sum = 0;
-			//fprintf(fp9, "\n\n\n\n%d,basis,psnr_ave,ent_ave,area_num",Q);
-			//for (i = 0; i < 64; i++) {
-			//	if (zig[i] != 0) {
-			//		fprintf(fp9, "\n,%d,%lf,%lf,%d", i, psnr_sum[i], ent_sum[i], (int)zig[i]);
-			//		c++;
-			//	}
-			//}
-
-			//img_out2(dcoe2, ica_sai, no_op, Q + 8);
-
-			// 画質の良さを基に基底を並び替え
-			/////////////////////////////////////////////////////////////////////////////
-
-			//for (j = 0; j < 1024; j++) {
-			//	no_op_0[j] = 0;
-			//	no_op_1[j] = 0;
-			//	no_op_2[j] = 0;
-			//	no_op_3[j] = 0;
-			//	no_op_all[j] = 0;
-			//	no_op_ica[j] = 0;
-			//	if (ica_basis2[64][j] != 99)
-			//		no_op_ica[j] = 1;
-			//	if (ica_basis2[64][j]!=99 && bunrui[0][j] - bunrui[2][j] >= 3 && bunrui[1][j] - bunrui[3][j]>=50) {//選出基底3津の時
-			//		//1vs2vs3個で画質比較
-			//		if (ica_basis2[64][j] < 4)
-			//			no_op_all[j] = 1;
-			//		if (ica_basis2[64][j] == 3)
-			//			no_op_3[j] = 1;
-			//		if (ica_basis2[64][j] == 2)
-			//			no_op_2[j] = 1;
-			//		if (ica_basis2[64][j] == 1)
-			//			no_op_1[j] = 1;
-			//		if(ica_basis2[64][j] ==0)
-			//			no_op_0[j] = 1;
-			//	}
-			//}
-			//img_out(origin, no_op_0, Q);
-			//img_out(origin, no_op_1, Q + 1);
-			//img_out(origin, no_op_2, Q + 2);
-			//img_out(origin, no_op_3, Q + 3);
-			//img_out(origin, no_op_ica, Q + 5);
-			//img_out4(origin, no_op_ica, no_op_all, Q + 4);
 
 			for (j = 0; j < 1024; j++) {
 				no_op_1[j] = 0;
@@ -2508,11 +1563,6 @@ int main()
 		} // dctの最初に戻る
 
 	}
-
-
-	for (i = 0; i < 64; i++)
-		free(xxx[i]);
-	free(xxx);
 
 
 
