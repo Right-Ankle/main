@@ -2007,7 +2007,7 @@ int main()
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
 									if (j == 1000) {
-										printf("\n %d : [%d,%d] (%lf , %lf)", j, k,l, -sum, comb2[j][k][l][1]);
+										printf("\n %d : [%d,%d] (%lf , %lf)", j, k, l, -sum, comb2[j][k][l][1]);
 									}
 								}
 								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
