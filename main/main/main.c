@@ -747,11 +747,6 @@ int main()
 				no_op_1[j] = 0;
 				no_op_2[j] = 0;
 				no_op_3[j] = 0;
-				//if (ica_basis2[64][j] == 0) {
-				//	no_op_1[j] = 1;
-				//	no_op_2[j] = 1;
-				//	no_op_3[j] = 1;
-				//}
 			}
 
 			if (yn == 'y') {
@@ -977,12 +972,6 @@ int main()
 						}
 					}
 				}
-				sum = 0;
-				for (l = 0; l < 64; l++) {
-					if (dcoe_temp[l][1000] != 0)
-						sum += dct_ent2[l][1000]; //dct単独
-				}
-				printf("\n\n 1000 (dct only) : %lf, %lf\n\n", sum, dct_mse[1000]);
 
 				//累積（基底3つ）
 				for (a = 0; a < 64 - 2; a++) {
@@ -1031,48 +1020,24 @@ int main()
 									m = c;
 
 
-
-								//if (ica_basis2[64][j]==1) {
-								//	if ((dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0) || (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) || (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0))
-								//		printf("\n %d : ", j);
-								//	if (dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c] > 0)
-								//		printf("[%d, %d, %d] ", a, b, c);
-								//	if (dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0)
-								//		printf("[%d, %d] ", k, l);
-								//	if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0)
-								//		printf("[%d] ", m);
-								//}
-
-
-
-
 								//1vs2vs3個で画質比較
 								if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c] && comb3_1[j][a][b][c]> 0) {
 									sum = dct_mse[j] - comb3_0[j][a][b][c];
 									comb_result3[a][b][c][0] += sum;
 									comb_result3[a][b][c][1] += comb3_1[j][a][b][c];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000) {
-										printf("\n %d : [%d,%d,%d] (%lf , %lf)", j, a, b, c, -sum, comb3_1[j][a][b][c]);
-									}
 								}
 								else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
 									sum = dct_mse[j] - comb2[j][k][l][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb2[j][k][l][1];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000) {
-										printf("\n %d : [%d,%d] (%lf , %lf)", j, k, l, -sum, comb2[j][k][l][1]);
-									}
 								}
 								else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 									sum = dct_mse[j] - comb[j][m][0];
 									comb_result3[a][b][c][0] += sum;//dctからの画質改善量を累積
 									comb_result3[a][b][c][1] += comb[j][m][1];
 									comb_result3[a][b][c][2]++;
-									if (j == 1000) {
-										printf("\n %d : [%d] (%lf , %lf)", j, m, -sum, comb[j][m][1]);
-									}
 								}
 							}
 						}
@@ -1236,7 +1201,6 @@ int main()
 				d = 0;
 				sum = 0;
 				for (a = 0; a < 30; a++) {
-					//printf("\n %lf, %lf",comb_after_sort[a][0], comb_after_sort[a][1]);
 
 					if (a >= 20)
 						c = 1;
@@ -1298,17 +1262,7 @@ int main()
 					}
 				}
 
-				fprintf(fp9, "\n\n\n,Q%d\n,Area_num,,ica_basis2,", Q);
 				for (j = 0; j < 1024; j++) {
-					fprintf(fp9, "\n,%d,,%d,", j, (int)ica_basis2[64][j]);
-
-					for (i = 0; i < 5; i++) {
-						fprintf(fp9, ",%d", (int)full_mse[0][63 - i][j]);
-					}
-
-					if (ica_basis2[64][j] == 0) {
-						fprintf(fp9, ",,0_area");
-					}
 
 					no_op_1[j] = 0;
 					no_op_2[j] = 0;
@@ -1344,7 +1298,6 @@ int main()
 							no_op[j] = 1;
 							no_op_3[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d,%d,%d", a, b, c);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0] && comb2[j][k][l][1] > 0) {
 							ny[k][j] = y[k][j];
@@ -1352,14 +1305,12 @@ int main()
 							no_op[j] = 1;
 							no_op_2[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d,%d", k, l);
 						}
 						else if (dct_mse[j] > comb[j][m][0] && comb[j][m][1] > 0) {
 							ny[m][j] = y[m][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d", m);
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1376,14 +1327,12 @@ int main()
 							no_op[j] = 1;
 							no_op_2[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d,%d", a, b);
 						}
 						else if (dct_mse[j] > comb[j][k][0] && comb[j][k][1] > 0) {
 							ny[k][j] = y[k][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d", k);
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1392,13 +1341,11 @@ int main()
 							no_op[j] = 1;
 							no_op_1[j] = 1;
 							no_op_4[j] = 1;
-							fprintf(fp9, ",,%d", a);
 						}
 					}
 
 				}
 
-				//img_out(origin, no_op_0, Q);//0ブロック
 				img_out(origin, no_op_1, Q + 1);//基底1ブロック
 				img_out(origin, no_op_2, Q + 2);//基底2ブロック
 				img_out(origin, no_op_3, Q + 3);//基底3ブロック
