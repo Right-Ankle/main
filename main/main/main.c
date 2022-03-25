@@ -22,64 +22,59 @@ int main()
 	char output[1000];//画像出力用
 	static char image_name[20] = { 0 };	//画像ファイル名(拡張子含まず)
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
-	static unsigned char origin_30[256][256] = { 0 };	//原画像（256*256のみ対応）
-
-	static int temp_sai[256 * 256];
-	double aaa[4][3];
-
-
-	static unsigned char nica_basis[64][64]; //ica基底変換用
+	static unsigned char nica_basis[64][64]; //ica基底出力用
 	static unsigned char dcoe2[256][256] = { 0 }; //dct再構成用
 	static unsigned char  ica_sai[256][256] = { 0 }; //ica再構成用
-	static unsigned char block_ica[64] = { 0 }; //ica 小領域
-	static unsigned char block_ica_temp[64] = { 0 }; //ica 小領域
-	static unsigned char dct_ica_sai[256][256];
-	static unsigned char average_temp[256][256];
+	static unsigned char block_ica[64] = { 0 }; //ica ブロックでの再構成用
+	static unsigned char dct_ica_sai[256][256]; //DCT&ICA併用後の再構成
 
 	////// int //////
-	static int a, b, c, d, i, j, k, l, m, n, o, mk, ml; //計算用
-	static int ori_temp[256 * 256] = { 0 }; // 原画像変換用
-	static int no_op[1024] = { 0 }; // 小領域flag
-	static int no_op_0[1024] = { 0 };
+	static int a, b, c, d, i, j, k, l, m, n, o, mk, ml; //計算用変数
+	static int ori_temp[256 * 256] = { 0 }; // 原画像(256*256の一次元)
+	static int no_op[1024] = { 0 }; // ブロックflag（基本的に0=DCT_Block, 1=ICA_Block）
+	static int no_op_0[1024] = { 0 }; // フラグを立てたブロックのみ出力するためのやつ（使い捨て）
 	static int no_op_1[1024] = { 0 };
 	static int no_op_2[1024] = { 0 };
 	static int no_op_3[1024] = { 0 };
 	static int no_op_4[1024] = { 0 };
-	static int no_op_all[1024];
-	static int no_op_ica[1024];
 	static int Q;//圧縮レート
-	static int QQ, QQQ, QQQQ;
-	double min2 = 100000;
-	double sum2 = 0;
-	int hist[50000];
-	int hist2[50000];
-	int test_basis[64];
-	int test_area[1024];
-	double dct_ent[64][1024];
-	double ica_ent[64][1024];
-	double dct_ent2[64][1024];
-	double ica_ent2[64][1024];
-	double out_ent[10];
-	int ica_fre[64][1024];//基底試用頻度
-	int dct_fre[10][64][1024];//基底使用頻度
-	int dct_fre_temp[10][64];
-	int ica_fre_temp[64];
-	int zig[64];
-	int excel_temp = 4;
-	int step = 100;
-	double ica_dc[1024];
-	double ica_ica[1024];
-	double ica_basis_ent[64];
-	double basis_temp[64];
-	double ica_group[64][64];
-	double ica_group_temp[64];
-	double ica_group_result[64];
-	double ica_group_num[64];
-	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"
-	double basis_limits[64];
-	double ica_mse[1024];
-	double dct_mse[1024];
-	double psnr_temp2;
+	static int QQ;//適当な変数として使用中？
+	int hist[50000]; //entropy算出時のヒストグラム用
+	int test_basis[64]; //どの基底が使用されているのか確認用？
+	int test_area[1024]; // ブロック当たりの使用基底数の確認用？
+	int ica_fre[64][1024]; //ICA基底頻度
+	int ica_fre_temp[64]; //ICA基底毎の使用数
+	int excel_temp = 4; // excel出力時に使用
+	int step = 100; // ICA係数のentropy算出時に使用
+
+	////// double //////
+	static double sum = 0, min = 0, max = 0;//計算用
+	double avg[1024];//ICAの直流成分
+	double y[64][1024];//ICAの係数値（基本的にいじらない）
+	double w[64][64];//ICAの基底
+	double ny[64][1024];//ICA_Blockの係数値、計算用
+	double nny[64][1024];//ICA_Blockの係数値、計算用2
+	double nw[64][64];//ICA基底、計算用
+	double x[64][1024];//ICAの再構成時に使用、直流成分なし
+	double xx[64];//ICAの再構成時に使用、直流なし（ブロックごと専用）
+	static double mse_dct[2][10][1024]; //DCTのMSEとEntropy格納用、”dct_mse”と変わらん
+	    //ICAのMSEと基底番号格納用、[0=基底番号、1=MSE][0=0個、1=一番いらない基底、63=1番重要な基底、64=64個][ブロック番号]
+	static double full_mse[2][65][1024];//↑
+	double dct_ent[64][1024]; // DCTにおける各ブロック各基底のentropy
+	double ica_ent[64][1024]; // ICAにおける各ブロック各基底のentropy
+	double ica_ent2[64][1024]; // entropy操作後
+	double dcoe[256][256] = { 0 };//DCTの係数
+	double ica_basis2[65][1024];//領域分割後のICA_Blockにおける、使用基底と最適基底数　[0~63=フラグ、64=最適基底数][ブロック番号]
+	double dcoe_temp[64][1024] = { 0 };//DCTの係数 64*1024版
+	double bunrui[4][1024];//領域分割時に使用、[0=DCTの基底数、1=DCTのMSE、2=ICAの基底数、3=ICAのMSE][ブロック番号]
+	double ica_dc[1024];  // ICAの直流成分のentropy
+	double ica_basis_ent[64]; //ICA基底のentropy
+	double basis_temp[64]; //entropy操作時に使用（）
+	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"（Excel用）
+	double dct_mse[1024]; //DCTの各ブロックのMSE
+	double psnr_temp2; //PSNR出力用
+	static double basis0_ent = 0;//0領域の改善可能なentropy用
+		// 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
 	static double comb[1024][64][2] = { 0 };//0->画質，1->情報量
 	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
 	double**** comb3_0; //0->画質，1->情報量
@@ -91,28 +86,6 @@ int main()
 	double comb_sort2[64][64] = { 0 };
 	double comb_sort[64] = { 0 };
 	double comb_after_sort[100][6] = { 0 };//0->累積画質，1->累積情報量，2,3,4->基底番号（基底２の4番目は99)
-	double comb_basis[64] = { 0 };// 0or1  0->基底を使ってない　1->基底を使っている
-	double coe_temp[64];
-	static double min3 = 0;
-	double sum1 = 0;
-
-
-	////// double //////
-	static double sum = 0, min = 0, max = 0;//計算用
-	static double threshold = 0, percent = 0;//閾値で使用
-	static double b_ica_ent[1024]; //各ica基底の情報量
-	static double b_dct_ent[1024]; //各ica基底の情報量
-	static double mse_dct[2][10][1024]; //mse
-	static double full_mse[2][65][1024];
-	double dcoe[256][256] = { 0 }, ica_basis[65][1024], ica_basis2[65][1024];
-	double avg[1024], y[64][1024], w[64][64], ny[64][1024], nny[64][1024], nnny[64][1024], nw[64][64], x[64][1024], xx[64], dcoe_temp[64][1024] = { 0 }, bunrui[4][1024];
-	static double true_profit[64]; //１領域の改善量 - 係数の情報量 - DC情報量 = 真の利益
-	static double mse_profit[1024];
-	static double ent_profit[1024];
-	static double basis_profit[1024];
-	static double mse_sum[64];//基底ごとの画質の良さ
-	static double ent_sum[64];//基底ごとの情報量の良さ
-	static double basis0_ent = 0;
 
 	//stract関数用
 	static struct pca pcaStr = { 0 };
@@ -277,24 +250,24 @@ int main()
 	// DCの情報量 ////////
 	/* histの初期化 */
 	for (i = 0; i < 50000; i++) {
-		hist2[i] = 0;
+		hist[i] = 0;
 	}
 
 	/* hist2の作成 */
-	min2 = avg[0];
+	min = avg[0];
 	for (i = 0; i < 1024; i++)
-		if (avg[i] < min2)
-			min2 = avg[i]; // histの左端
+		if (avg[i] < min)
+			min = avg[i]; // histの左端
 
 	for (i = 0; i < 1024; i++) {
-		hist2[(int)((avg[i] - min2)) + 1]++;	//ステップ幅1
+		hist[(int)((avg[i] - min)) + 1]++;	//ステップ幅1
 	}
 
 	sum = 0;
 	/* エントロピーの計算 */
 	for (i = 0; i < 50000; i++)
-		if (hist2[i] > 0) {
-			sum += -((hist2[i] / (double)(1024)) * (log((hist2[i] / (double)(1024))) / log(2)));
+		if (hist[i] > 0) {
+			sum += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
 		}
 
 	for (i = 0; i < 1024; i++)
@@ -311,23 +284,23 @@ int main()
 			hist[i] = 0;
 		}
 
-		sum1 = 0;
-		min3 = y[j][0];
+		sum = 0;
+		min = y[j][0];
 
 		for (i = 0; i < 1024; i++)
-			if (y[j][i] < min3)
-				min3 = y[j][i]; // histの左端
+			if (y[j][i] < min)
+				min = y[j][i]; // histの左端
 
 		for (i = 0; i < 1024; i++) {
-			hist[(int)((y[j][i] - min3) * step) + 1]++;	//ステップ幅1
+			hist[(int)((y[j][i] - min) * step) + 1]++;	//ステップ幅1
 		}
 
 		for (i = 0; i < 50000; i++)
 			if (hist[i] > 0) {
-				sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+				sum += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
 			}
 		for (i = 0; i < 1024; i++) {
-			ica_ent[j][i] = sum1 / (64 * 1024);
+			ica_ent[j][i] = sum / (64 * 1024);
 		}
 	}
 	// 係数の情報量　終了/////////
@@ -343,8 +316,8 @@ int main()
 	for (j = 0; j < 1024; j++) {
 		for (c = 0; c < 64; c++) { //MSE優先度の格納カウント
 
-			threshold = 10000;
-			QQ = 99;
+			min = 10000; // 最小MSE 保存用
+			QQ = 99; //最小MSEの基底番号 保存用
 
 			for (n = 0; n < 64; n++) { //調査対象基底
 
@@ -379,13 +352,13 @@ int main()
 						}
 					}
 
-					if (threshold > sum / 64.0) {//MSEの減少が一番小さい基底を抜く
-						threshold = sum / 64.0;
+					if (min > sum / 64.0) {//MSEの減少が一番小さい基底を抜く
+						min = sum / 64.0;
 						QQ = n;
 					}
 				}
 			}
-			full_mse[1][c + 1][j] = threshold; //格納基底のMSE
+			full_mse[1][c + 1][j] = min; //格納基底のMSE
 			full_mse[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
 		}
 		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
@@ -485,7 +458,7 @@ int main()
 				}
 			}
 
-			/////////////////// DCTの各ブロックの基底数と画質 /////////////////////////////////////
+			/////////////////// DCTの各ブロックの基底数と画質とentropy　 /////////////////////////////////////
 			block_mse(origin, dcoe2, dct_mse);
 
 			for (j = 0; j < 1024; j++) {
@@ -507,7 +480,38 @@ int main()
 				mse_dct[1][(Q / 10) - 1][j] = i;
 			}
 
-			/////////////////// DCTの各ブロックの基底数と画質 終了/////////////////////////////////////
+			//dctのentropy
+			for (j = 0; j < 64; j++)
+				for (i = 0; i < 1024; i++)
+					dct_ent[j][i] = 0;
+
+			for (j = 0; j < 64; j++) {
+				for (i = 0; i < 50000; i++) {
+					hist[i] = 0;
+				}
+
+				sum = 0;
+				// 左端
+				min = dcoe_temp[j][0];
+				for (i = 0; i < 1024; i++)
+					if (dcoe_temp[j][i] < min)
+						min = dcoe_temp[j][i]; // histの左端
+
+				for (i = 0; i < 1024; i++) {
+					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;	//ステップ幅1
+				}
+
+				for (i = 0; i < 50000; i++)
+					if (hist[i] > 0) {
+						sum += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
+					}
+
+				for (i = 0; i < 1024; i++) {
+					if (dcoe_temp[j][i] != 0)
+						dct_ent[j][i] = sum / (64 * 1024);
+				}
+			}
+			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
 
 
 			/// 領域分割のメイン処理 ///////////////////////////
@@ -577,20 +581,6 @@ int main()
 			// 各ブロックの各基底の情報量を求める////////////////////////////////////////////////////////////////////////////
 
 			////各基底の使用数をカウント　//////////////
-			/// DCT ///
-			for (i = 0; i < 64; i++)
-				for (j = 0; j < 1024; j++) {
-					dct_fre[(Q / 10 - 1)][i][j] = 0;
-					if (dcoe_temp[i][j] != 0)
-						dct_fre[(Q / 10 - 1)][i][j]++;
-				}
-
-			for (i = 0; i < 64; i++) {
-				dct_fre_temp[(Q / 10 - 1)][i] = 0;
-				for (j = 0; j < 1024; j++) {
-					dct_fre_temp[(Q / 10 - 1)][i] += dct_fre[(Q / 10 - 1)][i][j];
-				}
-			}
 
 			/// ICA ///
 			seki5(nw, ny, x); // x -> nw * ny
@@ -622,8 +612,9 @@ int main()
 
 
 
-			// icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
-			// 基底1つ1つの情報量を求める際に
+			// icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/基底頻度
+			// 仮のICA_Blockで使用される基底の頻度によって情報量を増減
+			// 高頻度＝低情報量、低頻度＝高情報量、全体の情報量は変わっていない
 
 			// 比率により情報量を変更
 			max = 0;
@@ -637,88 +628,26 @@ int main()
 			for (i = 0; i < 64; i++)
 				basis_temp[i] = ((max - ica_fre_temp[i]) / max) + 1;
 
-			sum = 0;
+			QQ = 0;
 			for (i = 0; i < 64; i++)
-				sum += basis_temp[i];
+				QQ += basis_temp[i];
 
-			sum2 = 0;
+			sum = 0;
 			for (i = 0; i < 64; i++) {
 				for (j = 0; j < 1024; j++)
-					sum2 += ica_ent[i][j];
+					if (ny[i][j] != 0)
+						sum += ica_ent[i][j];
 
 				for (j = 0; j < 1024; j++)
 					ica_ent2[i][j] = 0;
 
 				for (j = 0; j < 1024; j++)
-					ica_ent2[i][j] = (sum2 * basis_temp[i] / (ica_fre_temp[i]));
+					if (ny[i][j] != 0)
+						ica_ent2[i][j] = (sum * basis_temp[i] / QQ) / ica_fre_temp[i];
 			}
 			//.//////////////////////////////////////
 
-			//dctの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/1024
-			// 情報量
-			for (j = 0; j < 64; j++)
-				for (i = 0; i < 1024; i++)
-					dct_ent[j][i] = 0;
-
-			for (j = 0; j < 64; j++) {
-				for (i = 0; i < 50000; i++) {
-					hist[i] = 0;
-				}
-
-				sum1 = 0;
-				// 左端
-				min3 = dcoe_temp[j][0];
-				for (i = 0; i < 1024; i++)
-					if (dcoe_temp[j][i] < min3)
-						min3 = dcoe_temp[j][i]; // histの左端
-
-				for (i = 0; i < 1024; i++) {
-					hist[(int)((dcoe_temp[j][i] - min3)) + 1]++;	//ステップ幅1
-				}
-
-				for (i = 0; i < 50000; i++)
-					if (hist[i] > 0) {
-						sum1 += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
-					}
-
-				for (i = 0; i < 1024; i++) {
-					if (dcoe_temp[j][i] != 0)
-						dct_ent[j][i] = sum1 / (64 * 1024);
-				}
-			}
-
-			// 比率により情報量変更//////////////
-			max = 0;
-			for (i = 0; i < 64; i++)
-				if (dct_fre_temp[((Q / 10) - 1)][i] > max)
-					max = dct_fre_temp[((Q / 10) - 1)][i];
-
-			for (i = 0; i < 64; i++)
-				basis_temp[i] = 0;
-
-			for (i = 0; i < 64; i++)
-				basis_temp[i] = ((max - dct_fre_temp[((Q / 10) - 1)][i]) / max) + 1;
-
-			sum = 0;
-			for (i = 0; i < 64; i++)
-				sum += basis_temp[i];
-
-			sum2 = 0;
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++)
-					sum2 += dct_ent[i][j];
-
-				for (j = 0; j < 1024; j++)
-					dct_ent2[i][j] = 0;
-
-				for (j = 0; j < 1024; j++)
-					if (dcoe_temp[i][j] != 0)
-						dct_ent2[i][j] = (sum2 * basis_temp[i] / (dct_fre_temp[((Q / 10) - 1)][i]));
-			}
 			// 各ブロックの各基底の情報量を求める　終了//////////////////////////////////////////////////////////////////////
-
-
-
 
 			/// 0ブロックの情報量を求める /////////////
 			for (j = 0; j < 1024; j++)
@@ -733,7 +662,7 @@ int main()
 			for (j = 0; j < 1024; j++) {
 				if (ica_basis2[64][j] == 0) {
 					for (i = 0; i < 64; i++) {
-						basis0_ent += dct_ent2[i][j];
+						basis0_ent += dct_ent[i][j];
 					}
 					basis0_ent -= ica_dc[j];
 				}
@@ -828,7 +757,7 @@ int main()
 
 							for (l = 0; l < 64; l++) {
 								if (dcoe_temp[l][j] != 0)
-									sum += dct_ent2[l][j]; //dct単独
+									sum += dct_ent[l][j]; //dct単独
 							}
 
 							for (l = 0; l < 64; l++) {
@@ -888,7 +817,7 @@ int main()
 
 								for (l = 0; l < 64; l++) {
 									if (dcoe_temp[l][j] != 0)
-										sum += dct_ent2[l][j]; //dct単独
+										sum += dct_ent[l][j]; //dct単独
 								}
 
 								for (l = 0; l < 64; l++) {
@@ -955,7 +884,7 @@ int main()
 
 									for (l = 0; l < 64; l++) {
 										if (dcoe_temp[l][j] != 0)
-											sum += dct_ent2[l][j]; //dct単独
+											sum += dct_ent[l][j]; //dct単独
 									}
 
 									for (l = 0; l < 64; l++) {
@@ -992,10 +921,6 @@ int main()
 
 
 				for (j = 0; j < 1024; j++) {
-					aaa[0][0] = aaa[0][1] = aaa[0][2] = 100000;
-					aaa[1][0] = aaa[1][1] = aaa[1][2] = 99;
-					aaa[2][0] = aaa[2][1] = aaa[2][2] = 99;
-					aaa[3][0] = aaa[3][1] = aaa[3][2] = 99;
 					for (a = 0; a < 64 - 2; a++) {
 						for (b = a + 1; b < 64 - 1; b++) {
 							for (c = b + 1; c < 64; c++) {
@@ -1374,7 +1299,7 @@ int main()
 				for (j = 0; j < 1024; j++) {
 					for (i = 0; i < 64; i++) {
 						if (dcoe_temp[i][j] != 0)
-							sum += dct_ent2[i][j];
+							sum += dct_ent[i][j];
 					}
 				}
 
@@ -1385,7 +1310,7 @@ int main()
 					if (no_op[j] == 0) {
 						for (i = 0; i < 64; i++) {
 							if (dcoe_temp[i][j] != 0)
-								sum += dct_ent2[i][j];
+								sum += dct_ent[i][j];
 						}
 					}
 				}
