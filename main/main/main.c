@@ -60,6 +60,7 @@ int main()
 	static double mse_dct[2][10][1024]; //DCTのMSEとEntropy格納用、”dct_mse”と変わらん
 	    //ICAのMSEと基底番号格納用、[0=基底番号、1=MSE][0=0個、1=一番いらない基底、63=1番重要な基底、64=64個][ブロック番号]
 	static double full_mse[2][65][1024];//↑
+	static double full_mse_temp[2][65][1024];//↑
 	double dct_ent[64][1024]; // DCTにおける各ブロック各基底のentropy
 	double ica_ent[64][1024]; // ICAにおける各ブロック各基底のentropy
 	double ica_ent2[64][1024]; // entropy操作後
@@ -74,7 +75,7 @@ int main()
 	double dct_mse[1024]; //DCTの各ブロックのMSE
 	double psnr_temp2; //PSNR出力用
 	static double basis0_ent = 0;//0領域の改善可能なentropy用
-		// 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
+	    // 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
 	static double comb[1024][64][2] = { 0 };//0->画質，1->情報量
 	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
 	double**** comb3_0; //0->画質，1->情報量
@@ -313,6 +314,14 @@ int main()
 	fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
 	fprintf(fp6, "\n\n  DCT vs ICA  \n\n    Area with a small number of basis\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
 
+	for (i = 0; i < 65; i++)
+		for (j = 0; j < 1024; j++) {
+			full_mse_temp[0][i][j] = 99;
+			full_mse_temp[1][i][j] = 10000;
+			full_mse[0][i][j] = 99;
+			full_mse[1][i][j] = 10000;
+		}
+
 	for (j = 0; j < 1024; j++) {
 		for (c = 0; c < 64; c++) { //MSE優先度の格納カウント
 
@@ -322,17 +331,17 @@ int main()
 			for (n = 0; n < 64; n++) { //調査対象基底
 
 				for (a = 0; a < 64; a++)
-					ny[a][j] = y[a][j]; //係数の初期化
+					ny[a][j] = 0; //係数の初期化
 
 				if (c != 0) {
 					for (a = 0; a < c; a++) {
 						if ((int)full_mse[0][a][j] != 99)
-							ny[(int)full_mse[0][a][j]][j] = 0; //選出済みの基底の係数を0
+							ny[(int)full_mse[0][a][j]][j] = y[(int)full_mse[0][a][j]][j]; //選出済みの基底の係数を0
 					}
 				}
 
-				if (ny[n][j] != 0) {
-					ny[n][j] = 0; // 調査対象の基底の係数値を0
+				if (ny[n][j] == 0) {
+					ny[n][j] = y[n][j]; // 調査対象の基底の係数値を0
 
 					// 初期化（必ず行う）
 					for (a = 0; a < 64; a++)
@@ -352,39 +361,48 @@ int main()
 						}
 					}
 
-					if (min > sum / 64.0) {//MSEの減少が一番小さい基底を抜く
-						min = sum / 64.0;
+					if (min > sum/64.0) {//MSEの減少が一番小さい基底を抜く
+						min = sum/64.0;
 						QQ = n;
 					}
 				}
 			}
-			full_mse[1][c + 1][j] = min; //格納基底のMSE
-			full_mse[0][c][j] = (double)QQ; //0~63 いらない順で基底を格納
+			full_mse[1][c+1][j] = min; //格納基底のMSE
+			full_mse[0][c][j] = (double)QQ; //0~63 必要順で格納
 		}
 		printf("\r Now Running  :  [%3.3lf]", ((double)j / 1024.0) * 100);
 	}
 	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
 
+
+
+
+
 	/// 基底を全て使ったときのMSE
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
 			ny[n][j] = y[n][j];
 
-	seki5(nw, ny, x); // x -> nw * ny
-	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+	for (j = 0; j < 1024;j++) {
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
 
-	for (j = 0; j < 1024; j++) {
+		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
 		sum = 0.0;
 		mk = j % 32;
 		ml = j / 32;
+
 		for (a = 0; a < 8; a++) {
 			for (b = 0; b < 8; b++) {
-				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
 			}
 		}
-		full_mse[1][0][j] = sum / 64;//基底すべて用いた場合のMSE
+		full_mse[1][64][j] = sum / 64.0;//基底すべて用いた場合のMSE
 	}
 	/// 基底を全て使った時終了///////////
 
@@ -394,21 +412,47 @@ int main()
 		for (n = 0; n < 64; n++)
 			ny[n][j] = 0; // iつ目の基底選択
 
-	seki5(nw, ny, x); // x -> nw * ny
-	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
 	for (j = 0; j < 1024; j++) {
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
+
+		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
 		sum = 0.0;
 		mk = j % 32;
 		ml = j / 32;
+
 		for (a = 0; a < 8; a++) {
 			for (b = 0; b < 8; b++) {
-				sum += pow(origin[ml * 8 + b][mk * 8 + a] - ica_sai[ml * 8 + b][mk * 8 + a], 2);
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
 			}
 		}
-		full_mse[1][64][j] = sum / 64;//基底すべて用いない場合のMSE
+		full_mse[1][0][j] = sum / 64.0;//基底すべて用いた場合のMSE
 	}
+
+	for(i=0;i<65;i++)
+		for (j = 0; j < 1024; j++) {
+			full_mse_temp[0][64 - i][j] = full_mse[0][i][j];
+			full_mse_temp[1][64 - i][j] = full_mse[1][i][j];
+		}
+
+	for (i = 0; i < 65; i++)
+		for (j = 0; j < 1024; j++) {
+			full_mse[0][i][j] = full_mse_temp[0][i][j];
+			full_mse[1][i][j] = full_mse_temp[1][i][j];
+		}
+
+	for (i = 0; i < 65; i++)
+		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][0], full_mse[1][i][0]);
+	printf(" \n");
+	//for (j = 0; j < 1024; j++) {
+	//	for (i = 0; i < 64; i++)
+	//		basis_temp[i] = full_mse[1][i][j];
+	//	gnuplot5(basis_temp, j);
+	//}
 	///基底を使わなかったとき　終了///////////////////
 	/////////////////  Step1  のメイン処理　終了/////////////////////////////////////////////////////////////
 
@@ -431,7 +475,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 60; Q > 0; Q -= 10) {
+		for (Q = 10; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -507,7 +551,6 @@ int main()
 					}
 
 				for (i = 0; i < 1024; i++) {
-					if (dcoe_temp[j][i] != 0)
 						dct_ent[j][i] = sum / (64 * 1024);
 				}
 			}
@@ -541,7 +584,7 @@ int main()
 					for (b = 0; b < 65; b++)
 						if (mse_dct[0][a][j] > full_mse[1][b][j]) {
 							bunrui[3][j] = full_mse[1][b][j];
-							bunrui[2][j] = 64.0 - b;
+							bunrui[2][j] = 64-b;
 						}
 					if (mse_dct[0][a][j] < full_mse[1][0][j]) {
 						bunrui[3][j] = full_mse[1][0][j];
@@ -551,7 +594,7 @@ int main()
 					bunrui[0][j] = mse_dct[1][a][j];
 					bunrui[1][j] = mse_dct[0][a][j];
 
-					if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {//
+					if (bunrui[0][j] >= bunrui[2][j] && bunrui[1][j] >= bunrui[3][j]) {//
 						no_op[j] = 1; // no_op 1 ならica
 
 						//printf("%d\n", j);
@@ -575,6 +618,7 @@ int main()
 			}
 
 			//////領域分割メイン処理　終了/////////////////////////////
+
 
 
 

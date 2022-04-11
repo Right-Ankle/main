@@ -20,7 +20,7 @@ void gnuplot5(double date[64], int name) {
 		double temp[64];
 
 		//gp = _popen(GNUPLOT_PATH, "w");
-		printf("----plot start----\n");
+		//printf("----plot start----\n");
 		for (int j = 0; j < 64; j++) {
 			temp[j] = date[j];
 			if (j == 0) {
