@@ -39,7 +39,7 @@ int main()
 	static int no_op_4[1024] = { 0 };
 	static int Q;//圧縮レート
 	static int QQ;//適当な変数として使用中？
-	int hist[50000]; //entropy算出時のヒストグラム用
+	int hist[500000]; //entropy算出時のヒストグラム用
 	int test_basis[64]; //どの基底が使用されているのか確認用？
 	int test_area[1024]; // ブロック当たりの使用基底数の確認用？
 	int ica_fre[64][1024]; //ICA基底頻度
@@ -306,11 +306,12 @@ int main()
 	// 係数の情報量　終了/////////
 	///////ICAの情報量　終了/////////////////////////////////////
 
-		//テスト
-
-	for (Q = 10; Q > 0; Q -= 10) {
+	for (Q = 100; Q > 0; Q -= 10) {
 		// dct処理
 		dct(origin, dcoe, 8); // 係数を出力
+		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+		idct(dcoe, dcoe2, 8); // 普通の再構成
+
 		n = 0;
 		for (i = 0; i < 256; i += 8) {
 			for (j = 0; j < 256; j += 8) {
@@ -324,38 +325,66 @@ int main()
 				n++;
 			}
 		}
-		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
 
-		for (i = 0; i < 64; i++) {
-			a = i / 8;
-			b = i % 8;
-			printf("\n [%d] before:%lf , after:%lf ", i, dcoe_temp[i][0], dcoe[a][b]);
-		}
-
-		idct(dcoe, dcoe2, 8); // 普通の再構成
-		for (i = 0; i < 50000; i++) {
+		for (i = 0; i < 500000; i++) {
 			hist[i] = 0;
 		}
 
 		sum = 0;
 		// 左端
-		min = dcoe_temp[j][0];
+		min = dcoe_temp[0][0];
 		for (i = 0; i < 1024; i++)
 			for (j = 0; j < 64; j++)
 				if (dcoe_temp[j][i] < min)
 					min = dcoe_temp[j][i]; // histの左端
 
 		for (i = 0; i < 1024; i++)
-			for (j = 0; j < 64; j++)
-				hist[(int)((dcoe_temp[j][i] - min)) + 1]++;	//ステップ幅1
+			for (j = 0; j < 64; j++) {
+				if (j == 0)
+					hist[(int)((avg[i]*8 - min) * step) + 1]++;
+				else
+					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
+			}
 
-		for (i = 0; i < 50000; i++)
+		for (i = 0; i < 500000; i++)
 			if (hist[i] > 0) {
 				sum += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
 			}
 
 		psnr_temp2 = psnr(origin, dcoe2);
 		printf("\n\n [%d]  PSNR = %lf, Entropy = %lf", Q, psnr_temp2, sum);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	for (Q = 100; Q > 0; Q -= 100) {
+		// dct処理
+		dct(origin, dcoe, 8); // 係数を出力
+
+		idct(dcoe, dcoe2, 8); // 普通の再構成
+		for (i = 0; i < 256; i += 8) {
+			for (j = 0; j < 256; j += 8) {
+				m = 0;
+				for (k = 0; k < 8; k++) {
+					for (l = 0; l < 8; l++) {
+						dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
+						m++;
+					}
+				}
+				n++;
+			}
+		}
+
 	}
 
 	printf("\n\n");
