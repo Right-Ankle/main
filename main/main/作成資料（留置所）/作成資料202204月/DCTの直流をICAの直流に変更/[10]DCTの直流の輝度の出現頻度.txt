@@ -1,0 +1,26 @@
+
+
+ [10] Entropy of DC = 0.147998
+
+value of DC | frequency | count | entropy
+
+[761]  1  sum(1)  entropy = 0.000244
+[921]  2  sum(3)  entropy = 0.000458
+[1001]  2  sum(5)  entropy = 0.000458
+[1081]  4  sum(9)  entropy = 0.000854
+[1161]  9  sum(18)  entropy = 0.001762
+[1241]  14  sum(32)  entropy = 0.002605
+[1321]  20  sum(52)  entropy = 0.003564
+[1401]  28  sum(80)  entropy = 0.004782
+[1481]  32  sum(112)  entropy = 0.005371
+[1561]  46  sum(158)  entropy = 0.007353
+[1641]  23  sum(181)  entropy = 0.004028
+[1721]  39  sum(220)  entropy = 0.006376
+[1801]  46  sum(266)  entropy = 0.007353
+[1881]  58  sum(324)  entropy = 0.008976
+[1961]  47  sum(371)  entropy = 0.007491
+[2041]  61  sum(432)  entropy = 0.009372
+[2121]  177  sum(609)  entropy = 0.023044
+[2201]  257  sum(866)  entropy = 0.031350
+[2281]  131  sum(997)  entropy = 0.017923
+[2361]  27  sum(1024)  entropy = 0.004633

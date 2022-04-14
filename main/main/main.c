@@ -48,7 +48,7 @@ int main()
 	int step = 100; // ICA係数のentropy算出時に使用
 
 	////// double //////
-	static double sum = 0, min = 0, max = 0;//計算用
+	static double sum = 0, min = 0, max = 0, temp=0;//計算用
 	double avg[1024];//ICAの直流成分
 	double y[64][1024];//ICAの係数値（基本的にいじらない）
 	double w[64][64];//ICAの基底
@@ -306,7 +306,10 @@ int main()
 	// 係数の情報量　終了/////////
 	///////ICAの情報量　終了/////////////////////////////////////
 
-	for (Q = 100; Q > 0; Q -= 10) {
+
+
+	// テスト
+	for (Q = 10; Q > 0; Q -= 100) {
 		// dct処理
 		dct(origin, dcoe, 8); // 係数を出力
 		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
@@ -340,19 +343,43 @@ int main()
 
 		for (i = 0; i < 1024; i++)
 			for (j = 0; j < 64; j++) {
-				if (j == 0)
-					hist[(int)((avg[i]*8 - min) * step) + 1]++;
-				else
-					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
+				//if (j == 0)
+				//	hist[(int)((avg[i]*8 - min) * step) + 1]++;
+				//else
+				hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
+				//if (j == 0) {
+				//	if (i % 2 == 0)
+				//		hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
+				//	else
+				//		hist[(int)((avg[i] * 8 - min) * step) + 1]++;
+				//}
 			}
-
-		for (i = 0; i < 500000; i++)
+		a = 0;
+		temp = 0;
+		for (i = 0; i < 500000; i++) {
 			if (hist[i] > 0) {
 				sum += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
+				//temp += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
+				a += hist[i];
+				//printf("\n[%d]  %d  sum(%d)  entropy = %lf", i, hist[i], a, sum);
 			}
+		}
+
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				dcoe_temp[i][j] = (-((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((dcoe_temp[i][j] - min)) + 1];
+			}
+		}
+
+		temp = 0;
+		for (i = 0; i < 64; i++) {
+			for (j = 0; j < 1024; j++) {
+				temp += dcoe_temp[i][j];
+			}
+		}
 
 		psnr_temp2 = psnr(origin, dcoe2);
-		printf("\n\n [%d]  PSNR = %lf, Entropy = %lf", Q, psnr_temp2, sum);
+		printf("\n\n sum = %lf, temp = %lf", sum, temp);
 	}
 
 
@@ -556,7 +583,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 10) {
+		for (Q = 100; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -567,7 +594,7 @@ int main()
 			// DCT画像確認用
 			for (i = 0; i < 1024; i++)
 				no_op[i] = 1;
-			img_out(dcoe2, no_op, Q);
+			//img_out(dcoe2, no_op, Q);
 
 			n = 0;
 			for (i = 0; i < 256; i += 8) {
@@ -698,6 +725,27 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
+			for (j = 0; j < 1024; j++) {
+				no_op_1[j] = 0;
+				no_op_2[j] = 0;
+				no_op_3[j] = 0;
+				no_op_4[j] = 0;
+				if (ica_basis2[64][j] == 0)
+					no_op_4[j] = 1;
+				if (ica_basis2[64][j] == 1)
+					no_op_1[j] = 1;
+				if (ica_basis2[64][j] == 2)
+					no_op_2[j] = 1;
+				if (ica_basis2[64][j] == 3)
+					no_op_3[j] = 1;
+			}
+
+			img_out(origin, no_op_1, Q + 1);//基底1ブロック
+			img_out(origin, no_op_2, Q + 2);//基底2ブロック
+			img_out(origin, no_op_3, Q + 3);//基底3ブロック
+			img_out(origin, no_op_4, Q + 5);//0のみICAブロック
+			img_out(origin, no_op, Q);
+			printf("a");
 			//////領域分割メイン処理　終了/////////////////////////////
 
 
