@@ -1,0 +1,12 @@
+
+ [100] basis_ent0 = 0.004225 
+
+ 0block [700] MSE battle ~ dct(0.671875) vs ica(0.453125) ~
+ dct_block(12) : 0.002370
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.002104
+
+ 0block [862] MSE battle ~ dct(0.640625) vs ica(0.484375) ~
+ dct_block(12) : 0.002386
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.002120

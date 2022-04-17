@@ -245,10 +245,83 @@ int main()
 		for (j = 0; j < 64; j++)
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
+	for (j = 0; j < 1024; j++)
+		for (n = 0; n < 64; n++)
+			ny[n][j] = 0;
+
+	for (j = 0; j < 1024; j++) {
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
+
+		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
+			}
+		}
+		ica_dc[j] = sum / 64.0;
+		dct_mse[j] = avg[j];
+	}
+
+	Q = 100;
+	// dct処理
+	dct(origin, dcoe, 8); // 係数を出力
+	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
+	idct(dcoe, dcoe2, 8); // 普通の再構成
+
+	n = 0;
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			m = 0;
+			for (k = 0; k < 8; k++) {
+				for (l = 0; l < 8; l++) {
+					if (m == 0) {
+						avg[n] = dcoe[i + k][j + l] / 8;
+						//printf("\n\n [%d] : %lf (%lf) diff = %lf ", n, dcoe[i + k][j + l], dcoe[i + k][j + l] / 8, (dcoe[i + k][j + l] / 8) - avg[n]);
+					}
+					m++;
+				}
+			}
+			n++;
+		}
+	}
+
+	for (j = 0; j < 1024; j++) {
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
+
+		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
+			}
+		}
+		printf("\n\n [%d] : before %lf (%lf) , after %lf (%lf) diff = %lf ", j, ica_dc[j], dct_mse[j], sum / 64.0, avg[j], ica_dc[j] - (sum / 64.0));
+	}
+
+
+
 
 	///////ICAの情報量を求める///////////////////////////////////////////
 	// DCの情報量 ////////
 	/* histの初期化 */
+
 	for (i = 0; i < 50000; i++) {
 		hist[i] = 0;
 	}
@@ -305,116 +378,6 @@ int main()
 	}
 	// 係数の情報量　終了/////////
 	///////ICAの情報量　終了/////////////////////////////////////
-
-
-
-	// テスト
-	for (Q = 10; Q > 0; Q -= 100) {
-		// dct処理
-		dct(origin, dcoe, 8); // 係数を出力
-		quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
-		idct(dcoe, dcoe2, 8); // 普通の再構成
-
-		n = 0;
-		for (i = 0; i < 256; i += 8) {
-			for (j = 0; j < 256; j += 8) {
-				m = 0;
-				for (k = 0; k < 8; k++) {
-					for (l = 0; l < 8; l++) {
-						dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
-						m++;
-					}
-				}
-				n++;
-			}
-		}
-
-		for (i = 0; i < 500000; i++) {
-			hist[i] = 0;
-		}
-
-		sum = 0;
-		// 左端
-		min = dcoe_temp[0][0];
-		for (i = 0; i < 1024; i++)
-			for (j = 0; j < 64; j++)
-				if (dcoe_temp[j][i] < min)
-					min = dcoe_temp[j][i]; // histの左端
-
-		for (i = 0; i < 1024; i++)
-			for (j = 0; j < 64; j++) {
-				//if (j == 0)
-				//	hist[(int)((avg[i]*8 - min) * step) + 1]++;
-				//else
-				hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
-				//if (j == 0) {
-				//	if (i % 2 == 0)
-				//		hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
-				//	else
-				//		hist[(int)((avg[i] * 8 - min) * step) + 1]++;
-				//}
-			}
-		a = 0;
-		temp = 0;
-		for (i = 0; i < 500000; i++) {
-			if (hist[i] > 0) {
-				sum += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
-				//temp += -((hist[i] / (double)(1024 * 64)) * (log((hist[i] / (double)(1024 * 64))) / log(2)));
-				a += hist[i];
-				//printf("\n[%d]  %d  sum(%d)  entropy = %lf", i, hist[i], a, sum);
-			}
-		}
-
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				dcoe_temp[i][j] = (-((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((dcoe_temp[i][j] - min)) + 1];
-			}
-		}
-
-		temp = 0;
-		for (i = 0; i < 64; i++) {
-			for (j = 0; j < 1024; j++) {
-				temp += dcoe_temp[i][j];
-			}
-		}
-
-		psnr_temp2 = psnr(origin, dcoe2);
-		printf("\n\n sum = %lf, temp = %lf", sum, temp);
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	for (Q = 100; Q > 0; Q -= 100) {
-		// dct処理
-		dct(origin, dcoe, 8); // 係数を出力
-
-		idct(dcoe, dcoe2, 8); // 普通の再構成
-		for (i = 0; i < 256; i += 8) {
-			for (j = 0; j < 256; j += 8) {
-				m = 0;
-				for (k = 0; k < 8; k++) {
-					for (l = 0; l < 8; l++) {
-						dcoe_temp[m][n] = dcoe[i + k][j + l]; //dct64*1024 -> coe256*256を格納
-						m++;
-					}
-				}
-				n++;
-			}
-		}
-
-	}
-
-	printf("\n\n");
 
 	/////////////////  Step1  のメイン処理　//////////////////////////
 	// 1 -> 64 までのMSE調査
@@ -583,7 +546,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 100; Q > 0; Q -= 10) {
+		for (Q = 10; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -622,46 +585,16 @@ int main()
 						sum += pow(origin[ml * 8 + b][mk * 8 + a] - dcoe2[ml * 8 + b][mk * 8 + a], 2);
 					}
 				}
-				mse_dct[0][(Q / 10) - 1][j] = sum / 64;//平均
+				mse_dct[0][(Q / 10) - 1][j] = sum / 64;//MSEを格納
 
 				i = 0;
 				for (b = 0; b < 64; b++)
 					if (dcoe_temp[b][j] != 0)
 						i++;
 
-				mse_dct[1][(Q / 10) - 1][j] = i;
+				mse_dct[1][(Q / 10) - 1][j] = i;//基底個数を格納
 			}
 
-			//dctのentropy
-			for (j = 0; j < 64; j++)
-				for (i = 0; i < 1024; i++)
-					dct_ent[j][i] = 0;
-
-			for (j = 0; j < 64; j++) {
-				for (i = 0; i < 50000; i++) {
-					hist[i] = 0;
-				}
-
-				sum = 0;
-				// 左端
-				min = dcoe_temp[j][0];
-				for (i = 0; i < 1024; i++)
-					if (dcoe_temp[j][i] < min)
-						min = dcoe_temp[j][i]; // histの左端
-
-				for (i = 0; i < 1024; i++) {
-					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;	//ステップ幅1
-				}
-
-				for (i = 0; i < 50000; i++)
-					if (hist[i] > 0) {
-						sum += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
-					}
-
-				for (i = 0; i < 1024; i++) {
-						dct_ent[j][i] = sum / (64 * 1024);
-				}
-			}
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
 
 
@@ -689,31 +622,42 @@ int main()
 						ica_basis2[b][j] = 99;
 					}
 
-					for (b = 0; b < 65; b++)
-						if (mse_dct[0][a][j] > full_mse[1][b][j]) {
+					// 最小基底数
+					for (b = 0; b < 65; b++)//ICAの基底数　0は一番いらないやつ
+						if (mse_dct[0][a][j] > full_mse[1][b][j] && mse_dct[1][a][j] > (double)(64 - b)) {//
 							bunrui[3][j] = full_mse[1][b][j];
-							bunrui[2][j] = 64-b;
+							bunrui[2][j] = 64 - b;
 						}
-					if (mse_dct[0][a][j] < full_mse[1][0][j]) {
-						bunrui[3][j] = full_mse[1][0][j];
-						bunrui[2][j] = 64.0;
-					}
 
-					bunrui[0][j] = mse_dct[1][a][j];
-					bunrui[1][j] = mse_dct[0][a][j];
-
-					if (bunrui[0][j] >= bunrui[2][j] && bunrui[1][j] >= bunrui[3][j]) {//
-						no_op[j] = 1; // no_op 1 ならica
-
-						//printf("%d\n", j);
-						ica_basis2[64][j] = bunrui[2][j];
-
-						for (b = 63; b > 63 - bunrui[2][j]; b--) {
-							ica_basis2[(int)full_mse[0][b][j]][j] = 1;
-							ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
-							nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+					//最大基底数
+					for (b = 64; b > 0; b--)//ICAの基底数　0は一番いらないやつ
+						if (mse_dct[0][a][j] > full_mse[1][b][j] && mse_dct[1][a][j] > (double)(64 - b)) {//
+							bunrui[1][j] = full_mse[1][b][j];
+							bunrui[0][j] = 64 - b;
 						}
-					}
+
+
+
+
+					//if (mse_dct[0][a][j] < full_mse[1][0][j]) {
+					//	bunrui[3][j] = full_mse[1][0][j];
+					//	bunrui[2][j] = 64.0;
+					//}
+
+					//bunrui[0][j] = mse_dct[1][a][j];
+					//bunrui[1][j] = mse_dct[0][a][j];
+
+					//if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {//
+					//	no_op[j] = 1; // no_op 1 ならica
+
+					//	ica_basis2[64][j] = bunrui[2][j];
+
+					//	for (b = 63; b > 63 - bunrui[2][j]; b--) {
+					//		ica_basis2[(int)full_mse[0][b][j]][j] = 1;
+					//		ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
+					//		nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+					//	}
+					//}
 				}
 			}
 			else if (yn == 'n')
@@ -724,6 +668,12 @@ int main()
 			{
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
+
+			for (j = 0; j < 1024; j++)
+				if (bunrui[0][j] != 99 && bunrui[2][j] != 99)
+					printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
+
+
 
 			for (j = 0; j < 1024; j++) {
 				no_op_1[j] = 0;
@@ -748,6 +698,79 @@ int main()
 			printf("a");
 			//////領域分割メイン処理　終了/////////////////////////////
 
+
+
+
+	// テスト
+
+
+				for (i = 0; i < 500000; i++) {
+					hist[i] = 0;
+				}
+
+				sum = 0;
+				// 左端
+				min = dcoe_temp[0][0];
+				for (i = 0; i < 1024; i++)
+					for (j = 0; j < 64; j++)
+						if (dcoe_temp[j][i] < min)
+							min = dcoe_temp[j][i]; // histの左端
+
+				for (i = 0; i < 1024; i++)
+					for (j = 0; j < 64; j++)
+						hist[(int)((dcoe_temp[j][i] - min)) + 1]++;//ステップ幅1
+
+
+				for (i = 0; i < 64; i++)
+					for (j = 0; j < 1024; j++)
+						dct_ent[i][j] = (-((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((dcoe_temp[i][j] - min)) + 1];
+
+
+				for (i = 0; i < 500000; i++) {
+					hist[i] = 0;
+				}
+
+				sum = 0;
+				// 左端
+				min = avg[0];
+				for (i = 0; i < 1024; i++)
+						if (avg[i]< min)
+							min = avg[i]; // histの左端
+
+				for (i = 0; i < 1024; i++)
+						hist[(int)((avg[i] - min)*step) + 1]++;//ステップ幅1
+
+
+					for (j = 0; j < 1024; j++)
+						ica_dc[j] = (-((hist[(int)((avg[j] - min) * step) + 1] / (double)(1024 * 64)) * (log((hist[(int)((avg[j] - min) * step) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((avg[j] - min) * step) + 1];
+
+
+					basis0_ent = 0;
+					sum = 0.000021844; //係数0、1個当たりのentropy×63　＝　１ブロック当たりの係数0のentropy
+					temp = 0;
+					printf("\n\n %lf\n\n", sum);
+					for (j = 0; j < 1024; j++) {
+						if (ica_basis2[64][j] == 0) {
+							temp = 0;
+							a = 0;
+							printf("\n 0block [%d] MSE battle ~ dct(%lf) vs ica(%lf) ~", j, dct_mse[j], full_mse[1][64][j]);
+							for (i = 0; i < 64; i++) {
+								basis0_ent += dct_ent[i][j];
+								temp+= dct_ent[i][j];
+								if (dcoe_temp[i][j] != 0)
+									a++;
+							}
+							printf("\n dct_block(%d) : %lf", a, temp);
+							printf("\n ICA_dc : %lf + ICA_coe : %lf = %lf", ica_dc[j], sum, ica_dc[j] + sum);
+							printf("\n diff : %lf\n", temp - ica_dc[j] - sum);
+							basis0_ent -= ica_dc[j];
+							basis0_ent -= sum;
+
+						}
+					}
+					printf("\nbasis_ent0 = %lf", basis0_ent);
+
+					printf("a");
 
 
 

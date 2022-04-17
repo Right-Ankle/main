@@ -1,0 +1,134 @@
+
+[90] basis_ent0 = 0.013756
+
+ 0block [285] MSE battle ~ dct(2.312500) vs ica(1.906250) ~
+ dct_block(2) : 0.000743
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000477
+
+ 0block [516] MSE battle ~ dct(5.265625) vs ica(4.921875) ~
+ dct_block(3) : 0.000870
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000604
+
+ 0block [539] MSE battle ~ dct(2.015625) vs ica(0.984375) ~
+ dct_block(1) : 0.000637
+ ICA_dc : 0.000220 + ICA_coe : 0.000022 = 0.000242
+ diff : 0.000395
+
+ 0block [540] MSE battle ~ dct(2.859375) vs ica(2.640625) ~
+ dct_block(3) : 0.000892
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000626
+
+ 0block [541] MSE battle ~ dct(2.562500) vs ica(1.125000) ~
+ dct_block(1) : 0.000637
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000371
+
+ 0block [571] MSE battle ~ dct(1.078125) vs ica(0.828125) ~
+ dct_block(2) : 0.000776
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000510
+
+ 0block [573] MSE battle ~ dct(1.687500) vs ica(0.562500) ~
+ dct_block(1) : 0.000637
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000371
+
+ 0block [574] MSE battle ~ dct(1.859375) vs ica(1.359375) ~
+ dct_block(2) : 0.000752
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000486
+
+ 0block [604] MSE battle ~ dct(1.796875) vs ica(1.171875) ~
+ dct_block(2) : 0.000768
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000502
+
+ 0block [700] MSE battle ~ dct(0.984375) vs ica(0.578125) ~
+ dct_block(2) : 0.000761
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000495
+
+ 0block [733] MSE battle ~ dct(1.296875) vs ica(0.703125) ~
+ dct_block(2) : 0.000749
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000483
+
+ 0block [734] MSE battle ~ dct(1.343750) vs ica(1.156250) ~
+ dct_block(3) : 0.000877
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000611
+
+ 0block [804] MSE battle ~ dct(1.828125) vs ica(1.421875) ~
+ dct_block(2) : 0.000743
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000477
+
+ 0block [833] MSE battle ~ dct(1.734375) vs ica(1.671875) ~
+ dct_block(3) : 0.000859
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000593
+
+ 0block [862] MSE battle ~ dct(0.890625) vs ica(0.578125) ~
+ dct_block(2) : 0.000768
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000502
+
+ 0block [867] MSE battle ~ dct(1.171875) vs ica(0.859375) ~
+ dct_block(2) : 0.000729
+ ICA_dc : 0.000229 + ICA_coe : 0.000022 = 0.000251
+ diff : 0.000479
+
+ 0block [868] MSE battle ~ dct(1.562500) vs ica(1.437500) ~
+ dct_block(2) : 0.000717
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000451
+
+ 0block [898] MSE battle ~ dct(2.515625) vs ica(1.921875) ~
+ dct_block(2) : 0.000741
+ ICA_dc : 0.000220 + ICA_coe : 0.000022 = 0.000242
+ diff : 0.000499
+
+ 0block [900] MSE battle ~ dct(2.312500) vs ica(2.109375) ~
+ dct_block(4) : 0.000947
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000681
+
+ 0block [902] MSE battle ~ dct(1.734375) vs ica(1.515625) ~
+ dct_block(3) : 0.000827
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000562
+
+ 0block [927] MSE battle ~ dct(1.671875) vs ica(1.390625) ~
+ dct_block(2) : 0.000748
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000482
+
+ 0block [931] MSE battle ~ dct(2.484375) vs ica(2.343750) ~
+ dct_block(4) : 0.000952
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000686
+
+ 0block [932] MSE battle ~ dct(2.609375) vs ica(2.328125) ~
+ dct_block(2) : 0.000716
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000450
+
+ 0block [933] MSE battle ~ dct(2.812500) vs ica(2.765625) ~
+ dct_block(6) : 0.001180
+ ICA_dc : 0.000229 + ICA_coe : 0.000022 = 0.000251
+ diff : 0.000929
+
+ 0block [963] MSE battle ~ dct(4.578125) vs ica(4.078125) ~
+ dct_block(2) : 0.000732
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000466
+
+ 0block [967] MSE battle ~ dct(3.546875) vs ica(3.078125) ~
+ dct_block(3) : 0.000834
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000568
+
+basis_ent0 = 0.013756
