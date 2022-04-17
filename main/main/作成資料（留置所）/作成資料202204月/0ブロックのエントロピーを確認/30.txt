@@ -1,0 +1,1543 @@
+
+ [30] basis_ent0 = 0.023926
+
+
+ 0block [39] MSE battle ~ dct(17.453125) vs ica(8.171875) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [40] MSE battle ~ dct(13.968750) vs ica(12.843750) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000068
+
+ 0block [41] MSE battle ~ dct(14.828125) vs ica(9.015625) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [42] MSE battle ~ dct(17.734375) vs ica(11.046875) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [43] MSE battle ~ dct(19.468750) vs ica(8.406250) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [44] MSE battle ~ dct(19.140625) vs ica(12.328125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [45] MSE battle ~ dct(11.906250) vs ica(9.468750) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [54] MSE battle ~ dct(26.406250) vs ica(21.656250) ~
+ dct_block(2) : 0.000408
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000203
+
+ 0block [63] MSE battle ~ dct(33.734375) vs ica(19.390625) ~
+ dct_block(1) : 0.000298
+ ICA_dc : 0.000198 + ICA_coe : 0.000022 = 0.000220
+ diff : 0.000077
+
+ 0block [74] MSE battle ~ dct(16.453125) vs ica(8.515625) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [79] MSE battle ~ dct(18.390625) vs ica(13.328125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [80] MSE battle ~ dct(10.593750) vs ica(7.968750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [81] MSE battle ~ dct(14.968750) vs ica(8.593750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [82] MSE battle ~ dct(11.515625) vs ica(6.953125) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [83] MSE battle ~ dct(17.953125) vs ica(10.140625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [84] MSE battle ~ dct(24.187500) vs ica(15.968750) ~
+ dct_block(2) : 0.000393
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000203
+
+ 0block [91] MSE battle ~ dct(22.000000) vs ica(14.875000) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [108] MSE battle ~ dct(11.031250) vs ica(5.531250) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [110] MSE battle ~ dct(18.062500) vs ica(10.437500) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [111] MSE battle ~ dct(23.609375) vs ica(11.515625) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [112] MSE battle ~ dct(14.671875) vs ica(12.953125) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [113] MSE battle ~ dct(17.031250) vs ica(5.968750) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000078
+
+ 0block [115] MSE battle ~ dct(11.437500) vs ica(9.875000) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [116] MSE battle ~ dct(12.687500) vs ica(8.187500) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [118] MSE battle ~ dct(18.406250) vs ica(9.031250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [119] MSE battle ~ dct(17.093750) vs ica(10.843750) ~
+ dct_block(2) : 0.000395
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000204
+
+ 0block [120] MSE battle ~ dct(6.984375) vs ica(5.953125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [121] MSE battle ~ dct(14.687500) vs ica(3.625000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [122] MSE battle ~ dct(17.187500) vs ica(4.062500) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [124] MSE battle ~ dct(20.062500) vs ica(9.937500) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [133] MSE battle ~ dct(6.593750) vs ica(4.906250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [134] MSE battle ~ dct(8.593750) vs ica(3.718750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [135] MSE battle ~ dct(10.484375) vs ica(4.171875) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [140] MSE battle ~ dct(8.546875) vs ica(6.453125) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [141] MSE battle ~ dct(14.468750) vs ica(12.781250) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [149] MSE battle ~ dct(19.703125) vs ica(11.765625) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [150] MSE battle ~ dct(14.312500) vs ica(6.812500) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [151] MSE battle ~ dct(13.031250) vs ica(8.406250) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [152] MSE battle ~ dct(13.296875) vs ica(12.015625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000071
+
+ 0block [153] MSE battle ~ dct(13.859375) vs ica(7.796875) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [154] MSE battle ~ dct(10.203125) vs ica(7.671875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [155] MSE battle ~ dct(18.109375) vs ica(6.578125) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [156] MSE battle ~ dct(24.750000) vs ica(12.000000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [157] MSE battle ~ dct(21.671875) vs ica(7.890625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [158] MSE battle ~ dct(27.203125) vs ica(13.046875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [159] MSE battle ~ dct(22.281250) vs ica(8.593750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [161] MSE battle ~ dct(12.484375) vs ica(5.171875) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [162] MSE battle ~ dct(6.109375) vs ica(4.515625) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [163] MSE battle ~ dct(12.640625) vs ica(5.828125) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [164] MSE battle ~ dct(8.421875) vs ica(6.328125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [165] MSE battle ~ dct(21.609375) vs ica(9.703125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [169] MSE battle ~ dct(7.156250) vs ica(5.781250) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000067
+
+ 0block [170] MSE battle ~ dct(15.718750) vs ica(10.968750) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [171] MSE battle ~ dct(22.281250) vs ica(15.781250) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [174] MSE battle ~ dct(16.984375) vs ica(12.296875) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000068
+
+ 0block [175] MSE battle ~ dct(33.203125) vs ica(31.390625) ~
+ dct_block(2) : 0.000408
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000203
+
+ 0block [177] MSE battle ~ dct(20.625000) vs ica(10.312500) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [178] MSE battle ~ dct(26.078125) vs ica(20.140625) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [182] MSE battle ~ dct(13.125000) vs ica(10.687500) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [183] MSE battle ~ dct(23.343750) vs ica(13.781250) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [189] MSE battle ~ dct(11.406250) vs ica(8.718750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [190] MSE battle ~ dct(16.359375) vs ica(4.640625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000054
+
+ 0block [191] MSE battle ~ dct(10.250000) vs ica(3.125000) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [193] MSE battle ~ dct(16.203125) vs ica(8.515625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [194] MSE battle ~ dct(7.140625) vs ica(5.296875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [195] MSE battle ~ dct(14.453125) vs ica(8.640625) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [196] MSE battle ~ dct(10.296875) vs ica(7.953125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [197] MSE battle ~ dct(19.343750) vs ica(8.093750) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000078
+
+ 0block [198] MSE battle ~ dct(24.578125) vs ica(10.234375) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [199] MSE battle ~ dct(23.109375) vs ica(10.078125) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000068
+
+ 0block [201] MSE battle ~ dct(29.312500) vs ica(11.062500) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000073
+
+ 0block [208] MSE battle ~ dct(31.718750) vs ica(20.468750) ~
+ dct_block(1) : 0.000291
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000068
+
+ 0block [211] MSE battle ~ dct(28.625000) vs ica(25.593750) ~
+ dct_block(2) : 0.000422
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000199
+
+ 0block [213] MSE battle ~ dct(21.531250) vs ica(11.593750) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [214] MSE battle ~ dct(15.843750) vs ica(5.343750) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [215] MSE battle ~ dct(12.453125) vs ica(10.359375) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [216] MSE battle ~ dct(7.281250) vs ica(5.031250) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [217] MSE battle ~ dct(20.421875) vs ica(8.328125) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [218] MSE battle ~ dct(12.453125) vs ica(4.765625) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [219] MSE battle ~ dct(17.203125) vs ica(5.296875) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000078
+
+ 0block [220] MSE battle ~ dct(8.078125) vs ica(6.984375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000071
+
+ 0block [221] MSE battle ~ dct(19.500000) vs ica(12.125000) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [222] MSE battle ~ dct(10.125000) vs ica(8.375000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [223] MSE battle ~ dct(14.093750) vs ica(6.468750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [225] MSE battle ~ dct(20.375000) vs ica(18.000000) ~
+ dct_block(2) : 0.000397
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000207
+
+ 0block [226] MSE battle ~ dct(19.890625) vs ica(18.859375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000071
+
+ 0block [227] MSE battle ~ dct(19.328125) vs ica(16.546875) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [228] MSE battle ~ dct(22.421875) vs ica(14.859375) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [230] MSE battle ~ dct(21.734375) vs ica(13.921875) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [231] MSE battle ~ dct(20.343750) vs ica(9.281250) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [233] MSE battle ~ dct(22.468750) vs ica(15.468750) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [234] MSE battle ~ dct(16.921875) vs ica(7.640625) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [235] MSE battle ~ dct(15.437500) vs ica(8.687500) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [236] MSE battle ~ dct(14.468750) vs ica(12.468750) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [237] MSE battle ~ dct(19.859375) vs ica(17.828125) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [250] MSE battle ~ dct(18.375000) vs ica(11.875000) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [251] MSE battle ~ dct(11.843750) vs ica(6.843750) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [252] MSE battle ~ dct(13.656250) vs ica(11.593750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [253] MSE battle ~ dct(8.093750) vs ica(2.343750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [262] MSE battle ~ dct(10.078125) vs ica(8.921875) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000067
+
+ 0block [263] MSE battle ~ dct(16.734375) vs ica(14.328125) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [268] MSE battle ~ dct(16.734375) vs ica(15.453125) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000068
+
+ 0block [270] MSE battle ~ dct(16.421875) vs ica(9.359375) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [271] MSE battle ~ dct(10.953125) vs ica(8.796875) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [272] MSE battle ~ dct(12.171875) vs ica(9.265625) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [273] MSE battle ~ dct(22.953125) vs ica(10.296875) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [274] MSE battle ~ dct(10.937500) vs ica(7.937500) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [275] MSE battle ~ dct(12.359375) vs ica(5.296875) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [276] MSE battle ~ dct(16.265625) vs ica(9.078125) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [278] MSE battle ~ dct(15.750000) vs ica(14.875000) ~
+ dct_block(2) : 0.000397
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000194
+
+ 0block [279] MSE battle ~ dct(17.656250) vs ica(7.906250) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [280] MSE battle ~ dct(21.281250) vs ica(16.218750) ~
+ dct_block(2) : 0.000419
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000206
+
+ 0block [283] MSE battle ~ dct(9.593750) vs ica(3.593750) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [284] MSE battle ~ dct(19.484375) vs ica(2.859375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [285] MSE battle ~ dct(4.343750) vs ica(1.906250) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [286] MSE battle ~ dct(5.515625) vs ica(2.984375) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000063
+
+ 0block [287] MSE battle ~ dct(14.515625) vs ica(1.859375) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [292] MSE battle ~ dct(18.984375) vs ica(12.671875) ~
+ dct_block(1) : 0.000337
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000071
+
+ 0block [296] MSE battle ~ dct(13.312500) vs ica(8.562500) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [297] MSE battle ~ dct(14.015625) vs ica(8.953125) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000071
+
+ 0block [298] MSE battle ~ dct(12.171875) vs ica(10.765625) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000065
+
+ 0block [299] MSE battle ~ dct(20.578125) vs ica(12.765625) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000068
+
+ 0block [302] MSE battle ~ dct(30.531250) vs ica(12.531250) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000073
+
+ 0block [303] MSE battle ~ dct(18.453125) vs ica(6.546875) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000068
+
+ 0block [304] MSE battle ~ dct(20.906250) vs ica(7.218750) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [306] MSE battle ~ dct(18.093750) vs ica(8.156250) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [308] MSE battle ~ dct(15.015625) vs ica(12.984375) ~
+ dct_block(2) : 0.000390
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000197
+
+ 0block [309] MSE battle ~ dct(14.828125) vs ica(12.671875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [313] MSE battle ~ dct(5.968750) vs ica(4.906250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000071
+
+ 0block [314] MSE battle ~ dct(17.093750) vs ica(4.531250) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [315] MSE battle ~ dct(8.781250) vs ica(3.281250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [316] MSE battle ~ dct(14.953125) vs ica(2.859375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [318] MSE battle ~ dct(10.234375) vs ica(4.546875) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [319] MSE battle ~ dct(5.312500) vs ica(3.000000) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000063
+
+ 0block [321] MSE battle ~ dct(21.531250) vs ica(20.187500) ~
+ dct_block(2) : 0.000390
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000197
+
+ 0block [324] MSE battle ~ dct(18.671875) vs ica(8.453125) ~
+ dct_block(1) : 0.000326
+ ICA_dc : 0.000220 + ICA_coe : 0.000022 = 0.000242
+ diff : 0.000084
+
+ 0block [325] MSE battle ~ dct(11.062500) vs ica(5.312500) ~
+ dct_block(1) : 0.000326
+ ICA_dc : 0.000220 + ICA_coe : 0.000022 = 0.000242
+ diff : 0.000084
+
+ 0block [328] MSE battle ~ dct(19.390625) vs ica(17.953125) ~
+ dct_block(2) : 0.000397
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000207
+
+ 0block [329] MSE battle ~ dct(12.734375) vs ica(8.171875) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [330] MSE battle ~ dct(10.281250) vs ica(7.906250) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [331] MSE battle ~ dct(23.859375) vs ica(10.453125) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000068
+
+ 0block [332] MSE battle ~ dct(18.656250) vs ica(16.343750) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [333] MSE battle ~ dct(11.171875) vs ica(5.859375) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000068
+
+ 0block [334] MSE battle ~ dct(13.578125) vs ica(11.734375) ~
+ dct_block(1) : 0.000291
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000068
+
+ 0block [335] MSE battle ~ dct(31.031250) vs ica(16.218750) ~
+ dct_block(1) : 0.000291
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000068
+
+ 0block [337] MSE battle ~ dct(13.593750) vs ica(10.968750) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000064
+
+ 0block [338] MSE battle ~ dct(15.046875) vs ica(9.609375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [339] MSE battle ~ dct(16.156250) vs ica(8.906250) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [340] MSE battle ~ dct(19.406250) vs ica(8.343750) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [341] MSE battle ~ dct(13.578125) vs ica(7.890625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [342] MSE battle ~ dct(11.078125) vs ica(8.671875) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [343] MSE battle ~ dct(16.687500) vs ica(5.437500) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000054
+
+ 0block [344] MSE battle ~ dct(8.968750) vs ica(6.281250) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000063
+
+ 0block [347] MSE battle ~ dct(16.875000) vs ica(10.125000) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [349] MSE battle ~ dct(12.671875) vs ica(3.015625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [351] MSE battle ~ dct(7.859375) vs ica(3.171875) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [353] MSE battle ~ dct(16.093750) vs ica(4.843750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000054
+
+ 0block [354] MSE battle ~ dct(29.296875) vs ica(23.609375) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [361] MSE battle ~ dct(8.656250) vs ica(3.656250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [362] MSE battle ~ dct(8.984375) vs ica(7.140625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [367] MSE battle ~ dct(14.859375) vs ica(8.421875) ~
+ dct_block(1) : 0.000278
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000068
+
+ 0block [368] MSE battle ~ dct(7.000000) vs ica(5.500000) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000183 + ICA_coe : 0.000022 = 0.000205
+ diff : 0.000065
+
+ 0block [369] MSE battle ~ dct(25.171875) vs ica(18.578125) ~
+ dct_block(2) : 0.000401
+ ICA_dc : 0.000181 + ICA_coe : 0.000022 = 0.000202
+ diff : 0.000199
+
+ 0block [371] MSE battle ~ dct(14.187500) vs ica(4.250000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [372] MSE battle ~ dct(19.000000) vs ica(5.500000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [373] MSE battle ~ dct(6.609375) vs ica(5.328125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [374] MSE battle ~ dct(7.609375) vs ica(3.546875) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000063
+
+ 0block [375] MSE battle ~ dct(3.875000) vs ica(2.187500) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [376] MSE battle ~ dct(72.343750) vs ica(65.062500) ~
+ dct_block(2) : 0.000412
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000202
+
+ 0block [377] MSE battle ~ dct(7.968750) vs ica(1.468750) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [379] MSE battle ~ dct(20.562500) vs ica(2.062500) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000185 + ICA_coe : 0.000022 = 0.000206
+ diff : 0.000081
+
+ 0block [380] MSE battle ~ dct(13.859375) vs ica(2.890625) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [381] MSE battle ~ dct(22.187500) vs ica(7.187500) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [382] MSE battle ~ dct(20.312500) vs ica(6.250000) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [383] MSE battle ~ dct(17.921875) vs ica(4.140625) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [385] MSE battle ~ dct(9.218750) vs ica(2.343750) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [386] MSE battle ~ dct(13.531250) vs ica(7.031250) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [396] MSE battle ~ dct(18.062500) vs ica(8.500000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [399] MSE battle ~ dct(12.281250) vs ica(10.656250) ~
+ dct_block(1) : 0.000270
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000067
+
+ 0block [400] MSE battle ~ dct(22.031250) vs ica(11.343750) ~
+ dct_block(1) : 0.000291
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000068
+
+ 0block [401] MSE battle ~ dct(15.921875) vs ica(14.203125) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [402] MSE battle ~ dct(18.359375) vs ica(9.265625) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000178 + ICA_coe : 0.000022 = 0.000200
+ diff : 0.000069
+
+ 0block [403] MSE battle ~ dct(26.250000) vs ica(14.625000) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000167 + ICA_coe : 0.000022 = 0.000189
+ diff : 0.000078
+
+ 0block [412] MSE battle ~ dct(15.421875) vs ica(5.015625) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [417] MSE battle ~ dct(17.015625) vs ica(4.734375) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [418] MSE battle ~ dct(15.718750) vs ica(12.781250) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000063
+
+ 0block [459] MSE battle ~ dct(22.578125) vs ica(17.140625) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [461] MSE battle ~ dct(37.187500) vs ica(22.562500) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [516] MSE battle ~ dct(6.453125) vs ica(4.921875) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [517] MSE battle ~ dct(16.750000) vs ica(8.750000) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [537] MSE battle ~ dct(5.703125) vs ica(3.796875) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [538] MSE battle ~ dct(32.250000) vs ica(19.312500) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [539] MSE battle ~ dct(10.078125) vs ica(0.984375) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [540] MSE battle ~ dct(14.734375) vs ica(2.640625) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000229 + ICA_coe : 0.000022 = 0.000251
+ diff : 0.000031
+
+ 0block [541] MSE battle ~ dct(11.437500) vs ica(1.125000) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [542] MSE battle ~ dct(15.156250) vs ica(2.218750) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000229 + ICA_coe : 0.000022 = 0.000251
+ diff : 0.000031
+
+ 0block [543] MSE battle ~ dct(27.750000) vs ica(22.750000) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [553] MSE battle ~ dct(23.875000) vs ica(18.500000) ~
+ dct_block(1) : 0.000361
+ ICA_dc : 0.000244 + ICA_coe : 0.000022 = 0.000266
+ diff : 0.000095
+
+ 0block [568] MSE battle ~ dct(18.968750) vs ica(17.843750) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000067
+
+ 0block [569] MSE battle ~ dct(5.625000) vs ica(3.250000) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [570] MSE battle ~ dct(3.796875) vs ica(2.765625) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000185 + ICA_coe : 0.000022 = 0.000206
+ diff : 0.000075
+
+ 0block [571] MSE battle ~ dct(6.515625) vs ica(0.828125) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [572] MSE battle ~ dct(13.015625) vs ica(5.828125) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [573] MSE battle ~ dct(9.937500) vs ica(0.562500) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [574] MSE battle ~ dct(11.765625) vs ica(1.359375) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [575] MSE battle ~ dct(16.765625) vs ica(7.671875) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [598] MSE battle ~ dct(16.312500) vs ica(6.562500) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [599] MSE battle ~ dct(15.625000) vs ica(2.500000) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [600] MSE battle ~ dct(13.953125) vs ica(7.640625) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [602] MSE battle ~ dct(33.140625) vs ica(30.265625) ~
+ dct_block(2) : 0.000435
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000226
+
+ 0block [603] MSE battle ~ dct(3.390625) vs ica(1.359375) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [604] MSE battle ~ dct(5.359375) vs ica(1.171875) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [605] MSE battle ~ dct(8.125000) vs ica(1.125000) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [606] MSE battle ~ dct(10.265625) vs ica(1.171875) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [607] MSE battle ~ dct(13.343750) vs ica(5.718750) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [632] MSE battle ~ dct(12.250000) vs ica(11.187500) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000078
+
+ 0block [634] MSE battle ~ dct(15.546875) vs ica(4.015625) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [636] MSE battle ~ dct(3.359375) vs ica(1.328125) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [637] MSE battle ~ dct(3.390625) vs ica(1.234375) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [638] MSE battle ~ dct(6.921875) vs ica(2.609375) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [639] MSE battle ~ dct(14.781250) vs ica(8.531250) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000069
+
+ 0block [666] MSE battle ~ dct(17.906250) vs ica(4.593750) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [668] MSE battle ~ dct(3.734375) vs ica(1.265625) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [669] MSE battle ~ dct(4.265625) vs ica(1.546875) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [697] MSE battle ~ dct(31.125000) vs ica(24.031250) ~
+ dct_block(2) : 0.000432
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000222
+
+ 0block [698] MSE battle ~ dct(13.531250) vs ica(11.718750) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [699] MSE battle ~ dct(13.968750) vs ica(6.843750) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [700] MSE battle ~ dct(1.921875) vs ica(0.578125) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000185 + ICA_coe : 0.000022 = 0.000206
+ diff : 0.000075
+
+ 0block [701] MSE battle ~ dct(2.281250) vs ica(0.843750) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000185 + ICA_coe : 0.000022 = 0.000206
+ diff : 0.000075
+
+ 0block [702] MSE battle ~ dct(33.468750) vs ica(16.218750) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [705] MSE battle ~ dct(16.515625) vs ica(16.328125) ~
+ dct_block(2) : 0.000422
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000219
+
+ 0block [731] MSE battle ~ dct(9.875000) vs ica(3.125000) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [733] MSE battle ~ dct(1.859375) vs ica(0.703125) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000185 + ICA_coe : 0.000022 = 0.000206
+ diff : 0.000075
+
+ 0block [734] MSE battle ~ dct(2.843750) vs ica(1.156250) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [737] MSE battle ~ dct(9.671875) vs ica(3.234375) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [738] MSE battle ~ dct(13.015625) vs ica(7.828125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [739] MSE battle ~ dct(18.796875) vs ica(8.390625) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000189 + ICA_coe : 0.000022 = 0.000211
+ diff : 0.000069
+
+ 0block [746] MSE battle ~ dct(40.750000) vs ica(39.281250) ~
+ dct_block(2) : 0.000438
+ ICA_dc : 0.000205 + ICA_coe : 0.000022 = 0.000227
+ diff : 0.000211
+
+ 0block [764] MSE battle ~ dct(15.562500) vs ica(2.250000) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [765] MSE battle ~ dct(16.703125) vs ica(2.546875) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [766] MSE battle ~ dct(2.421875) vs ica(0.640625) ~
+ dct_block(1) : 0.000282
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000066
+
+ 0block [767] MSE battle ~ dct(19.234375) vs ica(5.265625) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [769] MSE battle ~ dct(7.234375) vs ica(5.640625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [771] MSE battle ~ dct(15.859375) vs ica(3.953125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000191 + ICA_coe : 0.000022 = 0.000213
+ diff : 0.000054
+
+ 0block [772] MSE battle ~ dct(28.031250) vs ica(11.031250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [775] MSE battle ~ dct(23.437500) vs ica(19.312500) ~
+ dct_block(2) : 0.000415
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000222
+
+ 0block [796] MSE battle ~ dct(31.218750) vs ica(16.218750) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [797] MSE battle ~ dct(12.140625) vs ica(6.328125) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [801] MSE battle ~ dct(19.921875) vs ica(7.640625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [802] MSE battle ~ dct(6.343750) vs ica(4.593750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [803] MSE battle ~ dct(19.328125) vs ica(1.703125) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [804] MSE battle ~ dct(11.265625) vs ica(1.421875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [805] MSE battle ~ dct(19.812500) vs ica(2.812500) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [807] MSE battle ~ dct(23.062500) vs ica(22.000000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000071
+
+ 0block [829] MSE battle ~ dct(9.640625) vs ica(4.828125) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000201 + ICA_coe : 0.000022 = 0.000223
+ diff : 0.000065
+
+ 0block [833] MSE battle ~ dct(12.640625) vs ica(1.671875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [834] MSE battle ~ dct(4.046875) vs ica(2.890625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [835] MSE battle ~ dct(17.296875) vs ica(2.390625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [836] MSE battle ~ dct(16.640625) vs ica(2.109375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [837] MSE battle ~ dct(16.531250) vs ica(2.843750) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [840] MSE battle ~ dct(16.203125) vs ica(10.765625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [859] MSE battle ~ dct(33.890625) vs ica(21.984375) ~
+ dct_block(1) : 0.000281
+ ICA_dc : 0.000188 + ICA_coe : 0.000022 = 0.000210
+ diff : 0.000071
+
+ 0block [862] MSE battle ~ dct(17.203125) vs ica(0.578125) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [865] MSE battle ~ dct(12.343750) vs ica(1.656250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [867] MSE battle ~ dct(2.078125) vs ica(0.859375) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [868] MSE battle ~ dct(2.750000) vs ica(1.437500) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [870] MSE battle ~ dct(17.328125) vs ica(2.984375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [871] MSE battle ~ dct(16.953125) vs ica(2.609375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [872] MSE battle ~ dct(16.015625) vs ica(8.078125) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [876] MSE battle ~ dct(22.453125) vs ica(22.171875) ~
+ dct_block(2) : 0.000399
+ ICA_dc : 0.000179 + ICA_coe : 0.000022 = 0.000201
+ diff : 0.000198
+
+ 0block [877] MSE battle ~ dct(22.859375) vs ica(20.953125) ~
+ dct_block(1) : 0.000269
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000066
+
+ 0block [893] MSE battle ~ dct(85.656250) vs ica(74.781250) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [894] MSE battle ~ dct(13.625000) vs ica(7.000000) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [895] MSE battle ~ dct(14.421875) vs ica(1.203125) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000193 + ICA_coe : 0.000022 = 0.000215
+ diff : 0.000073
+
+ 0block [897] MSE battle ~ dct(7.703125) vs ica(2.515625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [898] MSE battle ~ dct(7.109375) vs ica(1.921875) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [899] MSE battle ~ dct(8.375000) vs ica(1.625000) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [900] MSE battle ~ dct(3.828125) vs ica(2.109375) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [901] MSE battle ~ dct(3.296875) vs ica(2.078125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [902] MSE battle ~ dct(2.984375) vs ica(1.515625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000074
+
+ 0block [903] MSE battle ~ dct(5.046875) vs ica(2.515625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [906] MSE battle ~ dct(6.953125) vs ica(4.359375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [907] MSE battle ~ dct(13.296875) vs ica(4.015625) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [908] MSE battle ~ dct(11.781250) vs ica(6.406250) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000072
+
+ 0block [927] MSE battle ~ dct(6.703125) vs ica(1.390625) ~
+ dct_block(1) : 0.000288
+ ICA_dc : 0.000196 + ICA_coe : 0.000022 = 0.000218
+ diff : 0.000070
+
+ 0block [929] MSE battle ~ dct(19.265625) vs ica(17.609375) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [930] MSE battle ~ dct(7.453125) vs ica(3.390625) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [931] MSE battle ~ dct(12.656250) vs ica(2.343750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000182 + ICA_coe : 0.000022 = 0.000204
+ diff : 0.000064
+
+ 0block [932] MSE battle ~ dct(3.859375) vs ica(2.328125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [933] MSE battle ~ dct(18.890625) vs ica(2.765625) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [935] MSE battle ~ dct(5.421875) vs ica(2.453125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [937] MSE battle ~ dct(15.609375) vs ica(8.046875) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [938] MSE battle ~ dct(30.578125) vs ica(27.984375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [939] MSE battle ~ dct(17.671875) vs ica(8.390625) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000067
+
+ 0block [940] MSE battle ~ dct(27.046875) vs ica(23.859375) ~
+ dct_block(2) : 0.000418
+ ICA_dc : 0.000172 + ICA_coe : 0.000022 = 0.000194
+ diff : 0.000224
+
+ 0block [961] MSE battle ~ dct(11.812500) vs ica(9.562500) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [962] MSE battle ~ dct(12.500000) vs ica(4.750000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000065
+
+ 0block [963] MSE battle ~ dct(20.953125) vs ica(4.078125) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [964] MSE battle ~ dct(6.343750) vs ica(4.093750) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [965] MSE battle ~ dct(22.359375) vs ica(4.734375) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [966] MSE battle ~ dct(23.250000) vs ica(5.250000) ~
+ dct_block(1) : 0.000264
+ ICA_dc : 0.000169 + ICA_coe : 0.000022 = 0.000190
+ diff : 0.000073
+
+ 0block [967] MSE battle ~ dct(7.390625) vs ica(3.078125) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [968] MSE battle ~ dct(7.671875) vs ica(3.109375) ~
+ dct_block(1) : 0.000268
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000069
+
+ 0block [972] MSE battle ~ dct(19.500000) vs ica(6.000000) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000171 + ICA_coe : 0.000022 = 0.000193
+ diff : 0.000068
+
+ 0block [974] MSE battle ~ dct(7.500000) vs ica(4.937500) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [975] MSE battle ~ dct(7.734375) vs ica(6.328125) ~
+ dct_block(1) : 0.000267
+ ICA_dc : 0.000177 + ICA_coe : 0.000022 = 0.000199
+ diff : 0.000068
+
+ 0block [977] MSE battle ~ dct(8.421875) vs ica(3.484375) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068
+
+ 0block [978] MSE battle ~ dct(16.453125) vs ica(12.390625) ~
+ dct_block(1) : 0.000260
+ ICA_dc : 0.000170 + ICA_coe : 0.000022 = 0.000192
+ diff : 0.000068

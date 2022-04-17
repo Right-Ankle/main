@@ -69,6 +69,7 @@ int main()
 	double dcoe_temp[64][1024] = { 0 };//DCTの係数 64*1024版
 	double bunrui[4][1024];//領域分割時に使用、[0=DCTの基底数、1=DCTのMSE、2=ICAの基底数、3=ICAのMSE][ブロック番号]
 	double ica_dc[1024];  // ICAの直流成分のentropy
+	double ica_w[64]; //ICA基底のentropy
 	double ica_basis_ent[64]; //ICA基底のentropy
 	double basis_temp[64]; //entropy操作時に使用（）
 	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"（Excel用）
@@ -249,6 +250,7 @@ int main()
 		for (n = 0; n < 64; n++)
 			ny[n][j] = 0;
 
+	// ICAの直流成分をQ100で代用　//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	for (j = 0; j < 1024; j++) {
 		// 初期化（必ず行う）
 		for (a = 0; a < 64; a++)
@@ -293,30 +295,7 @@ int main()
 			n++;
 		}
 	}
-
-	for (j = 0; j < 1024; j++) {
-		// 初期化（必ず行う）
-		for (a = 0; a < 64; a++)
-			xx[a] = 0.0;
-
-		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-		sum = 0.0;
-		mk = j % 32;
-		ml = j / 32;
-
-		for (a = 0; a < 8; a++) {
-			for (b = 0; b < 8; b++) {
-				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
-			}
-		}
-		printf("\n\n [%d] : before %lf (%lf) , after %lf (%lf) diff = %lf ", j, ica_dc[j], dct_mse[j], sum / 64.0, avg[j], ica_dc[j] - (sum / 64.0));
-	}
-
-
-
+	///////////////////////////////////////////////////////////////////////////////////////
 
 	///////ICAの情報量を求める///////////////////////////////////////////
 	// DCの情報量 ////////
@@ -327,24 +306,26 @@ int main()
 	}
 
 	/* hist2の作成 */
-	min = avg[0];
-	for (i = 0; i < 1024; i++)
-		if (avg[i] < min)
-			min = avg[i]; // histの左端
+	min = w[0][0];
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 64; j++)
+			if (w[i][j] < min)
+				min = w[i][j]; // histの左端
 
-	for (i = 0; i < 1024; i++) {
-		hist[(int)((avg[i] - min)) + 1]++;	//ステップ幅1
-	}
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 64; j++)
+			hist[(int)((w[i][j] - min)*step) + 1]++;	//ステップ幅1
 
-	sum = 0;
+	for (i = 0; i < 64; i++)
+		ica_w[i] = 0;
+
 	/* エントロピーの計算 */
-	for (i = 0; i < 50000; i++)
-		if (hist[i] > 0) {
-			sum += -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2)));
-		}
+	for (i = 0; i < 64; i++)
+		for (j = 0; j < 64; j++)
+			ica_w[i] += (-((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 64)) * (log((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 64))) / log(2)))) / hist[(int)((w[i][j] - min) * step) + 1];
 
-	for (i = 0; i < 1024; i++)
-		ica_dc[i] = sum / (1024 * 64);// ICAのDC成分の情報量算出
+	for (i = 0; i < 64; i++)
+		printf("\n\n [%d] ent = %lf", i, ica_w[i]);
 	// DC 終了///////////
 
 	// 係数の情報量 //////////////
@@ -546,7 +527,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 10) {
+		for (Q = 100; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -636,9 +617,6 @@ int main()
 							bunrui[0][j] = 64 - b;
 						}
 
-
-
-
 					//if (mse_dct[0][a][j] < full_mse[1][0][j]) {
 					//	bunrui[3][j] = full_mse[1][0][j];
 					//	bunrui[2][j] = 64.0;
@@ -647,17 +625,17 @@ int main()
 					//bunrui[0][j] = mse_dct[1][a][j];
 					//bunrui[1][j] = mse_dct[0][a][j];
 
-					//if (bunrui[0][j] > bunrui[2][j] && bunrui[1][j] > bunrui[3][j]) {//
-					//	no_op[j] = 1; // no_op 1 ならica
+					if (mse_dct[1][a][j] > bunrui[2][j] && mse_dct[0][a][j] > bunrui[3][j]) {//
+						no_op[j] = 1; // no_op 1 ならica
 
-					//	ica_basis2[64][j] = bunrui[2][j];
+						ica_basis2[64][j] = bunrui[2][j];
 
-					//	for (b = 63; b > 63 - bunrui[2][j]; b--) {
-					//		ica_basis2[(int)full_mse[0][b][j]][j] = 1;
-					//		ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
-					//		nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
-					//	}
-					//}
+						for (b = 63; b > 63 - bunrui[2][j]; b--) {
+							ica_basis2[(int)full_mse[0][b][j]][j] = 1;
+							ny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];//重要な順で格納
+							nny[(int)full_mse[0][b][j]][j] = y[(int)full_mse[0][b][j]][j];
+						}
+					}
 				}
 			}
 			else if (yn == 'n')
@@ -680,13 +658,13 @@ int main()
 				no_op_2[j] = 0;
 				no_op_3[j] = 0;
 				no_op_4[j] = 0;
-				if (ica_basis2[64][j] == 0)
+				if (bunrui[2][j]<=0 && 0<=bunrui[0][j])
 					no_op_4[j] = 1;
-				if (ica_basis2[64][j] == 1)
+				if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j])
 					no_op_1[j] = 1;
-				if (ica_basis2[64][j] == 2)
+				if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j])
 					no_op_2[j] = 1;
-				if (ica_basis2[64][j] == 3)
+				if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j])
 					no_op_3[j] = 1;
 			}
 
@@ -738,11 +716,11 @@ int main()
 							min = avg[i]; // histの左端
 
 				for (i = 0; i < 1024; i++)
-						hist[(int)((avg[i] - min)*step) + 1]++;//ステップ幅1
+						hist[(int)((avg[i] - min)) + 1]++;//ステップ幅1
 
 
 					for (j = 0; j < 1024; j++)
-						ica_dc[j] = (-((hist[(int)((avg[j] - min) * step) + 1] / (double)(1024 * 64)) * (log((hist[(int)((avg[j] - min) * step) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((avg[j] - min) * step) + 1];
+						ica_dc[j] = (-((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((avg[j] - min)) + 1];
 
 
 					basis0_ent = 0;
