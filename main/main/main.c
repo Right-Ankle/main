@@ -322,10 +322,29 @@ int main()
 	/* エントロピーの計算 */
 	for (i = 0; i < 64; i++)
 		for (j = 0; j < 64; j++)
-			ica_w[i] += (-((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 64)) * (log((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 64))) / log(2)))) / hist[(int)((w[i][j] - min) * step) + 1];
+			ica_w[i] += (-((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 1024)) * (log((hist[(int)((w[i][j] - min) * step) + 1] / (double)(64 * 1024))) / log(2)))) / hist[(int)((w[i][j] - min) * step) + 1];
 
-	for (i = 0; i < 64; i++)
-		printf("\n\n [%d] ent = %lf", i, ica_w[i]);
+	/*for (i = 0; i < 64; i++)
+		printf("\n\n [%d] ent = %lf", i, ica_w[i]);*/
+
+	for (i = 0; i < 500000; i++) {
+		hist[i] = 0;
+	}
+
+	sum = 0;
+	// 左端
+	min = avg[0];
+	for (i = 0; i < 1024; i++)
+		if (avg[i] < min)
+			min = avg[i]; // histの左端
+
+	for (i = 0; i < 1024; i++)
+		hist[(int)((avg[i] - min)) + 1]++;//ステップ幅1
+
+
+	for (j = 0; j < 1024; j++)
+		ica_dc[j] = (-((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((avg[j] - min)) + 1];
+
 	// DC 終了///////////
 
 	// 係数の情報量 //////////////
@@ -527,7 +546,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 100; Q > 0; Q -= 100) {
+		for (Q = 10; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -536,8 +555,8 @@ int main()
 			idct(dcoe, dcoe2, 8); // 普通の再構成
 
 			// DCT画像確認用
-			for (i = 0; i < 1024; i++)
-				no_op[i] = 1;
+			//for (i = 0; i < 1024; i++)
+			//	no_op[i] = 1;
 			//img_out(dcoe2, no_op, Q);
 
 			n = 0;
@@ -704,27 +723,11 @@ int main()
 						dct_ent[i][j] = (-((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((dcoe_temp[i][j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((dcoe_temp[i][j] - min)) + 1];
 
 
-				for (i = 0; i < 500000; i++) {
-					hist[i] = 0;
-				}
 
-				sum = 0;
-				// 左端
-				min = avg[0];
-				for (i = 0; i < 1024; i++)
-						if (avg[i]< min)
-							min = avg[i]; // histの左端
-
-				for (i = 0; i < 1024; i++)
-						hist[(int)((avg[i] - min)) + 1]++;//ステップ幅1
-
-
-					for (j = 0; j < 1024; j++)
-						ica_dc[j] = (-((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64)) * (log((hist[(int)((avg[j] - min)) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((avg[j] - min)) + 1];
 
 
 					basis0_ent = 0;
-					sum = 0.000021844; //係数0、1個当たりのentropy×63　＝　１ブロック当たりの係数0のentropy
+					sum = 0.000021844; //係数0(×63済み)、1個当たりのentropy×63　＝　１ブロック当たりの係数0のentropy
 					temp = 0;
 					printf("\n\n %lf\n\n", sum);
 					for (j = 0; j < 1024; j++) {
@@ -754,95 +757,7 @@ int main()
 
 			// 各ブロックの各基底の情報量を求める////////////////////////////////////////////////////////////////////////////
 
-			////各基底の使用数をカウント　//////////////
 
-			/// ICA ///
-			seki5(nw, ny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					ica_fre[i][j] = 0;
-				}
-			}
-
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					if (no_op[j] == 1) {
-						if (ny[i][j] != 0)
-							ica_fre[i][j]++;
-					}
-				}
-				ica_fre_temp[i] = 0;
-			}
-
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++) {
-					ica_fre_temp[i] += ica_fre[i][j];
-				}
-			}
-			///// 各基底の使用数　終了 /////////////////
-
-
-
-			// icaの情報量の比率を変更     比率=(Max差/Max) +1 　基底ごとの情報量=(全体の情報量*(比率/比率の総和))/基底頻度
-			// 仮のICA_Blockで使用される基底の頻度によって情報量を増減
-			// 高頻度＝低情報量、低頻度＝高情報量、全体の情報量は変わっていない
-
-			// 比率により情報量を変更
-			max = 0;
-			for (i = 0; i < 64; i++)
-				if (ica_fre_temp[i] > max)
-					max = ica_fre_temp[i];
-
-			for (i = 0; i < 64; i++)
-				basis_temp[i] = 0;
-
-			for (i = 0; i < 64; i++)
-				basis_temp[i] = ((max - ica_fre_temp[i]) / max) + 1;
-
-			QQ = 0;
-			for (i = 0; i < 64; i++)
-				QQ += basis_temp[i];
-
-			sum = 0;
-			for (i = 0; i < 64; i++) {
-				for (j = 0; j < 1024; j++)
-					if (ny[i][j] != 0)
-						sum += ica_ent[i][j];
-
-				for (j = 0; j < 1024; j++)
-					ica_ent2[i][j] = 0;
-
-				for (j = 0; j < 1024; j++)
-					if (ny[i][j] != 0)
-						ica_ent2[i][j] = (sum * basis_temp[i] / QQ) / ica_fre_temp[i];
-			}
-			//.//////////////////////////////////////
-
-			// 各ブロックの各基底の情報量を求める　終了//////////////////////////////////////////////////////////////////////
-
-			/// 0ブロックの情報量を求める /////////////
-			for (j = 0; j < 1024; j++)
-				no_op[j] = 0;
-
-			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 0) {//mseだから低い方が画質高い
-					no_op[j] = 1;
-				}
-			}
-			basis0_ent = 0;
-			for (j = 0; j < 1024; j++) {
-				if (ica_basis2[64][j] == 0) {
-					for (i = 0; i < 64; i++) {
-						basis0_ent += dct_ent[i][j];
-					}
-					basis0_ent -= ica_dc[j];
-				}
-			}
-			printf("\nbasis_ent0 = %lf", basis0_ent);
-			////0ブロックの情報量を求める　終了////////
 
 
 
@@ -892,16 +807,18 @@ int main()
 				//基底1個で画質＋の領域の画質・情報改善を全探索で算出
 				for (a = 0; a < 64; a++) {
 
-					for (j = 0; j < 1024; j++)
+					for (j = 0; j < 1024; j++) {
+						no_op_1[j] = 0;
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
+					}
 
 					for (j = 0; j < 1024; j++) {
 
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
 
-						if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底1個領域を対象
+						if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j]) {//基底1個領域を対象
 
 							ny[a][j] = y[a][j];
 
@@ -924,24 +841,53 @@ int main()
 								}
 							}
 
-							comb[j][a][0] = sum / 64;
+							comb[j][a][0] = sum / 64; //MSEを全探索
 
-							//情報量の調査
+							if (comb[j][a][0] < dct_mse[j])
+								no_op_1[j] = 1; //DCTよりも画質が高くなるブロックにフラグ
+						}
+					}
+
+					for (i = 0; i < 500000; i++) {
+						hist[i] = 0;
+					}
+
+					// 左端
+					min = 10000;
+					k = 0; //0ブロックの数
+					l = 0; //対象基底が有効なブロックの数
+					// フラグの立っているブロックのみでentropy算出
+					for (j = 0; j < 1024; j++) {
+						if (ica_basis2[64][j] == 0)
+							k++;
+						if (no_op_1[j] == 1) {
+							if (y[a][j] < min)
+								min = y[a][j]; // histの左端
+							l++;
+						}
+					}
+
+					for (j = 0; j < 1024; j++)
+						if (no_op_1[j] == 1) {
+							hist[(int)((y[a][j] - min) * step) + 1]++;//ステップ幅1
+						}
+
+					m = 1024 * 64 - (k + l); //画像全体の0の数　係数0のentropyを算出するため
+					for (j = 0; j < m; j++)
+						hist[(int)((0 - min) * step) + 1]++;
+
+					// 各ブロックのentropyを格納
+					for (j = 0; j < 1024; j++) {
+						if (no_op_1[j] == 1) {
 							sum = 0;
+							for (i = 0; i < 64; i++)
+								sum += dct_ent[i][j];//DCTのentropy
 
-							for (l = 0; l < 64; l++) {
-								if (dcoe_temp[l][j] != 0)
-									sum += dct_ent[l][j]; //dct単独
-							}
+							sum -= (-((hist[(int)((y[a][j] - min) * step) + 1] / (double)(1024 * 64)) * (log((hist[(int)((y[a][j] - min) * step) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((y[a][j] - min) * step) + 1];//対象基底のentropy
+							sum -= (-((hist[(int)((0 - min) * step) + 1] / (double)(1024 * 64)) * (log((hist[(int)((0 - min) * step) + 1] / (double)(1024 * 64))) / log(2)))) / hist[(int)((0 - min) * step) + 1] * 63;//対象基底以外のentropy
+							sum -= ica_dc[j];
 
-							for (l = 0; l < 64; l++) {
-								if (ny[l][j] != 0) {
-									sum -= ica_ent2[l][j];//対象領域をICA_Block
-								}
-							}
-							sum -= ica_dc[j];//ica_dc
-
-							comb[j][a][1] = sum;
+							comb[j][a][1] = sum; //entropyの改善量を格納
 						}
 					}
 				}
@@ -960,7 +906,7 @@ int main()
 							for (i = 0; i < 64; i++)
 								ny[i][j] = 0; //係数初期化
 
-							if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {//基底2個領域を対象
+							if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j]) {//基底2個領域を対象
 
 								ny[a][j] = y[a][j];
 								ny[b][j] = y[b][j];
@@ -990,14 +936,11 @@ int main()
 								sum = 0;
 
 								for (l = 0; l < 64; l++) {
-									if (dcoe_temp[l][j] != 0)
 										sum += dct_ent[l][j]; //dct単独
 								}
 
 								for (l = 0; l < 64; l++) {
-									if (ny[l][j] != 0) {
 										sum -= ica_ent2[l][j];//対象領域をICA_Block
-									}
 								}
 								sum -= ica_dc[j];//ica_dc
 
@@ -1025,7 +968,7 @@ int main()
 								for (i = 0; i < 64; i++)
 									ny[i][j] = 0; //係数初期化
 
-								if (ica_basis2[64][j] != 99 && ica_basis2[64][j] != 0) {
+								if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j]) {
 
 									ny[a][j] = y[a][j];
 									ny[b][j] = y[b][j];
@@ -1057,14 +1000,11 @@ int main()
 
 
 									for (l = 0; l < 64; l++) {
-										if (dcoe_temp[l][j] != 0)
 											sum += dct_ent[l][j]; //dct単独
 									}
 
 									for (l = 0; l < 64; l++) {
-										if (ny[l][j] != 0) {
 											sum -= ica_ent2[l][j];//対象領域をICA_Block
-										}
 									}
 									sum -= ica_dc[j];//ica_dc
 
