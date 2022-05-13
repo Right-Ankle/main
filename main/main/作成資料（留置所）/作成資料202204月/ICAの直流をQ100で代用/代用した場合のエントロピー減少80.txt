@@ -1,0 +1,2049 @@
+ before :0.247039, after : 0.202678
+
+ [0] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [1] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [2] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [3] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [4] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [5] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [6] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [7] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [8] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [9] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [10] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [11] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [12] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [13] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [14] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [15] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [16] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [17] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [18] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [19] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [20] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [21] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [22] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [23] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [24] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [25] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [26] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [27] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [28] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [29] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [30] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [31] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [32] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [33] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [34] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [35] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [36] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [37] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [38] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [39] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [40] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [41] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [42] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [43] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [44] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [45] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [46] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [47] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [48] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [49] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [50] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [51] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [52] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [53] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [54] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [55] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [56] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [57] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [58] : before 0.000229 , after 0.000196  diff = 0.000033
+
+ [59] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [60] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [61] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [62] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [63] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [64] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [65] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [66] : before 0.000220 , after 0.000209  diff = 0.000011
+
+ [67] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [68] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [69] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [70] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [71] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [72] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [73] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [74] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [75] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [76] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [77] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [78] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [79] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [80] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [81] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [82] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [83] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [84] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [85] : before 0.000229 , after 0.000177  diff = 0.000052
+
+ [86] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [87] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [88] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [89] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [90] : before 0.000229 , after 0.000174  diff = 0.000055
+
+ [91] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [92] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [93] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [94] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [95] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [96] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [97] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [98] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [99] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [100] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [101] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [102] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [103] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [104] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [105] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [106] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [107] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [108] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [109] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [110] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [111] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [112] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [113] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [114] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [115] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [116] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [117] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [118] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [119] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [120] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [121] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [122] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [123] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [124] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [125] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [126] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [127] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [128] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [129] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [130] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [131] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [132] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [133] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [134] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [135] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [136] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [137] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [138] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [139] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [140] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [141] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [142] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [143] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [144] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [145] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [146] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [147] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [148] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [149] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [150] : before 0.000229 , after 0.000174  diff = 0.000055
+
+ [151] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [152] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [153] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [154] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [155] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [156] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [157] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [158] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [159] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [160] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [161] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [162] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [163] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [164] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [165] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [166] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [167] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [168] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [169] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [170] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [171] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [172] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [173] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [174] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [175] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [176] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [177] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [178] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [179] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [180] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [181] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [182] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [183] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [184] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [185] : before 0.000220 , after 0.000173  diff = 0.000047
+
+ [186] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [187] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [188] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [189] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [190] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [191] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [192] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [193] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [194] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [195] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [196] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [197] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [198] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [199] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [200] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [201] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [202] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [203] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [204] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [205] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [206] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [207] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [208] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [209] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [210] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [211] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [212] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [213] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [214] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [215] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [216] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [217] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [218] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [219] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [220] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [221] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [222] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [223] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [224] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [225] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [226] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [227] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [228] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [229] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [230] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [231] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [232] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [233] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [234] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [235] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [236] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [237] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [238] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [239] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [240] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [241] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [242] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [243] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [244] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [245] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [246] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [247] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [248] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [249] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [250] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [251] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [252] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [253] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [254] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [255] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [256] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [257] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [258] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [259] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [260] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [261] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [262] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [263] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [264] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [265] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [266] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [267] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [268] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [269] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [270] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [271] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [272] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [273] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [274] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [275] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [276] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [277] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [278] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [279] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [280] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [281] : before 0.000220 , after 0.000183  diff = 0.000037
+
+ [282] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [283] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [284] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [285] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [286] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [287] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [288] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [289] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [290] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [291] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [292] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [293] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [294] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [295] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [296] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [297] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [298] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [299] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [300] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [301] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [302] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [303] : before 0.000229 , after 0.000188  diff = 0.000041
+
+ [304] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [305] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [306] : before 0.000229 , after 0.000174  diff = 0.000055
+
+ [307] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [308] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [309] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [310] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [311] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [312] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [313] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [314] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [315] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [316] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [317] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [318] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [319] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [320] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [321] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [322] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [323] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [324] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [325] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [326] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [327] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [328] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [329] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [330] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [331] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [332] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [333] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [334] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [335] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [336] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [337] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [338] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [339] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [340] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [341] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [342] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [343] : before 0.000229 , after 0.000196  diff = 0.000033
+
+ [344] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [345] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [346] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [347] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [348] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [349] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [350] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [351] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [352] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [353] : before 0.000229 , after 0.000196  diff = 0.000033
+
+ [354] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [355] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [356] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [357] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [358] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [359] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [360] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [361] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [362] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [363] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [364] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [365] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [366] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [367] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [368] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [369] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [370] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [371] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [372] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [373] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [374] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [375] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [376] : before 0.000220 , after 0.000189  diff = 0.000031
+
+ [377] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [378] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [379] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [380] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [381] : before 0.000220 , after 0.000189  diff = 0.000031
+
+ [382] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [383] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [384] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [385] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [386] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [387] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [388] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [389] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [390] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [391] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [392] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [393] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [394] : before 0.000220 , after 0.000183  diff = 0.000037
+
+ [395] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [396] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [397] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [398] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [399] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [400] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [401] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [402] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [403] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [404] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [405] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [406] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [407] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [408] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [409] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [410] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [411] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [412] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [413] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [414] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [415] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [416] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [417] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [418] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [419] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [420] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [421] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [422] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [423] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [424] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [425] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [426] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [427] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [428] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [429] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [430] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [431] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [432] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [433] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [434] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [435] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [436] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [437] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [438] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [439] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [440] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [441] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [442] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [443] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [444] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [445] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [446] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [447] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [448] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [449] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [450] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [451] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [452] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [453] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [454] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [455] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [456] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [457] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [458] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [459] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [460] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [461] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [462] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [463] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [464] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [465] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [466] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [467] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [468] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [469] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [470] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [471] : before 0.000229 , after 0.000214  diff = 0.000015
+
+ [472] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [473] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [474] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [475] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [476] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [477] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [478] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [479] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [480] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [481] : before 0.000220 , after 0.000209  diff = 0.000011
+
+ [482] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [483] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [484] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [485] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [486] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [487] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [488] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [489] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [490] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [491] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [492] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [493] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [494] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [495] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [496] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [497] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [498] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [499] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [500] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [501] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [502] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [503] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [504] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [505] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [506] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [507] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [508] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [509] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [510] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [511] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [512] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [513] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [514] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [515] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [516] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [517] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [518] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [519] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [520] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [521] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [522] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [523] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [524] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [525] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [526] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [527] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [528] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [529] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [530] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [531] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [532] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [533] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [534] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [535] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [536] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [537] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [538] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [539] : before 0.000220 , after 0.000198  diff = 0.000022
+
+ [540] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [541] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [542] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [543] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [544] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [545] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [546] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [547] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [548] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [549] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [550] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [551] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [552] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [553] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [554] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [555] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [556] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [557] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [558] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [559] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [560] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [561] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [562] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [563] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [564] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [565] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [566] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [567] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [568] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [569] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [570] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [571] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [572] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [573] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [574] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [575] : before 0.000220 , after 0.000198  diff = 0.000022
+
+ [576] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [577] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [578] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [579] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [580] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [581] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [582] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [583] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [584] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [585] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [586] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [587] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [588] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [589] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [590] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [591] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [592] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [593] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [594] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [595] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [596] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [597] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [598] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [599] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [600] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [601] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [602] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [603] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [604] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [605] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [606] : before 0.000220 , after 0.000198  diff = 0.000022
+
+ [607] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [608] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [609] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [610] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [611] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [612] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [613] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [614] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [615] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [616] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [617] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [618] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [619] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [620] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [621] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [622] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [623] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [624] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [625] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [626] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [627] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [628] : before 0.000229 , after 0.000188  diff = 0.000041
+
+ [629] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [630] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [631] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [632] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [633] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [634] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [635] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [636] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [637] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [638] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [639] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [640] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [641] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [642] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [643] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [644] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [645] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [646] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [647] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [648] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [649] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [650] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [651] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [652] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [653] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [654] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [655] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [656] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [657] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [658] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [659] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [660] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [661] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [662] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [663] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [664] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [665] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [666] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [667] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [668] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [669] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [670] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [671] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [672] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [673] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [674] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [675] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [676] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [677] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [678] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [679] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [680] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [681] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [682] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [683] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [684] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [685] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [686] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [687] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [688] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [689] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [690] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [691] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [692] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [693] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [694] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [695] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [696] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [697] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [698] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [699] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [700] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [701] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [702] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [703] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [704] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [705] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [706] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [707] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [708] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [709] : before 0.000229 , after 0.000205  diff = 0.000024
+
+ [710] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [711] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [712] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [713] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [714] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [715] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [716] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [717] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [718] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [719] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [720] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [721] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [722] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [723] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [724] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [725] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [726] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [727] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [728] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [729] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [730] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [731] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [732] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [733] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [734] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [735] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [736] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [737] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [738] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [739] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [740] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [741] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [742] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [743] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [744] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [745] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [746] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [747] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [748] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [749] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [750] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [751] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [752] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [753] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [754] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [755] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [756] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [757] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [758] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [759] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [760] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [761] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [762] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [763] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [764] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [765] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [766] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [767] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [768] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [769] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [770] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [771] : before 0.000244 , after 0.000196  diff = 0.000048
+
+ [772] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [773] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [774] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [775] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [776] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [777] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [778] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [779] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [780] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [781] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [782] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [783] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [784] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [785] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [786] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [787] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [788] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [789] : before 0.000220 , after 0.000173  diff = 0.000047
+
+ [790] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [791] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [792] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [793] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [794] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [795] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [796] : before 0.000220 , after 0.000189  diff = 0.000031
+
+ [797] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [798] : before 0.000229 , after 0.000191  diff = 0.000038
+
+ [799] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [800] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [801] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [802] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [803] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [804] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [805] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [806] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [807] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [808] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [809] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [810] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [811] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [812] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [813] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [814] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [815] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [816] : before 0.000229 , after 0.000196  diff = 0.000033
+
+ [817] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [818] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [819] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [820] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [821] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [822] : before 0.000229 , after 0.000214  diff = 0.000015
+
+ [823] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [824] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [825] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [826] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [827] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [828] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [829] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [830] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [831] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [832] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [833] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [834] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [835] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [836] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [837] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [838] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [839] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [840] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [841] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [842] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [843] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [844] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [845] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [846] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [847] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [848] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [849] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [850] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [851] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [852] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [853] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [854] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [855] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [856] : before 0.000229 , after 0.000201  diff = 0.000028
+
+ [857] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [858] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [859] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [860] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [861] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [862] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [863] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [864] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [865] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [866] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [867] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [868] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [869] : before 0.000220 , after 0.000183  diff = 0.000037
+
+ [870] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [871] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [872] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [873] : before 0.000220 , after 0.000176  diff = 0.000044
+
+ [874] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [875] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [876] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [877] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [878] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [879] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [880] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [881] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [882] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [883] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [884] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [885] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [886] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [887] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [888] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [889] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [890] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [891] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [892] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [893] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [894] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [895] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [896] : before 0.000220 , after 0.000173  diff = 0.000047
+
+ [897] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [898] : before 0.000220 , after 0.000182  diff = 0.000038
+
+ [899] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [900] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [901] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [902] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [903] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [904] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [905] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [906] : before 0.000220 , after 0.000176  diff = 0.000044
+
+ [907] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [908] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [909] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [910] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [911] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [912] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [913] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [914] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [915] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [916] : before 0.000244 , after 0.000188  diff = 0.000056
+
+ [917] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [918] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [919] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [920] : before 0.000229 , after 0.000220  diff = 0.000009
+
+ [921] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [922] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [923] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [924] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [925] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [926] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [927] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [928] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [929] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [930] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [931] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [932] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [933] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [934] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [935] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [936] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [937] : before 0.000244 , after 0.000177  diff = 0.000067
+
+ [938] : before 0.000220 , after 0.000176  diff = 0.000044
+
+ [939] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [940] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [941] : before 0.000244 , after 0.000191  diff = 0.000053
+
+ [942] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [943] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [944] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [945] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [946] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [947] : before 0.000229 , after 0.000186  diff = 0.000043
+
+ [948] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [949] : before 0.000244 , after 0.000181  diff = 0.000064
+
+ [950] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [951] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [952] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [953] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [954] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [955] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [956] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [957] : before 0.000244 , after 0.000229  diff = 0.000015
+
+ [958] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [959] : before 0.000229 , after 0.000193  diff = 0.000035
+
+ [960] : before 0.000244 , after 0.000186  diff = 0.000058
+
+ [961] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [962] : before 0.000229 , after 0.000177  diff = 0.000052
+
+ [963] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [964] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [965] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [966] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [967] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [968] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [969] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [970] : before 0.000229 , after 0.000173  diff = 0.000056
+
+ [971] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [972] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [973] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [974] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [975] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [976] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [977] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [978] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [979] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [980] : before 0.000229 , after 0.000182  diff = 0.000047
+
+ [981] : before 0.000244 , after 0.000193  diff = 0.000051
+
+ [982] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [983] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [984] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [985] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [986] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [987] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [988] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [989] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [990] : before 0.000244 , after 0.000209  diff = 0.000035
+
+ [991] : before 0.000244 , after 0.000244  diff = 0.000000
+
+ [992] : before 0.000229 , after 0.000198  diff = 0.000031
+
+ [993] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [994] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [995] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [996] : before 0.000229 , after 0.000183  diff = 0.000046
+
+ [997] : before 0.000229 , after 0.000174  diff = 0.000055
+
+ [998] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [999] : before 0.000244 , after 0.000183  diff = 0.000061
+
+ [1000] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [1001] : before 0.000229 , after 0.000176  diff = 0.000053
+
+ [1002] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [1003] : before 0.000244 , after 0.000174  diff = 0.000070
+
+ [1004] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [1005] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [1006] : before 0.000229 , after 0.000189  diff = 0.000039
+
+ [1007] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [1008] : before 0.000229 , after 0.000181  diff = 0.000048
+
+ [1009] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [1010] : before 0.000244 , after 0.000173  diff = 0.000071
+
+ [1011] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [1012] : before 0.000244 , after 0.000189  diff = 0.000055
+
+ [1013] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [1014] : before 0.000244 , after 0.000176  diff = 0.000068
+
+ [1015] : before 0.000244 , after 0.000182  diff = 0.000062
+
+ [1016] : before 0.000220 , after 0.000209  diff = 0.000011
+
+ [1017] : before 0.000244 , after 0.000214  diff = 0.000031
+
+ [1018] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [1019] : before 0.000244 , after 0.000205  diff = 0.000039
+
+ [1020] : before 0.000244 , after 0.000220  diff = 0.000024
+
+ [1021] : before 0.000244 , after 0.000198  diff = 0.000046
+
+ [1022] : before 0.000244 , after 0.000201  diff = 0.000043
+
+ [1023] : before 0.000244 , after 0.000244  diff = 0.000000

@@ -74,6 +74,7 @@ int main()
 	double basis_temp[64]; //entropy操作時に使用（）
 	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"（Excel用）
 	double dct_mse[1024]; //DCTの各ブロックのMSE
+	double dct_dct[1024];
 	double psnr_temp2; //PSNR出力用
 	static double basis0_ent = 0;//0領域の改善可能なentropy用
 	    // 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
@@ -273,7 +274,7 @@ int main()
 		dct_mse[j] = avg[j];
 	}
 
-	Q = 100;
+	Q = 80;
 	// dct処理
 	dct(origin, dcoe, 8); // 係数を出力
 	quantization(dcoe, Q); // 係数の品質を10段階で落とす処理（量子化）落とせば落とすほどデータは軽くなるが、品質が落ちる
@@ -296,6 +297,89 @@ int main()
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////////////////
+	min = 0;
+	for (j = 0; j < 1024; j++) {
+		// 初期化（必ず行う）
+		for (a = 0; a < 64; a++)
+			xx[a] = 0.0;
+
+		seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+		xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+		avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+		sum = 0.0;
+		mk = j % 32;
+		ml = j / 32;
+
+		for (a = 0; a < 8; a++) {
+			for (b = 0; b < 8; b++) {
+				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
+			}
+		}
+		printf("\n\n [%d] : before %lf (%lf) , after %lf (%lf) diff = %lf ", j, ica_dc[j], dct_mse[j], sum / 64.0, avg[j], ica_dc[j] - (sum / 64.0));
+		min += (ica_dc[j] - (sum / 64.0)) * (ica_dc[j] - (sum / 64.0));
+	}
+	printf("\n\n diff = %lf", min / 1024);
+
+	for (i = 0; i < 50000; i++) {
+		hist[i] = 0;
+	}
+
+	/* hist2の作成 */
+	min = dcoe[0][0];
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			if (dcoe[i][j] < min)
+				min = dcoe[i][j]; // histの左端
+		}
+	}
+
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			hist[(int)((dcoe[i][j] - min)) + 1]++;
+		}
+	}
+
+	for (i = 0; i < 1024; i++)
+		ica_dc[i] = 0;
+
+	n = 0;
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			ica_dc[n] += (-((hist[(int)((dcoe[i][j] - min)) + 1] / (double)(64 * 1024)) * (log((hist[(int)((dcoe[i][j] - min)) + 1] / (double)(64 * 1024))) / log(2)))) / hist[(int)((dcoe[i][j] - min)) + 1];
+			n++;
+		}
+	}
+
+
+	// 元のえんとｒｐさんしゅうｔ
+	for (i = 0; i < 50000; i++) {
+		hist[i] = 0;
+	}
+
+	/* hist2の作成 */
+	min = dct_mse[0];
+	for (i = 0; i < 1024; i++)
+		if (dct_mse[i] < min)
+			min = dct_mse[i]; // histの左端
+
+	for (i = 0; i < 1024; i++)
+			hist[(int)((dct_mse[i] - min)*step) + 1]++;
+
+	for (i = 0; i < 1024; i++)
+		dct_dct[i] = 0;
+
+	for (i = 0; i < 1024; i++)
+			dct_dct[i] += (-((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024)) * (log((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024))) / log(2)))) / hist[(int)((dct_mse[i] - min) * step) + 1];
+
+	sum = min = 0;
+	for (i = 0; i < 1024; i++) {
+		printf("\n\n [%d] : before %lf , after %lf  diff = %lf ", i, dct_dct[i], ica_dc[i], dct_dct[i] - ica_dc[i]);
+		sum += dct_dct[i];
+		min += ica_dc[i];
+	}
+	printf("\n\n before :%lf, after : %lf", sum, min);
+
 
 	///////ICAの情報量を求める///////////////////////////////////////////
 	// DCの情報量 ////////
