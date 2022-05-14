@@ -48,7 +48,7 @@ int main()
 	int step = 100; // ICA係数のentropy算出時に使用
 
 	////// double //////
-	static double sum = 0, min = 0, max = 0, temp=0;//計算用
+	static double sum = 0, min = 0, max = 0, temp = 0;//計算用
 	double avg[1024];//ICAの直流成分
 	double y[64][1024];//ICAの係数値（基本的にいじらない）
 	double w[64][64];//ICAの基底
@@ -58,7 +58,7 @@ int main()
 	double x[64][1024];//ICAの再構成時に使用、直流成分なし
 	double xx[64];//ICAの再構成時に使用、直流なし（ブロックごと専用）
 	static double mse_dct[2][10][1024]; //DCTのMSEとEntropy格納用、”dct_mse”と変わらん
-	    //ICAのMSEと基底番号格納用、[0=基底番号、1=MSE][0=0個、1=一番いらない基底、63=1番重要な基底、64=64個][ブロック番号]
+		//ICAのMSEと基底番号格納用、[0=基底番号、1=MSE][0=0個、1=一番いらない基底、63=1番重要な基底、64=64個][ブロック番号]
 	static double full_mse[2][65][1024];//↑
 	static double full_mse_temp[2][65][1024];//↑
 	double dct_ent[64][1024]; // DCTにおける各ブロック各基底のentropy
@@ -77,7 +77,7 @@ int main()
 	double dct_dct[1024];
 	double psnr_temp2; //PSNR出力用
 	static double basis0_ent = 0;//0領域の改善可能なentropy用
-	    // 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
+		// 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
 	static double comb[1024][64][2] = { 0 };//0->画質，1->情報量
 	static double comb2[1024][64][64][2] = { 0 };//0->画質，1->情報量
 	double**** comb3_0; //0->画質，1->情報量
@@ -364,13 +364,13 @@ int main()
 			min = dct_mse[i]; // histの左端
 
 	for (i = 0; i < 1024; i++)
-			hist[(int)((dct_mse[i] - min)*step) + 1]++;
+		hist[(int)((dct_mse[i] - min) * step) + 1]++;
 
 	for (i = 0; i < 1024; i++)
 		dct_dct[i] = 0;
 
 	for (i = 0; i < 1024; i++)
-			dct_dct[i] += (-((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024)) * (log((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024))) / log(2)))) / hist[(int)((dct_mse[i] - min) * step) + 1];
+		dct_dct[i] += (-((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024)) * (log((hist[(int)((dct_mse[i] - min) * step) + 1] / (double)(64 * 1024))) / log(2)))) / hist[(int)((dct_mse[i] - min) * step) + 1];
 
 	sum = min = 0;
 	for (i = 0; i < 1024; i++) {
@@ -398,7 +398,7 @@ int main()
 
 	for (i = 0; i < 64; i++)
 		for (j = 0; j < 64; j++)
-			hist[(int)((w[i][j] - min)*step) + 1]++;	//ステップ幅1
+			hist[(int)((w[i][j] - min) * step) + 1]++;	//ステップ幅1
 
 	for (i = 0; i < 64; i++)
 		ica_w[i] = 0;
@@ -463,6 +463,81 @@ int main()
 	// 係数の情報量　終了/////////
 	///////ICAの情報量　終了/////////////////////////////////////
 
+
+
+	min = 10000; // 最小MSE 保存用
+	QQ = 1; //最小MSEの基底番号 保存用
+	for (i = 0; i < 64; i++)
+		ny[i][QQ] = 0; //係数の初期化
+
+	for (a = 0; a < 60; a++)
+		for (b = a + 1; b < 61; b++)
+			for (c = b + 1; c < 62; c++)
+				for (d = c+1; d < 63; d++){
+					//for (k = d + 1; k < 64; k++)
+					//MSE優先度の格納カウント
+
+						for (i = 0; i < 64; i++)
+							ny[i][QQ] = 0; //係数の初期化
+
+						ny[a][QQ] = y[a][QQ];//選出済みの基底の係数を0
+						ny[b][QQ] = y[b][QQ];//選出済みの基底の係数を0
+						ny[c][QQ] = y[c][QQ];//選出済みの基底の係数を0
+						ny[d][QQ] = y[d][QQ];//選出済みの基底の係数を0
+						//ny[k][QQ] = y[k][QQ];//選出済みの基底の係数を0
+
+
+
+							// 初期化（必ず行う）
+						for (i = 0; i < 64; i++)
+							xx[i] = 0.0;
+
+						seki5_Block(nw, ny, xx, QQ); // xx64 -> nw * ny
+						xtogen_Block(xx, block_ica, avg, QQ); // ica_sai -> 再構成済①
+						avg_inter_Block(block_ica, avg, QQ); // ica_sai -> 再構成済②
+
+						sum = 0.0;
+						mk = QQ % 32;
+						ml = QQ / 32;
+
+						for (i = 0; i < 8; i++) {
+							for (j = 0; j < 8; j++) {
+								sum += pow(origin[ml * 8 + j][mk * 8 + i] - block_ica[j * 8 + i], 2); //MSE
+							}
+						}
+
+						if (min > sum / 64.0) {//MSEの減少が一番小さい基底を抜く
+							min = sum / 64.0;
+							ica_fre_temp[0] = a;
+							ica_fre_temp[1] = b;
+							ica_fre_temp[2] = c;
+							ica_fre_temp[3] = d;
+							//ica_fre_temp[4] = k;
+						}
+					}
+	printf("\n\n %d, %d, %d, %d, %d, (%lf)", ica_fre_temp[0], ica_fre_temp[1], ica_fre_temp[2], ica_fre_temp[3],ica_fre_temp[4], min);
+	printf("\n\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/////////////////  Step1  のメイン処理　//////////////////////////
 	// 1 -> 64 までのMSE調査
 
@@ -491,7 +566,7 @@ int main()
 				if (c != 0) {
 					for (a = 0; a < c; a++) {
 						if ((int)full_mse[0][a][j] != 99)
-							ny[(int)full_mse[0][a][j]][j] = y[(int)full_mse[0][a][j]][j]; //選出済みの基底の係数を0
+							ny[(int)full_mse[0][a][j]][j] = y[(int)full_mse[0][a][j]][j]; //選出済みの基底の係数を加える
 					}
 				}
 
@@ -601,7 +676,7 @@ int main()
 		}
 
 	for (i = 0; i < 65; i++)
-		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][0], full_mse[1][i][0]);
+		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][1], full_mse[1][i][1]);
 	printf(" \n");
 	//for (j = 0; j < 1024; j++) {
 	//	for (i = 0; i < 64; i++)
