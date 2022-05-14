@@ -561,17 +561,17 @@ int main()
 			for (n = 0; n < 64; n++) { //調査対象基底
 
 				for (a = 0; a < 64; a++)
-					ny[a][j] = 0; //係数の初期化
+					ny[a][j] = y[a][j]; //係数の初期化
 
 				if (c != 0) {
 					for (a = 0; a < c; a++) {
 						if ((int)full_mse[0][a][j] != 99)
-							ny[(int)full_mse[0][a][j]][j] = y[(int)full_mse[0][a][j]][j]; //選出済みの基底の係数を加える
+							ny[(int)full_mse[0][a][j]][j] = 0; //選出済みの基底の係数を0
 					}
 				}
 
-				if (ny[n][j] == 0) {
-					ny[n][j] = y[n][j]; // 調査対象の基底の係数値を0
+				if (ny[n][j] != 0) {
+					ny[n][j] = 0; // 調査対象の基底の係数値を0
 
 					// 初期化（必ず行う）
 					for (a = 0; a < 64; a++)
@@ -676,7 +676,7 @@ int main()
 		}
 
 	for (i = 0; i < 65; i++)
-		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][1], full_mse[1][i][1]);
+		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][0], full_mse[1][i][0]);
 	printf(" \n");
 	//for (j = 0; j < 1024; j++) {
 	//	for (i = 0; i < 64; i++)
