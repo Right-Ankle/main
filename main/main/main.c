@@ -41,7 +41,7 @@ int main()
 	static int QQ;//適当な変数として使用中？
 	int hist[500000]; //entropy算出時のヒストグラム用
 	int test_basis[64]; //どの基底が使用されているのか確認用？
-	int test_area[1024]; // ブロック当たりの使用基底数の確認用？
+	double test_area[1024]; // ブロック当たりの使用基底数の確認用？
 	int ica_fre[64][1024]; //ICA基底頻度
 	int ica_fre_temp[64]; //ICA基底毎の使用数
 	int excel_temp = 4; // excel出力時に使用
@@ -488,7 +488,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 10; Q > 0; Q -= 100) {
+		for (Q = 40; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -554,11 +554,25 @@ int main()
 				for (i = 0; i < 1024; i++)
 					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;
 
+			/* hist2の作成 */
+            //DCは差分のエントロピーを算出
+			test_area[0] = dcoe_temp[0][0];
+			for (i = 1; i < 1024; i++)
+				test_area[i] = dcoe_temp[0][i] - dcoe_temp[0][i - 1];
+
+			//min = test_area[0];
+			for (i = 0; i < 1024; i++)
+				if (test_area[i] < min)
+					min = test_area[i]; // histの左端
+
+			for (i = 0; i < 1024; i++)
+				hist[(int)((test_area[i] - min)) + 1]++;
+
 			sum = 0;
 			dct_all_mse = 0;
 			for (i = 0; i < 500000; i++)
 				if (hist[i] > 0) {
-					sum += (-((hist[i] / (double)(63 * 1024)) * (log((hist[i] / (double)(63 * 1024))) / log(2))));
+					sum += (-((hist[i] / (double)(64 * 1024)) * (log((hist[i] / (double)(64 * 1024))) / log(2))));
 				}
 			dct_all_mse = sum;
 			printf("\nAC ent = %lf", sum);
@@ -590,7 +604,7 @@ int main()
 				if (hist[i] > 0) {
 					sum += (-((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2))));
 				}
-			dct_all_mse += sum;
+			//dct_all_mse += sum;
 			printf("\nDC ent = %lf", sum);
 
 
@@ -1215,7 +1229,7 @@ int main()
 									min = ny[j][i]; // histの左端
 								}
 							}
-							else
+							else if(no_op[i]==0)
 								if (dcoe_temp[j][i] < min && j != 0) {
 									min = dcoe_temp[j][i]; // histの左端
 								}
@@ -1229,15 +1243,36 @@ int main()
 									hist[(int)((dcoe_temp[j][i] - min) * step) + 1]++;
 						}
 
+					/* hist2の作成 *///DCも一緒にエントロピー算出
+                    //DCは差分のエントロピーを算出
+					for (i = 0; i < 1024; i++) {
+						if (no_op[i] == 1)
+							ica_dc[i] = (int)(avg[i] * 8);
+						else
+							ica_dc[i] = (int)dcoe_temp[0][i];
+					}
+
+					test_area[0] = ica_dc[0];
+					for (i = 1; i < 1024; i++)
+						test_area[i] = (double)(ica_dc[i] - ica_dc[i - 1]);
+
+					//min = test_area[0];
 					for (i = 0; i < 1024; i++)
-						if (no_op[i] == 0)
+						if (test_area[i] < min)
+							min = test_area[i]; // histの左端
+
+					for (i = 0; i < 1024; i++)
+						hist[(int)((test_area[i] - min)*step) + 1]++;
+
+					for (i = 0; i < 1024; i++)
+						if (no_op[i] == 1)
 							a++;
 
 					sum = 0;
-					a = 1024 - a; //DCTのDC分引く（DCTは63個だから）
+					//a = 1024 - a; //DCTのDC分引く（DCTは63個だから）
 					for (i = 0; i < 500000; i++)
 						if (hist[i] > 0) {
-							sum += (-((hist[i] / (double)(64 * 1024 - a)) * (log((hist[i] / (double)(64 * 1024 - a))) / log(2))));
+							sum += (-((hist[i] / (double)(64 * 1024 +a)) * (log((hist[i] / (double)(64 * 1024 + a))) / log(2))));
 						}
 
 					printf("\n\n AC ent = %lf", sum);
