@@ -122,7 +122,7 @@ int txt_out4(double date1[64][64], static char filename[20], int rate);
 int group(double date1[65][1024], static char filename[20], int rate);
 void ent_out(unsigned char origin[][256], double y[][1024], double avg[1024], double w[][64], double y_flag[64][1024], int block_flag[1024], int Q);
 void ent_count(double y[256][256], double ica_dc[1024]);
-void ent_count_basis(double w[64][64], double result_w[64]);
+void ent_count_basis(double w[64][64], double result_w[3]);
 void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag[1024], int name);
 void img_out3(unsigned char origin[][256]);
 void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int name);
