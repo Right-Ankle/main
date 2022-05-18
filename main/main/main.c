@@ -317,10 +317,10 @@ int main()
 				sum += pow(origin[ml * 8 + b][mk * 8 + a] - block_ica[b * 8 + a], 2); //MSE
 			}
 		}
-		printf("\n\n [%d] : before %lf (%lf) , after %lf (%lf) diff = %lf ", j, ica_dc[j], dct_mse[j], sum / 64.0, avg[j], ica_dc[j] - (sum / 64.0));
+		//printf("\n\n [%d] : before %lf (%lf) , after %lf (%lf) diff = %lf ", j, ica_dc[j], dct_mse[j], sum / 64.0, avg[j], ica_dc[j] - (sum / 64.0));
 		min += (ica_dc[j] - (sum / 64.0)) * (ica_dc[j] - (sum / 64.0));
 	}
-	printf("\n\n diff = %lf", min / 1024);
+	//printf("\n\n diff = %lf", min / 1024);
 
 	/////////////////  Step1  のメイン処理　//////////////////////////
 	// 1 -> 64 までのMSE調査
@@ -488,7 +488,7 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 40; Q > 0; Q -= 100) {
+		for (Q = 30; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -545,28 +545,14 @@ int main()
 
 			/* hist2の作成 */
 			min = dcoe_temp[0][0];
-			for (j = 0; j < 1; j++)
+			for (j = 0; j < 64; j++)
 				for (i = 0; i < 1024; i++)
 					if (dcoe_temp[j][i] < min)
 						min = dcoe_temp[j][i]; // histの左端
 
-			for (j = 1; j < 64; j++)
+			for (j = 0; j < 64; j++)
 				for (i = 0; i < 1024; i++)
 					hist[(int)((dcoe_temp[j][i] - min)) + 1]++;
-
-			/* hist2の作成 */
-            //DCは差分のエントロピーを算出
-			test_area[0] = dcoe_temp[0][0];
-			for (i = 1; i < 1024; i++)
-				test_area[i] = dcoe_temp[0][i] - dcoe_temp[0][i - 1];
-
-			//min = test_area[0];
-			for (i = 0; i < 1024; i++)
-				if (test_area[i] < min)
-					min = test_area[i]; // histの左端
-
-			for (i = 0; i < 1024; i++)
-				hist[(int)((test_area[i] - min)) + 1]++;
 
 			sum = 0;
 			dct_all_mse = 0;
@@ -587,10 +573,11 @@ int main()
 			//DCは差分のエントロピーを算出
 			test_area[0] = dcoe_temp[0][0];
 			for (i = 1; i < 1024; i++)
-				test_area[i] = dcoe_temp[0][i] - dcoe_temp[0][i - 1];
+				test_area[i] = dcoe_temp[0][i];
 
 			min = test_area[0];
-				for (i = 1; i < 1024; i++)
+
+				for (i = 0; i < 1024; i++)
 					if (test_area[i] < min)
 						min = test_area[i]; // histの左端
 
@@ -606,7 +593,7 @@ int main()
 				}
 			//dct_all_mse += sum;
 			printf("\nDC ent = %lf", sum);
-
+			printf("\na");
 
 
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
@@ -680,9 +667,9 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
-			for (j = 0; j < 1024; j++)
-				if (bunrui[0][j] != 99 && bunrui[2][j] != 99)
-					printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
+			//for (j = 0; j < 1024; j++)
+			//	if (bunrui[0][j] != 99 && bunrui[2][j] != 99)
+			//		printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
 
 
 
@@ -1059,7 +1046,7 @@ int main()
 						comb_after_sort[i][2] = (double)k;
 						comb_after_sort[i][3] = (double)l;
 						comb_after_sort[i][4] = (double)m;
-						//comb_after_sort[i][5] = comb_result3[k][l][m][2];
+						comb_after_sort[i][5] = comb_result3[k][l][m][2];
 						comb_sort3[k][l][m] = 0;//99番基底が入らないか？
 					}
 				}
@@ -1082,7 +1069,7 @@ int main()
 						comb_after_sort[i][3] = (double)o;
 						comb_after_sort[i][4] = 99;
 						comb_after_sort[i][5] = comb_result2[n][o][2];
-						//comb_sort2[n][o] = 0;//99番基底が入らないか？
+						comb_sort2[n][o] = 0;//99番基底が入らないか？
 					}
 				}
 
@@ -1100,7 +1087,7 @@ int main()
 						comb_after_sort[i][2] = (double)n;
 						comb_after_sort[i][3] = 99;
 						comb_after_sort[i][4] = 99;
-						//comb_after_sort[i][5] = comb_result[n][2];
+						comb_after_sort[i][5] = comb_result[n][2];
 						comb_sort[n] = 0;//99番基底が入らないか？
 					}
 				}
@@ -1219,6 +1206,20 @@ int main()
 						hist[i] = 0;
 					}
 
+					/* hist2の作成 *///DCも一緒にエントロピー算出
+                    //DCは差分のエントロピーを算出
+					for (i = 0; i < 1024; i++) {
+						if (no_op[i] == 1)
+							ica_dc[i] = avg[i];
+						else
+							ica_dc[i] = dcoe_temp[0][i] / 8;
+					}
+
+					test_area[0] = ica_dc[0];
+					for (i = 1; i < 1024; i++)
+						test_area[i] = (double)(ica_dc[i] - ica_dc[i - 1]);
+					/////////////////////////////////////////////////////////
+
 					/* hist2の作成 */
 					min = 10000;
 					a = 0;//DCT領域数カウント用
@@ -1234,6 +1235,13 @@ int main()
 									min = dcoe_temp[j][i]; // histの左端
 								}
 
+					/////////  DCの最小も確認
+					//min = test_area[0];
+					for (i = 0; i < 1024; i++)
+						if (test_area[i] < min)
+							min = test_area[i]; // histの左端
+
+					// ACのヒストグラム
 					for (j = 0; j < 64; j++)
 						for (i = 0; i < 1024; i++) {
 							if (no_op[i] == 1)
@@ -1243,24 +1251,7 @@ int main()
 									hist[(int)((dcoe_temp[j][i] - min) * step) + 1]++;
 						}
 
-					/* hist2の作成 *///DCも一緒にエントロピー算出
-                    //DCは差分のエントロピーを算出
-					for (i = 0; i < 1024; i++) {
-						if (no_op[i] == 1)
-							ica_dc[i] = (int)(avg[i] * 8);
-						else
-							ica_dc[i] = (int)dcoe_temp[0][i];
-					}
-
-					test_area[0] = ica_dc[0];
-					for (i = 1; i < 1024; i++)
-						test_area[i] = (double)(ica_dc[i] - ica_dc[i - 1]);
-
-					//min = test_area[0];
-					for (i = 0; i < 1024; i++)
-						if (test_area[i] < min)
-							min = test_area[i]; // histの左端
-
+					// DCのヒストグラム
 					for (i = 0; i < 1024; i++)
 						hist[(int)((test_area[i] - min)*step) + 1]++;
 
@@ -1273,6 +1264,7 @@ int main()
 					for (i = 0; i < 500000; i++)
 						if (hist[i] > 0) {
 							sum += (-((hist[i] / (double)(64 * 1024 +a)) * (log((hist[i] / (double)(64 * 1024 + a))) / log(2))));
+							//printf("\n%d : %d (%lf)", i, hist[i], -((hist[i] / (double)(64 * 1024 + a)) * (log((hist[i] / (double)(64 * 1024 + a))) / log(2))));
 						}
 
 					printf("\n\n AC ent = %lf", sum);
@@ -1287,14 +1279,16 @@ int main()
 					//DCは差分のエントロピーを算出
 					for (i = 0; i < 1024; i++) {
 						if (no_op[i] == 1)
-							ica_dc[i] = (int)(avg[i] * 8);
+							ica_dc[i] = avg[i]*8;
 						else
-							ica_dc[i] = (int)dcoe_temp[0][i];
+							ica_dc[i] = dcoe_temp[0][i];
 					}
 
 					test_area[0] = ica_dc[0];
-					for (i = 1; i < 1024; i++)
-						test_area[i] = ica_dc[i] - ica_dc[i - 1];
+					for (i = 1; i < 1024; i++) {
+						test_area[i] = ica_dc[i] - ica_dc[0];
+						//printf("\n%d : %lf", i, test_area[i]);
+					}
 
 					min = test_area[0];
 					for (i = 1; i < 1024; i++)
@@ -1305,13 +1299,15 @@ int main()
 						hist[(int)((test_area[i] - min)) + 1]++;
 
 					sum = 0;
-
+					a = 0;
 					for (i = 0; i < 500000; i++)
 						if (hist[i] > 0) {
 							sum += (-((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2))));
+							//printf("\n%d : %d (%lf)", i, hist[i], -((hist[i] / (double)(1024)) * (log((hist[i] / (double)(1024))) / log(2))));
 						}
 					printf("\n\n DC ent = %lf", sum);
-					comb_after_sort[d][1] += sum;
+					//printf("\n0");
+					//comb_after_sort[d][1] += sum;
 
 					// 全体の画質も一応算出しておく/////////////////////////////////////
 
@@ -1330,12 +1326,12 @@ int main()
 								dct_ica_sai[i][j] = ica_sai[i][j];
 							}
 						}
-					img_out2(dcoe2, ica_sai, no_op, Q);
+					//img_out2(dcoe2, ica_sai, no_op, Q);
 					sum = 0;
 					for (j = 0; j < 1024; j++)
 						sum += mse_dct[0][(Q / 10) - 1][j];
 					printf("\n\n DCT MSE = %lf", sum);
-					comb_after_sort[d][5] = sum;
+					//comb_after_sort[d][5] = sum;
 
 					sum = 0;
 					for (i = 0; i < 256; i++) {
@@ -1345,7 +1341,7 @@ int main()
 						//printf("\nsum = %lf", sum);
 					}
 					sum = sum / 64;
-					comb_after_sort[d][5] += -sum; //ブロックの平均二乗誤差を総和　正しいMSEは後で/1024する
+					//comb_after_sort[d][5] += -sum; //ブロックの平均二乗誤差を総和　正しいMSEは後で/1024する
 					printf("\n\n MSE = %lf", comb_after_sort[d][5]);
 				}// DCとACのエントロピーOK
 				//comb_after_sort[d][5]に全体の画質を格納して累積した画質と比較してもいいんじゃね？ ←OK
@@ -1370,9 +1366,14 @@ int main()
 					else
 						c = 3;
 
-					printf("\ndct_all_mse = %lf\ncomb_after_sort[a][1] =%lf\n", dct_all_mse, comb_after_sort[a][1]);
+					///printf("\ndct_all_mse = %lf\ncomb_after_sort[a][1] =%lf\n", dct_all_mse, comb_after_sort[a][1]);
+					sum = dct_all_mse * 1024 * 64;
+					printf("\n DCT sum = %lf", sum);
+					sum = (comb_after_sort[a][1] * (1024 * 64 + (int)comb_after_sort[a][5]) + ica_basis_ent[c - 1] * 64 * 64);
+					printf("\n ICA sum = %lf (%lf)", sum, dct_all_mse * 1024 * 64 - sum);
+
 					if (k == 0) {
-						if ((dct_all_mse - comb_after_sort[a][1]) > ica_basis_ent[c-1]) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
+						if (dct_all_mse > sum) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
 							printf("\n [%d , %d, %d]  %lf + %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse, comb_after_sort[a][1], ica_basis_ent[c-1], comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 5; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
