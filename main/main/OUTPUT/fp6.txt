@@ -1,6 +1,6 @@
 
 
- Use image  :  airplane.bmp
+ Use image  :  cameraman.bmp
 
 
 
