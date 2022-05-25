@@ -447,17 +447,17 @@ int main()
 		full_mse[1][0][j] = sum / 64.0;//基底すべて用いた場合のMSE
 	}
 
-	for(i=0;i<65;i++)
-		for (j = 0; j < 1024; j++) {
-			full_mse_temp[0][64 - i][j] = full_mse[0][i][j];
-			full_mse_temp[1][64 - i][j] = full_mse[1][i][j];
-		}
-
-	for (i = 0; i < 65; i++)
-		for (j = 0; j < 1024; j++) {
-			full_mse[0][i][j] = full_mse_temp[0][i][j];
-			full_mse[1][i][j] = full_mse_temp[1][i][j];
-		}
+	//for(i=0;i<65;i++)
+	//	for (j = 0; j < 1024; j++) {
+	//		full_mse_temp[0][64 - i][j] = full_mse[0][i][j];
+	//		full_mse_temp[1][64 - i][j] = full_mse[1][i][j];
+	//	}
+	//
+	//for (i = 0; i < 65; i++)
+	//	for (j = 0; j < 1024; j++) {
+	//		full_mse[0][i][j] = full_mse_temp[0][i][j];
+	//		full_mse[1][i][j] = full_mse_temp[1][i][j];
+	//	}
 
 	for (i = 0; i < 65; i++)
 		printf(" \n%d : %d , %lf", i, (int)full_mse[0][i][0], full_mse[1][i][0]);
@@ -471,6 +471,147 @@ int main()
 	/////////////////  Step1  のメイン処理　終了/////////////////////////////////////////////////////////////
 
 
+	min = 10000; // 最小MSE 保存用
+	for (i = 0; i < 64; i++)
+		ny[i][QQ] = 0; //係数の初期化
+	for(j=0;j<1024;j++){
+		fprintf(fp8, "\n\n\n\n,[%d]", j);
+		min = 10000; // 最小MSE 保存用
+		for (k = 0; k < 4; k++) {
+			for (a = 0; a < 64 - k; a++) {
+
+				if (k == 0) {
+					for (i = 0; i < 64; i++)
+						ny[i][j] = 0; //係数の初期化
+					ny[a][j] = y[a][j];//選出済みの基底の係数を0
+					for (i = 0; i < 64; i++)
+						xx[i] = 0.0;
+					seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+					xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+					avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+					sum = 0.0;
+					mk = j % 32;
+					ml = j / 32;
+					for (l = 0; l < 8; l++)
+						for (m = 0; m < 8; m++)
+							sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+					if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+						min = sum / 64.0;
+				}
+
+				if (k > 0)
+					for (b = a + 1; b < 64 - k + 1; b++) {
+
+						if (k == 1) {
+							for (i = 0; i < 64; i++)
+								ny[i][j] = 0; //係数の初期化
+							ny[a][j] = y[a][j];//選出済みの基底の係数を0
+							ny[b][j] = y[b][j];//選出済みの基底の係数を0
+							for (i = 0; i < 64; i++)
+								xx[i] = 0.0;
+							seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+							xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+							avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+							sum = 0.0;
+							mk = j % 32;
+							ml = j / 32;
+							for (l = 0; l < 8; l++)
+								for (m = 0; m < 8; m++)
+									sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+							if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+								min = sum / 64.0;
+						}
+
+						if (k > 1)
+							for (c = b + 1; c < 64 - k + 2; c++) {
+
+								if (k == 2) {
+									for (i = 0; i < 64; i++)
+										ny[i][j] = 0; //係数の初期化
+									ny[a][j] = y[a][j];//選出済みの基底の係数を0
+									ny[b][j] = y[b][j];//選出済みの基底の係数を0
+									ny[c][j] = y[c][j];//選出済みの基底の係数を0
+									for (i = 0; i < 64; i++)
+										xx[i] = 0.0;
+									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+									sum = 0.0;
+									mk = j % 32;
+									ml = j / 32;
+									for (l = 0; l < 8; l++)
+										for (m = 0; m < 8; m++)
+											sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+									if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+										min = sum / 64.0;
+								}
+
+								if (k > 2)
+									for (d = c + 1; d < 64 - k + 3; d++) {
+										if (k == 3) {
+											for (i = 0; i < 64; i++)
+												ny[i][j] = 0; //係数の初期化
+											ny[a][j] = y[a][j];//選出済みの基底の係数を0
+											ny[b][j] = y[b][j];//選出済みの基底の係数を0
+											ny[c][j] = y[c][j];//選出済みの基底の係数を0
+											ny[d][j] = y[d][j];//選出済みの基底の係数を0
+											for (i = 0; i < 64; i++)
+												xx[i] = 0.0;
+											seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+											xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+											avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+											sum = 0.0;
+											mk = j % 32;
+											ml = j / 32;
+											for (l = 0; l < 8; l++)
+												for (m = 0; m < 8; m++)
+													sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+											if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+												min = sum / 64.0;
+										}
+
+										//if (k > 3)
+										//	for (o = d + 1; o < 64 - k + 4; o++) {
+										//		if (k == 4) {
+										//			for (i = 0; i < 64; i++)
+										//				ny[i][j] = 0; //係数の初期化
+										//			ny[a][j] = y[a][j];//選出済みの基底の係数を0
+										//			ny[b][j] = y[b][j];//選出済みの基底の係数を0
+										//			ny[c][j] = y[c][j];//選出済みの基底の係数を0
+										//			ny[d][j] = y[d][j];//選出済みの基底の係数を0
+										//			ny[o][j] = y[o][j];//選出済みの基底の係数を0
+										//			for (i = 0; i < 64; i++)
+										//				xx[i] = 0.0;
+										//			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+										//			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+										//			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+										//			sum = 0.0;
+										//			mk = j % 32;
+										//			ml = j / 32;
+										//			for (l = 0; l < 8; l++)
+										//				for (m = 0; m < 8; m++)
+										//					sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+										//			if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+										//				min = sum / 64.0;
+										//		}
+
+										//	}
+									}
+							}
+					}
+			}
+			printf("\n[%d] : %lf (%d)", j, min, k);
+			fprintf(fp8, ",,,,%lf", min);
+		}
+	}
+
+
+	//for (j = 0; j < 1024; j++) {
+	//	fprintf(fp8, "\n\n\n\n,[%d],,%lf,,,%lf,,,%lf,,,%lf,,,%lf", j, full_mse[1][63][j], full_mse[1][62][j], full_mse[1][61][j], full_mse[1][60][j], full_mse[1][59][j]);
+	//}
+
+	fclose(fp8);
+	printf("a");
 	// //////////////////////////// dct ////////////////////////////////////////
 	// ICA と大体同じ。DCTの基底は汎用的だから決まっている。係数のみを動かせばいい
 
@@ -481,8 +622,6 @@ int main()
 		ent_count_basis(w, ica_basis_ent);
 		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp7, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result");
-		fprintf(fp8, "\nICA_Basis,%lf", ica_basis_ent[0]);
-		fprintf(fp8, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result");
 		fprintf(fp10, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp10, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,No_Options,With_Options");
 
@@ -1683,7 +1822,7 @@ int main()
 	fclose(fp5);
 	fclose(fp6);
 	fclose(fp7);
-	fclose(fp8);
+
 	fclose(fp9);
 	fclose(fp10);
 	//gnuplot(dcoe_temp);
