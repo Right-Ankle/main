@@ -453,7 +453,7 @@ int main()
 			full_mse_temp[0][64 - i][j] = full_mse[0][i][j];
 			full_mse_temp[1][64 - i][j] = full_mse[1][i][j];
 		}
-
+	
 	for (i = 0; i < 65; i++)
 		for (j = 0; j < 1024; j++) {
 			full_mse[0][i][j] = full_mse_temp[0][i][j];
@@ -471,16 +471,19 @@ int main()
 	///基底を使わなかったとき　終了///////////////////
 	/////////////////  Step1  のメイン処理　終了/////////////////////////////////////////////////////////////
 
-
+	/*
 	min = 10000; // 最小MSE 保存用
 	for (i = 0; i < 64; i++)
 		ny[i][QQ] = 0; //係数の初期化
+	for (i = 0; i < 4; i++)
+		excel_basis[i]=99;
 	for(j=0;j<1024;j++){
 		fprintf(fp8, "\n\n\n\n,[%d]", j);
 		min = 10000; // 最小MSE 保存用
-		for (k = 0; k < 4; k++) {
+		for (k = 0; k < 3; k++) {
+			min = 10000; // 最小MSE 保存用
 			for (a = 0; a < 64 - k; a++) {
-	
+
 				if (k == 0) {
 					for (i = 0; i < 64; i++)
 						ny[i][j] = 0; //係数の初期化
@@ -496,13 +499,15 @@ int main()
 					for (l = 0; l < 8; l++)
 						for (m = 0; m < 8; m++)
 							sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
-					if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+					if (min > sum / 64.0) { //MSEの減少が一番小さい基底を抜く
 						min = sum / 64.0;
+						excel_basis[0] = a;
+					}
 				}
-	
+
 				if (k > 0)
-					for (b = a + 1; b < 64 - k + 1; b++) {
-	
+					for (b = a + 1; b < 64; b++) {
+
 						if (k == 1) {
 							for (i = 0; i < 64; i++)
 								ny[i][j] = 0; //係数の初期化
@@ -519,13 +524,16 @@ int main()
 							for (l = 0; l < 8; l++)
 								for (m = 0; m < 8; m++)
 									sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
-							if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+							if (min > sum / 64.0) { //MSEの減少が一番小さい基底を抜く
 								min = sum / 64.0;
+								excel_basis[0] = a;
+								excel_basis[1] = b;
+							}
 						}
-	
+
 						if (k > 1)
-							for (c = b + 1; c < 64 - k + 2; c++) {
-	
+							for (c = b + 1; c < 64; c++) {
+
 								if (k == 2) {
 									for (i = 0; i < 64; i++)
 										ny[i][j] = 0; //係数の初期化
@@ -543,33 +551,37 @@ int main()
 									for (l = 0; l < 8; l++)
 										for (m = 0; m < 8; m++)
 											sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
-									if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+									if (min > sum / 64.0) { //MSEの減少が一番小さい基底を抜く
 										min = sum / 64.0;
+										excel_basis[0] = a;
+										excel_basis[1] = b;
+										excel_basis[2] = c;
+									}
 								}
-	
-								if (k > 2)
-									for (d = c + 1; d < 64 - k + 3; d++) {
-										if (k == 3) {
-											for (i = 0; i < 64; i++)
-												ny[i][j] = 0; //係数の初期化
-											ny[a][j] = y[a][j];//選出済みの基底の係数を0
-											ny[b][j] = y[b][j];//選出済みの基底の係数を0
-											ny[c][j] = y[c][j];//選出済みの基底の係数を0
-											ny[d][j] = y[d][j];//選出済みの基底の係数を0
-											for (i = 0; i < 64; i++)
-												xx[i] = 0.0;
-											seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-											xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-											avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-											sum = 0.0;
-											mk = j % 32;
-											ml = j / 32;
-											for (l = 0; l < 8; l++)
-												for (m = 0; m < 8; m++)
-													sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
-											if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
-												min = sum / 64.0;
-										}
+
+								//if (k > 2)
+								//	for (d = c + 1; d < 64; d++) {
+								//		if (k == 3) {
+								//			for (i = 0; i < 64; i++)
+								//				ny[i][j] = 0; //係数の初期化
+								//			ny[a][j] = y[a][j];//選出済みの基底の係数を0
+								//			ny[b][j] = y[b][j];//選出済みの基底の係数を0
+								//			ny[c][j] = y[c][j];//選出済みの基底の係数を0
+								//			ny[d][j] = y[d][j];//選出済みの基底の係数を0
+								//			for (i = 0; i < 64; i++)
+								//				xx[i] = 0.0;
+								//			seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+								//			xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+								//			avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+								//			sum = 0.0;
+								//			mk = j % 32;
+								//			ml = j / 32;
+								//			for (l = 0; l < 8; l++)
+								//				for (m = 0; m < 8; m++)
+								//					sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+								//			if (min > sum / 64.0) //MSEの減少が一番小さい基底を抜く
+								//				min = sum / 64.0;
+								//		}
 
 										//if (k > 3)
 										//	for (o = d + 1; o < 64 - k + 4; o++) {
@@ -597,21 +609,24 @@ int main()
 										//		}
 
 										//	}
-									}
+									//}
 							}
 					}
 			}
 			printf("\n[%d] : %lf (%d)", j, min, k);
-			fprintf(fp8, ",,,,%lf", min);
+			fprintf(fp8, "\n,,%lf", min);
+			fprintf(fp8, ",,,");
+			for (i = 0; i < k + 1; i++)
+				fprintf(fp8, ",%d", (int)excel_basis[i]);
 		}
-	}
+	}*/
 
 
 	//for (j = 0; j < 1024; j++) {
-	//	fprintf(fp8, "\n\n\n\n,[%d],,%lf,,,%lf,,,%lf,,,%lf,,,%lf", j, full_mse[1][63][j], full_mse[1][62][j], full_mse[1][61][j], full_mse[1][60][j], full_mse[1][59][j]);
+	//	fprintf(fp8, "\n\n\n\n,[%d]\n,,%lf,,,,%d\n,,%lf,,,,%d,%d\n,,%lf,,,,%d,%d,%d", j, full_mse[1][63][j], (int)full_mse[0][63][j],full_mse[1][62][j], (int)full_mse[0][63][j], (int)full_mse[0][62][j], full_mse[1][61][j], (int)full_mse[0][63][j], (int)full_mse[0][62][j], (int)full_mse[0][61][j]);
 	//}
 
-	fclose(fp8);
+	//fclose(fp8);
 	printf("a");
 	// //////////////////////////// dct ////////////////////////////////////////
 	// ICA と大体同じ。DCTの基底は汎用的だから決まっている。係数のみを動かせばいい
@@ -628,7 +643,9 @@ int main()
 
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
-		for (Q = 100; Q > 0; Q -= 10) {
+		printf("\nQ? : ");
+		scanf("%d", &QQ);
+		for (Q = QQ; Q > 0; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -732,14 +749,14 @@ int main()
 						ica_basis2[b][j] = 99;
 					}
 
-					// 最小基底数
+					// 最小基底数 (いらないやつから探索)
 					for (b = 0; b < 65; b++)//ICAの基底数　0は一番いらないやつ
 						if (mse_dct[0][a][j] > full_mse[1][b][j] && mse_dct[1][a][j] > (double)(64 - b)) {//
 							bunrui[3][j] = full_mse[1][b][j];
 							bunrui[2][j] = 64 - b;
 						}
 
-					//最大基底数
+					//最大基底数 (いるやつから探索)　使用できる基底数範囲の両端を探索可能
 					for (b = 64; b > 0; b--)//ICAの基底数　0は一番いらないやつ
 						if (mse_dct[0][a][j] > full_mse[1][b][j] && mse_dct[1][a][j] > (double)(64 - b)) {//
 							bunrui[1][j] = full_mse[1][b][j];
@@ -781,7 +798,7 @@ int main()
 			//		printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
 
 
-
+			fprintf(fp8, "\n\n\n\n,,[%d]\n",Q);
 			for (j = 0; j < 1024; j++) {
 				no_op_1[j] = 0;
 				no_op_2[j] = 0;
@@ -795,6 +812,9 @@ int main()
 					no_op_2[j] = 1;
 				if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j])
 					no_op_3[j] = 1;
+				if(j!=0)
+					fprintf(fp8, "\n\n\n\n\n\n\n");
+				fprintf(fp8, ",[%d], %d,%d", j, (int)bunrui[2][j], (int)bunrui[0][j]);
 			}
 
 			img_out(origin, no_op_1, Q + 1);//基底1ブロック
@@ -802,6 +822,11 @@ int main()
 			img_out(origin, no_op_3, Q + 3);//基底3ブロック
 			img_out(origin, no_op_4, Q + 5);//0のみICAブロック
 			img_out(origin, no_op, Q);//ICA領域
+
+
+
+
+			fclose(fp8);
 			printf("a");
 			//////領域分割メイン処理　終了/////////////////////////////
 
@@ -813,7 +838,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'y') {
+			if (yn == 'n') {
 				//0の情報量ok
 
 				// 動的配列の宣言
