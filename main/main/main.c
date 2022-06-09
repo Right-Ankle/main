@@ -22,6 +22,7 @@ int main()
 	char output[1000];//画像出力用
 	static char image_name[20] = { 0 };	//画像ファイル名(拡張子含まず)
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
+	static unsigned char origin_change[256][256] = { 0 }; //基底作成用画像（各レートの選出前のICA領域）
 	static unsigned char nica_basis[64][64]; //ica基底出力用
 	static unsigned char dcoe2[256][256] = { 0 }; //dct再構成用
 	static unsigned char  ica_sai[256][256] = { 0 }; //ica再構成用
@@ -37,6 +38,7 @@ int main()
 	static int no_op_2[1024] = { 0 };
 	static int no_op_3[1024] = { 0 };
 	static int no_op_4[1024] = { 0 };
+	static int no_op_5[1024] = { 0 };
 	static int Q;//圧縮レート
 	static int QQ;//適当な変数として使用中？
 	int hist[500000]; //entropy算出時のヒストグラム用
@@ -155,6 +157,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '4', '4', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -182,6 +185,20 @@ int main()
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
 			origin[i][j] = ori_temp[i * 256 + j];
+	printf("a");
+	/// 基底変更用//////////////////////////
+	yn = 'n';
+	if (yn == 'n') {
+		strcpy(filename, filename16);
+		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
+			return -1;
+
+		for (i = 0; i < 256; i++)
+			for (j = 0; j < 256; j++)
+				origin_change[i][j] = ori_temp[i * 256 + j];
+	}
+	///基底変更完了////////////////////////
+	printf("a");
 	///画像入力 処理終了//////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -233,17 +250,28 @@ int main()
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
-
-	pcaStr = new_pca(origin);
-	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
-
+	printf("a");
+	if (yn == 'y') {
+		pcaStr = new_pca(origin);
+		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+	}
+	else if (yn == 'n') {
+		pcaStr = new_pca(origin_change);
+		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
+	}
+	printf("a");
 	// ICA_BASIS 出力よう
 	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
 
 	// 計算用にコピー
+	sum = 0;
 	for (i = 0; i < 1024; i++)
-		for (j = 0; j < 64; j++)
+		for (j = 0; j < 64; j++) {
 			ny[j][i] = y[j][i]; // ny -> yy(ica係数コピー)
+			sum += y[j][i];
+		}
+	printf("\n%lf", sum);
+	printf("a");
 
 	for (i = 0; i < 64; i++)
 		for (j = 0; j < 64; j++)
@@ -453,7 +481,7 @@ int main()
 			full_mse_temp[0][64 - i][j] = full_mse[0][i][j];
 			full_mse_temp[1][64 - i][j] = full_mse[1][i][j];
 		}
-	
+
 	for (i = 0; i < 65; i++)
 		for (j = 0; j < 1024; j++) {
 			full_mse[0][i][j] = full_mse_temp[0][i][j];
@@ -645,7 +673,7 @@ int main()
 		// 10段階品質があるから10段階分やる
 		printf("\nQ? : ");
 		scanf("%d", &QQ);
-		for (Q = QQ; Q > 0; Q -= 10) {
+		for (Q = QQ; Q > 0; Q -= 100) {
 			printf("\r now Q is %d          \n", Q);
 
 			// dct処理
@@ -800,18 +828,29 @@ int main()
 
 			fprintf(fp8, "\n\n\n\n,,[%d]\n",Q);
 			for (j = 0; j < 1024; j++) {
+				no_op_0[j] = 0;
 				no_op_1[j] = 0;
 				no_op_2[j] = 0;
 				no_op_3[j] = 0;
 				no_op_4[j] = 0;
+				no_op_5[j] = 0;
 				if (bunrui[2][j]<=0 && 0<=bunrui[0][j])
-					no_op_4[j] = 1;
-				if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j])
+					no_op_0[j] = 1;
+				if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j]) {
 					no_op_1[j] = 1;
-				if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j])
+					no_op_4[j] = 1;
+				}
+				if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j]) {
 					no_op_2[j] = 1;
-				if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j])
+					no_op_4[j] = 1;
+				}
+				if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j]) {
 					no_op_3[j] = 1;
+					no_op_4[j] = 1;
+				}
+				if (bunrui[2][j] != 99 && bunrui[0][j] != 99 && bunrui[0][j]!=0) {// 0ブロック以外のICA領域（最小基底数0はしょうがない，最大基底数0は許さない）
+					no_op_5[j] = 1;
+				}
 				if(j!=0)
 					fprintf(fp8, "\n\n\n\n\n\n\n");
 				fprintf(fp8, ",[%d], %d,%d", j, (int)bunrui[2][j], (int)bunrui[0][j]);
@@ -820,7 +859,9 @@ int main()
 			img_out(origin, no_op_1, Q + 1);//基底1ブロック
 			img_out(origin, no_op_2, Q + 2);//基底2ブロック
 			img_out(origin, no_op_3, Q + 3);//基底3ブロック
-			img_out(origin, no_op_4, Q + 5);//0のみICAブロック
+			img_out(origin, no_op_4, Q + 4);//0無しICAブロック
+			img_out(origin, no_op_0, Q + 5);//0のみICAブロック
+			img_out(origin, no_op_5, Q + 6);//0のみICAブロック
 			img_out(origin, no_op, Q);//ICA領域
 
 
@@ -838,7 +879,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'n') {
+			if (yn == 'y') {
 				//0の情報量ok
 
 				// 動的配列の宣言
@@ -1576,12 +1617,12 @@ int main()
 
 					}
 
-					img_out(origin, no_op_0, Q);//基底0ブロック
-					img_out(origin, no_op_1, Q + 1);//基底1ブロック
-					img_out(origin, no_op_2, Q + 2);//基底2ブロック
-					img_out(origin, no_op_3, Q + 3);//基底3ブロック
-					img_out(origin, no_op_4, Q + 5);//0抜きICAブロック
-					img_out(origin, no_op, Q + 6);//ICAブロック
+					img_out(origin, no_op_0, Q*10 + 5);//基底0ブロック
+					img_out(origin, no_op_1, Q*10 + 1);//基底1ブロック
+					img_out(origin, no_op_2, Q*10 + 2);//基底2ブロック
+					img_out(origin, no_op_3, Q*10 + 3);//基底3ブロック
+					img_out(origin, no_op_4, Q*10 + 4);//0抜きICAブロック
+					img_out(origin, no_op, Q*10 + 6);//ICAブロック
 
 					seki5(nw, ny, x); // x -> nw * ny
 					xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
