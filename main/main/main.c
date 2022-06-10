@@ -42,6 +42,7 @@ int main()
 	static int Q;//圧縮レート
 	static int QQ;//適当な変数として使用中？
 	int hist[500000]; //entropy算出時のヒストグラム用
+	double hist2[500000][2]; //entropy算出時のヒストグラム用 [][0]=係数値, [][1]=確率値（ラプラス）
 	int test_basis[64]; //どの基底が使用されているのか確認用？
 	double test_area[1024]; // ブロック当たりの使用基底数の確認用？
 	int ica_fre[64][1024]; //ICA基底頻度
@@ -187,7 +188,7 @@ int main()
 			origin[i][j] = ori_temp[i * 256 + j];
 	printf("a");
 	/// 基底変更用//////////////////////////
-	yn = 'n';
+	yn = 'y';
 	if (yn == 'n') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -280,6 +281,44 @@ int main()
 	for (j = 0; j < 1024; j++)
 		for (n = 0; n < 64; n++)
 			ny[n][j] = 0;
+
+	////////////// 係数の確率分布（ラプラス）を尖度で比較 ////////////////
+	// 画像全体でのラプラス分布
+	for (i = 0; i < 500000; i++) {
+		hist[i] = 0;
+		hist2[i][0] = 0;
+		hist2[i][1] = 0;
+	}
+
+	min = 10000;
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++)
+			if (y[j][i] < min)
+				min = y[j][i];
+
+	a = 0;
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++) {
+			if (y[j][i] != 0) {
+				hist[(int)((y[j][i] - min) * step) + 1]++;
+				a++;
+			}
+		}
+
+	for (i = 0; i < 500000; i++)
+		if (hist[i] > 0) {
+			hist2[i][0] = ((double)i / step) + min;
+			hist2[i][1] = (double)hist[i] / (double)(a); //ラプラス分布　平均0　標準偏差？1 0.5 * exp(-1.0 * fabs((double)hist[i] / (double)(a)))
+		}
+
+	for (i = 0; i < 500000; i++)
+		if (hist[i] > 0) {
+			fprintf(fp9, "\n,%d,%lf,%lf",hist[i],hist2[i][0],hist2[i][1]);
+		}
+
+	fclose(fp9);
+	printf("a");
+	////////////////////////////////
 
 	// ICAの直流成分をQ100で代用　//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	for (j = 0; j < 1024; j++) {
@@ -879,7 +918,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'y') {
+			if (yn == 'n') {
 				//0の情報量ok
 
 				// 動的配列の宣言
@@ -1780,7 +1819,7 @@ int main()
 	fclose(fp6);
 	fclose(fp7);
 
-	fclose(fp9);
+
 	fclose(fp10);
 	//gnuplot(dcoe_temp);
 
