@@ -132,7 +132,8 @@ double b_SSIM(unsigned char data1[][8], unsigned char data2[][8], int width, int
 void smoothing(unsigned char origin[][256], unsigned char out[][256], int size);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
-
+void gnuplot5_3(double y[64][1024], double ny[64][1024], double y2[64][1024], double ny2[64][1024]);
+void gnuplot5_4(double y[64][1024], double y2[64][1024]);
 
 
 

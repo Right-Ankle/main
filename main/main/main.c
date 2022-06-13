@@ -43,6 +43,7 @@ int main()
 	static int QQ;//適当な変数として使用中？
 	int hist[500000]; //entropy算出時のヒストグラム用
 	double hist2[500000][2]; //entropy算出時のヒストグラム用 [][0]=係数値, [][1]=確率値（ラプラス）
+	double hist3[500000][2]; //entropy算出時のヒストグラム用 [][0]=係数値, [][1]=確率値（ラプラス）
 	int test_basis[64]; //どの基底が使用されているのか確認用？
 	double test_area[1024]; // ブロック当たりの使用基底数の確認用？
 	int ica_fre[64][1024]; //ICA基底頻度
@@ -54,8 +55,10 @@ int main()
 	static double sum = 0, min = 0, max = 0, temp = 0;//計算用
 	double avg[1024];//ICAの直流成分
 	double y[64][1024];//ICAの係数値（基本的にいじらない）
+	double y2[64][1024];//ICAの係数値（基本的にいじらない）
 	double w[64][64];//ICAの基底
 	double ny[64][1024];//ICA_Blockの係数値、計算用
+	double ny2[64][1024];//ICA_Blockの係数値、計算用
 	double nny[64][1024];//ICA_Blockの係数値、計算用2
 	double nw[64][64];//ICA基底、計算用
 	double x[64][1024];//ICAの再構成時に使用、直流成分なし
@@ -158,7 +161,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '4', '4', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '3', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -188,7 +191,7 @@ int main()
 			origin[i][j] = ori_temp[i * 256 + j];
 	printf("a");
 	/// 基底変更用//////////////////////////
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'n') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -245,18 +248,89 @@ int main()
 	}
 	/////////////////宣言処理 終了//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// ///////////////////////// ica基底と係数を求める //////////////////////////////////
+	/// 基底作成による尖度を比較中////////////////////////////////////////////////////////////////////
+	printf("a");
+		pcaStr = new_pca(origin);
+		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+		if (yn == 'n') {
+			pcaStr = new_pca(origin_change);
+			ICA(origin_change, pcaStr, y2, w, avg, 100, 0.002);
+		}
+	printf("a");
+
+	for (j = 0; j < 1024; j++)
+		for (n = 0; n < 64; n++) {
+			ny[n][j] = 0;
+			ny2[n][j] = 0;
+		}
+
+	////////////// 係数の確率分布（ラプラス）を尖度で比較 ////////////////
+	// 画像全体でのラプラス分布
+	sum = temp = 0;
+	min = max = 0;
+	a = b = 0;
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++) {
+			if (y[j][i] != 0) {
+				sum += y[j][i];
+				a++;
+			}
+			if (y2[j][i] != 0) {
+				temp += y2[j][i];
+				b++;
+			}
+		}
+	sum = sum / (double)a;
+	temp = temp / (double)b;
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++) {
+			if (y[j][i] != 0)
+				min += pow(y[j][i] - sum, 2);//分散
+
+			if (y2[j][i] != 0) {
+				max += pow(y2[j][i] - temp, 2);//分散
+			}
+		}
+
+	sum = sqrt(0.5*(min / (double)a));// ラプラス分布のｂ（0.5*分散をルートしたやつ）
+	temp = sqrt(0.5*(max / (double)b));
+	printf("%lf", sum);
+
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++) {
+			if (y[j][i] != 0)
+				ny[j][i] = (1.0/(2.0*sum))* exp(-1.0 * fabs(y[j][i]) / sum);
+			if (y2[j][i] != 0)
+				ny2[j][i] = (1.0 / (2.0 * temp))* exp(-1.0 * fabs(y2[j][i]) / temp);
+		}
+
+	for (i = 0; i < 1024; i++)
+		for (j = 0; j < 64; j++) {
+			fprintf(fp9, "\n");
+			if (y[j][i] != 0)
+				fprintf(fp9, ",%lf,%lf", y[j][i], ny[j][i]);
+			if(y2[j][i]!=0)
+				fprintf(fp9, ",,%lf,%lf", y2[j][i], ny2[j][i]);
+		}
+
+	fclose(fp9);
+	printf("a");
+	gnuplot5_3(y, ny, y2, ny2);
+	//gnuplot5_4(y, y2);
+
+	printf("a");
+	////////////////////////////////実験 終了////////////////////////////////////////////
+
+		// ///////////////////////// ica基底と係数を求める //////////////////////////////////
 	// ICA基底・係数
 	// origin = 画素値(256*256),  y = ica係数(ブロックで64個で1024ブロック分),  w = ica基底(64個の計算法の中にそれぞれ64個の計算法がある)
 	// ICAに"origin"を入れることで"y"(計算後の値)と"w"(計算の仕方)の結果が出力される
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	if (yn == 'y') {
-		pcaStr = new_pca(origin);
-		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
-	}
-	else if (yn == 'n') {
+	pcaStr = new_pca(origin);
+	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+	if (yn == 'n') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
@@ -279,46 +353,10 @@ int main()
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
 	for (j = 0; j < 1024; j++)
-		for (n = 0; n < 64; n++)
+		for (n = 0; n < 64; n++) {
 			ny[n][j] = 0;
-
-	////////////// 係数の確率分布（ラプラス）を尖度で比較 ////////////////
-	// 画像全体でのラプラス分布
-	for (i = 0; i < 500000; i++) {
-		hist[i] = 0;
-		hist2[i][0] = 0;
-		hist2[i][1] = 0;
-	}
-
-	min = 10000;
-	for (i = 0; i < 1024; i++)
-		for (j = 0; j < 64; j++)
-			if (y[j][i] < min)
-				min = y[j][i];
-
-	a = 0;
-	for (i = 0; i < 1024; i++)
-		for (j = 0; j < 64; j++) {
-			if (y[j][i] != 0) {
-				hist[(int)((y[j][i] - min) * step) + 1]++;
-				a++;
-			}
+			ny2[n][j] = 0;
 		}
-
-	for (i = 0; i < 500000; i++)
-		if (hist[i] > 0) {
-			hist2[i][0] = ((double)i / step) + min;
-			hist2[i][1] = (double)hist[i] / (double)(a); //ラプラス分布　平均0　標準偏差？1 0.5 * exp(-1.0 * fabs((double)hist[i] / (double)(a)))
-		}
-
-	for (i = 0; i < 500000; i++)
-		if (hist[i] > 0) {
-			fprintf(fp9, "\n,%d,%lf,%lf",hist[i],hist2[i][0],hist2[i][1]);
-		}
-
-	fclose(fp9);
-	printf("a");
-	////////////////////////////////
 
 	// ICAの直流成分をQ100で代用　//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	for (j = 0; j < 1024; j++) {
@@ -918,7 +956,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'n') {
+			if (yn == 'y') {
 				//0の情報量ok
 
 				// 動的配列の宣言
