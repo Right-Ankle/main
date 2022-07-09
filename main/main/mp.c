@@ -75,62 +75,10 @@ void mp(double y[][1024], double avg[1024], double w[][64], int mpans[][64]){
 			y2[key[i]][i] = 0.0; //ica係数のブロック内番号jは０
 		}
 
-		//seki(w, y2, x);
-		//xtogen(x, gen, avg);
-		//gentox(gen, x);
-
-		//for (i = 0; i < 1024; i++) {
-		//	for (k = 0; k < 64; k++) {
-		//		atemp[k] = xori[k][i]; // ica係数*基底
-		//		btemp[k] = x[k][i];    // 最大値のところ0のica係数 * 基底
-		//	}
-		//	inans2[i][count] = inner_product(atemp, btemp);
-		//}
-
-		////count 4ずつに'とりこ'？
-		//if (count % gauge == 0)
-		//	printf("擒");
-
 		printf("\r Now Running  :  [%3.3lf]", ((double)count / 64.0) * 100);
 	}
 	printf("\r [ Execution finished ]          ");
 	printf("\n\n");
-
-
-	// 確認用 fprint
-	for(i = 0; i < 64; i++){
-		for(j = 0; j < 1024; j++)
-			fprintf(fp, "%d,", mpans[j][i]+1);
-		fprintf(fp, "\n");
-	}
-
-	fprintf(fp,"\n\n");
-
-	for(i = 0; i < 64; i++){
-		for(j = 0; j < 1024; j++)
-			fprintf(fp, "%lf,", inans[j][i]);
-		fprintf(fp, "\n");
-	}
-
-	fprintf(fp,"\n\n");
-
-	for(i = 0; i < 64; i++){
-		for(j = 0; j < 1024; j++)
-			fprintf(fp, "%lf,", inans2[j][i]);
-		fprintf(fp, "\n");
-	}
-
-	for(i = 0; i < 64; i++)
-		for(j = 0; j < 1024; j++)
-			hist[i][mpans[j][i]]++;
-
-	fprintf(fp,"\n\n");
-
-	for(i = 0; i < 64; i++){
-		for(j = 0; j < 64; j++)
-			fprintf(fp, "%d,", hist[i][j]);
-		fprintf(fp, "\n");
-	}
 
 	fclose(fp);
 }
