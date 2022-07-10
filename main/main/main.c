@@ -1812,12 +1812,12 @@ int main()
 
 				}
 
-				img_out(origin, no_op_0, Q * 10 + 5);//基底0ブロック
-				img_out(origin, no_op_1, Q * 10 + 1);//基底1ブロック
-				img_out(origin, no_op_2, Q * 10 + 2);//基底2ブロック
-				img_out(origin, no_op_3, Q * 10 + 3);//基底3ブロック
-				img_out(origin, no_op_4, Q * 10 + 4);//0抜きICAブロック
-				img_out(origin, no_op, Q * 10 + 6);//ICAブロック
+				img_out(origin, no_op_0, Q + 100 + 5);//基底0ブロック
+				img_out(origin, no_op_1, Q + 100 + 1);//基底1ブロック
+				img_out(origin, no_op_2, Q + 100 + 2);//基底2ブロック
+				img_out(origin, no_op_3, Q + 100 + 3);//基底3ブロック
+				img_out(origin, no_op_4, Q + 100 + 4);//0抜きICAブロック
+				img_out(origin, no_op, Q + 100 + 6);//ICAブロック
 
 				seki5(nw, ny, x); // x -> nw * ny
 				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
