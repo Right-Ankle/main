@@ -161,7 +161,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '5', '4', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '1', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -1006,11 +1006,11 @@ int main()
 						for (i = 0; i < 64; i++)
 							ny[i][j] = 0; //係数初期化
 
-						temp = 0;
-						if (full_mse[0][64][j] == a)//正順での基底選択に準拠している。それ以外の基底は使用しない
-							temp = 1;
+						//temp = 0;
+						//if (full_mse[0][64][j] == a)//正順での基底選択に準拠している。それ以外の基底は使用しない
+						//	temp = 1;
 
-						if (temp == 1)
+						//if (temp == 1)
 						if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j]) {//基底1個領域を対象
 
 							ny[a][j] = y[a][j];
@@ -1053,13 +1053,13 @@ int main()
 							for (i = 0; i < 64; i++)
 								ny[i][j] = 0; //係数初期化
 
-							temp = 0;//正順での基底選択に準拠している。それ以外の基底は使用しない
-							if (full_mse[0][64][j] == a || full_mse[0][64][j] == b)
-								temp = 1;
-							if (full_mse[0][63][j] == a || full_mse[0][63][j] == b)
-								temp = 1;
+							//temp = 0;//正順での基底選択に準拠している。それ以外の基底は使用しない
+							//if (full_mse[0][64][j] == a || full_mse[0][64][j] == b)
+							//	temp = 1;
+							//if (full_mse[0][63][j] == a || full_mse[0][63][j] == b)
+							//	temp = 1;
 
-							if (temp == 1)
+							//if (temp == 1)
 							if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j]) {//基底2個領域を対象
 
 								ny[a][j] = y[a][j];
@@ -1109,15 +1109,15 @@ int main()
 								for (i = 0; i < 64; i++)
 									ny[i][j] = 0; //係数初期化
 
-								temp = 0;//正順での基底選択に準拠している。それ以外の基底は使用しない
-								if (full_mse[0][64][j] == a || full_mse[0][64][j] == b || full_mse[0][64][j] == c)
-									temp = 1;
-								if (full_mse[0][63][j] == a || full_mse[0][63][j] == b || full_mse[0][63][j] == c)
-									temp = 1;
-								if (full_mse[0][62][j] == a || full_mse[0][62][j] == b || full_mse[0][62][j] == c)
-									temp = 1;
+								//temp = 0;//正順での基底選択に準拠している。それ以外の基底は使用しない
+								//if (full_mse[0][64][j] == a || full_mse[0][64][j] == b || full_mse[0][64][j] == c)
+								//	temp = 1;
+								//if (full_mse[0][63][j] == a || full_mse[0][63][j] == b || full_mse[0][63][j] == c)
+								//	temp = 1;
+								//if (full_mse[0][62][j] == a || full_mse[0][62][j] == b || full_mse[0][62][j] == c)
+								//	temp = 1;
 
-								if (temp == 1)
+								//if (temp == 1)
 								if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j]) {
 
 									ny[a][j] = y[a][j];
