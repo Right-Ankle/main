@@ -328,12 +328,15 @@ int main()
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	pcaStr = new_pca(origin);
-	ICA(origin, pcaStr, y, w, avg, 100, 0.002);
 	if (yn == 'n') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
+	else {
+		pcaStr = new_pca(origin);
+		ICA(origin, pcaStr, y, w, avg, 100, 0.002);
+	}
+
 	printf("a");
 	// ICA_BASIS 出力よう
 	wtosai(w, nica_basis);	//出力用ICA基底の作成　w -> ica基底
@@ -1011,31 +1014,33 @@ int main()
 						//	temp = 1;
 
 						//if (temp == 1)
-						if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j]) {//基底1個領域を対象
+						if (y[a][j] != 0)
+							if (bunrui[2][j] <= 1 && 1 <= bunrui[0][j]) {//基底1個領域を対象
 
-							ny[a][j] = y[a][j];
+								ny[a][j] = y[a][j];
 
-							for (m = 0; m < 64; m++)
-								xx[m] = 0.0;
-
-							seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-							xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-							avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-
-							sum = 0.0;
-							mk = j % 32;
-							ml = j / 32;
-
-							// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-							// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-							for (m = 0; m < 8; m++) {
-								for (l = 0; l < 8; l++) {
-									sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+								for (m = 0; m < 64; m++) {
+									xx[m] = 0.0;
 								}
-							}
 
-							comb[j][a][0] = sum / 64; //MSEを全探索
-						}
+								seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+								xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+								avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+
+								sum = 0.0;
+								mk = j % 32;
+								ml = j / 32;
+
+								// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+								// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+								for (m = 0; m < 8; m++) {
+									for (l = 0; l < 8; l++) {
+										sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+									}
+								}
+
+								comb[j][a][0] = sum / 64; //MSEを全探索
+							}
 					}
 				}
 
@@ -1060,33 +1065,34 @@ int main()
 							//	temp = 1;
 
 							//if (temp == 1)
-							if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j]) {//基底2個領域を対象
+							if (y[a][j] != 0 || y[b][j] != 0)
+								if (bunrui[2][j] <= 2 && 2 <= bunrui[0][j]) {//基底2個領域を対象
 
-								ny[a][j] = y[a][j];
-								ny[b][j] = y[b][j];
+									ny[a][j] = y[a][j];
+									ny[b][j] = y[b][j];
 
-								for (m = 0; m < 64; m++)
-									xx[m] = 0.0;
+									for (m = 0; m < 64; m++)
+										xx[m] = 0.0;
 
-								seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-								xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-								avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-								sum = 0.0;
-								mk = j % 32;
-								ml = j / 32;
+									sum = 0.0;
+									mk = j % 32;
+									ml = j / 32;
 
-								// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-								// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-								for (m = 0; m < 8; m++) {
-									for (l = 0; l < 8; l++) {
-										sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+									// 64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+									// （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+									for (m = 0; m < 8; m++) {
+										for (l = 0; l < 8; l++) {
+											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+										}
 									}
+
+									comb2[j][a][b][0] = sum / 64;
+
 								}
-
-								comb2[j][a][b][0] = sum / 64;
-
-							}
 						}
 					}
 				}
@@ -1118,34 +1124,35 @@ int main()
 								//	temp = 1;
 
 								//if (temp == 1)
-								if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j]) {
+								if (y[a][j] != 0 || y[b][j] != 0 || y[c][j] != 0)
+									if (bunrui[2][j] <= 3 && 3 <= bunrui[0][j]) {
 
-									ny[a][j] = y[a][j];
-									ny[b][j] = y[b][j];
-									ny[d][j] = y[d][j];
+										ny[a][j] = y[a][j];
+										ny[b][j] = y[b][j];
+										ny[d][j] = y[d][j];
 
-									for (m = 0; m < 64; m++)
-										xx[m] = 0.0;
+										for (m = 0; m < 64; m++)
+											xx[m] = 0.0;
 
-									seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
-									xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-									avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+										seki5_Block(nw, ny, xx, j); // xx64 -> nw * ny
+										xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+										avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
 
-									sum = 0.0;
-									mk = j % 32;
-									ml = j / 32;
+										sum = 0.0;
+										mk = j % 32;
+										ml = j / 32;
 
-									//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
-								   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
-									for (m = 0; m < 8; m++) {
-										for (l = 0; l < 8; l++) {
-											sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+										//64個の2乗の平均からそのブロックが平均してどれくらい ずれているのかを見る
+									   // （ちなみに、1ブロックにつき64パターン＊全1024ブロック）
+										for (m = 0; m < 8; m++) {
+											for (l = 0; l < 8; l++) {
+												sum += pow(origin[ml * 8 + l][mk * 8 + m] - block_ica[l * 8 + m], 2);
+											}
 										}
+
+										comb3_0[j][a][b][d] = sum / 64;
+
 									}
-
-									comb3_0[j][a][b][d] = sum / 64;
-
-								}
 							}
 						}
 					}
@@ -1221,8 +1228,8 @@ int main()
 
 				//累積（基底2つ）
 				k = 0;
-				for (a = 0; a < 64 - 1; a++) {
-					for (b = a + 1; b < 64; b++) {
+				for (a = 0; a < 64; a++) {
+					for (b = 0; b < 64; b++) {
 						comb_result2[a][b][0] = 0;
 						comb_result2[a][b][1] = 0;
 						comb_result2[a][b][2] = 0;
@@ -1234,6 +1241,7 @@ int main()
 				for (a = 0; a < 64 - 1; a++) {
 					for (b = a + 1; b < 64; b++) {
 						for (j = 0; j < 1024; j++) {
+							sum = 0;
 							//1個
 							k = a;
 							if (comb[j][a][0] > comb[j][b][0])
@@ -1266,6 +1274,7 @@ int main()
 				for (a = 0; a < 64; a++)
 					for (j = 0; j < 1024; j++)
 						if (dct_mse[j] > comb[j][a][0]) {
+							sum = 0;
 							sum = dct_mse[j] - comb[j][a][0];
 							comb_result[a][0] += sum;
 							comb_result[a][2]++;
