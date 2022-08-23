@@ -33,7 +33,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 		}
 	}
 
-	sprintf(output, "OUTPUT\\%d.bmp", (int)name);
+	sprintf(output, "OUTPUT\\Result\\%d.bmp", (int)name);
 	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 	name++;
 
@@ -74,7 +74,7 @@ void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag
 		}
 	}
 
-	sprintf(output, "OUTPUT\\ProMet%d.bmp", name);
+	sprintf(output, "OUTPUT\\Result\\ProMet%d.bmp", name);
 	img_write_gray(temp_sai, output, 256, 256); // outputに出力画像を書き出す
 
 	printf(" end\n\n");

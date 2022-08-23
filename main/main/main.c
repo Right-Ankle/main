@@ -123,7 +123,8 @@ int main()
 
 	_mkdir("OUTPUT\\DCT"); //実験中のICAとDCTの再構成画像を出力
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
-	_mkdir("OUTPUT\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
+	_mkdir("OUTPUT\\Result"); //保存用のファイル格納用フォルダ
+	_mkdir("OUTPUT\\Result\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
 
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//for (i = 1; i < 5; i++) {
@@ -143,71 +144,8 @@ int main()
 	printf("mkdir end\n");
 	// フォルダ初期化 処理終了//////////////////////////////////////////////////////////////////////////
 
-
-	// 画像入力 処理 /////////////////////////////////////////////////////////////////
-	//読み込むファイル名
-	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
-	static char filename2[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
-	static char filename3[20] = { 'a', 'i', 'r', 'p', 'l', 'a', 'n', 'e', '.', 'b', 'm', 'p' };
-	static char filename4[20] = { 'l', 'a', 'x', '.', 'b', 'm', 'p' };
-	static char filename5[20] = { 'l', 'e', 'n', 'n', 'a', '.', 'b', 'm', 'p' };
-	static char filename6[20] = { 's', 'a', 'i', 'l', 'b', 'o', 'a', 't', '.', 'b', 'm', 'p' };
-	static char filename7[20] = { 'w', 'o', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
-	static char filename8[20] = { 'b', 'r', 'i', 'd', 'g', 'e', '.', 'b', 'm', 'p' };
-	static char filename9[20] = { 'b', 'o', 'a', 't', '.', 'b', 'm', 'p' };
-	static char filename10[20] = { 'b', 'u', 'i', 'l', 'd', 'i', 'n', 'g', '.', 'b', 'm', 'p' };
-	static char filename11[20] = { 'g', 'i', 'r', 'l', '.', 'b', 'm', 'p' };
-	static char filename12[20] = { 'l', 'i', 'g', 'h', 't', 'h', 'o', 'u', 's', 'e', '.', 'b', 'm', 'p' };
-	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
-	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
-	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '3', '4', '.', 'b', 'm', 'p' };
-
-	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
-	scanf("%d", &i);
-	if (i == 2)
-		strcpy(filename, filename2);
-	else if (i == 3)
-		strcpy(filename, filename15);
-	else if (i == 4)
-		strcpy(filename, filename14);
-	else if (i == 5)
-		strcpy(filename, filename3);
-	else if (i == 6)
-		strcpy(filename, filename6);
-	else if (i == 7)
-		strcpy(filename, filename9);
-	else if (i == 8)
-		strcpy(filename, filename13);
-	else if (i == 9)
-		strcpy(filename, filename10);
-
-	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
-		return -1;
-
-	/* 一次元配列から二次元配列に変換 */
-	for (i = 0; i < 256; i++)
-		for (j = 0; j < 256; j++)
-			origin[i][j] = ori_temp[i * 256 + j];
-	printf("a");
-	/// 基底変更用//////////////////////////
-	yn = 'n';
-	if (yn == 'n') {
-		strcpy(filename, filename16);
-		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
-			return -1;
-
-		for (i = 0; i < 256; i++)
-			for (j = 0; j < 256; j++)
-				origin_change[i][j] = ori_temp[i * 256 + j];
-	}
-	///基底変更完了////////////////////////
-	printf("a");
-	///画像入力 処理終了//////////////////////////////////////////////////////////////////////////////////////////////
-
-
 	//出力ファイル　宣言 ///////////////////////////////////////////////////////////////////////////
-	if ((fp = fopen("OUTPUT\\fp1.txt", "w")) == NULL) {
+	if ((fp = fopen("OUTPUT\\Result\\detail.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -235,7 +173,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp8 = fopen("OUTPUT\\ica_basis_result.csv", "w")) == NULL) {
+	if ((fp8 = fopen("OUTPUT\\Result\\ica_basis_result.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -243,10 +181,79 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp10 = fopen("OUTPUT\\ICA_limits_result.csv", "w")) == NULL) {
+	if ((fp10 = fopen("OUTPUT\\Result\\ICA_limits_result.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
+
 	/////////////////宣言処理 終了//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 画像入力 処理 /////////////////////////////////////////////////////////////////
+	//読み込むファイル名
+	static char filename[20] = { 'b', 'a', 'r', 'b', 'a', 'r', 'a', '.', 'b', 'm', 'p' };
+	static char filename2[20] = { 'c', 'a', 'm', 'e', 'r', 'a', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
+	static char filename3[20] = { 'a', 'i', 'r', 'p', 'l', 'a', 'n', 'e', '.', 'b', 'm', 'p' };
+	static char filename4[20] = { 'l', 'a', 'x', '.', 'b', 'm', 'p' };
+	static char filename5[20] = { 'l', 'e', 'n', 'n', 'a', '.', 'b', 'm', 'p' };
+	static char filename6[20] = { 's', 'a', 'i', 'l', 'b', 'o', 'a', 't', '.', 'b', 'm', 'p' };
+	static char filename7[20] = { 'w', 'o', 'm', 'a', 'n', '.', 'b', 'm', 'p' };
+	static char filename8[20] = { 'b', 'r', 'i', 'd', 'g', 'e', '.', 'b', 'm', 'p' };
+	static char filename9[20] = { 'b', 'o', 'a', 't', '.', 'b', 'm', 'p' };
+	static char filename10[20] = { 'b', 'u', 'i', 'l', 'd', 'i', 'n', 'g', '.', 'b', 'm', 'p' };
+	static char filename11[20] = { 'g', 'i', 'r', 'l', '.', 'b', 'm', 'p' };
+	static char filename12[20] = { 'l', 'i', 'g', 'h', 't', 'h', 'o', 'u', 's', 'e', '.', 'b', 'm', 'p' };
+	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
+	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
+	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '4', '0', '.', 'b', 'm', 'p' };
+
+	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
+	scanf("%d", &i);
+	if (i == 2)
+		strcpy(filename, filename2);
+	else if (i == 3)
+		strcpy(filename, filename15);
+	else if (i == 4)
+		strcpy(filename, filename14);
+	else if (i == 5)
+		strcpy(filename, filename3);
+	else if (i == 6)
+		strcpy(filename, filename6);
+	else if (i == 7)
+		strcpy(filename, filename9);
+	else if (i == 8)
+		strcpy(filename, filename13);
+	else if (i == 9)
+		strcpy(filename, filename10);
+
+	fprintf(fp, "\n\n filename is [%s]\n\n", filename);
+
+	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
+		return -1;
+
+	/* 一次元配列から二次元配列に変換 */
+	for (i = 0; i < 256; i++)
+		for (j = 0; j < 256; j++)
+			origin[i][j] = ori_temp[i * 256 + j];
+	printf("a");
+	/// 基底変更用//////////////////////////
+	yn = 'n';
+	if (yn == 'n') {
+		strcpy(filename, filename16);
+		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
+			return -1;
+
+		for (i = 0; i < 256; i++)
+			for (j = 0; j < 256; j++)
+				origin_change[i][j] = ori_temp[i * 256 + j];
+		fprintf(fp, "\n\n Change filename --> [%s]\n\n", filename);
+	}
+	///基底変更完了////////////////////////
+	printf("a");
+
+	///画像入力 処理終了//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 	/// 基底作成による尖度を比較中////////////////////////////////////////////////////////////////////
 	//printf("a");
@@ -755,6 +762,8 @@ int main()
 		scanf("%d", &QQ);
 		for (Q = QQ; Q > 20; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
+			fprintf(fp, "\n************************************************************************\n\n");
+			fprintf(fp, "\n Q is %d\n\n", Q);
 
 			// dct処理
 			dct(origin, dcoe, 8); // 係数を出力
@@ -1433,20 +1442,32 @@ int main()
 								ny[c][j] = y[c][j];
 								no_op[j] = 1;
 								no_op_3[j] = 1;
-								no_op_4[j] = 1;
+								if (y[a][j] != 0 && y[b][j] != 0 && y[c][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
+
 							}
 							else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 								ny[k][j] = y[k][j];
 								ny[l][j] = y[l][j];
 								no_op[j] = 1;
 								no_op_2[j] = 1;
-								no_op_4[j] = 1;
+								if (y[k][j] != 0 && y[l][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
+
 							}
 							else if (dct_mse[j] > comb[j][m][0]) {
 								ny[m][j] = y[m][j];
 								no_op[j] = 1;
 								no_op_1[j] = 1;
-								no_op_4[j] = 1;
+								if (y[m][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
+
 							}
 						}
 						else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1462,13 +1483,21 @@ int main()
 								ny[b][j] = y[b][j];
 								no_op[j] = 1;
 								no_op_2[j] = 1;
-								no_op_4[j] = 1;
+								if (y[a][j] != 0 && y[b][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
+
 							}
 							else if (dct_mse[j] > comb[j][k][0]) {
 								ny[k][j] = y[k][j];
 								no_op[j] = 1;
 								no_op_1[j] = 1;
-								no_op_4[j] = 1;
+								if (y[k][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
+
 							}
 						}
 						else if (a != 99 && b == 99 && c == 99) {
@@ -1476,7 +1505,11 @@ int main()
 								ny[a][j] = y[a][j];
 								no_op[j] = 1;
 								no_op_1[j] = 1;
-								no_op_4[j] = 1;
+								if (y[a][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
+
 							}
 						}
 					}// 基底格納終了
@@ -1579,18 +1612,23 @@ int main()
 					///printf("\ndct_all_mse = %lf\ncomb_after_sort[a][1] =%lf\n", dct_all_mse, comb_after_sort[a][1]);
 					sum = dct_all_mse * 1024 * 64;
 					printf("\n DCT sum = %lf", sum);
+					fprintf(fp,"\n DCT sum = %lf", sum);
 					sum = (comb_after_sort[a][1] * (1024 * 64 + comb_after_sort[a][5] + l) + ica_basis_ent[c - 1] * 64 * 64);
 					printf("\n ICA sum = %lf (%lf)", sum, dct_all_mse * 1024 * 64 - sum);
+					fprintf(fp,"\n ICA sum = %lf (%lf)", sum, dct_all_mse * 1024 * 64 - sum);
 
 					if (k == 0) {
 						if (dct_all_mse * 1024 * 64 > sum) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
 							printf("\n [%d , %d, %d]  %lf vs %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+							fprintf(fp, "\n [%d , %d, %d]  %lf vs %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
 							for (b = 0; b < 6; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
 							k++;
 						}
 						else {
 							printf("\n [%d , %d, %d]  %lf vs %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+							fprintf(fp, "\n [%d , %d, %d]  %lf vs %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+
 							comb_after_sort[a][0] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][1] = 0;//選出基底以外全て初期化
 							comb_after_sort[a][2] = 99;//選出基底以外全て初期化
@@ -1600,12 +1638,18 @@ int main()
 					}
 					else {
 						printf("\n [%d , %d, %d]  %lf vs %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+						fprintf(fp,"\n [%d , %d, %d]  %lf vs %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+
 					}
 
-					if (a == 9)
+					if (a == 9) {
 						printf("\n");
-					if (a == 19)
+						fprintf(fp,"\n");
+					}
+					if (a == 19) {
 						printf("\n");
+						fprintf(fp, "\n");
+					}
 				}
 
 				//選出基底のうち，領域内で使用する基底を決定
@@ -1624,7 +1668,8 @@ int main()
 				basis_ent[1] = (double)b;
 				basis_ent[2] = (double)c;
 				basis_ent[3] = ent_count_basis2(w, a, b, c);
-				printf("\n%d, %d, %d  (%lf)", a, b, c, basis_ent[3]);
+				printf("\n\n%d, %d, %d  (%lf)", a, b, c, basis_ent[3]);
+				fprintf(fp,"\n\n%d, %d, %d  (%lf)\n\n\n", a, b, c, basis_ent[3]);
 				//////基底選出　終了///////////////////////////////////////////////////////////////
 
 				/// 選出基底の係数を格納 ///////////////////////////////////////////////////////
@@ -1646,25 +1691,28 @@ int main()
 					no_op_3[j] = 0;
 					no_op_4[j] = 0;
 					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
-						//基底3で画質最大
-						//2個
-						max = comb2[j][a][b][0];//MSEだから小さい順
+	                    //基底3で画質最大
+	                    //2個
+						min = comb2[j][a][b][0];//MSEだから小さい順
 						k = a;
 						l = b;
-						if (max > comb2[j][b][c][0]) {
+						if (min > comb2[j][b][c][0]) {
+							min = comb2[j][b][c][0];
 							k = b;
 							l = c;
 						}
-						if (max > comb2[j][a][c][0]) {
+						if (min > comb2[j][a][c][0]) {
 							k = a;
 							l = c;
 						}
 						//1個
-						max = comb[j][a][0];//MSEだから小さい順
+						min = comb[j][a][0];//MSEだから小さい順
 						m = a;
-						if (max > comb[j][b][0])
+						if (min > comb[j][b][0]) {
+							min = comb[j][b][0];
 							m = b;
-						if (max > comb[j][c][0])
+						}
+						if (min > comb[j][c][0])
 							m = c;
 
 						//1vs2vs3個で画質比較
@@ -1674,20 +1722,32 @@ int main()
 							ny[c][j] = y[c][j];
 							no_op[j] = 1;
 							no_op_3[j] = 1;
-							no_op_4[j] = 1;
+							if (y[a][j] != 0 && y[b][j] != 0 && y[c][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
+
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
 							ny[l][j] = y[l][j];
 							no_op[j] = 1;
 							no_op_2[j] = 1;
-							no_op_4[j] = 1;
+							if (y[k][j] != 0 && y[l][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
+
 						}
 						else if (dct_mse[j] > comb[j][m][0]) {
 							ny[m][j] = y[m][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
-							no_op_4[j] = 1;
+							if (y[m][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
+
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1703,13 +1763,21 @@ int main()
 							ny[b][j] = y[b][j];
 							no_op[j] = 1;
 							no_op_2[j] = 1;
-							no_op_4[j] = 1;
+							if (y[a][j] != 0 && y[b][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
+
 						}
 						else if (dct_mse[j] > comb[j][k][0]) {
 							ny[k][j] = y[k][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
-							no_op_4[j] = 1;
+							if (y[k][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
+
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1717,11 +1785,16 @@ int main()
 							ny[a][j] = y[a][j];
 							no_op[j] = 1;
 							no_op_1[j] = 1;
-							no_op_4[j] = 1;
+							if (y[a][j] != 0)
+								no_op_4[j] = 1;
+							else
+								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
+
 						}
 					}
+				}// 基底格納終了
 
-				}
+				
 
 				img_out(origin, no_op_0, Q * 10 + 5);//基底0ブロック
 				img_out(origin, no_op_1, Q * 10 + 1);//基底1ブロック

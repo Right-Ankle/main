@@ -185,7 +185,7 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 				for (k = 0; k < 8; k++)
 					for (l = 0; l < 8; l++)
 						temp_basis2[64 * 8 * a + 8 * b + l + 64 * k] = ica[a * 8 + b];
-		sprintf(output, "OUTPUT\\test\\PCA[%d].bmp", i);
+		sprintf(output, "OUTPUT\\Result\\test\\PCA[%d].bmp", i);
 		img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
 	}
 	sprintf(output, "OUTPUT\\ICA_BASIS.bmp"); //ICA基底bmpで出力
@@ -207,7 +207,7 @@ void ICA(unsigned char origin[][256], struct pca pcaTemp, double ny[][1024], dou
 					for (k = 0; k < 8; k++)
 						for (l = 0; l < 8; l++)
 							temp_basis2[64 * 8 * a + 8 * b + l + 64 * k] = ica[a * 8 + b];
-			sprintf(output, "OUTPUT\\test\\ICA[%d].bmp", i);
+			sprintf(output, "OUTPUT\\Result\\test\\ICA[%d].bmp", i);
 			img_write_gray(temp_basis2, output, 64, 64); // outputに出力画像を書き出す
 		}
 
