@@ -22,6 +22,7 @@
     <ClCompile Include="avg_inter.c" />
     <ClCompile Include="avg_inter_Block.c" />
     <ClCompile Include="bitmap.c" />
+    <ClCompile Include="Block_count.c" />
     <ClCompile Include="block_mse.c" />
     <ClCompile Include="block_psnr.c" />
     <ClCompile Include="b_entropy_dct.c" />
@@ -56,6 +57,7 @@
     </ClCompile>
     <ClCompile Include="makew.c" />
     <ClCompile Include="make_cost.c" />
+    <ClCompile Include="mk_input_image.c" />
     <ClCompile Include="mp.c" />
     <ClCompile Include="new_pca.c" />
     <ClCompile Include="new_pre.c" />

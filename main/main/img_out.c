@@ -160,3 +160,20 @@ void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int
 
 	printf(" end\n\n");
 }
+
+void img_out5(unsigned char origin[][256], int name) {
+	static int temp_sai[256 * 256];
+	char output[1000];
+	int a, b, i, l, k, Q;
+
+	//gp = _popen(GNUPLOT_PATH, "w");
+	printf(" \n now outputing  - - - ->");
+	for (a = 0; a < 256; a++)
+		for (b = 0; b < 256; b++)
+			temp_sai[a * 256 + b] = origin[a][b];
+
+	sprintf(output, "OUTPUT\\Result\\%d.bmp", (int)name);
+	img_write_gray(temp_sai, output, 256, 256); // output‚Éo—Í‰æ‘œ‚ð‘‚«o‚·
+
+	printf(" end\n\n");
+}

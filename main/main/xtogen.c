@@ -33,7 +33,7 @@ void xtogen(double x[][1024], unsigned char gen[][256], double avg[1024]){
 	}
 }
 
-void xtogen2(double x[][1024], double gen[][256]){
+void xtogen2(double x[][1024], char gen[][256]){
 	int i, j, k, l;
 	int block = 0;
 	int sub = 0;

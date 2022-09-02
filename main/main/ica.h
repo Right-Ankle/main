@@ -127,6 +127,7 @@ double ent_count_basis2(double w[64][64], int a, int b, int c);
 void img_out2(unsigned char dct[][256], unsigned char ica[][256], int block_flag[1024], int name);
 void img_out3(unsigned char origin[][256]);
 void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int name);
+void img_out5(unsigned char origin[][256], int name);
 double SSIM(unsigned char data1[][256], unsigned char data2[][256], int width, int heigth);
 double b_SSIM(unsigned char data1[][8], unsigned char data2[][8], int width, int heigth);
 void smoothing(unsigned char origin[][256], unsigned char out[][256], int size);
@@ -134,6 +135,9 @@ void smoothing(unsigned char origin[][256], unsigned char out[][256], int size);
 //double improvement(unsigned char filename[20], );
 void gnuplot5_3(double y[64][1024], double ny[64][1024], double y2[64][1024], double ny2[64][1024]);
 void gnuplot5_4(double y[64][1024], double y2[64][1024]);
+
+void Block_count(int a);
+void mk_input_image(unsigned char origin[][256]);
 
 
 
