@@ -20,6 +20,7 @@ int main()
 	char g[50];//フォルダ作成用
 	char yn;//実行処理の選択用
 	char output[1000];//画像出力用
+	char name[20];
 	static char image_name[20] = { 0 };	//画像ファイル名(拡張子含まず)
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応）
 	static unsigned char origin_change[256][256] = { 0 }; //基底作成用画像（各レートの選出前のICA領域）
@@ -169,7 +170,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp7 = fopen("OUTPUT\\ica_basis_map.csv", "w")) == NULL) {
+	if ((fp7 = fopen("OUTPUT\\Result\\ica_basis_map.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -177,7 +178,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp9 = fopen("OUTPUT\\true_profit.csv", "w")) == NULL) {
+	if ((fp9 = fopen("OUTPUT\\Result\\true_profit.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -204,7 +205,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '4', '0', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '8', '5', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -252,17 +253,30 @@ int main()
 
 	///画像入力 処理終了//////////////////////////////////////////////////////////////////////////////////////////////
 
+	//実験中///////////////////////////////////////////////////////////////
+	// 使いにくさや、メイン手法との連携部分の改善がまだ
+	//
 	//入力画像のブロック番号をCSV出力
-	while (k == 0) {
-		Block_count(k);
-		printf("\n\n continue ? (y:0/n:1) ");
-		scanf("%d", &k);
+	yn = 'y';
+	if (yn == 'n') {
+		while (k == 0) {
+			//ファイル名の入力
+			printf("\n\n filename please: ");
+			scanf("%s", &name);
+
+			//入力画像のブロック番号をCSV出力
+			//Block_count(name);
+
+			//入力CSVファイルのブロック番号のみを画像出力
+			mk_input_image(origin, name);
+
+			//継続判定
+			printf("\n\n continue ? (y:0/n:1) ");
+			scanf("%d", &k);
+		}
 	}
-
-	//入力CSVファイルのブロック番号のみを出力
-	mk_input_image(origin);
-
-
+	yn = 'n';
+	printf("a");
 
 
 	/// 基底作成による尖度を比較中////////////////////////////////////////////////////////////////////
@@ -761,8 +775,6 @@ int main()
 
 		yn = 'y';
 		ent_count_basis(w, ica_basis_ent);
-		fprintf(fp7, "\nICA_Basis,%lf", ica_basis_ent[0]);
-		fprintf(fp7, "\nQ,DCT_only,DCT_area,ICA_area,ICA_Num,ICA_DC,Basis_Type,Basis_Num,,Result");
 		fprintf(fp10, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp10, "\nQ,DCT_ent,PSNR,SSIM,MS-SSIM,Area,,ICA_ent,PSNR,SSIM,MS-SSIM,Area,,Basis");
 
@@ -770,7 +782,7 @@ int main()
 		// 10段階品質があるから10段階分やる
 		printf("\nQ? : ");
 		scanf("%d", &QQ);
-		for (Q = QQ; Q > 20; Q -= 100) {
+		for (Q = QQ; Q > 20; Q -= 10) {
 			printf("\r now Q is %d          \n", Q);
 			fprintf(fp, "\n************************************************************************\n\n");
 			fprintf(fp, "\n Q is %d\n\n", Q);
@@ -1395,12 +1407,16 @@ int main()
 				////////Step2 前半終了///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 				//評価上位の基底群は実際に係数を入れて画像全体のエントロピーを算出，DCTのエントロピーと比較する
+				fprintf(fp7, "\n\n,,[%d]\n,,,", Q);
+				for (j = 0; j < 1024; j++)
+					fprintf(fp7, ",[%d]", j);
+
 				for (d = 0; d < 30; d++) {
 
 					a = (int)comb_after_sort[d][2];
 					b = (int)comb_after_sort[d][3];
 					c = (int)comb_after_sort[d][4];
-
+					fprintf(fp7, "\n,[%d-%d-%d],,[%d]", a,b,c,d);
 
 					for (j = 0; j < 1024; j++) {
 						no_op_0[j] = 0;
@@ -1456,7 +1472,7 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb3_0[j][a][b][c]);
 							}
 							else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 								ny[k][j] = y[k][j];
@@ -1467,7 +1483,7 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb2[j][k][l][0]);
 							}
 							else if (dct_mse[j] > comb[j][m][0]) {
 								ny[m][j] = y[m][j];
@@ -1477,7 +1493,10 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb[j][m][0]);
+							}
+							else {
+								fprintf(fp7, ",");
 							}
 						}
 						else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1497,7 +1516,7 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb2[j][a][b][0]);
 							}
 							else if (dct_mse[j] > comb[j][k][0]) {
 								ny[k][j] = y[k][j];
@@ -1507,7 +1526,10 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb[j][k][0]);
+							}
+							else {
+								fprintf(fp7, ",");
 							}
 						}
 						else if (a != 99 && b == 99 && c == 99) {
@@ -1519,9 +1541,13 @@ int main()
 									no_op_4[j] = 1;
 								else
 									printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-
+								fprintf(fp7, ",%lf", dct_mse[j] - comb[j][a][0]);
+							}
+							else {
+								fprintf(fp7, ",");
 							}
 						}
+
 					}// 基底格納終了
 
 					//画像全体のエントロピー算出///////////////////////////////////////////////
@@ -1634,6 +1660,9 @@ int main()
 							for (b = 0; b < 6; b++)
 								comb_after_sort[0][b] = comb_after_sort[a][b];//選出基底以外全て初期化
 							k++;
+							fprintf(fp9, "\n\n [%d] ******************************************************\n", Q);
+							fprintf(fp9, "\n [%d , %d, %d]  %lf vs %lf >>  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
+
 						}
 						else {
 							printf("\n [%d , %d, %d]  %lf vs %lf <  %lf  :  %lf  (%d)", (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4], dct_all_mse * 1024 * 64, sum, dct_all_mse * 1024 * 64 - sum, comb_after_sort[a][0], (int)comb_after_sort[a][5]);
@@ -1700,6 +1729,7 @@ int main()
 					no_op_2[j] = 0;
 					no_op_3[j] = 0;
 					no_op_4[j] = 0;
+
 					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
 						//基底3で画質最大
 						//2個
@@ -1736,7 +1766,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (3)",j, dct_mse[j] - comb3_0[j][a][b][c]);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
@@ -1747,7 +1777,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (2)",j, dct_mse[j] - comb2[j][k][l][0]);
 						}
 						else if (dct_mse[j] > comb[j][m][0]) {
 							ny[m][j] = y[m][j];
@@ -1757,7 +1787,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (1)",j, dct_mse[j] - comb[j][m][0]);
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1777,7 +1807,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (2)", j,dct_mse[j] - comb2[j][a][b][0]);
 						}
 						else if (dct_mse[j] > comb[j][k][0]) {
 							ny[k][j] = y[k][j];
@@ -1787,7 +1817,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (1)", j,dct_mse[j] - comb[j][k][0]);
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1799,7 +1829,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-
+							fprintf(fp9, "\n [%d]    %lf (1)", j,dct_mse[j] - comb[j][a][0]);
 						}
 					}
 				}// 基底格納終了
@@ -2009,8 +2039,8 @@ int main()
 	fclose(fp5);
 	fclose(fp6);
 	fclose(fp7);
-
-
+	//fclose(fp8);
+	fclose(fp9);
 	fclose(fp10);
 	//gnuplot(dcoe_temp);
 

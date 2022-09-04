@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include "ica.h"
 
-void Block_count(int a) {
+void Block_count(char name[20]) {
 	FILE *fp;
-	static char filename[100], name[20];
+	static char filename[100];
 	static char image_name[20] = { 0 };	//画像ファイル名(拡張子含まず)
 	static unsigned char origin[256][256] = { 0 };	//原画像（256*256のみ対応)
 	static double x[64][1024] = { 0 }; //原画像（64*1024）
@@ -14,17 +14,14 @@ void Block_count(int a) {
 	static int count[1024] = { 0 };
 	int i, j, k, l, m, n;
 
-	//ファイル名の入力
-	printf("\n\n filename please: ");
-	scanf("%s", &name);
-
 	//ファイル名と拡張子の結合
+	//strcpy(image_name, name);
 	sprintf(filename, "%s.bmp",name);
 	if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 		return -1;
 
 	//出力ファイルのファイル名を作成
-	sprintf(filename, "OUTPUT\\Result\\Block_num[%s].csv", image_name);
+	sprintf(filename, "OUTPUT\\Result\\Block_num[%s111].csv", image_name);
 	if ((fp = fopen(filename, "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}

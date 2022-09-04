@@ -136,8 +136,8 @@ void smoothing(unsigned char origin[][256], unsigned char out[][256], int size);
 void gnuplot5_3(double y[64][1024], double ny[64][1024], double y2[64][1024], double ny2[64][1024]);
 void gnuplot5_4(double y[64][1024], double y2[64][1024]);
 
-void Block_count(int a);
-void mk_input_image(unsigned char origin[][256]);
+void Block_count(char name[20]);
+void mk_input_image(unsigned char origin[][256], char name[20]);
 
 
 

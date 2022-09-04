@@ -1,0 +1,14 @@
+
+
+ Use image  :  85.bmp
+
+
+
+
+  DCT vs ICA  
+
+    Area with a small number of basis
+  Number of basis used : 1 ~ 64 
+
+----------------------------------------------------------------------------------
+

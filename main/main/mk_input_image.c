@@ -4,18 +4,20 @@
 #include <math.h>
 #include "ica.h"
 
-void mk_input_image(char origin[256][256]) {
+void mk_input_image(char origin[256][256], char name[20]) {
 	FILE *fp;
-	char moji[10];//取得した文字列を格納
-	int block_flag[1024];//出力するブロックの番号にフラグを立てる
-	int block[1024]; //各ブロックを出力する際の形状（元の番号）を格納　（通常は配列と同じ番号だが、0に99が格納されていれば、0番は99番の形状で出力される）
+	static char moji[10];//取得した文字列を格納
+	static char filename[100];
+	static int block_flag[1024];//出力するブロックの番号にフラグを立てる
+	static int block[1024]; //各ブロックを出力する際の形状（元の番号）を格納　（通常は配列と同じ番号だが、0に99が格納されていれば、0番は99番の形状で出力される）
 	char block_image[256][256]; //かさまし処理後の画像
 	static double x[64][1024] = { 0 }; //原画像（64*1024）
 	static double origin_temp[64][1024]; //配列コピー用
 	int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
 
 	//	読み込みモードでファイルを開く
-	if ((fp = fopen("image\\Block_num[80].csv", "r")) == NULL) {
+	sprintf(filename, "image\\入力画像変更実験用\\Cameraman\\Block_num[%s111].csv", name);
+	if ((fp = fopen(filename, "r")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -24,12 +26,13 @@ void mk_input_image(char origin[256][256]) {
 		block_flag[i] = 9999;
 
 	//	NULLポインタの終端までファイルから文字を1行ずつ読み込む
+	i = 0;
 	while (fgets(moji, 10, fp) != NULL)
 	{
 		//	読み込んだ文字列を数字に変換し、対象のブロック番号にフラグを立てる
-		block_flag[atoi(moji)] = atoi(moji);
+		block_flag[i] = atoi(moji);
+		i++;
 	}
-
 	fclose(fp);
 
 	//ブロック数が64個以下だった場合のかさまし処理
@@ -84,5 +87,6 @@ void mk_input_image(char origin[256][256]) {
 	xtogen2(origin_temp, block_image);
 
 	//出力
-	img_out5(block_image, 49);
+	sprintf(name, "%s111", name);
+	img_out5(block_image, atoi(name));
 }
