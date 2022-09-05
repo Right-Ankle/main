@@ -166,7 +166,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp6 = fopen("OUTPUT\\fp6.txt", "w")) == NULL) {
+	if ((fp6 = fopen("OUTPUT\\Result\\DCT_MSE.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -265,10 +265,10 @@ int main()
 			scanf("%s", &name);
 
 			//入力画像のブロック番号をCSV出力
-			//Block_count(name);
+			Block_count(name);
 
 			//入力CSVファイルのブロック番号のみを画像出力
-			mk_input_image(origin, name);
+			//mk_input_image(origin, name);
 
 			//継続判定
 			printf("\n\n continue ? (y:0/n:1) ");
@@ -464,9 +464,6 @@ int main()
 
 	/////////////////  Step1  のメイン処理　//////////////////////////
 	// 1 -> 64 までのMSE調査
-
-	fprintf(fp6, "\n\n Use image  :  %s\n\n\n", filename);
-	fprintf(fp6, "\n\n  DCT vs ICA  \n\n    Area with a small number of basis\n  Number of basis used : 1 ~ 64 \n\n----------------------------------------------------------------------------------\n\n");
 
 	for (i = 0; i < 65; i++)
 		for (j = 0; j < 1024; j++) {
@@ -813,7 +810,7 @@ int main()
 
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　 /////////////////////////////////////
 			block_mse(origin, dcoe2, dct_mse);
-
+			fprintf(fp6, "\n\n,[%d]\n",Q);
 			for (j = 0; j < 1024; j++) {
 				sum = 0.0;
 				mk = j % 32;
@@ -824,6 +821,14 @@ int main()
 					}
 				}
 				mse_dct[0][(Q / 10) - 1][j] = sum / 64;//MSEを格納
+
+				//DCTの画質が極端に悪いブロックのみフラグ
+				if (j % 32 == 0)
+					fprintf(fp6, "\n");
+				fprintf(fp6, ",%lf", sum / 64);
+
+
+
 
 				i = 0;
 				for (b = 0; b < 64; b++)
@@ -965,6 +970,7 @@ int main()
 				if (j != 0)
 					fprintf(fp8, "\n\n\n\n\n\n\n");
 				fprintf(fp8, ",[%d], %d,%d", j, (int)bunrui[2][j], (int)bunrui[0][j]);
+
 			}
 
 			img_out(origin, no_op_1, Q + 1);//基底1ブロック
@@ -975,9 +981,19 @@ int main()
 			img_out(origin, no_op_5, Q + 6);//0のみICAブロック
 			img_out(origin, no_op, Q);//ICA領域
 
-
-
-
+			//DCTで画質が悪く、ICAで少数基底の領域を抽出
+			k = 0;
+			for (j = 0; j < 1024; j++) {
+				no_op_0[j] = 0;
+				//if (bunrui[2][j] <= 4 && 4 <= bunrui[0][j]) {
+				//	no_op_4[j] = 1;
+				//}
+				if (mse_dct[0][a][j] > 20 && no_op_4[j] == 1) {//基底4以下かつMSEが150以上のブロック
+					no_op_0[j] = 1;
+					k++;
+				}
+			}
+			//img_out(origin, no_op_0, Q*1000 + 111);//
 			fclose(fp8);
 			printf("a");
 			//////領域分割メイン処理　終了/////////////////////////////

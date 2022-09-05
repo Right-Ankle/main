@@ -21,7 +21,7 @@ void Block_count(char name[20]) {
 		return -1;
 
 	//出力ファイルのファイル名を作成
-	sprintf(filename, "OUTPUT\\Result\\Block_num[%s111].csv", image_name);
+	sprintf(filename, "OUTPUT\\Result\\Block_num[%s].csv", image_name);
 	if ((fp = fopen(filename, "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
