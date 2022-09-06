@@ -265,10 +265,10 @@ int main()
 			scanf("%s", &name);
 
 			//入力画像のブロック番号をCSV出力
-			Block_count(name);
+			//Block_count(name);
 
 			//入力CSVファイルのブロック番号のみを画像出力
-			//mk_input_image(origin, name);
+			mk_input_image(origin, name);
 
 			//継続判定
 			printf("\n\n continue ? (y:0/n:1) ");

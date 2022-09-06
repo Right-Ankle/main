@@ -7,6 +7,7 @@
 void mk_input_image(char origin[256][256], char name[20]) {
 	FILE *fp;
 	static char moji[10];//取得した文字列を格納
+	static char name_temp[20];
 	static char filename[100];
 	static int block_flag[1024];//出力するブロックの番号にフラグを立てる
 	static int block[1024]; //各ブロックを出力する際の形状（元の番号）を格納　（通常は配列と同じ番号だが、0に99が格納されていれば、0番は99番の形状で出力される）
@@ -16,7 +17,7 @@ void mk_input_image(char origin[256][256], char name[20]) {
 	int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
 
 	//	読み込みモードでファイルを開く
-	sprintf(filename, "image\\入力画像変更実験用\\Cameraman\\Block_num[%s111].csv", name);
+	sprintf(filename, "image\\入力画像変更実験用\\Cameraman\\Block_num[%s].csv", name);
 	if ((fp = fopen(filename, "r")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
@@ -87,6 +88,6 @@ void mk_input_image(char origin[256][256], char name[20]) {
 	xtogen2(origin_temp, block_image);
 
 	//出力
-	sprintf(name, "%s111", name);
-	img_out5(block_image, atoi(name));
+	sprintf(name_temp, "%s", name);
+	img_out5(block_image, atoi(name_temp));
 }
