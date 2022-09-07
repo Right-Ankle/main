@@ -257,7 +257,7 @@ int main()
 	// 使いにくさや、メイン手法との連携部分の改善がまだ
 	//
 	//入力画像のブロック番号をCSV出力
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'n') {
 		while (k == 0) {
 			//ファイル名の入力
@@ -988,14 +988,19 @@ int main()
 				//if (bunrui[2][j] <= 4 && 4 <= bunrui[0][j]) {
 				//	no_op_4[j] = 1;
 				//}
-				if (mse_dct[0][a][j] > 20 && no_op_4[j] == 1) {//基底4以下かつMSEが150以上のブロック
+				if (mse_dct[0][a][j] <= 500 && no_op_4[j] == 1) {//基底4以下かつMSEが150以上のブロック
+					no_op_0[j] = 1;
+					k++;
+				}
+				if (mse_dct[0][a][j] > 600 && no_op_4[j] == 1) {
 					no_op_0[j] = 1;
 					k++;
 				}
 			}
-			//img_out(origin, no_op_0, Q*1000 + 111);//
-			fclose(fp8);
-			printf("a");
+			if (k == 0)
+				k = 99;
+			img_out(origin, no_op_0, k*1000 + 111);//
+			fclose(fp8);			printf("a");
 			//////領域分割メイン処理　終了/////////////////////////////
 
 
