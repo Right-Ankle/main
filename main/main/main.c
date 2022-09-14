@@ -205,7 +205,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '8', '5', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '8', '6', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -235,6 +235,8 @@ int main()
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
 			origin[i][j] = ori_temp[i * 256 + j];
+
+	img_out3(origin);
 	printf("a");
 	/// 基底変更用//////////////////////////
 	yn = 'n';
@@ -257,7 +259,7 @@ int main()
 	// 使いにくさや、メイン手法との連携部分の改善がまだ
 	//
 	//入力画像のブロック番号をCSV出力
-	yn = 'n';
+	yn = 'y';
 	if (yn == 'n') {
 		while (k == 0) {
 			//ファイル名の入力
