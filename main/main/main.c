@@ -236,7 +236,7 @@ int main()
 		for (j = 0; j < 256; j++)
 			origin[i][j] = ori_temp[i * 256 + j];
 
-	img_out3(origin);
+	//img_out3(origin);
 	printf("a");
 	/// 基底変更用//////////////////////////
 	yn = 'n';
@@ -1789,7 +1789,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-							fprintf(fp9, "\n [%d]    %lf (3)",j, dct_mse[j] - comb3_0[j][a][b][c]);
+							fprintf(fp9, "\n [%d]    %lf (3)  [%d, %d, %d]",j, dct_mse[j] - comb3_0[j][a][b][c], a,b,c);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
@@ -1800,7 +1800,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-							fprintf(fp9, "\n [%d]    %lf (2)",j, dct_mse[j] - comb2[j][k][l][0]);
+							fprintf(fp9, "\n [%d]    %lf (2)  [%d, %d]",j, dct_mse[j] - comb2[j][k][l][0], k,l);
 						}
 						else if (dct_mse[j] > comb[j][m][0]) {
 							ny[m][j] = y[m][j];
@@ -1810,7 +1810,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)",j, dct_mse[j] - comb[j][m][0]);
+							fprintf(fp9, "\n [%d]    %lf (1)  [%d]",j, dct_mse[j] - comb[j][m][0],m);
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1830,7 +1830,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-							fprintf(fp9, "\n [%d]    %lf (2)", j,dct_mse[j] - comb2[j][a][b][0]);
+							fprintf(fp9, "\n [%d]    %lf (2)  [%d, %d]", j,dct_mse[j] - comb2[j][a][b][0], a,b);
 						}
 						else if (dct_mse[j] > comb[j][k][0]) {
 							ny[k][j] = y[k][j];
@@ -1840,7 +1840,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)", j,dct_mse[j] - comb[j][k][0]);
+							fprintf(fp9, "\n [%d]    %lf (1)  [%d]", j,dct_mse[j] - comb[j][k][0],k);
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1852,7 +1852,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)", j,dct_mse[j] - comb[j][a][0]);
+							fprintf(fp9, "\n [%d]    %lf (1)  [%d]", j,dct_mse[j] - comb[j][a][0],a);
 						}
 					}
 				}// 基底格納終了
