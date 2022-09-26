@@ -985,24 +985,32 @@ int main()
 
 			//DCTで画質が悪く、ICAで少数基底の領域を抽出
 			k = 0;
+			a = 0;
+			b = 0;
 			for (j = 0; j < 1024; j++) {
 				no_op_0[j] = 0;
+				if (no_op_4[j] == 1)
+					a++;
+				if (no_op_5[j] == 1)
+					b++;
+
 				//if (bunrui[2][j] <= 4 && 4 <= bunrui[0][j]) {
 				//	no_op_4[j] = 1;
 				//}
-				if (mse_dct[0][a][j] <= 500 && no_op_4[j] == 1) {//基底4以下かつMSEが150以上のブロック
-					no_op_0[j] = 1;
-					k++;
-				}
-				if (mse_dct[0][a][j] > 600 && no_op_4[j] == 1) {
-					no_op_0[j] = 1;
-					k++;
-				}
+			//	if (mse_dct[0][a][j] <= 500 && no_op_4[j] == 1) {//基底4以下かつMSEが150以上のブロック
+			//		no_op_0[j] = 1;
+			//		k++;
+			//	}
+			//	if (mse_dct[0][a][j] > 600 && no_op_4[j] == 1) {
+			//		no_op_0[j] = 1;
+			//		k++;
+			//	}
 			}
-			if (k == 0)
-				k = 99;
-			img_out(origin, no_op_0, k*1000 + 111);//
+			//if (k == 0)
+			//	k = 99;
+			//img_out(origin, no_op_0, k*1000 + 111);//
 			fclose(fp8);			printf("a");
+			fprintf(fp,"\n\n [ 1~3 ] : %d  [ all ] : %d  (%lf)", a, b, ((double)a / (double)b) * 100);
 			//////領域分割メイン処理　終了/////////////////////////////
 
 
