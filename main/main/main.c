@@ -389,21 +389,21 @@ int main()
 		for (j = 0; j < 64; j++)
 			nw[j][i] = w[j][i]; // nw-> w(ica基底コピー)
 
-	for (j = 0; j < 1024; j++)
-		for (n = 0; n < 64; n++) {
-			ny[n][j] = 0;
-			ny2[n][j] = 0;
-		}
-
 	//再構成確認
 	seki5(nw, ny, x); // x -> nw * ny
 	xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
 	avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-	sprintf(output, "OUTPUT\\ICA_SAI_main.bmp"); //再構成画像bmpで出力
+	sprintf(output, "OUTPUT\\Result\\ICA_SAI_main.bmp");
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 256; j++)
 			ica_temp[i * 256 + j] = ica_sai[i][j];
 	img_write_gray(ica_temp, output, 256, 256);
+
+	//for (j = 0; j < 1024; j++)
+	//	for (n = 0; n < 64; n++) {
+	//		ny[n][j] = 0;
+	//		ny2[n][j] = 0;
+	//	}
 
 	// ICAの直流成分をQ100で代用　//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	for (j = 0; j < 1024; j++) {
@@ -1013,7 +1013,6 @@ int main()
 			//	}
 
 			//DCTの画質が極端に悪いブロックのみフラグ, DCTのMSEをExcelに出力
-
 				if (j % 32 == 0)
 					fprintf(fp6, "\n");
 				//if (no_op_5[j] == 1)
@@ -1023,20 +1022,21 @@ int main()
 
 				no_op_1[j] = 0;
 				if (Q == 80)
-					k = 154;
+					sum = 150.4;
 				if (Q == 50)
-					k = 375;
+					sum = 362.0;
 				if (Q == 30)
-					k = 515;
+					sum = 495.5;
 
-				if (mse_dct[0][Q / 10 - 1][j] >= k) //MSEで閾値して画像出力
+				if (mse_dct[0][Q / 10 - 1][j] >= sum) //MSEで閾値して画像出力
 					no_op_1[j] = 1;
 			}
 
 			//if (k == 0)
 			//	k = 99;
 			//img_out(origin, no_op_0, k*1000 + 111);//
-			//img_out(origin, no_op_1, Q + 9);//MSEで閾値した領域を出力
+			//if (Q == 30 || Q == 50 || Q == 80)
+			//	img_out(origin, no_op_1, Q + 9);//MSEで閾値した領域を出力
 			fclose(fp8);			printf("a");
 			fprintf(fp,"\n\n [ 1~3 ] : %d  [ all ] : %d  (%lf)", a, b, ((double)a / (double)b) * 100);
 			//////領域分割メイン処理　終了/////////////////////////////
