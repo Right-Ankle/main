@@ -206,7 +206,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '8', '9', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '5', '0', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -1825,7 +1825,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-							fprintf(fp9, "\n [%d]    %lf (3)  [%d, %d, %d]",j, dct_mse[j] - comb3_0[j][a][b][c], a,b,c);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d, %d]",j, dct_mse[j] - comb3_0[j][a][b][c], a,b,c);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
@@ -1836,7 +1836,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-							fprintf(fp9, "\n [%d]    %lf (2)  [%d, %d]",j, dct_mse[j] - comb2[j][k][l][0], k,l);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]",j, dct_mse[j] - comb2[j][k][l][0], k,l);
 						}
 						else if (dct_mse[j] > comb[j][m][0]) {
 							ny[m][j] = y[m][j];
@@ -1846,7 +1846,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)  [%d]",j, dct_mse[j] - comb[j][m][0],m);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]",j, dct_mse[j] - comb[j][m][0],m);
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1866,7 +1866,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-							fprintf(fp9, "\n [%d]    %lf (2)  [%d, %d]", j,dct_mse[j] - comb2[j][a][b][0], a,b);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j,dct_mse[j] - comb2[j][a][b][0], a,b);
 						}
 						else if (dct_mse[j] > comb[j][k][0]) {
 							ny[k][j] = y[k][j];
@@ -1876,7 +1876,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)  [%d]", j,dct_mse[j] - comb[j][k][0],k);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j,dct_mse[j] - comb[j][k][0],k);
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1888,7 +1888,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-							fprintf(fp9, "\n [%d]    %lf (1)  [%d]", j,dct_mse[j] - comb[j][a][0],a);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j,dct_mse[j] - comb[j][a][0],a);
 						}
 					}
 				}// 基底格納終了
