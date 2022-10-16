@@ -206,7 +206,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '5', '0', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '4', '0', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -1708,9 +1708,11 @@ int main()
 					sum = dct_all_mse * 1024 * 64;
 					printf("\n DCT sum = %lf", sum);
 					fprintf(fp, "\n DCT sum = %lf", sum);
-					sum = (comb_after_sort[a][1] * (1024 * 64 + comb_after_sort[a][5] + l) + ica_basis_ent[c - 1] * 64 * 64);
-					printf("\n ICA sum = %lf (%lf)", sum, dct_all_mse * 1024 * 64 - sum);
-					fprintf(fp, "\n ICA sum = %lf (%lf)", sum, dct_all_mse * 1024 * 64 - sum);
+
+					basis_ent[3] = ent_count_basis2(w, (int)comb_after_sort[a][2], (int)comb_after_sort[a][3], (int)comb_after_sort[a][4]);
+					sum = (comb_after_sort[a][1] * (1024 * 64 + comb_after_sort[a][5] + l) + basis_ent[3] * 64 * 64);
+					printf("\n ICA sum = %lf (Basis ent : %lf)", sum, basis_ent[3] * 64 * 64);
+					fprintf(fp, "\n ICA sum = %lf (Basis ent : %lf)", sum, basis_ent[3] * 64 * 64);
 
 					if (k == 0) {
 						if (dct_all_mse * 1024 * 64 > sum) { // 基底0の改善情報量 + 基底１（対象基底）の改善情報量 + これまでの情報量 > 基底の情報量 * いくつ使っているか
