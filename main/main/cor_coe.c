@@ -30,3 +30,66 @@ double cor_coe(double date1[1024], double date2[1024]) {
 
 	return result_coe;
 }
+
+double cor_coe2(unsigned char origin[][256], int a, int b) {
+	int i, j, n, m, l, k;
+	double result_coe, sum0, sum1, sum2, sum11, sum22;
+	double x[64][1024];
+
+	sum2 = 0; sum0 = 0; sum1 = 0; sum11 = 0; sum22 = 0;
+
+	// 256*256  ‚ğ@64*1024
+	n = 0;
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			m = 0;
+			for (k = 0; k < 8; k++) {
+				for (l = 0; l < 8; l++) {
+					x[m][n] = origin[i + k][j + l];
+					m++;
+				}
+			}
+			n++;
+		}
+	}
+
+	for (j = 0; j < 64; j++) {
+		sum1 += x[j][a];
+		sum2 += x[j][b];
+	}
+
+	sum1 /= 64.0;
+	sum2 /= 64.0;
+
+	for (j = 0; j < 64; j++) {
+		sum0 += (x[j][a] - sum1) * (x[j][b] - sum2);
+		sum11 += pow(x[j][a] - sum1, 2);
+		sum22 += pow(x[j][b] - sum2, 2);
+	}
+
+	result_coe = (sum0 / 64.0) / (sqrt(sum11 / 64.0) * sqrt(sum22 / 64.0));
+
+
+	return result_coe;
+}
+
+double cor_coe3(int temp[2][10]) {
+	int i, j, n, m, l, k;
+	double result_coe, sum0, sum1, sum2, sum11, sum22;
+	double x[64][1024];
+
+	sum2 = 0; sum0 = 0; sum1 = 0; sum11 = 0; sum22 = 0;
+
+	// W‡“à‚Ì“¯‚¶”š‚ğ’Tõ
+	n = 0;
+	for (k = 0; k < 10; k++) {
+		for (l = 0; l < 10; l++) {
+			if (temp[0][k] == temp[1][l])
+				n++;
+		}
+	}
+
+	result_coe = (double)n/10.0;//•ªq/2‚µ‚Ä‚ ‚è‚Ü‚·
+
+	return result_coe;
+}

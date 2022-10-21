@@ -41,6 +41,8 @@ int main()
 	static int no_op_3[1024] = { 0 };
 	static int no_op_4[1024] = { 0 };
 	static int no_op_5[1024] = { 0 };
+	static int Block_flag[1024] = { 0 };
+	static int Block_flag2[1024] = { 0 };
 	static int Q;//圧縮レート
 	static int QQ;//適当な変数として使用中？
 	int hist[500000]; //entropy算出時のヒストグラム用
@@ -52,6 +54,7 @@ int main()
 	int ica_fre_temp[64]; //ICA基底毎の使用数
 	int excel_temp = 4; // excel出力時に使用
 	int step = 100; // ICA係数のentropy算出時に使用
+	int dice_temp[2][10]; //基底順位をDICE係数で求める
 
 	////// double //////
 	static double sum = 0, min = 0, max = 0, temp = 0;//計算用
@@ -84,6 +87,7 @@ int main()
 	double excel_basis[7];//0->ica基底，1->DCT単独，2->DCT領域，3->ICA領域，4->ICA領域数，5->ICAのDC "制限基底数=(1-2-5)/((3/4)+0)"（Excel用）
 	double dct_mse[1024]; //DCTの各ブロックのMSE
 	double dct_dct[1024];
+	double coe_temp[64][1024] = { 0 };//
 	double psnr_temp2; //PSNR出力用
 	static double basis0_ent = 0;//0領域の改善可能なentropy用
 		// 重要基底選出用 （無印＝MSEと情報量格納、Results＝各基底の評価、Sort＝画質順に並び替え）
@@ -128,6 +132,7 @@ int main()
 	_mkdir("OUTPUT\\MSE"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	_mkdir("OUTPUT\\Result"); //保存用のファイル格納用フォルダ
 	_mkdir("OUTPUT\\Result\\test"); //MSE比較後、基底ごとの領域で分割した画像を出力
+	_mkdir("OUTPUT\\Result\\test2"); //MSE比較後、基底ごとの領域で分割した画像を出力
 
 	//_mkdir("DEFAULT"); //MSE比較後、基底ごとの領域で分割した画像を出力
 	//for (i = 1; i < 5; i++) {
@@ -156,15 +161,15 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp3 = fopen("OUTPUT\\fp3.txt", "w")) == NULL) {
+	if ((fp3 = fopen("OUTPUT\\Result\\test2\\Higherbasis.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp4 = fopen("OUTPUT\\fp4.txt", "w")) == NULL) {
+	if ((fp4 = fopen("OUTPUT\\Result\\test2\\Correlation.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp5 = fopen("OUTPUT\\Result\\DCT_hist.csv", "w")) == NULL) {
+	if ((fp5 = fopen("OUTPUT\\Result\\test2\\DCT_hist.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -176,7 +181,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp8 = fopen("OUTPUT\\Result\\ica_basis_result.csv", "w")) == NULL) {
+	if ((fp8 = fopen("OUTPUT\\Result\\test2\\ica_basis_result.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -241,7 +246,7 @@ int main()
 	//img_out3(origin);
 	printf("a");
 	/// 基底変更用//////////////////////////
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'n') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -281,6 +286,51 @@ int main()
 	}
 	yn = 'n';
 	printf("a");
+
+	for (i = 0; i < 256; i += 8) {
+		for (j = 0; j < 256; j += 8) {
+			m = 0;
+			for (k = 0; k < 8; k++) {
+				for (l = 0; l < 8; l++) {
+					coe_temp[m][n] = origin_change[i + k][j + l]; //256*256 -> 64*1024
+					m++;
+				}
+			}
+			n++;
+		}
+	}
+	a = 0;
+	for (i = 0; i < 1024; i++)
+		Block_flag2[i] = 999;
+
+	for (i = 0; i < 1024; i++) {
+		sum = 0;
+		for (j = 0; j < 64; j++) {
+			sum += coe_temp[j][i];
+		}
+		if (sum != 0) {
+			Block_flag[i] = 1;
+			Block_flag2[a] = i;
+			a++;
+		}
+		else
+			Block_flag[i] = 0;
+	}
+
+	//相関係数出力
+	fprintf(fp4, "\n\n\n,");
+	for (b = 0; b < a; b++)
+		fprintf(fp4, ",[%d]", Block_flag2[b]);
+
+	for (b = 0; b < a; b++) {
+		fprintf(fp4, "\n,[%d]", Block_flag2[b]);
+		for (c = 0; c < a; c++) {
+			fprintf(fp4, ",%1.3lf", cor_coe2(origin, b, c));
+		}
+	}
+
+
+
 
 
 	/// 基底作成による尖度を比較中////////////////////////////////////////////////////////////////////
@@ -946,6 +996,53 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
+			// 基底順位上位10個を出力
+			if (Q == 30) {
+				Block_flag[i] = 1;
+				a = 0;
+				fprintf(fp3, "\n\n\n\n,");
+				for (i = 1; i < 11; i++) {
+					fprintf(fp3, ",[%d]", i);
+					if (i == 5)
+						fprintf(fp3, ",");
+				}
+
+				for (i = 0; i < 1024; i++)
+					if (Block_flag[i] == 1)
+						a++;
+				for (b = 0; b < a; b++) {
+					fprintf(fp3, "\n,[%d]", Block_flag2[b]);
+					for (i = 0; i < 10; i++) {
+						fprintf(fp3, ",%d", (int)full_mse[0][63 - i][Block_flag2[b]]);
+						if (i == 4)
+							fprintf(fp3, ",");
+					}
+				}
+
+				//Dice係数
+				fprintf(fp3, "\n\n\n,");
+				for (b = 0; b < a; b++)
+					fprintf(fp3, ",[%d]", Block_flag2[b]);
+				for (b = 0; b < a; b++) {
+					fprintf(fp3, "\n,[%d]", Block_flag2[b]);
+					sum = 0;
+					k = 0;
+					for (c = 0; c < a; c++) {
+						for (i = 0; i < 10; i++) {
+							dice_temp[0][i] = (int)full_mse[0][63 - i][Block_flag2[b]];
+							dice_temp[1][i] = (int)full_mse[0][63 - i][Block_flag2[c]];
+						}
+						temp = cor_coe3(dice_temp);
+						fprintf(fp3, ",%1.3lf", temp);
+						sum += temp;
+						if (temp == 0)
+							k++;
+					}
+					fprintf(fp3, ",,[%1.3lf],%d/%d", sum / a, k, a);
+				}
+
+			}
+
 			//for (j = 0; j < 1024; j++)
 			//	if (bunrui[0][j] != 99 && bunrui[2][j] != 99)
 			//		printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
@@ -985,11 +1082,11 @@ int main()
 
 			if (Q == 30) {
 				fprintf(fp8, "\n\n\n\n");
-				for (a = 8; a > 2; a--)
-					fprintf(fp8, ",,[%d]", a * 10);
+				for (a = 7; a > 1; a--)
+					fprintf(fp8, ",,,[%d]", (a+1) * 10);
 				for (j = 0; j < 1024; j++) {
 					fprintf(fp8, "\n\n,[%d]", j);
-					for (a = 8; a > 2; a--) {
+					for (a = 7; a > 1; a--) {
 						fprintf(fp8, ",,%d,%d", (int)bunrui_temp[a][j][0], (int)bunrui_temp[a][j][1]);
 					}
 				}

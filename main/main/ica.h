@@ -139,5 +139,6 @@ void gnuplot5_4(double y[64][1024], double y2[64][1024]);
 void Block_count(char name[20]);
 void mk_input_image(unsigned char origin[][256], char name[20]);
 
-
+double cor_coe2(unsigned char origin[][256], int a, int b);
+double cor_coe3(int temp[2][10]);
 
