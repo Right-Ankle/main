@@ -76,6 +76,7 @@ int main()
 	double ica_basis2[65][1024];//領域分割後のICA_Blockにおける、使用基底と最適基底数　[0~63=フラグ、64=最適基底数][ブロック番号]
 	double dcoe_temp[64][1024] = { 0 };//DCTの係数 64*1024版
 	double bunrui[4][1024];//領域分割時に使用、[0=DCTの基底数、1=DCTのMSE、2=ICAの基底数、3=ICAのMSE][ブロック番号]
+	double bunrui_temp[10][1024][2];
 	double ica_dc[1024];  // ICAの直流成分のentropy
 	double ica_w[64]; //ICA基底のentropy
 	double ica_basis_ent[3]; //ICA基底のentropy
@@ -163,7 +164,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp5 = fopen("OUTPUT\\fp5.txt", "w")) == NULL) {
+	if ((fp5 = fopen("OUTPUT\\Result\\DCT_hist.csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -206,7 +207,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '4', '0', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '8', '9', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -240,7 +241,7 @@ int main()
 	//img_out3(origin);
 	printf("a");
 	/// 基底変更用//////////////////////////
-	yn = 'n';
+	yn = 'y';
 	if (yn == 'n') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -362,7 +363,7 @@ int main()
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	if (yn == 'n') {
+	if (yn == 'y') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
@@ -950,7 +951,7 @@ int main()
 			//		printf("\n\n [%d] min : (%d) %lf ~max : (%d) %lf\n DCT : (%d) %lf", j, (int)bunrui[2][j], bunrui[3][j], (int)bunrui[0][j], bunrui[1][j], (int)mse_dct[1][(int)(Q / 10 - 1)][j], mse_dct[0][(int)(Q / 10 - 1)][j]);
 
 			fprintf(fp6, "\n\n,[%d]\n", Q);
-			fprintf(fp8, "\n\n\n\n,,[%d]\n", Q);
+
 			for (j = 0; j < 1024; j++) {
 				no_op_0[j] = 0;
 				no_op_1[j] = 0;
@@ -975,10 +976,23 @@ int main()
 				if (bunrui[2][j] != 99 && bunrui[0][j] != 99 && bunrui[0][j] != 0) {// 0ブロック以外のICA領域（最小基底数0はしょうがない，最大基底数0は許さない）
 					no_op_5[j] = 1;
 				}
-				if (j != 0)
-					fprintf(fp8, "\n\n\n\n\n\n\n");
-				fprintf(fp8, ",[%d], %d,%d", j, (int)bunrui[2][j], (int)bunrui[0][j]);
+				//if (j != 0)
+				//	fprintf(fp8, "\n\n\n\n\n\n\n");
+				bunrui_temp[Q / 10 - 1][j][0] = bunrui[2][j];
+				bunrui_temp[Q / 10 - 1][j][1] = bunrui[0][j];
 
+			}
+
+			if (Q == 30) {
+				fprintf(fp8, "\n\n\n\n");
+				for (a = 8; a > 2; a--)
+					fprintf(fp8, ",,[%d]", a * 10);
+				for (j = 0; j < 1024; j++) {
+					fprintf(fp8, "\n\n,[%d]", j);
+					for (a = 8; a > 2; a--) {
+						fprintf(fp8, ",,%d,%d", (int)bunrui_temp[a][j][0], (int)bunrui_temp[a][j][1]);
+					}
+				}
 			}
 
 			img_out(origin, no_op_1, Q + 1);//基底1ブロック
@@ -1016,7 +1030,7 @@ int main()
 				if (j % 32 == 0)
 					fprintf(fp6, "\n");
 				//if (no_op_5[j] == 1)
-					fprintf(fp6, ",%lf", mse_dct[0][Q / 10 - 1][j]);
+				fprintf(fp6, ",%lf", mse_dct[0][Q / 10 - 1][j]);
 				//else
 				//	fprintf(fp6, ",");
 
@@ -1037,8 +1051,74 @@ int main()
 			//img_out(origin, no_op_0, k*1000 + 111);//
 			//if (Q == 30 || Q == 50 || Q == 80)
 			//	img_out(origin, no_op_1, Q + 9);//MSEで閾値した領域を出力
-			fclose(fp8);			printf("a");
-			fprintf(fp,"\n\n [ 1~3 ] : %d  [ all ] : %d  (%lf)", a, b, ((double)a / (double)b) * 100);
+			printf("a");
+			fprintf(fp, "\n\n [ 1~3 ] : %d  [ all ] : %d  (%lf)", a, b, ((double)a / (double)b) * 100);
+
+			//DCTMSEのヒストグラム算出実験
+			for (i = 0; i < 500000; i++) {
+				hist[i] = 0;
+			}
+
+			/* hist2の作成 */
+			min = 0;
+			//for (i = 0; i < 1024; i++)
+			//	if (mse_dct[0][Q / 10 - 1][j] < min)
+			//		min = mse_dct[0][Q / 10 - 1][j]; // histの左端
+
+			fprintf(fp5, "\n\n\n,[%d]", Q);
+			////Step幅0.1
+			//fprintf(fp5, "\n,[Step 0.1],");
+			//for (i = 0; i < 1024; i++)
+			//	hist[(int)((mse_dct[0][Q / 10 - 1][j] - min)*10) + 1]++;
+			//for (i = 0; i < 10000; i++)
+			//	fprintf(fp5, ",%d", hist[i]);
+
+			////Step幅1
+			//for (i = 0; i < 500000; i++)
+			//	hist[i] = 0;
+			//fprintf(fp5, "\n,[Step 1],");
+			//for (i = 0; i < 1024; i++)
+			//	hist[(int)((mse_dct[0][Q / 10 - 1][i] - min)) + 1]++;
+			//for (i = 0; i < 1000; i++)
+			//	fprintf(fp5, ",%d", hist[i]);
+
+			//Step幅5
+			for (i = 0; i < 500000; i++)
+				hist[i] = 0;
+			fprintf(fp5, "\n[Step 5]\n");
+			for (i = 0; i < 1024; i++)
+				hist[(int)((mse_dct[0][Q / 10 - 1][i] - min) / 5) + 1]++;
+			for (i = 0; i < 200; i++)
+				fprintf(fp5, ",%d", hist[i]);
+
+			//Step幅10
+			for (i = 0; i < 500000; i++)
+				hist[i] = 0;
+			fprintf(fp5, "\n[Step 10]\n");
+			for (i = 0; i < 1024; i++)
+				hist[(int)((mse_dct[0][Q / 10 - 1][i] - min) / 10) + 1]++;
+			for (i = 0; i < 100; i++)
+				fprintf(fp5, ",%d", hist[i]);
+
+			//Step幅20
+			for (i = 0; i < 500000; i++)
+				hist[i] = 0;
+			fprintf(fp5, "\n[Step 20]\n");
+			for (i = 0; i < 1024; i++)
+				hist[(int)((mse_dct[0][Q / 10 - 1][i] - min) / 20) + 1]++;
+			for (i = 0; i < 50; i++)
+				fprintf(fp5, ",%d", hist[i]);
+
+			//Step幅50
+			for (i = 0; i < 500000; i++)
+				hist[i] = 0;
+			fprintf(fp5, "\n[Step 50]\n");
+			for (i = 0; i < 1024; i++)
+				hist[(int)((mse_dct[0][Q / 10 - 1][i] - min) / 50) + 1]++;
+			for (i = 0; i < 20; i++)
+				fprintf(fp5, ",%d", hist[i]);
+
+
 			//////領域分割メイン処理　終了/////////////////////////////
 
 
@@ -1049,7 +1129,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'y') {
+			if (yn == 'n') {
 				//0の情報量ok
 
 				// 動的配列の宣言
@@ -1475,7 +1555,7 @@ int main()
 					a = (int)comb_after_sort[d][2];
 					b = (int)comb_after_sort[d][3];
 					c = (int)comb_after_sort[d][4];
-					fprintf(fp7, "\n,[%d-%d-%d],,[%d]", a,b,c,d);
+					fprintf(fp7, "\n,[%d-%d-%d],,[%d]", a, b, c, d);
 
 					for (j = 0; j < 1024; j++) {
 						no_op_0[j] = 0;
@@ -1827,7 +1907,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d, %d]",j, dct_mse[j] - comb3_0[j][a][b][c], a,b,c);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d, %d]", j, dct_mse[j] - comb3_0[j][a][b][c], a, b, c);
 						}
 						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
 							ny[k][j] = y[k][j];
@@ -1838,7 +1918,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]",j, dct_mse[j] - comb2[j][k][l][0], k,l);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][k][l][0], k, l);
 						}
 						else if (dct_mse[j] > comb[j][m][0]) {
 							ny[m][j] = y[m][j];
@@ -1848,7 +1928,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]",j, dct_mse[j] - comb[j][m][0],m);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][m][0], m);
 						}
 					}
 					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
@@ -1868,7 +1948,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j,dct_mse[j] - comb2[j][a][b][0], a,b);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][a][b][0], a, b);
 						}
 						else if (dct_mse[j] > comb[j][k][0]) {
 							ny[k][j] = y[k][j];
@@ -1878,7 +1958,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j,dct_mse[j] - comb[j][k][0],k);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][k][0], k);
 						}
 					}
 					else if (a != 99 && b == 99 && c == 99) {
@@ -1890,7 +1970,7 @@ int main()
 								no_op_4[j] = 1;
 							else
 								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j,dct_mse[j] - comb[j][a][0],a);
+							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][a][0], a);
 						}
 					}
 				}// 基底格納終了
@@ -2100,7 +2180,7 @@ int main()
 	fclose(fp5);
 	fclose(fp6);
 	fclose(fp7);
-	//fclose(fp8);
+	fclose(fp8);
 	fclose(fp9);
 	fclose(fp10);
 	//gnuplot(dcoe_temp);
