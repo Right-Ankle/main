@@ -292,6 +292,7 @@ int main()
 			m = 0;
 			for (k = 0; k < 8; k++) {
 				for (l = 0; l < 8; l++) {
+					coe_temp[m][n] = 0;
 					coe_temp[m][n] = origin_change[i + k][j + l]; //256*256 -> 64*1024
 					m++;
 				}
@@ -301,7 +302,7 @@ int main()
 	}
 	a = 0;
 	for (i = 0; i < 1024; i++)
-		Block_flag2[i] = 999;
+		Block_flag2[i] = 9999;
 
 	for (i = 0; i < 1024; i++) {
 		sum = 0;
@@ -321,12 +322,26 @@ int main()
 	fprintf(fp4, "\n\n\n,");
 	for (b = 0; b < a; b++)
 		fprintf(fp4, ",[%d]", Block_flag2[b]);
-
+	fprintf(fp4, ",,0~0.2,0.2~0.4,0.4~0.7,0.7~1,,0~0.1");
 	for (b = 0; b < a; b++) {
 		fprintf(fp4, "\n,[%d]", Block_flag2[b]);
+		k = l = m = n = d = 0;
 		for (c = 0; c < a; c++) {
-			fprintf(fp4, ",%1.3lf", cor_coe2(origin, b, c));
+			sum = cor_coe2(origin, Block_flag2[b], Block_flag2[c]);
+			if (fabs(sum) < 0.2)
+				k++;
+			else if (fabs(sum) >= 0.2 && fabs(sum) < 0.4)
+				l++;
+			else if (fabs(sum) >= 0.4 && fabs(sum) < 0.7)
+				m++;
+			else if (fabs(sum) > 0.7)
+				n++;
+			if (fabs(sum) < 0.1)
+				d++;
+			fprintf(fp4, ",%1.3lf", sum);
 		}
+		fprintf(fp4, ",[%d]", Block_flag2[b]);
+		fprintf(fp4, ",%d,%d,%d,%d,,%d", k, l, m, n,d);
 	}
 
 
@@ -998,7 +1013,6 @@ int main()
 
 			// 基底順位上位10個を出力
 			if (Q == 30) {
-				Block_flag[i] = 1;
 				a = 0;
 				fprintf(fp3, "\n\n\n\n,");
 				for (i = 1; i < 11; i++) {
