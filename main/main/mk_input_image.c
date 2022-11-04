@@ -17,7 +17,7 @@ void mk_input_image(char origin[256][256], char name[20]) {
 	int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
 
 	//	読み込みモードでファイルを開く
-	sprintf(filename, "image\\入力画像変更実験用\\Cameraman\\Block_num[%s].csv", name);
+	sprintf(filename, "image\\Block_num[%s].csv", name);
 	if ((fp = fopen(filename, "r")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}

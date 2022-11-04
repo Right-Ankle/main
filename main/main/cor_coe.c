@@ -82,14 +82,14 @@ double cor_coe3(int temp[2][10]) {
 
 	// W‡“à‚Ì“¯‚¶”š‚ğ’Tõ
 	n = 0;
-	for (k = 0; k < 10; k++) {
-		for (l = 0; l < 10; l++) {
+	for (k = 0; k < 4; k++) {
+		for (l = 0; l < 4; l++) {
 			if (temp[0][k] == temp[1][l])
 				n++;
 		}
 	}
 
-	result_coe = (double)n/10.0;//•ªq/2‚µ‚Ä‚ ‚è‚Ü‚·
+	result_coe = (double)n/4.0;//•ªq*2‚¾‚¯‚Ç–ñ•ª‚µ‚Ä‚ ‚è‚Ü‚·
 
 	return result_coe;
 }

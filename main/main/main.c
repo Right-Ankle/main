@@ -161,7 +161,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp3 = fopen("OUTPUT\\Result\\test2\\Higherbasis.csv", "w")) == NULL) {
+	if ((fp3 = fopen("OUTPUT\\Result\\test2\\Higherbasis[4].csv", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -212,7 +212,7 @@ int main()
 	static char filename13[20] = { 't', 'e', 'x', 't', '.', 'b', 'm', 'p' };
 	static char filename14[20] = { 'e', 'a', 'r', 't', 'h', '.', 'b', 'm', 'p' };
 	static char filename15[20] = { 'm', 'a', 'n', 'd', 'r', 'i', 'l', 'l', '.', 'b', 'm', 'p' };
-	static char filename16[20] = { '8', '9', '.', 'b', 'm', 'p' };
+	static char filename16[20] = { '3', '9', '.', 'b', 'm', 'p' };
 
 	printf("\n******************\n 1, barbara\n 2, cameraman \n 3, mandrill \n 4, earth \n 5, Airplane \n 6, saiboat \n 7, boat \n 8, text \n 9, building \n ****************** \n\n filename plz .... : ");
 	scanf("%d", &i);
@@ -277,7 +277,7 @@ int main()
 			Block_count(name);
 
 			//入力CSVファイルのブロック番号のみを画像出力
-			//mk_input_image(origin, name);
+			mk_input_image(origin, name);
 
 			//継続判定
 			printf("\n\n continue ? (y:0/n:1) ");
@@ -428,7 +428,7 @@ int main()
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	if (yn == 'y') {
+	if (yn == 'n') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
@@ -1015,7 +1015,7 @@ int main()
 			if (Q == 30) {
 				a = 0;
 				fprintf(fp3, "\n\n\n\n,");
-				for (i = 1; i < 11; i++) {
+				for (i = 1; i < 5; i++) {
 					fprintf(fp3, ",[%d]", i);
 					if (i == 5)
 						fprintf(fp3, ",");
@@ -1026,7 +1026,7 @@ int main()
 						a++;
 				for (b = 0; b < a; b++) {
 					fprintf(fp3, "\n,[%d]", Block_flag2[b]);
-					for (i = 0; i < 10; i++) {
+					for (i = 0; i < 4; i++) {
 						fprintf(fp3, ",%d", (int)full_mse[0][63 - i][Block_flag2[b]]);
 						if (i == 4)
 							fprintf(fp3, ",");
@@ -1042,7 +1042,7 @@ int main()
 					sum = 0;
 					k = 0;
 					for (c = 0; c < a; c++) {
-						for (i = 0; i < 10; i++) {
+						for (i = 0; i < 4; i++) {
 							dice_temp[0][i] = (int)full_mse[0][63 - i][Block_flag2[b]];
 							dice_temp[1][i] = (int)full_mse[0][63 - i][Block_flag2[c]];
 						}
@@ -1052,7 +1052,8 @@ int main()
 						if (temp == 0)
 							k++;
 					}
-					fprintf(fp3, ",,[%1.3lf],%d/%d", sum / a, k, a);
+					fprintf(fp3, ",[%d]", Block_flag2[b]);
+					fprintf(fp3, ",[%1.3lf],%d/%d", sum / a, k, a);
 				}
 
 			}
@@ -1240,7 +1241,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'n') {
+			if (yn == 'y') {
 				//0の情報量ok
 
 				// 動的配列の宣言
