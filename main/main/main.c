@@ -246,7 +246,7 @@ int main()
 	//img_out3(origin);
 	printf("a");
 	/// 基底変更用//////////////////////////
-	yn = 'y';
+	yn = 'n';
 	if (yn == 'n') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
@@ -274,7 +274,7 @@ int main()
 			scanf("%s", &name);
 
 			//入力画像のブロック番号をCSV出力
-			Block_count(name);
+			//Block_count(name);
 
 			//入力CSVファイルのブロック番号のみを画像出力
 			mk_input_image(origin, name);
@@ -428,7 +428,7 @@ int main()
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	if (yn == 'y') {
+	if (yn == 'n') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
@@ -973,8 +973,37 @@ int main()
 			dct_all_mse = sum;
 			printf("\nDCT ent = %lf", sum);// ACとDC関係なくエントロピー算出
 
-			//
-
+			//入力画像の個数変更実験(画像出力)
+			//for (i = 0; i < 1024; i++) {
+			//	Block_flag[i] = mse_dct[0][(Q / 10) - 1][i];
+			//	no_op_0[i] = 0;//100
+			//	no_op_1[i] = 0;//200
+			//	no_op_2[i] = 0;//500
+			//	no_op_3[i] = 0;//700
+			//}
+			//for(j=0;j<700;j++){
+			//	max = 0;
+			//	a = 0;
+			//	for (i = 0; i < 1024; i++)
+			//		if (max < Block_flag[i]) {
+			//			max = Block_flag[i];
+			//			a = i;
+			//		}
+			//	if (j < 100)
+			//		no_op_0[a] = 1;
+			//	if (j < 200)
+			//		no_op_1[a] = 1;
+			//	if (j < 500)
+			//		no_op_2[a] = 1;
+			//	if (j < 700)
+			//		no_op_3[a] = 1;
+			//	Block_flag[a] = 0;
+			//}
+			//img_out(origin, no_op_0, 100);
+			//img_out(origin, no_op_1, 200);
+			//img_out(origin, no_op_2, 500);
+			//img_out(origin, no_op_3, 700);
+			//printf("a");
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
 
 
@@ -1880,13 +1909,13 @@ int main()
 
 					}// 基底格納終了
 
-					img_out(origin, no_op_4, Q * 1000 + d*10+1);//評価上位基底の画像出力　発表資料用
-					for (i = 0; i < 1024; i++)
-						if (no_op_4[i] == 1)
-							no_op_4[i] = 0;
-						else
-							no_op_4[i] = 1;
-					img_out(origin, no_op_4, Q * 1000 + d*10+2);//DCT_Blockの出力
+					//img_out(origin, no_op_4, Q * 1000 + d*10+1);//評価上位基底の画像出力　発表資料用
+					//for (i = 0; i < 1024; i++)
+					//	if (no_op_4[i] == 1)
+					//		no_op_4[i] = 0;
+					//	else
+					//		no_op_4[i] = 1;
+					//img_out(origin, no_op_4, Q * 1000 + d*10+2);//DCT_Blockの出力
 
 					//画像全体のエントロピー算出///////////////////////////////////////////////
 

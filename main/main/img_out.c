@@ -18,7 +18,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 	for (a = 0; a < 256; a++)
 		for (b = 0; b < 256; b++)
 			temp_sai[a * 256 + b] = origin[a][b];
-
+	Q = 0;
 	for (i = 0; i < 1024; i++) {
 		k = i % 32;
 		l = i / 32;
@@ -30,6 +30,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 						temp_sai[256 * 8 * l + 8 * k + a + 256 * b] = 0;
 				}
 			}
+			Q++;
 		}
 	}
 
@@ -37,7 +38,7 @@ int img_out(unsigned char origin[][256], int date1[1024], int name) {
 	img_write_gray(temp_sai, output, 256, 256); // output‚Éo—Í‰æ‘œ‚ğ‘‚«o‚·
 	name++;
 
-	printf(" end\n\n");
+	printf(" [%d] end\n\n", 1024 - Q);
 	return name;
 }
 
