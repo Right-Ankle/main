@@ -471,6 +471,41 @@ int main()
 	//		ny2[n][j] = 0;
 	//	}
 
+
+	sum = 0;
+
+	/* ブロックごとの係数のエントロピーの計算 */
+
+		/* histの初期化 */
+		for (i = 0; i < 50000; i++) {
+			hist[i] = 0;
+		}
+
+		/* histの作成 */
+		min = 0;
+
+		/* hist2の作成 */
+		min = nw[0][0];
+		for (j = 0; j < 64; j++)
+			for (i = 0; i < 64; i++)
+				if (nw[j][i] < min)
+					min = nw[j][i]; // histの左端
+
+		for (i = 0; i < 64; i++)
+			for (j = 0; j < 64; j++)
+				hist[(int)(nw[j][i] - min) + 1]++;//ステップ幅1
+
+
+		sum = 0;
+		/* エントロピーの計算 */
+		for (i = 0; i < 50000; i++)
+			if (hist[i] > 0) {
+				sum += -((hist[i] / (double)(64 * 64)) * (log((hist[i] / (double)(64 * 64))) / log(2)));
+			}
+		printf("\n basis ent : %lf", sum);
+
+		printf("a");
+
 	// ICAの直流成分をQ100で代用　//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	for (j = 0; j < 1024; j++) {
 		// 初期化（必ず行う）
@@ -938,7 +973,7 @@ int main()
 			dct_all_mse = sum;
 			printf("\nDCT ent = %lf", sum);// ACとDC関係なくエントロピー算出
 
-
+			//
 
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
 
@@ -1234,46 +1269,46 @@ int main()
 			// 基底3個の画質最大を求める実験
 
 
-			for (j = 0; j < 1024; j++) {
-				// 全てのブロックに基底3個格納
-				for (i = 0; i < 64; i++)
-					nny[i][j] = 0;
-				for (i = 0; i < 3; i++) {
-					nny[(int)full_mse[0][63 - i][j]][j] = y[(int)full_mse[0][63 - i][j]][j];
-				}
+			//for (j = 0; j < 1024; j++) {
+			//	// 全てのブロックに基底3個格納
+			//	for (i = 0; i < 64; i++)
+			//		nny[i][j] = 0;
+			//	for (i = 0; i < 3; i++) {
+			//		nny[(int)full_mse[0][63 - i][j]][j] = y[(int)full_mse[0][63 - i][j]][j];
+			//	}
 
-				// 再構成処理
-				for (i = 0; i < 64; i++)
-					xx[i] = 0.0;
-				seki5_Block(nw, nny, xx, j); // xx64 -> nw * ny
-				xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
-				avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
-				sum = 0.0;
-				mk = j % 32;
-				ml = j / 32;
-				for (l = 0; l < 8; l++)
-					for (m = 0; m < 8; m++)
-						sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
+			//	// 再構成処理
+			//	for (i = 0; i < 64; i++)
+			//		xx[i] = 0.0;
+			//	seki5_Block(nw, nny, xx, j); // xx64 -> nw * ny
+			//	xtogen_Block(xx, block_ica, avg, j); // ica_sai -> 再構成済①
+			//	avg_inter_Block(block_ica, avg, j); // ica_sai -> 再構成済②
+			//	sum = 0.0;
+			//	mk = j % 32;
+			//	ml = j / 32;
+			//	for (l = 0; l < 8; l++)
+			//		for (m = 0; m < 8; m++)
+			//			sum += pow(origin[ml * 8 + m][mk * 8 + l] - block_ica[m * 8 + l], 2); //MSE
 
-				no_op_4[j] = 0;
-				if (dct_mse[j] > sum / 64.0) {
-					no_op_4[j] = 1;
-					printf(" ica : %.2lf", dct_mse[j] - sum / 64.0);
-				}
-				else
-					for (i = 0; i < 64; i++)
-						nny[i][j] = 0;
+			//	no_op_4[j] = 0;
+			//	if (dct_mse[j] > sum / 64.0) {
+			//		no_op_4[j] = 1;
+			//		printf(" ica : %.2lf", dct_mse[j] - sum / 64.0);
+			//	}
+			//	else
+			//		for (i = 0; i < 64; i++)
+			//			nny[i][j] = 0;
 
-				no_op[j] = no_op_4[j];
-				for (i = 0; i < 64; i++)
-					ny[i][j] = nny[i][j];
-			}
-			basis_ent[3] = 0;
-			seki5(nw, ny, x); // x -> nw * ny
-			xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-			avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-			img_out(origin, no_op, Q*10+4);//ICA領域
-			// 実験終了
+			//	no_op[j] = no_op_4[j];
+			//	for (i = 0; i < 64; i++)
+			//		ny[i][j] = nny[i][j];
+			//}
+			//basis_ent[3] = 0;
+			//seki5(nw, ny, x); // x -> nw * ny
+			//xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+			//avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+			//img_out(origin, no_op, Q*10+4);//ICA領域
+			//// 実験終了
 
 			//////領域分割メイン処理　終了/////////////////////////////
 
@@ -1285,7 +1320,7 @@ int main()
 				no_op_3[j] = 0;
 			}
 
-			if (yn == 'n') {
+			if (yn == 'y') {
 				//0の情報量ok
 
 				// 動的配列の宣言
@@ -1844,6 +1879,14 @@ int main()
 						}
 
 					}// 基底格納終了
+
+					img_out(origin, no_op_4, Q * 1000 + d*10+1);//評価上位基底の画像出力　発表資料用
+					for (i = 0; i < 1024; i++)
+						if (no_op_4[i] == 1)
+							no_op_4[i] = 0;
+						else
+							no_op_4[i] = 1;
+					img_out(origin, no_op_4, Q * 1000 + d*10+2);//DCT_Blockの出力
 
 					//画像全体のエントロピー算出///////////////////////////////////////////////
 
