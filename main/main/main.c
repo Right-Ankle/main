@@ -29,6 +29,8 @@ int main()
 	static unsigned char  ica_sai[256][256] = { 0 }; //ica再構成用
 	static unsigned char block_ica[64] = { 0 }; //ica ブロックでの再構成用
 	static unsigned char dct_ica_sai[256][256]; //DCT&ICA併用後の再構成
+	static unsigned char b_origin[8][8];
+	static unsigned char b_temp[8][8];
 
 	////// int //////
 	static int a, b, c, d, i, j, k, l, m, n, o, mk, ml; //計算用変数
@@ -41,7 +43,7 @@ int main()
 	static int no_op_3[1024] = { 0 };
 	static int no_op_4[1024] = { 0 };
 	static int no_op_5[1024] = { 0 };
-	static int Block_flag[1024] = { 0 };
+	static double Block_flag[1024] = { 0 };
 	static int Block_flag2[1024] = { 0 };
 	static int Q;//圧縮レート
 	static int QQ;//適当な変数として使用中？
@@ -973,37 +975,67 @@ int main()
 			dct_all_mse = sum;
 			printf("\nDCT ent = %lf", sum);// ACとDC関係なくエントロピー算出
 
-			//入力画像の個数変更実験(画像出力)
-			//for (i = 0; i < 1024; i++) {
-			//	Block_flag[i] = mse_dct[0][(Q / 10) - 1][i];
-			//	no_op_0[i] = 0;//100
-			//	no_op_1[i] = 0;//200
-			//	no_op_2[i] = 0;//500
-			//	no_op_3[i] = 0;//700
-			//}
-			//for(j=0;j<700;j++){
-			//	max = 0;
-			//	a = 0;
-			//	for (i = 0; i < 1024; i++)
-			//		if (max < Block_flag[i]) {
-			//			max = Block_flag[i];
-			//			a = i;
-			//		}
-			//	if (j < 100)
-			//		no_op_0[a] = 1;
-			//	if (j < 200)
-			//		no_op_1[a] = 1;
-			//	if (j < 500)
-			//		no_op_2[a] = 1;
-			//	if (j < 700)
-			//		no_op_3[a] = 1;
-			//	Block_flag[a] = 0;
-			//}
+			//入力画像の個数変更実験(画像出力) MSEver
+			//k = 1; //MSE ver
+			k = 0; //SSIM ver
+			for (i = 0; i < 1024; i++) {
+				if (k == 1) //MSE
+					Block_flag[i] = mse_dct[0][(Q / 10) - 1][i];
+				if (k == 0) { //SSIM
+					mk = i % 32;
+					ml = i / 32;
+					for (a = 0; a < 8; a++) {
+						for (b = 0; b < 8; b++) {
+							b_origin[b][a] = origin[ml * 8 + b][mk * 8 + a];
+							b_temp[b][a] = dcoe2[ml * 8 + b][mk * 8 + a];
+						}
+					}
+					Block_flag[i] = b_SSIM(b_origin, b_temp, 8, 8);
+				}
+				no_op_4[i] = 0;//75
+				no_op_0[i] = 0;//100
+				no_op_1[i] = 0;//200
+				no_op_2[i] = 0;//500
+				no_op_3[i] = 0;//700
+			}
+
+			for (j = 0; j < 700; j++) {
+				max = 0;
+				min = 1;
+				a = 0;
+				for (i = 0; i < 1024; i++) {
+					if (k == 1) //MSE
+						if (max < Block_flag[i]) {
+							max = Block_flag[i];
+							a = i;
+						}
+					if (k == 0) //SSIM
+						if (min > Block_flag[i]) {
+							min = Block_flag[i];
+							a = i;
+						}
+				}
+				if (j < 75)
+					no_op_4[a] = 1;
+				if (j < 100)
+					no_op_0[a] = 1;
+				if (j < 200)
+					no_op_1[a] = 1;
+				if (j < 500)
+					no_op_2[a] = 1;
+				if (j < 700)
+					no_op_3[a] = 1;
+				if (k == 1) //MSE
+					Block_flag[a] = 0;
+				if (k == 0) //SSIM
+					Block_flag[a] = 1;
+			}
+			//img_out(origin, no_op_4, 75);
 			//img_out(origin, no_op_0, 100);
 			//img_out(origin, no_op_1, 200);
 			//img_out(origin, no_op_2, 500);
 			//img_out(origin, no_op_3, 700);
-			//printf("a");
+			printf("a");
 			/////////////////// DCTの各ブロックの基底数と画質とentropy　終了/////////////////////////////////////
 
 
@@ -1075,7 +1107,7 @@ int main()
 				ent_out(origin, y, avg, w, ny, no_op, Q);
 			}
 
-			// 基底順位上位10個を出力
+			// 基底順位上位10個を出力//////////////
 			if (Q == 30) {
 				a = 0;
 				fprintf(fp3, "\n\n\n\n,");
@@ -1084,7 +1116,6 @@ int main()
 					if (i == 5)
 						fprintf(fp3, ",");
 				}
-
 				for (i = 0; i < 1024; i++)
 					if (Block_flag[i] == 1)
 						a++;
@@ -1096,7 +1127,6 @@ int main()
 							fprintf(fp3, ",");
 					}
 				}
-
 				//Dice係数
 				fprintf(fp3, "\n\n\n,");
 				for (b = 0; b < a; b++)
@@ -1119,7 +1149,6 @@ int main()
 					fprintf(fp3, ",[%d]", Block_flag2[b]);
 					fprintf(fp3, ",[%1.3lf],%d/%d", sum / a, k, a);
 				}
-
 			}
 
 			//for (j = 0; j < 1024; j++)
@@ -1174,7 +1203,7 @@ int main()
 			img_out(origin, no_op_1, Q + 1);//基底1ブロック
 			img_out(origin, no_op_2, Q + 2);//基底2ブロック
 			img_out(origin, no_op_3, Q + 3);//基底3ブロック
-			img_out(origin, no_op_4, Q + 4);//0無しICAブロック
+			img_out(origin, no_op_4, Q + 4);//0無しICAブロック0
 			img_out(origin, no_op_0, Q + 5);//0のみICAブロック
 			img_out(origin, no_op_5, Q + 6);//0のみICAブロック
 			img_out(origin, no_op, Q);//ICA領域
@@ -1210,16 +1239,16 @@ int main()
 				//else
 				//	fprintf(fp6, ",");
 
-				no_op_1[j] = 0;
-				if (Q == 80)
-					sum = 150.4;
-				if (Q == 50)
-					sum = 362.0;
-				if (Q == 30)
-					sum = 495.5;
+				//no_op_1[j] = 0;
+				//if (Q == 80)
+				//	sum = 150.4;
+				//if (Q == 50)
+				//	sum = 362.0;
+				//if (Q == 30)
+				//	sum = 495.5;
 
-				if (mse_dct[0][Q / 10 - 1][j] >= sum) //MSEで閾値して画像出力
-					no_op_1[j] = 1;
+				//if (mse_dct[0][Q / 10 - 1][j] >= sum) //MSEで閾値して画像出力
+				//	no_op_1[j] = 1;
 			}
 
 			//if (k == 0)

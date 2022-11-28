@@ -80,7 +80,7 @@ double SSIM(unsigned char data1[][256], unsigned char data2[][256], int width, i
     return Sum / (width * height);
 }
 
-double b_SSIM(unsigned char data1[][8], unsigned char data2[][8], int width, int height) {
+double b_SSIM(unsigned char data1[8][8], unsigned char data2[8][8], int width, int height) {
 
     double c1 = pow(0.01 * 255, 2);
     double c2 = pow(0.03 * 255, 2);

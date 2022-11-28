@@ -129,7 +129,7 @@ void img_out3(unsigned char origin[][256]);
 void img_out4(unsigned char origin[][256], int data1[1024], int data2[1024], int name);
 void img_out5(unsigned char origin[][256], int name);
 double SSIM(unsigned char data1[][256], unsigned char data2[][256], int width, int heigth);
-double b_SSIM(unsigned char data1[][8], unsigned char data2[][8], int width, int heigth);
+double b_SSIM(unsigned char data1[8][8], unsigned char data2[8][8], int width, int heigth);
 void smoothing(unsigned char origin[][256], unsigned char out[][256], int size);
 //double sort(double date1[64][1024], double date2[64][1024], double out[64][1024]);
 //double improvement(unsigned char filename[20], );
