@@ -57,6 +57,12 @@ int main()
 	int excel_temp = 4; // excel出力時に使用
 	int step = 100; // ICA係数のentropy算出時に使用
 	int dice_temp[2][10]; //基底順位をDICE係数で求める
+	int basis_temp2[3][5];
+	int basis_temp3[3][5];
+	double bd_mse[1024];
+	double bd_ssim[1024];
+	double bi_mse[1024];
+	double bi_ssim[1024];
 
 	////// double //////
 	static double sum = 0, min = 0, max = 0, temp = 0;//計算用
@@ -159,7 +165,7 @@ int main()
 		fprintf(stderr, "Can not open file\n");
 	}
 
-	if ((fp2 = fopen("OUTPUT\\fp2.txt", "w")) == NULL) {
+	if ((fp2 = fopen("OUTPUT\\Result\\test2\\fp2.txt", "w")) == NULL) {
 		fprintf(stderr, "Can not open file\n");
 	}
 
@@ -249,7 +255,7 @@ int main()
 	printf("a");
 	/// 基底変更用//////////////////////////
 	yn = 'n';
-	if (yn == 'n') {
+	if (yn == 'y') {
 		strcpy(filename, filename16);
 		if (img_read_gray(ori_temp, filename, image_name, 256, 256) != 0)
 			return -1;
@@ -430,7 +436,7 @@ int main()
 	// 基底は計算方法。係数は 8*8の画素ブロックを構成するのに 64個の基底がそれぞれ どれくらい使われているのか（含まれているか）の値。
 	// ブロックとは 256*256画素のうち縦8横8のブロック。一画像につき(256/8) 32*32 = 1024ブロック
 	printf("a");
-	if (yn == 'n') {
+	if (yn == 'y') {
 		pcaStr = new_pca(origin_change);
 		ICA(origin_change, pcaStr, y, w, avg, 100, 0.002);
 	}
@@ -891,7 +897,7 @@ int main()
 		ent_count_basis(w, ica_basis_ent);
 		fprintf(fp10, "\nICA_Basis,%lf", ica_basis_ent[0]);
 		fprintf(fp10, "\nQ,DCT_ent,PSNR,SSIM,MS-SSIM,Area,,ICA_ent,PSNR,SSIM,MS-SSIM,Area,,Basis");
-
+		fprintf(fp2, "\n\n  input image is [%s]\n\n", filename);
 		//fprintf(fp, "\n\n\n- - - - - - - - - - - - - - - - ( Reference ) For DCT - - - - - - - - - - - - - - - \n\n\n");
 		// 10段階品質があるから10段階分やる
 		printf("\nQ? : ");
@@ -900,6 +906,8 @@ int main()
 			printf("\r now Q is %d          \n", Q);
 			fprintf(fp, "\n************************************************************************\n\n");
 			fprintf(fp, "\n Q is %d\n\n", Q);
+			fprintf(fp2, "\n************************************************************************\n\n");
+			fprintf(fp2, "\n\n[Q %d] \n\n", Q);
 
 			// dct処理
 			dct(origin, dcoe, 8); // 係数を出力
@@ -2032,6 +2040,11 @@ int main()
 				for (i = 0; i < 1024; i++)
 					if (no_op_0[i] == 1)
 						l++;
+				for (a = 0; a < 5; a++) {
+					basis_temp2[0][a] = (int)comb_after_sort[a][2];
+					basis_temp2[1][a] = (int)comb_after_sort[a][3];
+					basis_temp2[2][a] = (int)comb_after_sort[a][4];
+				}
 				for (a = 0; a < 30; a++) {
 
 					if (a >= 20)
@@ -2040,6 +2053,7 @@ int main()
 						c = 2;
 					else
 						c = 3;
+
 					//printf("\n area sum = %d",(int)(1024 * 64 + comb_after_sort[a][5] + l));
 					///printf("\ndct_all_mse = %lf\ncomb_after_sort[a][1] =%lf\n", dct_all_mse, comb_after_sort[a][1]);
 					sum = dct_all_mse * 1024 * 64;
@@ -2109,143 +2123,217 @@ int main()
 				fprintf(fp, "\n\n%d, %d, %d  (%lf)\n\n\n", a, b, c, basis_ent[3]);
 				//////基底選出　終了///////////////////////////////////////////////////////////////
 
-				/// 選出基底の係数を格納 ///////////////////////////////////////////////////////
-				for (j = 0; j < 1024; j++) {
-					no_op_0[j] = 0;
-					for (i = 0; i < 64; i++)
-						ny[i][j] = 0;
-					no_op[j] = 0;
-					if (ica_basis2[64][j] == 0) {
-						no_op[j] = 1;
-						no_op_0[j] = 1;
-					}
-				}
+				//////// 上位評価の組み合わせによる各ブロックのMSE・SSIMを調査/////
+				for (QQ = 0; QQ < 5; QQ++) {
+					/// 選出基底の係数を格納 ///////////////////////////////////////////////////////
+					a = basis_temp2[0][QQ];
+					b = basis_temp2[1][QQ];
+					c = basis_temp2[2][QQ];
 
-				for (j = 0; j < 1024; j++) {
-
-					no_op_1[j] = 0;
-					no_op_2[j] = 0;
-					no_op_3[j] = 0;
-					no_op_4[j] = 0;
-
-					if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
-						//基底3で画質最大
-						//2個
-						min = comb2[j][a][b][0];//MSEだから小さい順
-						k = a;
-						l = b;
-						if (min > comb2[j][b][c][0]) {
-							min = comb2[j][b][c][0];
-							k = b;
-							l = c;
+					for (j = 0; j < 1024; j++) {
+						no_op_0[j] = 0;
+						for (i = 0; i < 64; i++)
+							ny[i][j] = 0;
+						no_op[j] = 0;
+						if (ica_basis2[64][j] == 0) {
+							no_op[j] = 1;
+							no_op_0[j] = 1;
 						}
-						if (min > comb2[j][a][c][0]) {
+					}
+
+					for (j = 0; j < 1024; j++) {
+
+						no_op_1[j] = 0;
+						no_op_2[j] = 0;
+						no_op_3[j] = 0;
+						no_op_4[j] = 0;
+
+						if (a != 99 && b != 99 && c != 99) {//選出基底3津の時
+							//基底3で画質最大
+							//2個
+							min = comb2[j][a][b][0];//MSEだから小さい順
 							k = a;
-							l = c;
-						}
-						//1個
-						min = comb[j][a][0];//MSEだから小さい順
-						m = a;
-						if (min > comb[j][b][0]) {
-							min = comb[j][b][0];
-							m = b;
-						}
-						if (min > comb[j][c][0])
-							m = c;
+							l = b;
+							if (min > comb2[j][b][c][0]) {
+								min = comb2[j][b][c][0];
+								k = b;
+								l = c;
+							}
+							if (min > comb2[j][a][c][0]) {
+								k = a;
+								l = c;
+							}
+							//1個
+							min = comb[j][a][0];//MSEだから小さい順
+							m = a;
+							if (min > comb[j][b][0]) {
+								min = comb[j][b][0];
+								m = b;
+							}
+							if (min > comb[j][c][0])
+								m = c;
 
-						//1vs2vs3個で画質比較
-						if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
-							ny[a][j] = y[a][j];
-							ny[b][j] = y[b][j];
-							ny[c][j] = y[c][j];
-							no_op[j] = 1;
-							no_op_3[j] = 1;
-							if (y[a][j] != 0 && y[b][j] != 0 && y[c][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d, %d]", j, dct_mse[j] - comb3_0[j][a][b][c], a, b, c);
+							//1vs2vs3個で画質比較
+							if (comb3_0[j][a][b][c] < comb2[j][k][l][0] && comb3_0[j][a][b][c] < comb[j][m][0] && dct_mse[j] > comb3_0[j][a][b][c]) {
+								ny[a][j] = y[a][j];
+								ny[b][j] = y[b][j];
+								ny[c][j] = y[c][j];
+								no_op[j] = 1;
+								no_op_3[j] = 1;
+								if (y[a][j] != 0 && y[b][j] != 0 && y[c][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 3 Error\n (a, b, c) = (%lf, %lf, %lf)", j, y[a][j], y[b][j], y[c][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d, %d, %d]", j, dct_mse[j] - comb3_0[j][a][b][c], a, b, c);
+								basis_temp3[0][QQ] = a;
+								basis_temp3[1][QQ] = b;
+								basis_temp3[2][QQ] = c;
+							}
+							else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
+								ny[k][j] = y[k][j];
+								ny[l][j] = y[l][j];
+								no_op[j] = 1;
+								no_op_2[j] = 1;
+								if (y[k][j] != 0 && y[l][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][k][l][0], k, l);
+								basis_temp3[0][QQ] = k;
+								basis_temp3[1][QQ] = l;
+								basis_temp3[2][QQ] = 99;
+							}
+							else if (dct_mse[j] > comb[j][m][0]) {
+								ny[m][j] = y[m][j];
+								no_op[j] = 1;
+								no_op_1[j] = 1;
+								if (y[m][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][m][0], m);
+								basis_temp3[0][QQ] = m;
+								basis_temp3[1][QQ] = 99;
+								basis_temp3[2][QQ] = 99;
+							}
 						}
-						else if (comb2[j][k][l][0] < comb[j][m][0] && dct_mse[j] > comb2[j][k][l][0]) {
-							ny[k][j] = y[k][j];
-							ny[l][j] = y[l][j];
-							no_op[j] = 1;
-							no_op_2[j] = 1;
-							if (y[k][j] != 0 && y[l][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 2 Error\n (k, l) = (%lf, %lf)", j, y[k][j], y[l][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][k][l][0], k, l);
+						else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
+							//1個
+							k = a;
+							if (comb[j][a][0] > comb[j][b][0])
+								k = b;
+
+							//1vs2個の画質比較
+							if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
+								//画質・情報量
+								ny[a][j] = y[a][j];
+								ny[b][j] = y[b][j];
+								no_op[j] = 1;
+								no_op_2[j] = 1;
+								if (y[a][j] != 0 && y[b][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][a][b][0], a, b);
+								basis_temp3[0][QQ] = a;
+								basis_temp3[1][QQ] = b;
+								basis_temp3[2][QQ] = 99;
+							}
+							else if (dct_mse[j] > comb[j][k][0]) {
+								ny[k][j] = y[k][j];
+								no_op[j] = 1;
+								no_op_1[j] = 1;
+								if (y[k][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][k][0], k);
+								basis_temp3[0][QQ] = k;
+								basis_temp3[1][QQ] = 99;
+								basis_temp3[2][QQ] = 99;
+							}
 						}
-						else if (dct_mse[j] > comb[j][m][0]) {
-							ny[m][j] = y[m][j];
-							no_op[j] = 1;
-							no_op_1[j] = 1;
-							if (y[m][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 1 Error\n (m) = (%lf)", j, y[m][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][m][0], m);
+						else if (a != 99 && b == 99 && c == 99) {
+							if (comb[j][a][0] < dct_mse[j]) {
+								ny[a][j] = y[a][j];
+								no_op[j] = 1;
+								no_op_1[j] = 1;
+								if (y[a][j] != 0)
+									no_op_4[j] = 1;
+								else
+									printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
+								fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][a][0], a);
+								basis_temp3[0][QQ] = a;
+								basis_temp3[1][QQ] = 99;
+								basis_temp3[2][QQ] = 99;
+							}
 						}
-					}
-					else if (a != 99 && b != 99 && c == 99) {//選出基底2津の時
-						//1個
-						k = a;
-						if (comb[j][a][0] > comb[j][b][0])
-							k = b;
+					}// 基底格納終了
 
-						//1vs2個の画質比較
-						if (dct_mse[j] > comb2[j][a][b][0] && comb[j][k][0] > comb2[j][a][b][0]) {
-							//画質・情報量
-							ny[a][j] = y[a][j];
-							ny[b][j] = y[b][j];
-							no_op[j] = 1;
-							no_op_2[j] = 1;
-							if (y[a][j] != 0 && y[b][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 2 Error\n (a, b) = (%lf, %lf)", j, y[a][j], y[b][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d, %d]", j, dct_mse[j] - comb2[j][a][b][0], a, b);
+
+
+					img_out(origin, no_op_0, Q * 100 + QQ*10+5);//基底0ブロック
+					img_out(origin, no_op_1, Q * 100 + QQ * 10 + 1);//基底1ブロック
+					img_out(origin, no_op_2, Q * 100 + QQ * 10 + 2);//基底2ブロック
+					img_out(origin, no_op_3, Q * 100 + QQ * 10 + 3);//基底3ブロック
+					img_out(origin, no_op_4, Q * 100 + QQ * 10 + 4);//0抜きICAブロック
+					img_out(origin, no_op, Q * 100 + QQ * 10 + 6);//ICAブロック
+
+					seki5(nw, ny, x); // x -> nw * ny
+					xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
+					avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
+
+					//img_out2(dcoe2, ica_sai, no_op, Q + 4);//再構成画像
+
+					///////// 実験中　後で消す//////
+					//Hybrid再構成//
+					for (i = 0; i < 256; i++)
+						for (j = 0; j < 256; j++) {
+							k = i / 8;
+							m = j / 8;
+							if (no_op[32 * k + m] == 0) {
+								dct_ica_sai[i][j] = dcoe2[i][j];
+							}
+							else if (no_op[32 * k + m] == 1) {
+								dct_ica_sai[i][j] = ica_sai[i][j];
+							}
 						}
-						else if (dct_mse[j] > comb[j][k][0]) {
-							ny[k][j] = y[k][j];
-							no_op[j] = 1;
-							no_op_1[j] = 1;
-							if (y[k][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 1 Error\n (k) = (%lf)", j, y[k][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][k][0], k);
+					block_mse(origin, dcoe2, bd_mse);
+					block_mse(origin, dct_ica_sai, bi_mse);
+					fprintf(fp2, "\n\n\n\n\n\n\n--------- %d, %d, %d ----------\n\n", a, b, c);
+					for(j=0;j<1024;j++)
+						if (no_op_4[j] == 1) {
+							mk = j % 32;
+							ml = j / 32;
+							fprintf(fp2, "\n\n[%d] : [%d, %d, %d]\n", j, basis_temp3[0][QQ], basis_temp3[1][QQ], basis_temp3[2][QQ]); // 適用ブロックの番号
+							// DCT PSNR
+							fprintf(fp2, "        DCT MSE : %.2lf,", bd_mse[j]);
+							// DCT SSIM
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									b_origin[l][m] = origin[ml * 8 + l][mk * 8 + m];
+									b_temp[l][m] = dcoe2[ml * 8 + l][mk * 8 + m];
+								}
+							}
+							sum = b_SSIM(b_origin, b_temp, 8, 8);
+							fprintf(fp2, "          DCT SSIM : %.4lf,", sum);
+							// ICA PSNR
+							fprintf(fp2, "\n        ICA MSE : %.2lf,", bi_mse[j]);
+							// ICA SSIM
+							for (m = 0; m < 8; m++) {
+								for (l = 0; l < 8; l++) {
+									b_origin[l][m] = origin[ml * 8 + l][mk * 8 + m];
+									b_temp[l][m] = dct_ica_sai[ml * 8 + l][mk * 8 + m];
+								}
+							}
+							temp = b_SSIM(b_origin, b_temp, 8, 8);
+							fprintf(fp2, "          ICA SSIM : %.4lf,", temp);
+							fprintf(fp2, "\n        MSE dif : %.2lf (%3.2lf),  SSIM dif : %.4lf (%3.2lf)", bd_mse[j] - bi_mse[j], (bd_mse[j] - bi_mse[j]) / bd_mse[j] * 100, (1 - sum) - (1 - temp), ((1 - sum) - (1 - temp)) / (1 - sum)*100);
+
 						}
-					}
-					else if (a != 99 && b == 99 && c == 99) {
-						if (comb[j][a][0] < dct_mse[j]) {
-							ny[a][j] = y[a][j];
-							no_op[j] = 1;
-							no_op_1[j] = 1;
-							if (y[a][j] != 0)
-								no_op_4[j] = 1;
-							else
-								printf("\n[%d] 1 Error\n (a) = (%lf)", j, y[a][j]);
-							fprintf(fp9, "\n[%d]    %.0lf  [%d]", j, dct_mse[j] - comb[j][a][0], a);
-						}
-					}
-				}// 基底格納終了
+				}
+				///////// 実験中　後で消す ////////
 
-
-
-				img_out(origin, no_op_0, Q * 10 + 5);//基底0ブロック
-				img_out(origin, no_op_1, Q * 10 + 1);//基底1ブロック
-				img_out(origin, no_op_2, Q * 10 + 2);//基底2ブロック
-				img_out(origin, no_op_3, Q * 10 + 3);//基底3ブロック
-				img_out(origin, no_op_4, Q * 10 + 4);//0抜きICAブロック
-				img_out(origin, no_op, Q * 10 + 6);//ICAブロック
-
-				seki5(nw, ny, x); // x -> nw * ny
-				xtogen(x, ica_sai, avg); // ica_sai -> 再構成済①
-				avg_inter(ica_sai, avg); // ica_sai -> 再構成済②
-
-				img_out2(dcoe2, ica_sai, no_op, Q + 4);//再構成画像
 				////// 係数格納　終了	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				for (a = 0; a < 1024; a++) {
 					for (b = 0; b < 64; b++) {

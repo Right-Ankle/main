@@ -1,0 +1,2102 @@
+
+
+  input image is [barbara.bmp]
+
+
+************************************************************************
+
+
+
+[Q 80] 
+
+
+
+
+
+
+
+
+--------- 23, 39, 45 ----------
+
+
+
+[32] : [39, 45, 99]
+        DCT MSE : 4.22,          DCT SSIM : 0.9453,
+        ICA MSE : 3.41,          ICA SSIM : 0.9517,
+        MSE dif : 0.81 (19.26),  SSIM dif : 0.0063 (11.56)
+
+[160] : [39, 45, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9332,
+        ICA MSE : 4.94,          ICA SSIM : 0.9348,
+        MSE dif : 0.62 (11.24),  SSIM dif : 0.0016 (2.42)
+
+[192] : [39, 45, 99]
+        DCT MSE : 5.19,          DCT SSIM : 0.9300,
+        ICA MSE : 4.59,          ICA SSIM : 0.9350,
+        MSE dif : 0.59 (11.45),  SSIM dif : 0.0050 (7.11)
+
+[305] : [39, 45, 99]
+        DCT MSE : 4.84,          DCT SSIM : 0.9400,
+        ICA MSE : 4.83,          ICA SSIM : 0.9365,
+        MSE dif : 0.02 (0.32),  SSIM dif : -0.0035 (-5.77)
+
+[306] : [39, 45, 99]
+        DCT MSE : 6.11,          DCT SSIM : 0.9243,
+        ICA MSE : 4.88,          ICA SSIM : 0.9270,
+        MSE dif : 1.23 (20.20),  SSIM dif : 0.0026 (3.49)
+
+[384] : [39, 45, 99]
+        DCT MSE : 5.58,          DCT SSIM : 0.9272,
+        ICA MSE : 5.44,          ICA SSIM : 0.9263,
+        MSE dif : 0.14 (2.52),  SSIM dif : -0.0009 (-1.24)
+
+[385] : [39, 45, 99]
+        DCT MSE : 7.75,          DCT SSIM : 0.9131,
+        ICA MSE : 6.50,          ICA SSIM : 0.9100,
+        MSE dif : 1.25 (16.13),  SSIM dif : -0.0031 (-3.55)
+
+[401] : [39, 45, 99]
+        DCT MSE : 5.09,          DCT SSIM : 0.9457,
+        ICA MSE : 4.77,          ICA SSIM : 0.9375,
+        MSE dif : 0.33 (6.44),  SSIM dif : -0.0082 (-15.16)
+
+[402] : [39, 45, 99]
+        DCT MSE : 4.67,          DCT SSIM : 0.9386,
+        ICA MSE : 4.23,          ICA SSIM : 0.9407,
+        MSE dif : 0.44 (9.36),  SSIM dif : 0.0022 (3.54)
+
+[416] : [39, 45, 99]
+        DCT MSE : 4.80,          DCT SSIM : 0.9444,
+        ICA MSE : 4.22,          ICA SSIM : 0.9403,
+        MSE dif : 0.58 (12.05),  SSIM dif : -0.0041 (-7.38)
+
+[577] : [39, 45, 99]
+        DCT MSE : 5.67,          DCT SSIM : 0.9369,
+        ICA MSE : 4.81,          ICA SSIM : 0.9368,
+        MSE dif : 0.86 (15.15),  SSIM dif : -0.0001 (-0.10)
+
+
+
+
+
+
+--------- 34, 39, 45 ----------
+
+
+
+[32] : [39, 45, 99]
+        DCT MSE : 4.22,          DCT SSIM : 0.9453,
+        ICA MSE : 3.41,          ICA SSIM : 0.9517,
+        MSE dif : 0.81 (19.26),  SSIM dif : 0.0063 (11.56)
+
+[160] : [39, 45, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9332,
+        ICA MSE : 4.94,          ICA SSIM : 0.9348,
+        MSE dif : 0.62 (11.24),  SSIM dif : 0.0016 (2.42)
+
+[192] : [39, 45, 99]
+        DCT MSE : 5.19,          DCT SSIM : 0.9300,
+        ICA MSE : 4.78,          ICA SSIM : 0.9374,
+        MSE dif : 0.41 (7.83),  SSIM dif : 0.0074 (10.53)
+
+[306] : [39, 45, 99]
+        DCT MSE : 6.11,          DCT SSIM : 0.9243,
+        ICA MSE : 4.88,          ICA SSIM : 0.9270,
+        MSE dif : 1.23 (20.20),  SSIM dif : 0.0026 (3.49)
+
+[385] : [39, 45, 99]
+        DCT MSE : 7.75,          DCT SSIM : 0.9131,
+        ICA MSE : 6.95,          ICA SSIM : 0.9050,
+        MSE dif : 0.80 (10.28),  SSIM dif : -0.0081 (-9.37)
+
+[401] : [39, 45, 99]
+        DCT MSE : 5.09,          DCT SSIM : 0.9457,
+        ICA MSE : 4.61,          ICA SSIM : 0.9330,
+        MSE dif : 0.48 (9.51),  SSIM dif : -0.0128 (-23.53)
+
+[402] : [39, 45, 99]
+        DCT MSE : 4.67,          DCT SSIM : 0.9386,
+        ICA MSE : 4.23,          ICA SSIM : 0.9407,
+        MSE dif : 0.44 (9.36),  SSIM dif : 0.0022 (3.54)
+
+[416] : [39, 45, 99]
+        DCT MSE : 4.80,          DCT SSIM : 0.9444,
+        ICA MSE : 4.22,          ICA SSIM : 0.9403,
+        MSE dif : 0.58 (12.05),  SSIM dif : -0.0041 (-7.38)
+
+[577] : [39, 45, 99]
+        DCT MSE : 5.67,          DCT SSIM : 0.9369,
+        ICA MSE : 4.81,          ICA SSIM : 0.9368,
+        MSE dif : 0.86 (15.15),  SSIM dif : -0.0001 (-0.10)
+
+
+
+
+
+
+--------- 31, 45, 56 ----------
+
+
+
+[32] : [31, 45, 99]
+        DCT MSE : 4.22,          DCT SSIM : 0.9453,
+        ICA MSE : 3.41,          ICA SSIM : 0.9517,
+        MSE dif : 0.81 (19.26),  SSIM dif : 0.0063 (11.56)
+
+[160] : [31, 45, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9332,
+        ICA MSE : 4.94,          ICA SSIM : 0.9348,
+        MSE dif : 0.62 (11.24),  SSIM dif : 0.0016 (2.42)
+
+[192] : [31, 45, 99]
+        DCT MSE : 5.19,          DCT SSIM : 0.9300,
+        ICA MSE : 4.69,          ICA SSIM : 0.9330,
+        MSE dif : 0.50 (9.64),  SSIM dif : 0.0029 (4.20)
+
+[288] : [31, 45, 99]
+        DCT MSE : 4.00,          DCT SSIM : 0.9459,
+        ICA MSE : 3.66,          ICA SSIM : 0.9456,
+        MSE dif : 0.34 (8.59),  SSIM dif : -0.0003 (-0.64)
+
+[306] : [31, 45, 99]
+        DCT MSE : 6.11,          DCT SSIM : 0.9243,
+        ICA MSE : 5.64,          ICA SSIM : 0.9278,
+        MSE dif : 0.47 (7.67),  SSIM dif : 0.0035 (4.56)
+
+[353] : [31, 45, 99]
+        DCT MSE : 3.70,          DCT SSIM : 0.9539,
+        ICA MSE : 3.69,          ICA SSIM : 0.9461,
+        MSE dif : 0.02 (0.42),  SSIM dif : -0.0078 (-16.82)
+
+[385] : [31, 45, 99]
+        DCT MSE : 7.75,          DCT SSIM : 0.9131,
+        ICA MSE : 6.95,          ICA SSIM : 0.9050,
+        MSE dif : 0.80 (10.28),  SSIM dif : -0.0081 (-9.37)
+
+[401] : [31, 45, 99]
+        DCT MSE : 5.09,          DCT SSIM : 0.9457,
+        ICA MSE : 4.77,          ICA SSIM : 0.9375,
+        MSE dif : 0.33 (6.44),  SSIM dif : -0.0082 (-15.16)
+
+[402] : [31, 45, 99]
+        DCT MSE : 4.67,          DCT SSIM : 0.9386,
+        ICA MSE : 4.19,          ICA SSIM : 0.9399,
+        MSE dif : 0.48 (10.37),  SSIM dif : 0.0013 (2.13)
+
+[416] : [31, 45, 99]
+        DCT MSE : 4.80,          DCT SSIM : 0.9444,
+        ICA MSE : 4.12,          ICA SSIM : 0.9433,
+        MSE dif : 0.67 (14.01),  SSIM dif : -0.0011 (-2.03)
+
+[480] : [31, 45, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9321,
+        ICA MSE : 5.42,          ICA SSIM : 0.9267,
+        MSE dif : 0.14 (2.53),  SSIM dif : -0.0054 (-7.95)
+
+[489] : [31, 45, 99]
+        DCT MSE : 6.78,          DCT SSIM : 0.9250,
+        ICA MSE : 6.34,          ICA SSIM : 0.9143,
+        MSE dif : 0.44 (6.45),  SSIM dif : -0.0107 (-14.26)
+
+[577] : [31, 45, 99]
+        DCT MSE : 5.67,          DCT SSIM : 0.9369,
+        ICA MSE : 5.08,          ICA SSIM : 0.9337,
+        MSE dif : 0.59 (10.47),  SSIM dif : -0.0032 (-5.05)
+
+
+
+
+
+
+--------- 0, 25, 45 ----------
+
+
+
+[32] : [0, 45, 99]
+        DCT MSE : 4.22,          DCT SSIM : 0.9453,
+        ICA MSE : 3.41,          ICA SSIM : 0.9517,
+        MSE dif : 0.81 (19.26),  SSIM dif : 0.0063 (11.56)
+
+[160] : [0, 45, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9332,
+        ICA MSE : 4.94,          ICA SSIM : 0.9348,
+        MSE dif : 0.62 (11.24),  SSIM dif : 0.0016 (2.42)
+
+[306] : [0, 45, 99]
+        DCT MSE : 6.11,          DCT SSIM : 0.9243,
+        ICA MSE : 5.92,          ICA SSIM : 0.9293,
+        MSE dif : 0.19 (3.07),  SSIM dif : 0.0049 (6.51)
+
+[332] : [0, 45, 99]
+        DCT MSE : 4.12,          DCT SSIM : 0.9570,
+        ICA MSE : 3.45,          ICA SSIM : 0.9561,
+        MSE dif : 0.67 (16.29),  SSIM dif : -0.0010 (-2.24)
+
+[385] : [0, 45, 99]
+        DCT MSE : 7.75,          DCT SSIM : 0.9131,
+        ICA MSE : 6.95,          ICA SSIM : 0.9050,
+        MSE dif : 0.80 (10.28),  SSIM dif : -0.0081 (-9.37)
+
+[401] : [0, 45, 99]
+        DCT MSE : 5.09,          DCT SSIM : 0.9457,
+        ICA MSE : 4.53,          ICA SSIM : 0.9415,
+        MSE dif : 0.56 (11.04),  SSIM dif : -0.0043 (-7.86)
+
+[402] : [0, 45, 99]
+        DCT MSE : 4.67,          DCT SSIM : 0.9386,
+        ICA MSE : 4.17,          ICA SSIM : 0.9397,
+        MSE dif : 0.50 (10.70),  SSIM dif : 0.0012 (1.91)
+
+[416] : [0, 45, 99]
+        DCT MSE : 4.80,          DCT SSIM : 0.9444,
+        ICA MSE : 4.22,          ICA SSIM : 0.9403,
+        MSE dif : 0.58 (12.05),  SSIM dif : -0.0041 (-7.38)
+
+[489] : [0, 45, 99]
+        DCT MSE : 6.78,          DCT SSIM : 0.9250,
+        ICA MSE : 5.97,          ICA SSIM : 0.9191,
+        MSE dif : 0.81 (11.98),  SSIM dif : -0.0059 (-7.90)
+
+[577] : [0, 45, 99]
+        DCT MSE : 5.67,          DCT SSIM : 0.9369,
+        ICA MSE : 5.11,          ICA SSIM : 0.9373,
+        MSE dif : 0.56 (9.92),  SSIM dif : 0.0004 (0.64)
+
+
+
+
+
+
+--------- 17, 40, 45 ----------
+
+
+
+[32] : [17, 40, 99]
+        DCT MSE : 4.22,          DCT SSIM : 0.9453,
+        ICA MSE : 3.41,          ICA SSIM : 0.9517,
+        MSE dif : 0.81 (19.26),  SSIM dif : 0.0063 (11.56)
+
+[160] : [17, 40, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9332,
+        ICA MSE : 4.94,          ICA SSIM : 0.9348,
+        MSE dif : 0.62 (11.24),  SSIM dif : 0.0016 (2.42)
+
+[306] : [17, 40, 99]
+        DCT MSE : 6.11,          DCT SSIM : 0.9243,
+        ICA MSE : 5.38,          ICA SSIM : 0.9260,
+        MSE dif : 0.73 (12.02),  SSIM dif : 0.0016 (2.15)
+
+[385] : [17, 40, 99]
+        DCT MSE : 7.75,          DCT SSIM : 0.9131,
+        ICA MSE : 6.95,          ICA SSIM : 0.9050,
+        MSE dif : 0.80 (10.28),  SSIM dif : -0.0081 (-9.37)
+
+[401] : [17, 40, 99]
+        DCT MSE : 5.09,          DCT SSIM : 0.9457,
+        ICA MSE : 4.77,          ICA SSIM : 0.9375,
+        MSE dif : 0.33 (6.44),  SSIM dif : -0.0082 (-15.16)
+
+[402] : [17, 40, 99]
+        DCT MSE : 4.67,          DCT SSIM : 0.9386,
+        ICA MSE : 4.23,          ICA SSIM : 0.9407,
+        MSE dif : 0.44 (9.36),  SSIM dif : 0.0022 (3.54)
+
+[416] : [17, 40, 99]
+        DCT MSE : 4.80,          DCT SSIM : 0.9444,
+        ICA MSE : 4.22,          ICA SSIM : 0.9403,
+        MSE dif : 0.58 (12.05),  SSIM dif : -0.0041 (-7.38)
+
+[480] : [17, 40, 99]
+        DCT MSE : 5.56,          DCT SSIM : 0.9321,
+        ICA MSE : 4.62,          ICA SSIM : 0.9392,
+        MSE dif : 0.94 (16.85),  SSIM dif : 0.0070 (10.37)
+
+[577] : [17, 40, 99]
+        DCT MSE : 5.67,          DCT SSIM : 0.9369,
+        ICA MSE : 4.84,          ICA SSIM : 0.9384,
+        MSE dif : 0.83 (14.60),  SSIM dif : 0.0015 (2.38)
+************************************************************************
+
+
+
+[Q 70] 
+
+
+
+
+
+
+
+
+--------- 24, 37, 45 ----------
+
+
+
+[274] : [24, 37, 45]
+        DCT MSE : 8.34,          DCT SSIM : 0.8997,
+        ICA MSE : 7.95,          ICA SSIM : 0.9039,
+        MSE dif : 0.39 (4.68),  SSIM dif : 0.0042 (4.17)
+
+[332] : [24, 37, 45]
+        DCT MSE : 5.03,          DCT SSIM : 0.9537,
+        ICA MSE : 4.72,          ICA SSIM : 0.9526,
+        MSE dif : 0.31 (6.21),  SSIM dif : -0.0011 (-2.34)
+
+[352] : [24, 37, 45]
+        DCT MSE : 6.25,          DCT SSIM : 0.9420,
+        ICA MSE : 6.19,          ICA SSIM : 0.9368,
+        MSE dif : 0.06 (1.00),  SSIM dif : -0.0053 (-9.06)
+
+[353] : [24, 37, 45]
+        DCT MSE : 4.61,          DCT SSIM : 0.9561,
+        ICA MSE : 4.20,          ICA SSIM : 0.9501,
+        MSE dif : 0.41 (8.81),  SSIM dif : -0.0060 (-13.57)
+
+[384] : [24, 37, 45]
+        DCT MSE : 7.02,          DCT SSIM : 0.9133,
+        ICA MSE : 6.12,          ICA SSIM : 0.9227,
+        MSE dif : 0.89 (12.69),  SSIM dif : 0.0094 (10.83)
+
+[449] : [24, 37, 45]
+        DCT MSE : 10.67,          DCT SSIM : 0.8948,
+        ICA MSE : 8.03,          ICA SSIM : 0.9072,
+        MSE dif : 2.64 (24.74),  SSIM dif : 0.0124 (11.78)
+
+[512] : [24, 37, 45]
+        DCT MSE : 7.73,          DCT SSIM : 0.9438,
+        ICA MSE : 5.28,          ICA SSIM : 0.9403,
+        MSE dif : 2.45 (31.72),  SSIM dif : -0.0034 (-6.13)
+
+[577] : [24, 37, 45]
+        DCT MSE : 7.14,          DCT SSIM : 0.9302,
+        ICA MSE : 6.16,          ICA SSIM : 0.9301,
+        MSE dif : 0.98 (13.79),  SSIM dif : -0.0001 (-0.18)
+
+[581] : [24, 37, 45]
+        DCT MSE : 102.30,          DCT SSIM : 0.4913,
+        ICA MSE : 98.80,          ICA SSIM : 0.5088,
+        MSE dif : 3.50 (3.42),  SSIM dif : 0.0174 (3.43)
+
+
+
+
+
+
+--------- 24, 28, 37 ----------
+
+
+
+[332] : [24, 28, 37]
+        DCT MSE : 5.03,          DCT SSIM : 0.9537,
+        ICA MSE : 4.72,          ICA SSIM : 0.9526,
+        MSE dif : 0.31 (6.21),  SSIM dif : -0.0011 (-2.34)
+
+[352] : [24, 28, 37]
+        DCT MSE : 6.25,          DCT SSIM : 0.9420,
+        ICA MSE : 6.19,          ICA SSIM : 0.9368,
+        MSE dif : 0.06 (1.00),  SSIM dif : -0.0053 (-9.06)
+
+[353] : [24, 28, 37]
+        DCT MSE : 4.61,          DCT SSIM : 0.9561,
+        ICA MSE : 4.30,          ICA SSIM : 0.9486,
+        MSE dif : 0.31 (6.78),  SSIM dif : -0.0075 (-16.98)
+
+[384] : [24, 28, 37]
+        DCT MSE : 7.02,          DCT SSIM : 0.9133,
+        ICA MSE : 6.12,          ICA SSIM : 0.9227,
+        MSE dif : 0.89 (12.69),  SSIM dif : 0.0094 (10.83)
+
+[449] : [24, 28, 37]
+        DCT MSE : 10.67,          DCT SSIM : 0.8948,
+        ICA MSE : 8.03,          ICA SSIM : 0.9072,
+        MSE dif : 2.64 (24.74),  SSIM dif : 0.0124 (11.78)
+
+[512] : [24, 28, 37]
+        DCT MSE : 7.73,          DCT SSIM : 0.9438,
+        ICA MSE : 6.09,          ICA SSIM : 0.9360,
+        MSE dif : 1.64 (21.21),  SSIM dif : -0.0078 (-13.86)
+
+[577] : [24, 28, 37]
+        DCT MSE : 7.14,          DCT SSIM : 0.9302,
+        ICA MSE : 6.16,          ICA SSIM : 0.9301,
+        MSE dif : 0.98 (13.79),  SSIM dif : -0.0001 (-0.18)
+
+[581] : [24, 28, 37]
+        DCT MSE : 102.30,          DCT SSIM : 0.4913,
+        ICA MSE : 97.83,          ICA SSIM : 0.5082,
+        MSE dif : 4.47 (4.37),  SSIM dif : 0.0169 (3.32)
+
+
+
+
+
+
+--------- 11, 22, 23 ----------
+
+
+
+[305] : [11, 99, 99]
+        DCT MSE : 4.94,          DCT SSIM : 0.9348,
+        ICA MSE : 4.83,          ICA SSIM : 0.9365,
+        MSE dif : 0.11 (2.22),  SSIM dif : 0.0017 (2.59)
+
+[332] : [11, 99, 99]
+        DCT MSE : 5.03,          DCT SSIM : 0.9537,
+        ICA MSE : 4.55,          ICA SSIM : 0.9452,
+        MSE dif : 0.48 (9.63),  SSIM dif : -0.0085 (-18.28)
+
+[353] : [11, 99, 99]
+        DCT MSE : 4.61,          DCT SSIM : 0.9561,
+        ICA MSE : 3.70,          ICA SSIM : 0.9477,
+        MSE dif : 0.91 (19.66),  SSIM dif : -0.0084 (-19.07)
+
+[384] : [11, 99, 99]
+        DCT MSE : 7.02,          DCT SSIM : 0.9133,
+        ICA MSE : 5.92,          ICA SSIM : 0.9248,
+        MSE dif : 1.09 (15.59),  SSIM dif : 0.0115 (13.28)
+
+[449] : [11, 99, 99]
+        DCT MSE : 10.67,          DCT SSIM : 0.8948,
+        ICA MSE : 8.22,          ICA SSIM : 0.8976,
+        MSE dif : 2.45 (22.99),  SSIM dif : 0.0028 (2.71)
+
+[456] : [11, 99, 99]
+        DCT MSE : 7.47,          DCT SSIM : 0.9459,
+        ICA MSE : 5.91,          ICA SSIM : 0.9439,
+        MSE dif : 1.56 (20.92),  SSIM dif : -0.0020 (-3.70)
+
+[512] : [11, 99, 99]
+        DCT MSE : 7.73,          DCT SSIM : 0.9438,
+        ICA MSE : 5.14,          ICA SSIM : 0.9325,
+        MSE dif : 2.59 (33.54),  SSIM dif : -0.0113 (-20.03)
+
+[577] : [11, 99, 99]
+        DCT MSE : 7.14,          DCT SSIM : 0.9302,
+        ICA MSE : 6.25,          ICA SSIM : 0.9258,
+        MSE dif : 0.89 (12.47),  SSIM dif : -0.0044 (-6.28)
+
+
+
+
+
+
+--------- 20, 24, 56 ----------
+
+
+
+[274] : [24, 99, 99]
+        DCT MSE : 8.34,          DCT SSIM : 0.8997,
+        ICA MSE : 7.25,          ICA SSIM : 0.9056,
+        MSE dif : 1.09 (13.11),  SSIM dif : 0.0059 (5.89)
+
+[332] : [24, 99, 99]
+        DCT MSE : 5.03,          DCT SSIM : 0.9537,
+        ICA MSE : 4.62,          ICA SSIM : 0.9503,
+        MSE dif : 0.41 (8.07),  SSIM dif : -0.0034 (-7.38)
+
+[352] : [24, 99, 99]
+        DCT MSE : 6.25,          DCT SSIM : 0.9420,
+        ICA MSE : 5.84,          ICA SSIM : 0.9385,
+        MSE dif : 0.41 (6.50),  SSIM dif : -0.0035 (-6.12)
+
+[353] : [24, 99, 99]
+        DCT MSE : 4.61,          DCT SSIM : 0.9561,
+        ICA MSE : 3.67,          ICA SSIM : 0.9553,
+        MSE dif : 0.94 (20.34),  SSIM dif : -0.0007 (-1.63)
+
+[384] : [24, 99, 99]
+        DCT MSE : 7.02,          DCT SSIM : 0.9133,
+        ICA MSE : 6.12,          ICA SSIM : 0.9227,
+        MSE dif : 0.89 (12.69),  SSIM dif : 0.0094 (10.83)
+
+[449] : [24, 99, 99]
+        DCT MSE : 10.67,          DCT SSIM : 0.8948,
+        ICA MSE : 8.03,          ICA SSIM : 0.9072,
+        MSE dif : 2.64 (24.74),  SSIM dif : 0.0124 (11.78)
+
+[512] : [24, 99, 99]
+        DCT MSE : 7.73,          DCT SSIM : 0.9438,
+        ICA MSE : 6.09,          ICA SSIM : 0.9360,
+        MSE dif : 1.64 (21.21),  SSIM dif : -0.0078 (-13.86)
+
+[513] : [24, 99, 99]
+        DCT MSE : 6.59,          DCT SSIM : 0.9388,
+        ICA MSE : 5.53,          ICA SSIM : 0.9345,
+        MSE dif : 1.06 (16.11),  SSIM dif : -0.0043 (-7.02)
+
+[577] : [24, 99, 99]
+        DCT MSE : 7.14,          DCT SSIM : 0.9302,
+        ICA MSE : 6.16,          ICA SSIM : 0.9301,
+        MSE dif : 0.98 (13.79),  SSIM dif : -0.0001 (-0.18)
+
+
+
+
+
+
+--------- 0, 18, 24 ----------
+
+
+
+[274] : [0, 99, 99]
+        DCT MSE : 8.34,          DCT SSIM : 0.8997,
+        ICA MSE : 8.05,          ICA SSIM : 0.9002,
+        MSE dif : 0.30 (3.56),  SSIM dif : 0.0004 (0.45)
+
+[332] : [0, 99, 99]
+        DCT MSE : 5.03,          DCT SSIM : 0.9537,
+        ICA MSE : 4.55,          ICA SSIM : 0.9550,
+        MSE dif : 0.48 (9.63),  SSIM dif : 0.0013 (2.84)
+
+[352] : [0, 99, 99]
+        DCT MSE : 6.25,          DCT SSIM : 0.9420,
+        ICA MSE : 6.19,          ICA SSIM : 0.9368,
+        MSE dif : 0.06 (1.00),  SSIM dif : -0.0053 (-9.06)
+
+[353] : [0, 99, 99]
+        DCT MSE : 4.61,          DCT SSIM : 0.9561,
+        ICA MSE : 3.73,          ICA SSIM : 0.9497,
+        MSE dif : 0.88 (18.98),  SSIM dif : -0.0064 (-14.57)
+
+[384] : [0, 99, 99]
+        DCT MSE : 7.02,          DCT SSIM : 0.9133,
+        ICA MSE : 6.12,          ICA SSIM : 0.9227,
+        MSE dif : 0.89 (12.69),  SSIM dif : 0.0094 (10.83)
+
+[449] : [0, 99, 99]
+        DCT MSE : 10.67,          DCT SSIM : 0.8948,
+        ICA MSE : 8.03,          ICA SSIM : 0.9072,
+        MSE dif : 2.64 (24.74),  SSIM dif : 0.0124 (11.78)
+
+[512] : [0, 99, 99]
+        DCT MSE : 7.73,          DCT SSIM : 0.9438,
+        ICA MSE : 5.62,          ICA SSIM : 0.9408,
+        MSE dif : 2.11 (27.27),  SSIM dif : -0.0029 (-5.22)
+
+[576] : [0, 99, 99]
+        DCT MSE : 8.00,          DCT SSIM : 0.9369,
+        ICA MSE : 6.19,          ICA SSIM : 0.9299,
+        MSE dif : 1.81 (22.66),  SSIM dif : -0.0070 (-11.12)
+
+[577] : [0, 99, 99]
+        DCT MSE : 7.14,          DCT SSIM : 0.9302,
+        ICA MSE : 6.11,          ICA SSIM : 0.9288,
+        MSE dif : 1.03 (14.44),  SSIM dif : -0.0014 (-2.05)
+************************************************************************
+
+
+
+[Q 60] 
+
+
+
+
+
+
+
+
+--------- 1, 11, 24 ----------
+
+
+
+[267] : [1, 11, 99]
+        DCT MSE : 12.11,          DCT SSIM : 0.9164,
+        ICA MSE : 8.06,          ICA SSIM : 0.9101,
+        MSE dif : 4.05 (33.42),  SSIM dif : -0.0063 (-7.51)
+
+[274] : [1, 11, 99]
+        DCT MSE : 10.94,          DCT SSIM : 0.8929,
+        ICA MSE : 9.02,          ICA SSIM : 0.9015,
+        MSE dif : 1.92 (17.57),  SSIM dif : 0.0087 (8.08)
+
+[357] : [1, 11, 99]
+        DCT MSE : 48.86,          DCT SSIM : 0.6301,
+        ICA MSE : 39.16,          ICA SSIM : 0.7064,
+        MSE dif : 9.70 (19.86),  SSIM dif : 0.0763 (20.64)
+
+[384] : [1, 11, 99]
+        DCT MSE : 8.33,          DCT SSIM : 0.9151,
+        ICA MSE : 6.12,          ICA SSIM : 0.9227,
+        MSE dif : 2.20 (26.45),  SSIM dif : 0.0076 (8.94)
+
+[434] : [1, 11, 99]
+        DCT MSE : 14.42,          DCT SSIM : 0.8600,
+        ICA MSE : 13.45,          ICA SSIM : 0.8481,
+        MSE dif : 0.97 (6.72),  SSIM dif : -0.0119 (-8.50)
+
+[512] : [1, 11, 99]
+        DCT MSE : 7.08,          DCT SSIM : 0.9487,
+        ICA MSE : 5.95,          ICA SSIM : 0.9412,
+        MSE dif : 1.12 (15.89),  SSIM dif : -0.0075 (-14.70)
+
+[691] : [1, 11, 99]
+        DCT MSE : 12.69,          DCT SSIM : 0.8843,
+        ICA MSE : 10.02,          ICA SSIM : 0.8828,
+        MSE dif : 2.67 (21.06),  SSIM dif : -0.0014 (-1.25)
+
+[784] : [1, 11, 99]
+        DCT MSE : 9.03,          DCT SSIM : 0.9066,
+        ICA MSE : 8.67,          ICA SSIM : 0.9025,
+        MSE dif : 0.36 (3.98),  SSIM dif : -0.0041 (-4.43)
+
+[985] : [1, 11, 99]
+        DCT MSE : 9.28,          DCT SSIM : 0.9375,
+        ICA MSE : 6.22,          ICA SSIM : 0.9321,
+        MSE dif : 3.06 (33.00),  SSIM dif : -0.0054 (-8.69)
+
+
+
+
+
+
+--------- 28, 40, 46 ----------
+
+
+
+[267] : [46, 99, 99]
+        DCT MSE : 12.11,          DCT SSIM : 0.9164,
+        ICA MSE : 9.02,          ICA SSIM : 0.9101,
+        MSE dif : 3.09 (25.55),  SSIM dif : -0.0063 (-7.51)
+
+[274] : [46, 99, 99]
+        DCT MSE : 10.94,          DCT SSIM : 0.8929,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.47 (4.29),  SSIM dif : -0.0089 (-8.30)
+
+[384] : [46, 99, 99]
+        DCT MSE : 8.33,          DCT SSIM : 0.9151,
+        ICA MSE : 8.25,          ICA SSIM : 0.9019,
+        MSE dif : 0.08 (0.94),  SSIM dif : -0.0132 (-15.53)
+
+[434] : [46, 99, 99]
+        DCT MSE : 14.42,          DCT SSIM : 0.8600,
+        ICA MSE : 13.58,          ICA SSIM : 0.8621,
+        MSE dif : 0.84 (5.85),  SSIM dif : 0.0021 (1.49)
+
+[675] : [46, 99, 99]
+        DCT MSE : 128.47,          DCT SSIM : 0.4110,
+        ICA MSE : 118.41,          ICA SSIM : 0.4891,
+        MSE dif : 10.06 (7.83),  SSIM dif : 0.0782 (13.27)
+
+[691] : [46, 99, 99]
+        DCT MSE : 12.69,          DCT SSIM : 0.8843,
+        ICA MSE : 11.17,          ICA SSIM : 0.8699,
+        MSE dif : 1.52 (11.95),  SSIM dif : -0.0144 (-12.42)
+
+[768] : [46, 99, 99]
+        DCT MSE : 123.36,          DCT SSIM : 0.3571,
+        ICA MSE : 114.88,          ICA SSIM : 0.5511,
+        MSE dif : 8.48 (6.88),  SSIM dif : 0.1940 (30.17)
+
+[784] : [46, 99, 99]
+        DCT MSE : 9.03,          DCT SSIM : 0.9066,
+        ICA MSE : 8.67,          ICA SSIM : 0.9014,
+        MSE dif : 0.36 (3.98),  SSIM dif : -0.0052 (-5.62)
+
+[985] : [46, 99, 99]
+        DCT MSE : 9.28,          DCT SSIM : 0.9375,
+        ICA MSE : 9.09,          ICA SSIM : 0.9087,
+        MSE dif : 0.19 (2.02),  SSIM dif : -0.0288 (-46.08)
+
+
+
+
+
+
+--------- 34, 40, 45 ----------
+
+
+
+[188] : [45, 99, 99]
+        DCT MSE : 89.77,          DCT SSIM : 0.6627,
+        ICA MSE : 76.95,          ICA SSIM : 0.7613,
+        MSE dif : 12.81 (14.27),  SSIM dif : 0.0986 (29.23)
+
+[267] : [45, 99, 99]
+        DCT MSE : 12.11,          DCT SSIM : 0.9164,
+        ICA MSE : 6.36,          ICA SSIM : 0.9358,
+        MSE dif : 5.75 (47.48),  SSIM dif : 0.0194 (23.19)
+
+[274] : [45, 99, 99]
+        DCT MSE : 10.94,          DCT SSIM : 0.8929,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.47 (4.29),  SSIM dif : -0.0089 (-8.30)
+
+[384] : [45, 99, 99]
+        DCT MSE : 8.33,          DCT SSIM : 0.9151,
+        ICA MSE : 7.14,          ICA SSIM : 0.9124,
+        MSE dif : 1.19 (14.26),  SSIM dif : -0.0027 (-3.17)
+
+[434] : [45, 99, 99]
+        DCT MSE : 14.42,          DCT SSIM : 0.8600,
+        ICA MSE : 11.98,          ICA SSIM : 0.8618,
+        MSE dif : 2.44 (16.90),  SSIM dif : 0.0017 (1.23)
+
+[512] : [45, 99, 99]
+        DCT MSE : 7.08,          DCT SSIM : 0.9487,
+        ICA MSE : 5.28,          ICA SSIM : 0.9403,
+        MSE dif : 1.80 (25.39),  SSIM dif : -0.0084 (-16.41)
+
+[985] : [45, 99, 99]
+        DCT MSE : 9.28,          DCT SSIM : 0.9375,
+        ICA MSE : 8.80,          ICA SSIM : 0.9054,
+        MSE dif : 0.48 (5.22),  SSIM dif : -0.0321 (-51.43)
+
+
+
+
+
+
+--------- 17, 22, 40 ----------
+
+
+
+[267] : [17, 22, 40]
+        DCT MSE : 12.11,          DCT SSIM : 0.9164,
+        ICA MSE : 9.27,          ICA SSIM : 0.8885,
+        MSE dif : 2.84 (23.48),  SSIM dif : -0.0279 (-33.41)
+
+[274] : [17, 22, 40]
+        DCT MSE : 10.94,          DCT SSIM : 0.8929,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.47 (4.29),  SSIM dif : -0.0089 (-8.30)
+
+[434] : [17, 22, 40]
+        DCT MSE : 14.42,          DCT SSIM : 0.8600,
+        ICA MSE : 13.84,          ICA SSIM : 0.8527,
+        MSE dif : 0.58 (4.01),  SSIM dif : -0.0074 (-5.26)
+
+[512] : [17, 22, 40]
+        DCT MSE : 7.08,          DCT SSIM : 0.9487,
+        ICA MSE : 5.14,          ICA SSIM : 0.9325,
+        MSE dif : 1.94 (27.37),  SSIM dif : -0.0162 (-31.66)
+
+[691] : [17, 22, 40]
+        DCT MSE : 12.69,          DCT SSIM : 0.8843,
+        ICA MSE : 11.09,          ICA SSIM : 0.8755,
+        MSE dif : 1.59 (12.56),  SSIM dif : -0.0088 (-7.57)
+
+[784] : [17, 22, 40]
+        DCT MSE : 9.03,          DCT SSIM : 0.9066,
+        ICA MSE : 8.67,          ICA SSIM : 0.8892,
+        MSE dif : 0.36 (3.98),  SSIM dif : -0.0175 (-18.74)
+
+[972] : [17, 22, 40]
+        DCT MSE : 88.81,          DCT SSIM : 0.9627,
+        ICA MSE : 69.91,          ICA SSIM : 0.9748,
+        MSE dif : 18.91 (21.29),  SSIM dif : 0.0120 (32.26)
+
+
+
+
+
+
+--------- 11, 40, 45 ----------
+
+
+
+[188] : [11, 99, 99]
+        DCT MSE : 89.77,          DCT SSIM : 0.6627,
+        ICA MSE : 81.50,          ICA SSIM : 0.7402,
+        MSE dif : 8.27 (9.21),  SSIM dif : 0.0774 (22.96)
+
+[267] : [11, 99, 99]
+        DCT MSE : 12.11,          DCT SSIM : 0.9164,
+        ICA MSE : 8.95,          ICA SSIM : 0.9096,
+        MSE dif : 3.16 (26.06),  SSIM dif : -0.0068 (-8.18)
+
+[274] : [11, 99, 99]
+        DCT MSE : 10.94,          DCT SSIM : 0.8929,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.47 (4.29),  SSIM dif : -0.0089 (-8.30)
+
+[357] : [11, 99, 99]
+        DCT MSE : 48.86,          DCT SSIM : 0.6301,
+        ICA MSE : 44.53,          ICA SSIM : 0.6580,
+        MSE dif : 4.33 (8.86),  SSIM dif : 0.0279 (7.55)
+
+[384] : [11, 99, 99]
+        DCT MSE : 8.33,          DCT SSIM : 0.9151,
+        ICA MSE : 7.14,          ICA SSIM : 0.9124,
+        MSE dif : 1.19 (14.26),  SSIM dif : -0.0027 (-3.17)
+
+[434] : [11, 99, 99]
+        DCT MSE : 14.42,          DCT SSIM : 0.8600,
+        ICA MSE : 11.98,          ICA SSIM : 0.8618,
+        MSE dif : 2.44 (16.90),  SSIM dif : 0.0017 (1.23)
+
+[512] : [11, 99, 99]
+        DCT MSE : 7.08,          DCT SSIM : 0.9487,
+        ICA MSE : 5.28,          ICA SSIM : 0.9403,
+        MSE dif : 1.80 (25.39),  SSIM dif : -0.0084 (-16.41)
+
+[691] : [11, 99, 99]
+        DCT MSE : 12.69,          DCT SSIM : 0.8843,
+        ICA MSE : 10.02,          ICA SSIM : 0.8828,
+        MSE dif : 2.67 (21.06),  SSIM dif : -0.0014 (-1.25)
+
+[985] : [11, 99, 99]
+        DCT MSE : 9.28,          DCT SSIM : 0.9375,
+        ICA MSE : 7.95,          ICA SSIM : 0.9193,
+        MSE dif : 1.33 (14.31),  SSIM dif : -0.0182 (-29.19)
+************************************************************************
+
+
+
+[Q 50] 
+
+
+
+
+
+
+
+
+--------- 7, 32, 41 ----------
+
+
+
+[274] : [7, 32, 41]
+        DCT MSE : 11.09,          DCT SSIM : 0.8949,
+        ICA MSE : 10.06,          ICA SSIM : 0.8879,
+        MSE dif : 1.03 (9.30),  SSIM dif : -0.0071 (-6.73)
+
+[289] : [7, 32, 41]
+        DCT MSE : 11.39,          DCT SSIM : 0.9066,
+        ICA MSE : 11.25,          ICA SSIM : 0.8958,
+        MSE dif : 0.14 (1.23),  SSIM dif : -0.0108 (-11.56)
+
+[837] : [7, 32, 41]
+        DCT MSE : 362.14,          DCT SSIM : 0.8860,
+        ICA MSE : 317.50,          ICA SSIM : 0.9050,
+        MSE dif : 44.64 (12.33),  SSIM dif : 0.0191 (16.71)
+
+
+
+
+
+
+--------- 12, 15, 30 ----------
+
+
+
+[274] : [12, 15, 30]
+        DCT MSE : 11.09,          DCT SSIM : 0.8949,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.62 (5.63),  SSIM dif : -0.0110 (-10.46)
+
+[736] : [12, 15, 30]
+        DCT MSE : 116.44,          DCT SSIM : 0.4019,
+        ICA MSE : 110.06,          ICA SSIM : 0.4607,
+        MSE dif : 6.38 (5.48),  SSIM dif : 0.0587 (9.82)
+
+[737] : [12, 15, 30]
+        DCT MSE : 187.81,          DCT SSIM : 0.4798,
+        ICA MSE : 151.77,          ICA SSIM : 0.6507,
+        MSE dif : 36.05 (19.19),  SSIM dif : 0.1709 (32.85)
+
+
+
+
+
+
+--------- 17, 22, 40 ----------
+
+
+
+[274] : [17, 22, 40]
+        DCT MSE : 11.09,          DCT SSIM : 0.8949,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.62 (5.63),  SSIM dif : -0.0110 (-10.46)
+
+[331] : [17, 22, 40]
+        DCT MSE : 10.75,          DCT SSIM : 0.9333,
+        ICA MSE : 10.03,          ICA SSIM : 0.8927,
+        MSE dif : 0.72 (6.69),  SSIM dif : -0.0406 (-60.80)
+
+[417] : [17, 22, 40]
+        DCT MSE : 11.11,          DCT SSIM : 0.9082,
+        ICA MSE : 8.89,          ICA SSIM : 0.9207,
+        MSE dif : 2.22 (19.97),  SSIM dif : 0.0126 (13.70)
+
+[512] : [17, 22, 40]
+        DCT MSE : 5.52,          DCT SSIM : 0.9516,
+        ICA MSE : 5.14,          ICA SSIM : 0.9325,
+        MSE dif : 0.38 (6.80),  SSIM dif : -0.0190 (-39.32)
+
+[972] : [17, 22, 40]
+        DCT MSE : 103.67,          DCT SSIM : 0.9570,
+        ICA MSE : 69.91,          ICA SSIM : 0.9748,
+        MSE dif : 33.77 (32.57),  SSIM dif : 0.0177 (41.24)
+
+
+
+
+
+
+--------- 7, 41, 55 ----------
+
+
+
+[274] : [7, 41, 55]
+        DCT MSE : 11.09,          DCT SSIM : 0.8949,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.62 (5.63),  SSIM dif : -0.0110 (-10.46)
+
+[289] : [7, 41, 55]
+        DCT MSE : 11.39,          DCT SSIM : 0.9066,
+        ICA MSE : 11.25,          ICA SSIM : 0.8958,
+        MSE dif : 0.14 (1.23),  SSIM dif : -0.0108 (-11.56)
+
+[784] : [7, 41, 55]
+        DCT MSE : 8.66,          DCT SSIM : 0.9065,
+        ICA MSE : 8.39,          ICA SSIM : 0.8973,
+        MSE dif : 0.27 (3.07),  SSIM dif : -0.0092 (-9.85)
+
+[837] : [7, 41, 55]
+        DCT MSE : 362.14,          DCT SSIM : 0.8860,
+        ICA MSE : 328.33,          ICA SSIM : 0.9137,
+        MSE dif : 33.81 (9.34),  SSIM dif : 0.0277 (24.31)
+
+
+
+
+
+
+--------- 11, 12, 30 ----------
+
+
+
+[274] : [11, 12, 30]
+        DCT MSE : 11.09,          DCT SSIM : 0.8949,
+        ICA MSE : 10.47,          ICA SSIM : 0.8840,
+        MSE dif : 0.62 (5.63),  SSIM dif : -0.0110 (-10.46)
+
+[289] : [11, 12, 30]
+        DCT MSE : 11.39,          DCT SSIM : 0.9066,
+        ICA MSE : 11.28,          ICA SSIM : 0.8799,
+        MSE dif : 0.11 (0.96),  SSIM dif : -0.0268 (-28.66)
+
+[357] : [11, 12, 30]
+        DCT MSE : 54.77,          DCT SSIM : 0.6242,
+        ICA MSE : 43.44,          ICA SSIM : 0.6706,
+        MSE dif : 11.33 (20.68),  SSIM dif : 0.0464 (12.35)
+
+[389] : [11, 12, 30]
+        DCT MSE : 31.25,          DCT SSIM : 0.7026,
+        ICA MSE : 30.67,          ICA SSIM : 0.7456,
+        MSE dif : 0.58 (1.85),  SSIM dif : 0.0429 (14.44)
+
+[737] : [11, 12, 30]
+        DCT MSE : 187.81,          DCT SSIM : 0.4798,
+        ICA MSE : 165.81,          ICA SSIM : 0.6299,
+        MSE dif : 22.00 (11.71),  SSIM dif : 0.1502 (28.87)
+************************************************************************
+
+
+
+[Q 40] 
+
+
+
+
+
+
+
+
+--------- 2, 28, 41 ----------
+
+
+
+[311] : [28, 99, 99]
+        DCT MSE : 594.31,          DCT SSIM : 0.6434,
+        ICA MSE : 544.08,          ICA SSIM : 0.6861,
+        MSE dif : 50.23 (8.45),  SSIM dif : 0.0428 (12.00)
+
+[389] : [28, 99, 99]
+        DCT MSE : 37.56,          DCT SSIM : 0.7106,
+        ICA MSE : 34.98,          ICA SSIM : 0.6937,
+        MSE dif : 2.58 (6.86),  SSIM dif : -0.0168 (-5.82)
+
+[514] : [28, 99, 99]
+        DCT MSE : 9.95,          DCT SSIM : 0.9536,
+        ICA MSE : 9.53,          ICA SSIM : 0.9256,
+        MSE dif : 0.42 (4.24),  SSIM dif : -0.0280 (-60.42)
+
+[581] : [28, 99, 99]
+        DCT MSE : 114.42,          DCT SSIM : 0.4546,
+        ICA MSE : 112.55,          ICA SSIM : 0.4203,
+        MSE dif : 1.88 (1.64),  SSIM dif : -0.0343 (-6.29)
+
+[690] : [28, 99, 99]
+        DCT MSE : 18.30,          DCT SSIM : 0.8576,
+        ICA MSE : 15.22,          ICA SSIM : 0.8293,
+        MSE dif : 3.08 (16.82),  SSIM dif : -0.0283 (-19.88)
+
+[707] : [28, 99, 99]
+        DCT MSE : 501.23,          DCT SSIM : 0.6961,
+        ICA MSE : 426.75,          ICA SSIM : 0.7911,
+        MSE dif : 74.48 (14.86),  SSIM dif : 0.0949 (31.24)
+
+[736] : [28, 99, 99]
+        DCT MSE : 123.72,          DCT SSIM : 0.3965,
+        ICA MSE : 122.33,          ICA SSIM : 0.3630,
+        MSE dif : 1.39 (1.12),  SSIM dif : -0.0335 (-5.55)
+
+[740] : [28, 99, 99]
+        DCT MSE : 532.80,          DCT SSIM : 0.6035,
+        ICA MSE : 389.64,          ICA SSIM : 0.6998,
+        MSE dif : 143.16 (26.87),  SSIM dif : 0.0963 (24.30)
+
+[796] : [28, 99, 99]
+        DCT MSE : 16.22,          DCT SSIM : 0.9083,
+        ICA MSE : 15.48,          ICA SSIM : 0.8767,
+        MSE dif : 0.73 (4.53),  SSIM dif : -0.0316 (-34.41)
+
+
+
+
+
+
+--------- 41, 43, 55 ----------
+
+
+
+[276] : [41, 43, 55]
+        DCT MSE : 449.02,          DCT SSIM : 0.7459,
+        ICA MSE : 275.38,          ICA SSIM : 0.9028,
+        MSE dif : 173.64 (38.67),  SSIM dif : 0.1569 (61.76)
+
+[359] : [41, 43, 55]
+        DCT MSE : 280.52,          DCT SSIM : 0.7425,
+        ICA MSE : 254.27,          ICA SSIM : 0.7836,
+        MSE dif : 26.25 (9.36),  SSIM dif : 0.0411 (15.97)
+
+[389] : [41, 43, 55]
+        DCT MSE : 37.56,          DCT SSIM : 0.7106,
+        ICA MSE : 36.02,          ICA SSIM : 0.6977,
+        MSE dif : 1.55 (4.12),  SSIM dif : -0.0129 (-4.45)
+
+[519] : [41, 43, 55]
+        DCT MSE : 201.80,          DCT SSIM : 0.7083,
+        ICA MSE : 189.83,          ICA SSIM : 0.7535,
+        MSE dif : 11.97 (5.93),  SSIM dif : 0.0452 (15.50)
+
+[690] : [41, 43, 55]
+        DCT MSE : 18.30,          DCT SSIM : 0.8576,
+        ICA MSE : 15.55,          ICA SSIM : 0.8342,
+        MSE dif : 2.75 (15.03),  SSIM dif : -0.0235 (-16.49)
+
+[736] : [41, 43, 55]
+        DCT MSE : 123.72,          DCT SSIM : 0.3965,
+        ICA MSE : 115.75,          ICA SSIM : 0.4353,
+        MSE dif : 7.97 (6.44),  SSIM dif : 0.0387 (6.42)
+
+[796] : [41, 43, 55]
+        DCT MSE : 16.22,          DCT SSIM : 0.9083,
+        ICA MSE : 15.75,          ICA SSIM : 0.8805,
+        MSE dif : 0.47 (2.89),  SSIM dif : -0.0278 (-30.34)
+
+[800] : [41, 43, 55]
+        DCT MSE : 218.73,          DCT SSIM : 0.2661,
+        ICA MSE : 213.80,          ICA SSIM : 0.4469,
+        MSE dif : 4.94 (2.26),  SSIM dif : 0.1808 (24.64)
+
+[837] : [41, 43, 55]
+        DCT MSE : 484.14,          DCT SSIM : 0.8305,
+        ICA MSE : 453.69,          ICA SSIM : 0.8877,
+        MSE dif : 30.45 (6.29),  SSIM dif : 0.0573 (33.79)
+
+
+
+
+
+
+--------- 14, 43, 55 ----------
+
+
+
+[276] : [14, 43, 55]
+        DCT MSE : 449.02,          DCT SSIM : 0.7459,
+        ICA MSE : 348.23,          ICA SSIM : 0.8677,
+        MSE dif : 100.78 (22.44),  SSIM dif : 0.1218 (47.95)
+
+[359] : [14, 43, 55]
+        DCT MSE : 280.52,          DCT SSIM : 0.7425,
+        ICA MSE : 275.20,          ICA SSIM : 0.7692,
+        MSE dif : 5.31 (1.89),  SSIM dif : 0.0268 (10.39)
+
+[389] : [14, 43, 55]
+        DCT MSE : 37.56,          DCT SSIM : 0.7106,
+        ICA MSE : 34.50,          ICA SSIM : 0.7042,
+        MSE dif : 3.06 (8.15),  SSIM dif : -0.0063 (-2.19)
+
+[519] : [14, 43, 55]
+        DCT MSE : 201.80,          DCT SSIM : 0.7083,
+        ICA MSE : 189.83,          ICA SSIM : 0.7535,
+        MSE dif : 11.97 (5.93),  SSIM dif : 0.0452 (15.50)
+
+[690] : [14, 43, 55]
+        DCT MSE : 18.30,          DCT SSIM : 0.8576,
+        ICA MSE : 15.55,          ICA SSIM : 0.8342,
+        MSE dif : 2.75 (15.03),  SSIM dif : -0.0235 (-16.49)
+
+[736] : [14, 43, 55]
+        DCT MSE : 123.72,          DCT SSIM : 0.3965,
+        ICA MSE : 115.75,          ICA SSIM : 0.4353,
+        MSE dif : 7.97 (6.44),  SSIM dif : 0.0387 (6.42)
+
+[769] : [14, 43, 55]
+        DCT MSE : 167.33,          DCT SSIM : 0.5777,
+        ICA MSE : 126.94,          ICA SSIM : 0.7749,
+        MSE dif : 40.39 (24.14),  SSIM dif : 0.1972 (46.69)
+
+[796] : [14, 43, 55]
+        DCT MSE : 16.22,          DCT SSIM : 0.9083,
+        ICA MSE : 14.75,          ICA SSIM : 0.8900,
+        MSE dif : 1.47 (9.06),  SSIM dif : -0.0183 (-19.97)
+
+[800] : [14, 43, 55]
+        DCT MSE : 218.73,          DCT SSIM : 0.2661,
+        ICA MSE : 187.50,          ICA SSIM : 0.5273,
+        MSE dif : 31.23 (14.28),  SSIM dif : 0.2612 (35.59)
+
+[834] : [14, 43, 55]
+        DCT MSE : 147.30,          DCT SSIM : 0.8046,
+        ICA MSE : 117.27,          ICA SSIM : 0.8821,
+        MSE dif : 30.03 (20.39),  SSIM dif : 0.0775 (39.67)
+
+
+
+
+
+
+--------- 17, 43, 55 ----------
+
+
+
+[276] : [43, 55, 99]
+        DCT MSE : 449.02,          DCT SSIM : 0.7459,
+        ICA MSE : 272.61,          ICA SSIM : 0.8738,
+        MSE dif : 176.41 (39.29),  SSIM dif : 0.1279 (50.33)
+
+[331] : [43, 55, 99]
+        DCT MSE : 11.62,          DCT SSIM : 0.9042,
+        ICA MSE : 11.05,          ICA SSIM : 0.8993,
+        MSE dif : 0.58 (4.97),  SSIM dif : -0.0049 (-5.15)
+
+[359] : [43, 55, 99]
+        DCT MSE : 280.52,          DCT SSIM : 0.7425,
+        ICA MSE : 261.05,          ICA SSIM : 0.7743,
+        MSE dif : 19.47 (6.94),  SSIM dif : 0.0318 (12.35)
+
+[514] : [43, 55, 99]
+        DCT MSE : 9.95,          DCT SSIM : 0.9536,
+        ICA MSE : 9.80,          ICA SSIM : 0.9224,
+        MSE dif : 0.16 (1.57),  SSIM dif : -0.0312 (-67.27)
+
+[519] : [43, 55, 99]
+        DCT MSE : 201.80,          DCT SSIM : 0.7083,
+        ICA MSE : 189.83,          ICA SSIM : 0.7535,
+        MSE dif : 11.97 (5.93),  SSIM dif : 0.0452 (15.50)
+
+[592] : [43, 55, 99]
+        DCT MSE : 15.31,          DCT SSIM : 0.9139,
+        ICA MSE : 13.11,          ICA SSIM : 0.9054,
+        MSE dif : 2.20 (14.39),  SSIM dif : -0.0085 (-9.86)
+
+[624] : [43, 55, 99]
+        DCT MSE : 13.08,          DCT SSIM : 0.8943,
+        ICA MSE : 12.03,          ICA SSIM : 0.8941,
+        MSE dif : 1.05 (8.00),  SSIM dif : -0.0002 (-0.22)
+
+[690] : [43, 55, 99]
+        DCT MSE : 18.30,          DCT SSIM : 0.8576,
+        ICA MSE : 15.55,          ICA SSIM : 0.8342,
+        MSE dif : 2.75 (15.03),  SSIM dif : -0.0235 (-16.49)
+
+[736] : [43, 55, 99]
+        DCT MSE : 123.72,          DCT SSIM : 0.3965,
+        ICA MSE : 115.75,          ICA SSIM : 0.4353,
+        MSE dif : 7.97 (6.44),  SSIM dif : 0.0387 (6.42)
+
+[796] : [43, 55, 99]
+        DCT MSE : 16.22,          DCT SSIM : 0.9083,
+        ICA MSE : 16.19,          ICA SSIM : 0.8851,
+        MSE dif : 0.03 (0.19),  SSIM dif : -0.0232 (-25.26)
+
+[800] : [43, 55, 99]
+        DCT MSE : 218.73,          DCT SSIM : 0.2661,
+        ICA MSE : 213.80,          ICA SSIM : 0.4469,
+        MSE dif : 4.94 (2.26),  SSIM dif : 0.1808 (24.64)
+
+
+
+
+
+
+--------- 41, 50, 57 ----------
+
+
+
+[389] : [41, 57, 99]
+        DCT MSE : 37.56,          DCT SSIM : 0.7106,
+        ICA MSE : 36.02,          ICA SSIM : 0.6977,
+        MSE dif : 1.55 (4.12),  SSIM dif : -0.0129 (-4.45)
+
+[471] : [41, 57, 99]
+        DCT MSE : 26.75,          DCT SSIM : 0.7785,
+        ICA MSE : 24.45,          ICA SSIM : 0.7701,
+        MSE dif : 2.30 (8.59),  SSIM dif : -0.0085 (-3.82)
+
+[514] : [41, 57, 99]
+        DCT MSE : 9.95,          DCT SSIM : 0.9536,
+        ICA MSE : 9.25,          ICA SSIM : 0.9278,
+        MSE dif : 0.70 (7.06),  SSIM dif : -0.0259 (-55.77)
+
+[690] : [41, 57, 99]
+        DCT MSE : 18.30,          DCT SSIM : 0.8576,
+        ICA MSE : 14.06,          ICA SSIM : 0.8467,
+        MSE dif : 4.23 (23.14),  SSIM dif : -0.0109 (-7.66)
+
+[736] : [41, 57, 99]
+        DCT MSE : 123.72,          DCT SSIM : 0.3965,
+        ICA MSE : 118.59,          ICA SSIM : 0.3791,
+        MSE dif : 5.12 (4.14),  SSIM dif : -0.0174 (-2.89)
+
+[771] : [41, 57, 99]
+        DCT MSE : 516.38,          DCT SSIM : 0.7400,
+        ICA MSE : 322.77,          ICA SSIM : 0.8383,
+        MSE dif : 193.61 (37.49),  SSIM dif : 0.0984 (37.83)
+
+[796] : [41, 57, 99]
+        DCT MSE : 16.22,          DCT SSIM : 0.9083,
+        ICA MSE : 15.45,          ICA SSIM : 0.8808,
+        MSE dif : 0.77 (4.72),  SSIM dif : -0.0275 (-30.02)
+
+[837] : [41, 57, 99]
+        DCT MSE : 484.14,          DCT SSIM : 0.8305,
+        ICA MSE : 478.69,          ICA SSIM : 0.8744,
+        MSE dif : 5.45 (1.13),  SSIM dif : 0.0439 (25.92)
+************************************************************************
+
+
+
+[Q 30] 
+
+
+
+
+
+
+
+
+--------- 2, 28, 41 ----------
+
+
+
+[93] : [41, 99, 99]
+        DCT MSE : 218.19,          DCT SSIM : 0.3611,
+        ICA MSE : 196.95,          ICA SSIM : 0.4820,
+        MSE dif : 21.23 (9.73),  SSIM dif : 0.1209 (18.92)
+
+[295] : [41, 99, 99]
+        DCT MSE : 223.66,          DCT SSIM : 0.3387,
+        ICA MSE : 206.12,          ICA SSIM : 0.5051,
+        MSE dif : 17.53 (7.84),  SSIM dif : 0.1664 (25.16)
+
+[301] : [41, 99, 99]
+        DCT MSE : 30.44,          DCT SSIM : 0.8758,
+        ICA MSE : 25.12,          ICA SSIM : 0.8420,
+        MSE dif : 5.31 (17.45),  SSIM dif : -0.0338 (-27.17)
+
+[311] : [41, 99, 99]
+        DCT MSE : 552.67,          DCT SSIM : 0.6933,
+        ICA MSE : 544.08,          ICA SSIM : 0.6861,
+        MSE dif : 8.59 (1.55),  SSIM dif : -0.0071 (-2.33)
+
+[395] : [41, 99, 99]
+        DCT MSE : 32.16,          DCT SSIM : 0.8433,
+        ICA MSE : 23.12,          ICA SSIM : 0.8176,
+        MSE dif : 9.03 (28.09),  SSIM dif : -0.0257 (-16.42)
+
+[411] : [41, 99, 99]
+        DCT MSE : 40.80,          DCT SSIM : 0.7735,
+        ICA MSE : 37.58,          ICA SSIM : 0.7579,
+        MSE dif : 3.22 (7.89),  SSIM dif : -0.0156 (-6.87)
+
+[433] : [41, 99, 99]
+        DCT MSE : 15.81,          DCT SSIM : 0.8961,
+        ICA MSE : 13.69,          ICA SSIM : 0.8777,
+        MSE dif : 2.12 (13.44),  SSIM dif : -0.0184 (-17.68)
+
+[436] : [41, 99, 99]
+        DCT MSE : 386.53,          DCT SSIM : 0.6043,
+        ICA MSE : 374.81,          ICA SSIM : 0.6809,
+        MSE dif : 11.72 (3.03),  SSIM dif : 0.0766 (19.36)
+
+[456] : [41, 99, 99]
+        DCT MSE : 17.20,          DCT SSIM : 0.9111,
+        ICA MSE : 14.42,          ICA SSIM : 0.8811,
+        MSE dif : 2.78 (16.17),  SSIM dif : -0.0300 (-33.68)
+
+[588] : [41, 99, 99]
+        DCT MSE : 30.91,          DCT SSIM : 0.8642,
+        ICA MSE : 23.36,          ICA SSIM : 0.8077,
+        MSE dif : 7.55 (24.42),  SSIM dif : -0.0565 (-41.59)
+
+[613] : [41, 99, 99]
+        DCT MSE : 83.59,          DCT SSIM : 0.5596,
+        ICA MSE : 81.09,          ICA SSIM : 0.5259,
+        MSE dif : 2.50 (2.99),  SSIM dif : -0.0337 (-7.66)
+
+[640] : [41, 99, 99]
+        DCT MSE : 40.42,          DCT SSIM : 0.8562,
+        ICA MSE : 32.62,          ICA SSIM : 0.8343,
+        MSE dif : 7.80 (19.29),  SSIM dif : -0.0219 (-15.20)
+
+[673] : [41, 99, 99]
+        DCT MSE : 561.94,          DCT SSIM : 0.3050,
+        ICA MSE : 543.56,          ICA SSIM : 0.4506,
+        MSE dif : 18.38 (3.27),  SSIM dif : 0.1456 (20.94)
+
+[678] : [41, 99, 99]
+        DCT MSE : 544.47,          DCT SSIM : 0.3667,
+        ICA MSE : 440.34,          ICA SSIM : 0.6124,
+        MSE dif : 104.12 (19.12),  SSIM dif : 0.2457 (38.80)
+
+[707] : [41, 99, 99]
+        DCT MSE : 599.44,          DCT SSIM : 0.6048,
+        ICA MSE : 426.75,          ICA SSIM : 0.7911,
+        MSE dif : 172.69 (28.81),  SSIM dif : 0.1862 (47.13)
+
+[710] : [41, 99, 99]
+        DCT MSE : 589.84,          DCT SSIM : 0.6612,
+        ICA MSE : 488.81,          ICA SSIM : 0.8312,
+        MSE dif : 101.03 (17.13),  SSIM dif : 0.1700 (50.18)
+
+[740] : [41, 99, 99]
+        DCT MSE : 793.88,          DCT SSIM : 0.3949,
+        ICA MSE : 389.64,          ICA SSIM : 0.6998,
+        MSE dif : 404.23 (50.92),  SSIM dif : 0.3050 (50.40)
+
+[753] : [41, 99, 99]
+        DCT MSE : 25.05,          DCT SSIM : 0.8245,
+        ICA MSE : 22.30,          ICA SSIM : 0.8216,
+        MSE dif : 2.75 (10.98),  SSIM dif : -0.0029 (-1.66)
+
+[764] : [41, 99, 99]
+        DCT MSE : 18.48,          DCT SSIM : 0.8639,
+        ICA MSE : 16.98,          ICA SSIM : 0.8557,
+        MSE dif : 1.50 (8.11),  SSIM dif : -0.0082 (-6.01)
+
+[771] : [41, 99, 99]
+        DCT MSE : 782.58,          DCT SSIM : 0.5917,
+        ICA MSE : 545.03,          ICA SSIM : 0.7709,
+        MSE dif : 237.55 (30.35),  SSIM dif : 0.1792 (43.88)
+
+[796] : [41, 99, 99]
+        DCT MSE : 17.19,          DCT SSIM : 0.9110,
+        ICA MSE : 15.48,          ICA SSIM : 0.8767,
+        MSE dif : 1.70 (9.91),  SSIM dif : -0.0342 (-38.46)
+
+[800] : [41, 99, 99]
+        DCT MSE : 229.64,          DCT SSIM : 0.2305,
+        ICA MSE : 225.48,          ICA SSIM : 0.2372,
+        MSE dif : 4.16 (1.81),  SSIM dif : 0.0067 (0.87)
+
+[805] : [41, 99, 99]
+        DCT MSE : 734.48,          DCT SSIM : 0.7483,
+        ICA MSE : 673.81,          ICA SSIM : 0.7652,
+        MSE dif : 60.67 (8.26),  SSIM dif : 0.0169 (6.70)
+
+[837] : [41, 99, 99]
+        DCT MSE : 594.41,          DCT SSIM : 0.7881,
+        ICA MSE : 491.28,          ICA SSIM : 0.8678,
+        MSE dif : 103.12 (17.35),  SSIM dif : 0.0797 (37.61)
+
+[932] : [41, 99, 99]
+        DCT MSE : 517.30,          DCT SSIM : 0.5972,
+        ICA MSE : 502.36,          ICA SSIM : 0.6476,
+        MSE dif : 14.94 (2.89),  SSIM dif : 0.0504 (12.52)
+
+[983] : [41, 99, 99]
+        DCT MSE : 18.62,          DCT SSIM : 0.9135,
+        ICA MSE : 16.75,          ICA SSIM : 0.8391,
+        MSE dif : 1.88 (10.07),  SSIM dif : -0.0744 (-85.98)
+
+
+
+
+
+
+--------- 28, 41, 43 ----------
+
+
+
+[143] : [43, 99, 99]
+        DCT MSE : 35.39,          DCT SSIM : 0.7851,
+        ICA MSE : 34.30,          ICA SSIM : 0.7502,
+        MSE dif : 1.09 (3.09),  SSIM dif : -0.0348 (-16.21)
+
+[295] : [43, 99, 99]
+        DCT MSE : 223.66,          DCT SSIM : 0.3387,
+        ICA MSE : 205.36,          ICA SSIM : 0.5061,
+        MSE dif : 18.30 (8.18),  SSIM dif : 0.1673 (25.31)
+
+[301] : [43, 99, 99]
+        DCT MSE : 30.44,          DCT SSIM : 0.8758,
+        ICA MSE : 25.12,          ICA SSIM : 0.8420,
+        MSE dif : 5.31 (17.45),  SSIM dif : -0.0338 (-27.17)
+
+[343] : [43, 99, 99]
+        DCT MSE : 518.44,          DCT SSIM : 0.6894,
+        ICA MSE : 513.48,          ICA SSIM : 0.6617,
+        MSE dif : 4.95 (0.96),  SSIM dif : -0.0277 (-8.91)
+
+[359] : [43, 99, 99]
+        DCT MSE : 271.81,          DCT SSIM : 0.7587,
+        ICA MSE : 234.95,          ICA SSIM : 0.7976,
+        MSE dif : 36.86 (13.56),  SSIM dif : 0.0389 (16.12)
+
+[391] : [43, 99, 99]
+        DCT MSE : 328.69,          DCT SSIM : 0.7590,
+        ICA MSE : 325.09,          ICA SSIM : 0.7895,
+        MSE dif : 3.59 (1.09),  SSIM dif : 0.0305 (12.66)
+
+[395] : [43, 99, 99]
+        DCT MSE : 32.16,          DCT SSIM : 0.8433,
+        ICA MSE : 23.12,          ICA SSIM : 0.8176,
+        MSE dif : 9.03 (28.09),  SSIM dif : -0.0257 (-16.42)
+
+[411] : [43, 99, 99]
+        DCT MSE : 40.80,          DCT SSIM : 0.7735,
+        ICA MSE : 37.86,          ICA SSIM : 0.7503,
+        MSE dif : 2.94 (7.20),  SSIM dif : -0.0231 (-10.21)
+
+[421] : [43, 99, 99]
+        DCT MSE : 48.39,          DCT SSIM : 0.6994,
+        ICA MSE : 46.09,          ICA SSIM : 0.6834,
+        MSE dif : 2.30 (4.75),  SSIM dif : -0.0160 (-5.32)
+
+[433] : [43, 99, 99]
+        DCT MSE : 15.81,          DCT SSIM : 0.8961,
+        ICA MSE : 14.06,          ICA SSIM : 0.8789,
+        MSE dif : 1.75 (11.07),  SSIM dif : -0.0171 (-16.50)
+
+[436] : [43, 99, 99]
+        DCT MSE : 386.53,          DCT SSIM : 0.6043,
+        ICA MSE : 308.58,          ICA SSIM : 0.7339,
+        MSE dif : 77.95 (20.17),  SSIM dif : 0.1296 (32.74)
+
+[455] : [43, 99, 99]
+        DCT MSE : 400.70,          DCT SSIM : 0.4333,
+        ICA MSE : 340.61,          ICA SSIM : 0.5467,
+        MSE dif : 60.09 (15.00),  SSIM dif : 0.1135 (20.02)
+
+[456] : [43, 99, 99]
+        DCT MSE : 17.20,          DCT SSIM : 0.9111,
+        ICA MSE : 14.42,          ICA SSIM : 0.8811,
+        MSE dif : 2.78 (16.17),  SSIM dif : -0.0300 (-33.68)
+
+[475] : [43, 99, 99]
+        DCT MSE : 23.45,          DCT SSIM : 0.8491,
+        ICA MSE : 23.34,          ICA SSIM : 0.7849,
+        MSE dif : 0.11 (0.47),  SSIM dif : -0.0643 (-42.61)
+
+[487] : [43, 99, 99]
+        DCT MSE : 293.73,          DCT SSIM : 0.5822,
+        ICA MSE : 220.36,          ICA SSIM : 0.7756,
+        MSE dif : 73.38 (24.98),  SSIM dif : 0.1934 (46.28)
+
+[519] : [43, 99, 99]
+        DCT MSE : 204.48,          DCT SSIM : 0.7132,
+        ICA MSE : 189.95,          ICA SSIM : 0.7541,
+        MSE dif : 14.53 (7.11),  SSIM dif : 0.0409 (14.26)
+
+[588] : [43, 99, 99]
+        DCT MSE : 30.91,          DCT SSIM : 0.8642,
+        ICA MSE : 23.36,          ICA SSIM : 0.8077,
+        MSE dif : 7.55 (24.42),  SSIM dif : -0.0565 (-41.59)
+
+[613] : [43, 99, 99]
+        DCT MSE : 83.59,          DCT SSIM : 0.5596,
+        ICA MSE : 81.09,          ICA SSIM : 0.5259,
+        MSE dif : 2.50 (2.99),  SSIM dif : -0.0337 (-7.66)
+
+[640] : [43, 99, 99]
+        DCT MSE : 40.42,          DCT SSIM : 0.8562,
+        ICA MSE : 32.62,          ICA SSIM : 0.8343,
+        MSE dif : 7.80 (19.29),  SSIM dif : -0.0219 (-15.20)
+
+[678] : [43, 99, 99]
+        DCT MSE : 544.47,          DCT SSIM : 0.3667,
+        ICA MSE : 520.81,          ICA SSIM : 0.4532,
+        MSE dif : 23.66 (4.34),  SSIM dif : 0.0865 (13.66)
+
+[710] : [43, 99, 99]
+        DCT MSE : 589.84,          DCT SSIM : 0.6612,
+        ICA MSE : 506.31,          ICA SSIM : 0.7996,
+        MSE dif : 83.53 (14.16),  SSIM dif : 0.1384 (40.84)
+
+[740] : [43, 99, 99]
+        DCT MSE : 793.88,          DCT SSIM : 0.3949,
+        ICA MSE : 504.69,          ICA SSIM : 0.5821,
+        MSE dif : 289.19 (36.43),  SSIM dif : 0.1872 (30.94)
+
+[753] : [43, 99, 99]
+        DCT MSE : 25.05,          DCT SSIM : 0.8245,
+        ICA MSE : 22.30,          ICA SSIM : 0.8216,
+        MSE dif : 2.75 (10.98),  SSIM dif : -0.0029 (-1.66)
+
+[764] : [43, 99, 99]
+        DCT MSE : 18.48,          DCT SSIM : 0.8639,
+        ICA MSE : 16.98,          ICA SSIM : 0.8557,
+        MSE dif : 1.50 (8.11),  SSIM dif : -0.0082 (-6.01)
+
+[770] : [43, 99, 99]
+        DCT MSE : 236.69,          DCT SSIM : 0.6558,
+        ICA MSE : 118.44,          ICA SSIM : 0.8751,
+        MSE dif : 118.25 (49.96),  SSIM dif : 0.2193 (63.72)
+
+[771] : [43, 99, 99]
+        DCT MSE : 782.58,          DCT SSIM : 0.5917,
+        ICA MSE : 598.44,          ICA SSIM : 0.7486,
+        MSE dif : 184.14 (23.53),  SSIM dif : 0.1569 (38.43)
+
+[796] : [43, 99, 99]
+        DCT MSE : 17.19,          DCT SSIM : 0.9110,
+        ICA MSE : 15.48,          ICA SSIM : 0.8767,
+        MSE dif : 1.70 (9.91),  SSIM dif : -0.0342 (-38.46)
+
+[800] : [43, 99, 99]
+        DCT MSE : 229.64,          DCT SSIM : 0.2305,
+        ICA MSE : 220.45,          ICA SSIM : 0.4278,
+        MSE dif : 9.19 (4.00),  SSIM dif : 0.1973 (25.64)
+
+[801] : [43, 99, 99]
+        DCT MSE : 208.52,          DCT SSIM : 0.6414,
+        ICA MSE : 185.28,          ICA SSIM : 0.7614,
+        MSE dif : 23.23 (11.14),  SSIM dif : 0.1200 (33.46)
+
+[832] : [43, 99, 99]
+        DCT MSE : 243.83,          DCT SSIM : 0.4116,
+        ICA MSE : 219.19,          ICA SSIM : 0.6558,
+        MSE dif : 24.64 (10.11),  SSIM dif : 0.2442 (41.50)
+
+[834] : [43, 99, 99]
+        DCT MSE : 241.28,          DCT SSIM : 0.6258,
+        ICA MSE : 208.53,          ICA SSIM : 0.7712,
+        MSE dif : 32.75 (13.57),  SSIM dif : 0.1454 (38.85)
+
+[835] : [43, 99, 99]
+        DCT MSE : 262.78,          DCT SSIM : 0.6785,
+        ICA MSE : 260.44,          ICA SSIM : 0.7209,
+        MSE dif : 2.34 (0.89),  SSIM dif : 0.0423 (13.17)
+
+[837] : [43, 99, 99]
+        DCT MSE : 594.41,          DCT SSIM : 0.7881,
+        ICA MSE : 479.06,          ICA SSIM : 0.8716,
+        MSE dif : 115.34 (19.40),  SSIM dif : 0.0835 (39.40)
+
+[864] : [43, 99, 99]
+        DCT MSE : 198.22,          DCT SSIM : 0.6486,
+        ICA MSE : 163.36,          ICA SSIM : 0.7882,
+        MSE dif : 34.86 (17.59),  SSIM dif : 0.1396 (39.73)
+
+[983] : [43, 99, 99]
+        DCT MSE : 18.62,          DCT SSIM : 0.9135,
+        ICA MSE : 16.67,          ICA SSIM : 0.8441,
+        MSE dif : 1.95 (10.49),  SSIM dif : -0.0694 (-80.19)
+
+
+
+
+
+
+--------- 2, 41, 43 ----------
+
+
+
+[93] : [43, 99, 99]
+        DCT MSE : 218.19,          DCT SSIM : 0.3611,
+        ICA MSE : 199.45,          ICA SSIM : 0.4627,
+        MSE dif : 18.73 (8.59),  SSIM dif : 0.1016 (15.90)
+
+[143] : [43, 99, 99]
+        DCT MSE : 35.39,          DCT SSIM : 0.7851,
+        ICA MSE : 34.30,          ICA SSIM : 0.7502,
+        MSE dif : 1.09 (3.09),  SSIM dif : -0.0348 (-16.21)
+
+[246] : [43, 99, 99]
+        DCT MSE : 576.03,          DCT SSIM : 0.7333,
+        ICA MSE : 572.89,          ICA SSIM : 0.7200,
+        MSE dif : 3.14 (0.55),  SSIM dif : -0.0133 (-4.98)
+
+[295] : [43, 99, 99]
+        DCT MSE : 223.66,          DCT SSIM : 0.3387,
+        ICA MSE : 222.72,          ICA SSIM : 0.3493,
+        MSE dif : 0.94 (0.42),  SSIM dif : 0.0106 (1.61)
+
+[301] : [43, 99, 99]
+        DCT MSE : 30.44,          DCT SSIM : 0.8758,
+        ICA MSE : 26.59,          ICA SSIM : 0.8417,
+        MSE dif : 3.84 (12.63),  SSIM dif : -0.0340 (-27.39)
+
+[343] : [43, 99, 99]
+        DCT MSE : 518.44,          DCT SSIM : 0.6894,
+        ICA MSE : 498.88,          ICA SSIM : 0.6775,
+        MSE dif : 19.56 (3.77),  SSIM dif : -0.0118 (-3.81)
+
+[359] : [43, 99, 99]
+        DCT MSE : 271.81,          DCT SSIM : 0.7587,
+        ICA MSE : 214.72,          ICA SSIM : 0.8503,
+        MSE dif : 57.09 (21.00),  SSIM dif : 0.0917 (37.98)
+
+[391] : [43, 99, 99]
+        DCT MSE : 328.69,          DCT SSIM : 0.7590,
+        ICA MSE : 305.06,          ICA SSIM : 0.8092,
+        MSE dif : 23.62 (7.19),  SSIM dif : 0.0501 (20.81)
+
+[395] : [43, 99, 99]
+        DCT MSE : 32.16,          DCT SSIM : 0.8433,
+        ICA MSE : 23.12,          ICA SSIM : 0.8176,
+        MSE dif : 9.03 (28.09),  SSIM dif : -0.0257 (-16.42)
+
+[411] : [43, 99, 99]
+        DCT MSE : 40.80,          DCT SSIM : 0.7735,
+        ICA MSE : 37.58,          ICA SSIM : 0.7579,
+        MSE dif : 3.22 (7.89),  SSIM dif : -0.0156 (-6.87)
+
+[421] : [43, 99, 99]
+        DCT MSE : 48.39,          DCT SSIM : 0.6994,
+        ICA MSE : 46.09,          ICA SSIM : 0.6834,
+        MSE dif : 2.30 (4.75),  SSIM dif : -0.0160 (-5.32)
+
+[433] : [43, 99, 99]
+        DCT MSE : 15.81,          DCT SSIM : 0.8961,
+        ICA MSE : 13.69,          ICA SSIM : 0.8777,
+        MSE dif : 2.12 (13.44),  SSIM dif : -0.0184 (-17.68)
+
+[456] : [43, 99, 99]
+        DCT MSE : 17.20,          DCT SSIM : 0.9111,
+        ICA MSE : 14.42,          ICA SSIM : 0.8811,
+        MSE dif : 2.78 (16.17),  SSIM dif : -0.0300 (-33.68)
+
+[475] : [43, 99, 99]
+        DCT MSE : 23.45,          DCT SSIM : 0.8491,
+        ICA MSE : 23.34,          ICA SSIM : 0.7849,
+        MSE dif : 0.11 (0.47),  SSIM dif : -0.0643 (-42.61)
+
+[487] : [43, 99, 99]
+        DCT MSE : 293.73,          DCT SSIM : 0.5822,
+        ICA MSE : 229.98,          ICA SSIM : 0.7110,
+        MSE dif : 63.75 (21.70),  SSIM dif : 0.1288 (30.82)
+
+[519] : [43, 99, 99]
+        DCT MSE : 204.48,          DCT SSIM : 0.7132,
+        ICA MSE : 178.89,          ICA SSIM : 0.7751,
+        MSE dif : 25.59 (12.52),  SSIM dif : 0.0619 (21.58)
+
+[588] : [43, 99, 99]
+        DCT MSE : 30.91,          DCT SSIM : 0.8642,
+        ICA MSE : 23.36,          ICA SSIM : 0.8077,
+        MSE dif : 7.55 (24.42),  SSIM dif : -0.0565 (-41.59)
+
+[640] : [43, 99, 99]
+        DCT MSE : 40.42,          DCT SSIM : 0.8562,
+        ICA MSE : 32.62,          ICA SSIM : 0.8343,
+        MSE dif : 7.80 (19.29),  SSIM dif : -0.0219 (-15.20)
+
+[673] : [43, 99, 99]
+        DCT MSE : 561.94,          DCT SSIM : 0.3050,
+        ICA MSE : 542.67,          ICA SSIM : 0.4505,
+        MSE dif : 19.27 (3.43),  SSIM dif : 0.1455 (20.93)
+
+[678] : [43, 99, 99]
+        DCT MSE : 544.47,          DCT SSIM : 0.3667,
+        ICA MSE : 426.80,          ICA SSIM : 0.6219,
+        MSE dif : 117.67 (21.61),  SSIM dif : 0.2552 (40.30)
+
+[710] : [43, 99, 99]
+        DCT MSE : 589.84,          DCT SSIM : 0.6612,
+        ICA MSE : 511.84,          ICA SSIM : 0.7904,
+        MSE dif : 78.00 (13.22),  SSIM dif : 0.1292 (38.13)
+
+[740] : [43, 99, 99]
+        DCT MSE : 793.88,          DCT SSIM : 0.3949,
+        ICA MSE : 683.81,          ICA SSIM : 0.4410,
+        MSE dif : 110.06 (13.86),  SSIM dif : 0.0461 (7.62)
+
+[753] : [43, 99, 99]
+        DCT MSE : 25.05,          DCT SSIM : 0.8245,
+        ICA MSE : 22.30,          ICA SSIM : 0.8216,
+        MSE dif : 2.75 (10.98),  SSIM dif : -0.0029 (-1.66)
+
+[764] : [43, 99, 99]
+        DCT MSE : 18.48,          DCT SSIM : 0.8639,
+        ICA MSE : 16.98,          ICA SSIM : 0.8557,
+        MSE dif : 1.50 (8.11),  SSIM dif : -0.0082 (-6.01)
+
+[770] : [43, 99, 99]
+        DCT MSE : 236.69,          DCT SSIM : 0.6558,
+        ICA MSE : 117.09,          ICA SSIM : 0.8779,
+        MSE dif : 119.59 (50.53),  SSIM dif : 0.2220 (64.51)
+
+[771] : [43, 99, 99]
+        DCT MSE : 782.58,          DCT SSIM : 0.5917,
+        ICA MSE : 542.95,          ICA SSIM : 0.7682,
+        MSE dif : 239.62 (30.62),  SSIM dif : 0.1766 (43.24)
+
+[796] : [43, 99, 99]
+        DCT MSE : 17.19,          DCT SSIM : 0.9110,
+        ICA MSE : 15.75,          ICA SSIM : 0.8805,
+        MSE dif : 1.44 (8.36),  SSIM dif : -0.0305 (-34.27)
+
+[800] : [43, 99, 99]
+        DCT MSE : 229.64,          DCT SSIM : 0.2305,
+        ICA MSE : 220.45,          ICA SSIM : 0.4278,
+        MSE dif : 9.19 (4.00),  SSIM dif : 0.1973 (25.64)
+
+[801] : [43, 99, 99]
+        DCT MSE : 208.52,          DCT SSIM : 0.6414,
+        ICA MSE : 196.23,          ICA SSIM : 0.7477,
+        MSE dif : 12.28 (5.89),  SSIM dif : 0.1063 (29.64)
+
+[805] : [43, 99, 99]
+        DCT MSE : 734.48,          DCT SSIM : 0.7483,
+        ICA MSE : 635.62,          ICA SSIM : 0.7842,
+        MSE dif : 98.86 (13.46),  SSIM dif : 0.0359 (14.26)
+
+[832] : [43, 99, 99]
+        DCT MSE : 243.83,          DCT SSIM : 0.4116,
+        ICA MSE : 219.19,          ICA SSIM : 0.6558,
+        MSE dif : 24.64 (10.11),  SSIM dif : 0.2442 (41.50)
+
+[834] : [43, 99, 99]
+        DCT MSE : 241.28,          DCT SSIM : 0.6258,
+        ICA MSE : 215.95,          ICA SSIM : 0.7579,
+        MSE dif : 25.33 (10.50),  SSIM dif : 0.1320 (35.29)
+
+[835] : [43, 99, 99]
+        DCT MSE : 262.78,          DCT SSIM : 0.6785,
+        ICA MSE : 260.44,          ICA SSIM : 0.7209,
+        MSE dif : 2.34 (0.89),  SSIM dif : 0.0423 (13.17)
+
+[837] : [43, 99, 99]
+        DCT MSE : 594.41,          DCT SSIM : 0.7881,
+        ICA MSE : 483.52,          ICA SSIM : 0.8710,
+        MSE dif : 110.89 (18.66),  SSIM dif : 0.0829 (39.12)
+
+[864] : [43, 99, 99]
+        DCT MSE : 198.22,          DCT SSIM : 0.6486,
+        ICA MSE : 165.45,          ICA SSIM : 0.7750,
+        MSE dif : 32.77 (16.53),  SSIM dif : 0.1264 (35.97)
+
+[931] : [43, 99, 99]
+        DCT MSE : 588.73,          DCT SSIM : 0.3956,
+        ICA MSE : 588.39,          ICA SSIM : 0.3547,
+        MSE dif : 0.34 (0.06),  SSIM dif : -0.0409 (-6.77)
+
+[983] : [43, 99, 99]
+        DCT MSE : 18.62,          DCT SSIM : 0.9135,
+        ICA MSE : 16.67,          ICA SSIM : 0.8441,
+        MSE dif : 1.95 (10.49),  SSIM dif : -0.0694 (-80.19)
+
+
+
+
+
+
+--------- 2, 12, 41 ----------
+
+
+
+[93] : [12, 99, 99]
+        DCT MSE : 218.19,          DCT SSIM : 0.3611,
+        ICA MSE : 206.11,          ICA SSIM : 0.4403,
+        MSE dif : 12.08 (5.54),  SSIM dif : 0.0792 (12.39)
+
+[143] : [12, 99, 99]
+        DCT MSE : 35.39,          DCT SSIM : 0.7851,
+        ICA MSE : 34.86,          ICA SSIM : 0.7467,
+        MSE dif : 0.53 (1.50),  SSIM dif : -0.0383 (-17.83)
+
+[246] : [12, 99, 99]
+        DCT MSE : 576.03,          DCT SSIM : 0.7333,
+        ICA MSE : 573.30,          ICA SSIM : 0.7484,
+        MSE dif : 2.73 (0.47),  SSIM dif : 0.0151 (5.66)
+
+[301] : [12, 99, 99]
+        DCT MSE : 30.44,          DCT SSIM : 0.8758,
+        ICA MSE : 26.59,          ICA SSIM : 0.8417,
+        MSE dif : 3.84 (12.63),  SSIM dif : -0.0340 (-27.39)
+
+[348] : [12, 99, 99]
+        DCT MSE : 43.94,          DCT SSIM : 0.7403,
+        ICA MSE : 43.69,          ICA SSIM : 0.7192,
+        MSE dif : 0.25 (0.57),  SSIM dif : -0.0211 (-8.12)
+
+[395] : [12, 99, 99]
+        DCT MSE : 32.16,          DCT SSIM : 0.8433,
+        ICA MSE : 23.12,          ICA SSIM : 0.8176,
+        MSE dif : 9.03 (28.09),  SSIM dif : -0.0257 (-16.42)
+
+[411] : [12, 99, 99]
+        DCT MSE : 40.80,          DCT SSIM : 0.7735,
+        ICA MSE : 37.58,          ICA SSIM : 0.7579,
+        MSE dif : 3.22 (7.89),  SSIM dif : -0.0156 (-6.87)
+
+[421] : [12, 99, 99]
+        DCT MSE : 48.39,          DCT SSIM : 0.6994,
+        ICA MSE : 48.25,          ICA SSIM : 0.6591,
+        MSE dif : 0.14 (0.29),  SSIM dif : -0.0403 (-13.39)
+
+[433] : [12, 99, 99]
+        DCT MSE : 15.81,          DCT SSIM : 0.8961,
+        ICA MSE : 13.69,          ICA SSIM : 0.8777,
+        MSE dif : 2.12 (13.44),  SSIM dif : -0.0184 (-17.68)
+
+[456] : [12, 99, 99]
+        DCT MSE : 17.20,          DCT SSIM : 0.9111,
+        ICA MSE : 14.25,          ICA SSIM : 0.8846,
+        MSE dif : 2.95 (17.17),  SSIM dif : -0.0265 (-29.74)
+
+[475] : [12, 99, 99]
+        DCT MSE : 23.45,          DCT SSIM : 0.8491,
+        ICA MSE : 23.14,          ICA SSIM : 0.7844,
+        MSE dif : 0.31 (1.33),  SSIM dif : -0.0647 (-42.90)
+
+[588] : [12, 99, 99]
+        DCT MSE : 30.91,          DCT SSIM : 0.8642,
+        ICA MSE : 23.36,          ICA SSIM : 0.8077,
+        MSE dif : 7.55 (24.42),  SSIM dif : -0.0565 (-41.59)
+
+[640] : [12, 99, 99]
+        DCT MSE : 40.42,          DCT SSIM : 0.8562,
+        ICA MSE : 32.62,          ICA SSIM : 0.8343,
+        MSE dif : 7.80 (19.29),  SSIM dif : -0.0219 (-15.20)
+
+[673] : [12, 99, 99]
+        DCT MSE : 561.94,          DCT SSIM : 0.3050,
+        ICA MSE : 437.61,          ICA SSIM : 0.5986,
+        MSE dif : 124.33 (22.12),  SSIM dif : 0.2936 (42.25)
+
+[674] : [12, 99, 99]
+        DCT MSE : 522.75,          DCT SSIM : 0.3047,
+        ICA MSE : 483.72,          ICA SSIM : 0.4709,
+        MSE dif : 39.03 (7.47),  SSIM dif : 0.1662 (23.91)
+
+[678] : [12, 99, 99]
+        DCT MSE : 544.47,          DCT SSIM : 0.3667,
+        ICA MSE : 440.34,          ICA SSIM : 0.6124,
+        MSE dif : 104.12 (19.12),  SSIM dif : 0.2457 (38.80)
+
+[710] : [12, 99, 99]
+        DCT MSE : 589.84,          DCT SSIM : 0.6612,
+        ICA MSE : 508.75,          ICA SSIM : 0.7936,
+        MSE dif : 81.09 (13.75),  SSIM dif : 0.1324 (39.08)
+
+[740] : [12, 99, 99]
+        DCT MSE : 793.88,          DCT SSIM : 0.3949,
+        ICA MSE : 668.56,          ICA SSIM : 0.4430,
+        MSE dif : 125.31 (15.78),  SSIM dif : 0.0481 (7.95)
+
+[753] : [12, 99, 99]
+        DCT MSE : 25.05,          DCT SSIM : 0.8245,
+        ICA MSE : 22.30,          ICA SSIM : 0.8216,
+        MSE dif : 2.75 (10.98),  SSIM dif : -0.0029 (-1.66)
+
+[764] : [12, 99, 99]
+        DCT MSE : 18.48,          DCT SSIM : 0.8639,
+        ICA MSE : 16.98,          ICA SSIM : 0.8557,
+        MSE dif : 1.50 (8.11),  SSIM dif : -0.0082 (-6.01)
+
+[771] : [12, 99, 99]
+        DCT MSE : 782.58,          DCT SSIM : 0.5917,
+        ICA MSE : 562.47,          ICA SSIM : 0.7705,
+        MSE dif : 220.11 (28.13),  SSIM dif : 0.1788 (43.80)
+
+[772] : [12, 99, 99]
+        DCT MSE : 759.09,          DCT SSIM : 0.7773,
+        ICA MSE : 739.81,          ICA SSIM : 0.8381,
+        MSE dif : 19.28 (2.54),  SSIM dif : 0.0608 (27.32)
+
+[773] : [12, 99, 99]
+        DCT MSE : 477.62,          DCT SSIM : 0.6276,
+        ICA MSE : 449.22,          ICA SSIM : 0.7229,
+        MSE dif : 28.41 (5.95),  SSIM dif : 0.0952 (25.58)
+
+[796] : [12, 99, 99]
+        DCT MSE : 17.19,          DCT SSIM : 0.9110,
+        ICA MSE : 15.75,          ICA SSIM : 0.8805,
+        MSE dif : 1.44 (8.36),  SSIM dif : -0.0305 (-34.27)
+
+[805] : [12, 99, 99]
+        DCT MSE : 734.48,          DCT SSIM : 0.7483,
+        ICA MSE : 668.50,          ICA SSIM : 0.7645,
+        MSE dif : 65.98 (8.98),  SSIM dif : 0.0162 (6.44)
+
+[837] : [12, 99, 99]
+        DCT MSE : 594.41,          DCT SSIM : 0.7881,
+        ICA MSE : 498.08,          ICA SSIM : 0.8672,
+        MSE dif : 96.33 (16.21),  SSIM dif : 0.0791 (37.32)
+
+[931] : [12, 99, 99]
+        DCT MSE : 588.73,          DCT SSIM : 0.3956,
+        ICA MSE : 354.47,          ICA SSIM : 0.7142,
+        MSE dif : 234.27 (39.79),  SSIM dif : 0.3186 (52.71)
+
+[983] : [12, 99, 99]
+        DCT MSE : 18.62,          DCT SSIM : 0.9135,
+        ICA MSE : 16.56,          ICA SSIM : 0.8489,
+        MSE dif : 2.06 (11.07),  SSIM dif : -0.0646 (-74.72)
+
+
+
+
+
+
+--------- 12, 28, 41 ----------
+
+
+
+[143] : [12, 99, 99]
+        DCT MSE : 35.39,          DCT SSIM : 0.7851,
+        ICA MSE : 34.86,          ICA SSIM : 0.7467,
+        MSE dif : 0.53 (1.50),  SSIM dif : -0.0383 (-17.83)
+
+[295] : [12, 99, 99]
+        DCT MSE : 223.66,          DCT SSIM : 0.3387,
+        ICA MSE : 207.36,          ICA SSIM : 0.4926,
+        MSE dif : 16.30 (7.29),  SSIM dif : 0.1539 (23.28)
+
+[301] : [12, 99, 99]
+        DCT MSE : 30.44,          DCT SSIM : 0.8758,
+        ICA MSE : 25.12,          ICA SSIM : 0.8420,
+        MSE dif : 5.31 (17.45),  SSIM dif : -0.0338 (-27.17)
+
+[395] : [12, 99, 99]
+        DCT MSE : 32.16,          DCT SSIM : 0.8433,
+        ICA MSE : 23.12,          ICA SSIM : 0.8176,
+        MSE dif : 9.03 (28.09),  SSIM dif : -0.0257 (-16.42)
+
+[411] : [12, 99, 99]
+        DCT MSE : 40.80,          DCT SSIM : 0.7735,
+        ICA MSE : 37.86,          ICA SSIM : 0.7503,
+        MSE dif : 2.94 (7.20),  SSIM dif : -0.0231 (-10.21)
+
+[421] : [12, 99, 99]
+        DCT MSE : 48.39,          DCT SSIM : 0.6994,
+        ICA MSE : 48.25,          ICA SSIM : 0.6591,
+        MSE dif : 0.14 (0.29),  SSIM dif : -0.0403 (-13.39)
+
+[433] : [12, 99, 99]
+        DCT MSE : 15.81,          DCT SSIM : 0.8961,
+        ICA MSE : 14.06,          ICA SSIM : 0.8789,
+        MSE dif : 1.75 (11.07),  SSIM dif : -0.0171 (-16.50)
+
+[436] : [12, 99, 99]
+        DCT MSE : 386.53,          DCT SSIM : 0.6043,
+        ICA MSE : 347.95,          ICA SSIM : 0.7152,
+        MSE dif : 38.58 (9.98),  SSIM dif : 0.1109 (28.02)
+
+[456] : [12, 99, 99]
+        DCT MSE : 17.20,          DCT SSIM : 0.9111,
+        ICA MSE : 14.25,          ICA SSIM : 0.8846,
+        MSE dif : 2.95 (17.17),  SSIM dif : -0.0265 (-29.74)
+
+[475] : [12, 99, 99]
+        DCT MSE : 23.45,          DCT SSIM : 0.8491,
+        ICA MSE : 23.14,          ICA SSIM : 0.7844,
+        MSE dif : 0.31 (1.33),  SSIM dif : -0.0647 (-42.90)
+
+[588] : [12, 99, 99]
+        DCT MSE : 30.91,          DCT SSIM : 0.8642,
+        ICA MSE : 23.36,          ICA SSIM : 0.8077,
+        MSE dif : 7.55 (24.42),  SSIM dif : -0.0565 (-41.59)
+
+[613] : [12, 99, 99]
+        DCT MSE : 83.59,          DCT SSIM : 0.5596,
+        ICA MSE : 81.09,          ICA SSIM : 0.5259,
+        MSE dif : 2.50 (2.99),  SSIM dif : -0.0337 (-7.66)
+
+[640] : [12, 99, 99]
+        DCT MSE : 40.42,          DCT SSIM : 0.8562,
+        ICA MSE : 32.62,          ICA SSIM : 0.8343,
+        MSE dif : 7.80 (19.29),  SSIM dif : -0.0219 (-15.20)
+
+[673] : [12, 99, 99]
+        DCT MSE : 561.94,          DCT SSIM : 0.3050,
+        ICA MSE : 501.73,          ICA SSIM : 0.5270,
+        MSE dif : 60.20 (10.71),  SSIM dif : 0.2220 (31.94)
+
+[674] : [12, 99, 99]
+        DCT MSE : 522.75,          DCT SSIM : 0.3047,
+        ICA MSE : 488.62,          ICA SSIM : 0.5786,
+        MSE dif : 34.12 (6.53),  SSIM dif : 0.2739 (39.39)
+
+[678] : [12, 99, 99]
+        DCT MSE : 544.47,          DCT SSIM : 0.3667,
+        ICA MSE : 520.81,          ICA SSIM : 0.4532,
+        MSE dif : 23.66 (4.34),  SSIM dif : 0.0865 (13.66)
+
+[710] : [12, 99, 99]
+        DCT MSE : 589.84,          DCT SSIM : 0.6612,
+        ICA MSE : 503.08,          ICA SSIM : 0.8035,
+        MSE dif : 86.77 (14.71),  SSIM dif : 0.1422 (41.98)
+
+[740] : [12, 99, 99]
+        DCT MSE : 793.88,          DCT SSIM : 0.3949,
+        ICA MSE : 477.39,          ICA SSIM : 0.5793,
+        MSE dif : 316.48 (39.87),  SSIM dif : 0.1844 (30.47)
+
+[753] : [12, 99, 99]
+        DCT MSE : 25.05,          DCT SSIM : 0.8245,
+        ICA MSE : 22.30,          ICA SSIM : 0.8216,
+        MSE dif : 2.75 (10.98),  SSIM dif : -0.0029 (-1.66)
+
+[764] : [12, 99, 99]
+        DCT MSE : 18.48,          DCT SSIM : 0.8639,
+        ICA MSE : 16.98,          ICA SSIM : 0.8557,
+        MSE dif : 1.50 (8.11),  SSIM dif : -0.0082 (-6.01)
+
+[771] : [12, 99, 99]
+        DCT MSE : 782.58,          DCT SSIM : 0.5917,
+        ICA MSE : 595.64,          ICA SSIM : 0.7572,
+        MSE dif : 186.94 (23.89),  SSIM dif : 0.1656 (40.55)
+
+[773] : [12, 99, 99]
+        DCT MSE : 477.62,          DCT SSIM : 0.6276,
+        ICA MSE : 402.59,          ICA SSIM : 0.7416,
+        MSE dif : 75.03 (15.71),  SSIM dif : 0.1140 (30.60)
+
+[796] : [12, 99, 99]
+        DCT MSE : 17.19,          DCT SSIM : 0.9110,
+        ICA MSE : 15.48,          ICA SSIM : 0.8767,
+        MSE dif : 1.70 (9.91),  SSIM dif : -0.0342 (-38.46)
+
+[800] : [12, 99, 99]
+        DCT MSE : 229.64,          DCT SSIM : 0.2305,
+        ICA MSE : 225.48,          ICA SSIM : 0.2372,
+        MSE dif : 4.16 (1.81),  SSIM dif : 0.0067 (0.87)
+
+[837] : [12, 99, 99]
+        DCT MSE : 594.41,          DCT SSIM : 0.7881,
+        ICA MSE : 491.28,          ICA SSIM : 0.8678,
+        MSE dif : 103.12 (17.35),  SSIM dif : 0.0797 (37.61)
+
+[931] : [12, 99, 99]
+        DCT MSE : 588.73,          DCT SSIM : 0.3956,
+        ICA MSE : 407.56,          ICA SSIM : 0.6663,
+        MSE dif : 181.17 (30.77),  SSIM dif : 0.2706 (44.78)
+
+[932] : [12, 99, 99]
+        DCT MSE : 517.30,          DCT SSIM : 0.5972,
+        ICA MSE : 514.81,          ICA SSIM : 0.6169,
+        MSE dif : 2.48 (0.48),  SSIM dif : 0.0198 (4.91)
+
+[983] : [12, 99, 99]
+        DCT MSE : 18.62,          DCT SSIM : 0.9135,
+        ICA MSE : 16.56,          ICA SSIM : 0.8489,
+        MSE dif : 2.06 (11.07),  SSIM dif : -0.0646 (-74.72)
